@@ -1243,6 +1243,12 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
         }, 250, true);
         GUI.content_ready(callback);
     }
+
+    //experimental expert-mode show/hide SPA
+    if (!isExpertModeEnabled()) {
+        $('.isexpertmode').hide();
+    }
+
 };
 
 TABS.configuration.cleanup = function (callback) {
