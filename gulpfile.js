@@ -43,7 +43,7 @@ var gitChangeSetId;
 // maybe serial/usb needs updating
 var nwBuilderOptions = {
     // FIXME: hardcoded version number
-    version: '0.45.6',
+    version: '0.47.0',
     files: './dist/**/*',
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
