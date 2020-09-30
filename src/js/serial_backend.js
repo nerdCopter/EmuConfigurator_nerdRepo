@@ -80,7 +80,7 @@ function initializeSerialBackend() {
                         finishClose(toggleStatus);
                     }
 
-                    mspHelper.setArmingEnabled(true, false, onFinishCallback);
+                    mspHelper.setArmingEnabled(false, false, onFinishCallback);
                 }
             }
        }
@@ -250,7 +250,7 @@ function onOpen(openInfo) {
                                             MSP.send_message(MSPCodes.MSP_NAME, false, false, function () {
                                                 GUI.log(i18n.getMessage('craftNameReceived', [CONFIG.name]));
 
-                                                CONFIG.armingDisabled = false;
+                                                CONFIG.armingDisabled = true;
                                                 mspHelper.setArmingEnabled(false, false, setRtc);
                                             });
                                         } else {
