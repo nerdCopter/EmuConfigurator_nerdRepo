@@ -936,6 +936,36 @@ OSD.loadDisplayFields = function() {
                 return OSD.generateTimerPreview(osd_data, 1);
             }
         },
+        OSD_CRSF_SNR: {
+            name: 'OSD_CRSF_SNR',
+            text: 'osdTextElementCrsfSnr',
+            desc: 'osdDescElementCrsfSnr',
+            default_position: -59,
+            draw_order: 397,
+            positionable: true,
+            preview: '-10DBM',
+            isexpertmode: true  //experimental
+        },
+        OSD_CRSF_TX: {
+            name: 'OSD_CRSF_TX',
+            text: 'osdTextElementCrsfTxPower',
+            desc: 'osdDescElementCrsfTxPower',
+            default_position: -59,
+            draw_order: 396,
+            positionable: true,
+            preview: '1000MW',
+            isexpertmode: true  //experimental
+        },
+        OSD_CRSF_RSSI: {
+            name: 'OSD_CRSF_RSSI',
+            text: 'osdTextElementCrsfRssi',
+            desc: 'osdDescElementCrsfRssi',
+            default_position: -59,
+            draw_order: 397,
+            positionable: true,
+            preview: '-10DBM',
+            isexpertmode: true  //experimental
+        },
         CORE_TEMPERATURE: {
             name: 'CORE_TEMPERATURE',
             text: 'osdTextElementCoreTemperature',

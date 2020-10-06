@@ -4452,6 +4452,27 @@
     "osdDescElementTimer2" : {
         "message": "Shows the value of timer 2"
     },
+    "osdTextElementCrsfSnr": {
+        "message": "CRSF SNR",
+        "description": "One of the elements of the OSD"
+    },
+    "osdDescElementCrsfSnr": {
+        "message": "CRSF SNR"
+    },
+    "osdTextElementCrsfTxPower": {
+        "message": "CRSF TX Power",
+        "description": "One of the elements of the OSD"
+    },
+    "osdDescElementCrsfTxPower": {
+        "message": "CRSF TX POWER"
+    },
+    "osdTextElementCrsfRssi": {
+        "message": "CRSF RSSI",
+        "description": "One of the elements of the OSD"
+    },
+    "osdDescElementCrsfRssi": {
+        "message": "CRSF RSSI"
+    },
     "osdTextElementCoreTemperature": {
         "message": "Core temperature",
         "description": "One of the elements of the OSD"
@@ -4564,7 +4585,6 @@
     "osdDescElementRssiDbmValue": {
         "message": "Value in dBm of the RSSI signal if available"
     },
-
     "osdTextElementUnknown": {
         "message": "Unknown $1",
         "description": "One of the elements of the OSD"
