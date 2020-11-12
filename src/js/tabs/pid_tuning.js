@@ -868,7 +868,20 @@ TABS.pid_tuning.initialize = function(callback) {
             $('input[id="gyroLowpass2Enabled"]').prop('checked', FILTER_CONFIG.gyro_lowpass2_hz != 0).change();
             $('input[id="yawLowpassEnabled"]').prop('checked', FILTER_CONFIG.yaw_lowpass_hz != 0).change();
         } else {
-            $('input[id="gyroLowpassEnabled"]').prop('checked', FILTER_CONFIG.gyro_lowpass_hz_pitch != 0).change();
+            //debugging
+            console.log('WWWWWWWHHHHHHHHHHAAAAAAAAAAA');
+            if ((FILTER_CONFIG.gyro_lowpass_hz_roll != 0 || FILTER_CONFIG.gyro_lowpass_hz_pitch != 0 || FILTER_CONFIG.gyro_lowpass_hz_yaw != 0)) {
+                console.log('not all 3 gyro are zero (at least 1 non-zero)');
+            } else {
+                console.log('all 3 gyro lpf1 = 0');
+            }
+            if ((FILTER_CONFIG.gyro_lowpass_hz_roll == 0 && FILTER_CONFIG.gyro_lowpass_hz_pitch == 0 && FILTER_CONFIG.gyro_lowpass_hz_yaw == 0)) {
+                console.log('all 3 gyro lpf1 = 0');
+            } else {
+                console.log('not all 3 gyro are zero (at least 1 non-zero)');
+            }
+            //end debugging
+            $('input[id="gyroLowpassEnabled"]').prop('checked', (FILTER_CONFIG.gyro_lowpass_hz_roll != 0 || FILTER_CONFIG.gyro_lowpass_hz_pitch != 0 || FILTER_CONFIG.gyro_lowpass_hz_yaw != 0) ).change();
             $('input[id="dtermLowpassEnabled"]').prop('checked', FILTER_CONFIG.dterm_lowpass_hz_pitch != 0).change();
             $('input[id="dtermLowpass2Enabled"]').prop('checked', FILTER_CONFIG.dterm_lowpass2_hz_pitch != 0).change();
             $('input[id="gyroLowpass2Enabled"]').prop('checked', FILTER_CONFIG.gyro_lowpass2_hz_pitch != 0).change();
