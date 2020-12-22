@@ -1293,10 +1293,15 @@ TABS.pid_tuning.initialize = function(callback) {
         $('.tab-pid_tuning .tab_container .filter').on('click', () => activateSubtab('filter'));
 
         function loadProfilesList() {
-            var numberOfProfiles = 3;
-            if (semver.gte(CONFIG.apiVersion, "1.20.0") &&
-                CONFIG.numProfiles === 2) {
-                numberOfProfiles = 2;
+            //var numberOfProfiles = 3;
+            //if (semver.gte(CONFIG.apiVersion, "1.20.0") &&
+            //    CONFIG.numProfiles === 2) {
+            //    numberOfProfiles = 2;
+            //}
+            if (semver.gte(CONFIG.apiVersion, "1.16.0")) {
+                    var numberOfProfiles = CONFIG.numProfiles;
+            } else {
+                var numberOfProfiles = 1;
             }
 
             var profileElements = [];
