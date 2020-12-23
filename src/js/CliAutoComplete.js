@@ -79,7 +79,7 @@ CliAutoComplete._builderWatchdogTouch = function() {
             self.builder.state = 'reset';
             self.builderStart();
         }
-    }, 3000);
+    }, 5000);
 };
 
 CliAutoComplete._builderWatchdogStop = function() {
