@@ -39,12 +39,7 @@ const LINUX_INSTALL_DIR = '/opt/emuflight';
 var gitChangeSetId;
 
 // FIXME: hardcoded version number
-var NWversion;
-if ((os.platform() === 'win32') || (os.platform() === 'win64')) {
-    NWversion ='0.42.6'
-} else {
-    NWversion ='0.50.3'
-}
+var NWversion = '0.50.3' ;
 
 // 0.45.6 Win7 connects; 0.42.3 fixed OSX Flashing; 0.46.X breaks Win7 connect
 // maybe serial/usb needs updating
