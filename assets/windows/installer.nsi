@@ -136,7 +136,7 @@ Section
     Delete "$SMPROGRAMS\${GROUP_NAME}\${FOLDER_NAME}\${APP_NAME} (English).lnk"
 
     # FTW, just purge old shiz
-    RMDir "$SMPROGRAMS\${GROUP_NAME}\${FOLDER_NAME}
+    RMDir "$SMPROGRAMS\${GROUP_NAME}\${FOLDER_NAME}"
 
     # if the registry entries did not exist, we ignore the errors
     ClearErrors
