@@ -84,11 +84,17 @@ $(document).ready(function () {
     $.getJSON('version.json', function(data) {
         CONFIGURATOR.version = data.version;
         CONFIGURATOR.gitChangesetId = data.gitChangesetId;
+        console.log("doc ready CONFIGURATOR.version "+CONFIGURATOR.version);
+        CONFIGURATOR.max_msp = data.max_msp;
+        console.log("doc ready CONFIGURATOR.max_msp "+CONFIGURATOR.max_msp);
 
         // Version in the ChromeApp's manifest takes precedence.
         if(chrome.runtime && chrome.runtime.getManifest) {
             var manifest = chrome.runtime.getManifest();
             CONFIGURATOR.version = manifest.version;
+            console.log("chrome runtime CONFIGURATOR.version "+CONFIGURATOR.version);
+            CONFIGURATOR.max_msp = manifest.max_msp;
+            console.log("chrome runtime CONFIGURATOR.max_msp "+CONFIGURATOR.max_msp);
             // manifest.json for ChromeApp can't have a version
             // with a prerelease tag eg 10.0.0-RC4
             // Work around is to specify the prerelease version in version_name
@@ -112,21 +118,24 @@ function startProcess() {
     var debugMode = typeof process === "object" && process.versions['nw-flavor'] === 'sdk';
 
     if (GUI.isNWJS()) {
-        var win = GUI.nwGui.Window.get();
-        win.on('close', closeHandler);
-        win.on('new-win-policy', function(frame, url, policy) {
+        console.log("GUI.isNWJS");
+        let nwWindow = GUI.nwGui.Window.get();
+        nwWindow.on('close', closeHandler);
+        nwWindow.on('new-win-policy', function(frame, url, policy) {
             // do not open the window
             policy.ignore();
             // and open it in external browser
             GUI.nwGui.Shell.openExternal(url);
         });
-     }else if (!GUI.isOther()) {
-        chrome.app.window.onClosed.addListener(closeHandler);
+    } else if (GUI.isChromeApp()) {
+        console.log("GUI.isChromeApp");
+        chrome.app.window.onClosed.addListener(closeHandler); //does not seem to work with NW2
         // This event does not actually get fired:
         chrome.runtime.onSuspend.addListener(closeHandler);
     }
 
     function closeHandler() {
+        console.log("closing...");
         this.hide();
         MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
         this.close(true);
@@ -700,6 +709,42 @@ function updateTabList(features) {
             $('#pid-tuning .dtermLowpassFrequencyAxis .LPFRol').text(i18n.getMessage("dtermLowpassFrequencyRoll"));
             $('#pid-tuning .dtermLowpass2FrequencyAxis .LPFRol').text(i18n.getMessage("dtermLowpass2FrequencyRoll"));
         }
+    }
+
+    //experimental: show/hide with expert-mode
+    if (!isExpertModeEnabled()) {
+        $('.IMUFQroll').show();
+        $('.IMUFQpitch').hide();
+        $('.IMUFQyaw').hide();
+        $('#pid-tuning .IMUFQroll').text(i18n.getMessage("pidTuningImufQ"));
+    } else {
+        $('.IMUFQroll').show();
+        $('.IMUFQpitch').show();
+        $('.IMUFQyaw').show();
+        $('#pid-tuning .IMUFQroll').text(i18n.getMessage("pidTuningImufRollQ"));
+    }
+
+    //experimental: show/hide with expert-mode
+    if (CONFIG.boardIdentifier == "HESP" || CONFIG.boardIdentifier == "SX10" || CONFIG.boardIdentifier == "FLUX") {
+        if (!isExpertModeEnabled()) {
+        $('.IMUFLPFroll').show();
+        $('.IMUFLPFpitch').hide();
+        $('.IMUFLPFyaw').hide();
+        $('#pid-tuning .IMUFLPFroll').text(i18n.getMessage("pidTuningImuflpf"));
+        console.log("Helio IMUF LPF basic mode");
+        } else {
+        $('.IMUFLPFroll').show();
+        $('.IMUFLPFpitch').show();
+        $('.IMUFLPFyaw').show();
+        $('#pid-tuning .IMUFLPFroll').text(i18n.getMessage("pidTuningImuflpfRoll"));
+        console.log("Helio IMUF LPF expert mode");
+        }
+    } else {
+        $('.IMUFLPF').hide();
+        $('.IMUFLPFroll').hide();
+        $('.IMUFLPFpitch').hide();
+        $('.IMUFLPFyaw').hide();
+        console.log("non-Helio hide IMUF LPF");
     }
 
     //experimental: show/hide with expert-mode

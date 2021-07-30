@@ -441,6 +441,9 @@
     "firmwareTypeNotSupported": {
         "message": "Non - Cleanflight/Emuflight firmware is <span class=\"message-negative\">not supported</span>, except for CLI mode."
     },
+    "firmwareMSPNotSupported": {
+        "message":"MSP version is not supported. Please upgrade EmuConfigurator."
+    },
     "firmwareUpgradeRequired": {
         "message": "The firmware on this device needs upgrading to a newer version. Use CLI for backup before flashing. CLI backup/restore procedure is in the documention.<br />Alternatively download and use an old version of the configurator if you are not ready to upgrade."
     },
@@ -3109,6 +3112,30 @@
     "controlAxisAux16": {
         "message": "AUX 16"
     },
+    "controlAxisAux17": {
+        "message": "AUX 17"
+    },
+    "controlAxisAux18": {
+        "message": "AUX 18"
+    },
+    "controlAxisAux19": {
+        "message": "AUX 19"
+    },
+    "controlAxisAux20": {
+        "message": "AUX 20"
+    },
+    "controlAxisAux21": {
+        "message": "AUX 21"
+    },
+    "controlAxisAux22": {
+        "message": "AUX 22"
+    },
+    "controlAxisAux23": {
+        "message": "AUX 23"
+    },
+    "controlAxisAux24": {
+        "message": "AUX 24"
+    },
     "pidTuningBasic": {
         "message": "PIDs"
     },
@@ -4628,6 +4655,13 @@
     "osdDescStatUsedMah": {
         "message": "Battery capacity used"
     },
+    "osdTextElementPercentMAHUsedValue": {
+        "message": "Battery mAh percent used.",
+        "description": "One of the elements of the OSD"
+    },
+    "osdDescElementPercentMAHUsedValue": {
+        "message": "Battery mAh percent used."
+    },
     "osdTextStatMaxAltitude": {
         "message": "Altitude maximum",
         "description": "One of the statistics that can be shown at the end of the flight in the OSD"
@@ -5255,23 +5289,17 @@
       "pidTuningImuflpf": {
         "message": "IMU-F LPF cutoff [Hz]"
       },
-      "pidTuningImuflpfRoll": {
-        "message": "IMU-F ROLL LPF cutoff Hz"
-      },
-        "pidTuningImuflpfRollHelp": {
+        "pidTuningImuflpfHelp": {
         "message": "Helio/Strix Hardware cutoff"
+      },
+      "pidTuningImuflpfRoll": {
+        "message": "IMU-F roll LPF cutoff Hz"
       },
       "pidTuningImuflpfPitch": {
-        "message": "IMU-F PITCH LPF cutoff Hz"
-      },
-        "pidTuningImuflpfPitchHelp": {
-        "message": "Helio/Strix Hardware cutoff"
+        "message": "IMU-F pitch LPF cutoff Hz"
       },
       "pidTuningImuflpfYaw": {
-        "message": "IMU-F YAW LPF cutoff Hz"
-      },
-        "pidTuningImuflpfYawHelp": {
-        "message": "Helio/Strix Hardware cutoff"
+        "message": "IMU-F yaw LPF cutoff Hz"
       },
       "pidTuningImuflpfAcc": {
         "message": "IMU-F accelerometer LPF cutoff [Hz]"
