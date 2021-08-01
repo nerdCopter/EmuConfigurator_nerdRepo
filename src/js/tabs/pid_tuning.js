@@ -75,17 +75,30 @@ TABS.pid_tuning.initialize = function(callback) {
     var presetJson;
 
     if (CONFIG.boardIdentifier !== "HESP" && CONFIG.boardIdentifier !== "SX10" && CONFIG.boardIdentifier !== "FLUX") {
-        if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
-            presetJson = require(presetsFolders + "/presets-nonHELIO-v0.3.0.json");
+        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            presetJson = require(presetsFolders + "/presets-nonHELIO-v0.4.0.json");
+            console.log("Using 0.4.0 nonHelio presets");
         } else {
-            presetJson = require(presetsFolders + "/presets-nonHELIO-v0.2.0.json");
+            if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
+                presetJson = require(presetsFolders + "/presets-nonHELIO-v0.3.0.json");
+                console.log("Using 0.3.0 nonHelio presets");
+            } else {
+                presetJson = require(presetsFolders + "/presets-nonHELIO-v0.2.0.json");
+                console.log("Using 0.2.0 nonHelio presets");
+            }
         }
-
     } else {
-        if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
-            presetJson = require(presetsFolders + "/presets-HELIO-v0.3.0.json");
+        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            presetJson = require(presetsFolders + "/presets-HELIO-v0.4.0.json");
+            console.log("Using 0.4.0 Helio presets");
         } else {
-            presetJson = require(presetsFolders + "/presets-HELIO-v0.2.0.json");
+            if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
+                presetJson = require(presetsFolders + "/presets-HELIO-v0.3.0.json");
+                console.log("Using 0.3.0 Helio presets");
+            } else {
+                presetJson = require(presetsFolders + "/presets-HELIO-v0.2.0.json");
+                console.log("Using 0.2.0 Helio presets");
+            }
         }
     }
 
@@ -319,15 +332,17 @@ TABS.pid_tuning.initialize = function(callback) {
 
         if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
             $('.pid_filter select[name="dtermLowpassType"]').val(FILTER_CONFIG.dterm_lowpass_type);
+        } else {
+            $('.dtermLowpassType').hide();
+        }
+
+        //quick & dirty 0.3.0 / MSP 1.47
+        if (FEATURE_CONFIG.features.isEnabled('ANTI_GRAVITY') &&
+                    semver.gte(CONFIG.apiVersion, "1.36.0") &&
+                    ( semver.lt(CONFIG.flightControllerVersion, "0.3.0") || semver.lt(CONFIG.apiVersion, "1.47.0"))) { //was removed in 0.3.0
             $('.antigravity input[name="itermThrottleThreshold"]').val(ADVANCED_TUNING.itermThrottleThreshold);
             $('.antigravity input[name="itermAcceleratorGain"]').val(ADVANCED_TUNING.itermAcceleratorGain / 1000);
 
-            //quick & dirty 0.3.0
-            if (FEATURE_CONFIG.features.isEnabled('ANTI_GRAVITY') && semver.lt(CONFIG.flightControllerVersion, "0.3.0")) {
-                $('.antigravity').show();
-            } else {
-                $('.antigravity').hide();
-            }
             var antiGravitySwitch = $('#antiGravitySwitch');
             antiGravitySwitch.prop('checked', ADVANCED_TUNING.itermAcceleratorGain !== 1000);
             antiGravitySwitch.change(function() {
@@ -349,9 +364,9 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('.antigravity .suboption').hide();
                 }
             });
+            $('.antigravity').show();
             antiGravitySwitch.change();
         } else {
-            $('.dtermLowpassType').hide();
             $('.antigravity').hide();
         }
 
@@ -625,8 +640,11 @@ TABS.pid_tuning.initialize = function(callback) {
             itermRelaxCheck.change();
 
             // Absolute Control
-            var absoluteControlGainNumberElement = $('input[name="absoluteControlGain-number"]');
-            absoluteControlGainNumberElement.val(ADVANCED_TUNING.absoluteControlGain).trigger('input');
+            //MSP 1.47 adjustment //semver.lt //was removed in 0.3.0
+            if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
+                var absoluteControlGainNumberElement = $('input[name="absoluteControlGain-number"]');
+                absoluteControlGainNumberElement.val(ADVANCED_TUNING.absoluteControlGain).trigger('input');
+            }
 
             // iDecay Control
             var iDecayNumberElement = $('input[name="iDecay-number"]');
@@ -789,19 +807,21 @@ TABS.pid_tuning.initialize = function(callback) {
             feedforwardTransitionNumberElement.val(ADVANCED_TUNING.feedforwardTransition / 100);
 
             // AntiGravity Mode
-            var antiGravityModeSelect = $('.antigravity select[id="antiGravityMode"]');
-            antiGravityModeSelect.change(function() {
-                var antiGravityModeValue = $('.antigravity select[id="antiGravityMode"]').val();
+            if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
+                var antiGravityModeSelect = $('.antigravity select[id="antiGravityMode"]');
+                antiGravityModeSelect.change(function() {
+                    var antiGravityModeValue = $('.antigravity select[id="antiGravityMode"]').val();
 
-                // Smooth
-                if (antiGravityModeValue == 0) {
-                    $('.antiGravityThres').hide();
-                } else {
-                    $('.antiGravityThres').show();
-                }
-            });
+                    // Smooth
+                    if (antiGravityModeValue == 0) {
+                        $('.antiGravityThres').hide();
+                    } else {
+                        $('.antiGravityThres').show();
+                    }
+                });
 
-            antiGravityModeSelect.val(ADVANCED_TUNING.antiGravityMode).change();
+                antiGravityModeSelect.val(ADVANCED_TUNING.antiGravityMode).change();
+            }
 
         } else {
             $('.feathered_pids').hide();
@@ -827,7 +847,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
 
         //quick & dirty 0.3.0
-        if (semver.gte(CONFIG.flightControllerVersion, "0.3.0")) {
+        if (semver.gte(CONFIG.flightControllerVersion, "0.3.0") || semver.gte(CONFIG.apiVersion, "1.47.0")) {
             $('.absoluteControlGain').hide();
             $('.itermrelax').hide();
         }
@@ -1230,8 +1250,15 @@ TABS.pid_tuning.initialize = function(callback) {
 
         if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
             FILTER_CONFIG.dterm_lowpass_type = $('.pid_filter select[name="dtermLowpassType"]').val();
-            ADVANCED_TUNING.itermThrottleThreshold = parseInt($('.antigravity input[name="itermThrottleThreshold"]').val());
-            ADVANCED_TUNING.itermAcceleratorGain = parseInt($('.antigravity input[name="itermAcceleratorGain"]').val() * 1000);
+            if (semver.lte(CONFIG.apiVersion, "1.47.0")) { // was removed in 0.3.0
+                ADVANCED_TUNING.itermThrottleThreshold = parseInt($('.antigravity input[name="itermThrottleThreshold"]').val());
+                ADVANCED_TUNING.itermAcceleratorGain = parseInt($('.antigravity input[name="itermAcceleratorGain"]').val() * 1000);
+            }
+        }
+
+        //MSP 1.51
+        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
         }
 
         //MSP 1.51
@@ -1292,7 +1319,10 @@ TABS.pid_tuning.initialize = function(callback) {
                 ADVANCED_TUNING.itermRelaxType = $('input[id="itermrelax"]').is(':checked') ? $('select[id="itermrelaxType"]').val() : 0;
                 ADVANCED_TUNING.itermRelaxCutoff = parseInt($('input[name="itermRelaxCutoff"]').val());
             }
-            ADVANCED_TUNING.absoluteControlGain = $('input[name="absoluteControlGain-number"]').val();
+            // MSP 1.47 adjustment //was removed in 0.3.0
+            if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
+                ADVANCED_TUNING.absoluteControlGain = $('input[name="absoluteControlGain-number"]').val();
+            }
             ADVANCED_TUNING.iDecay = $('input[name="iDecay-number"]').val();
             ADVANCED_TUNING.errorBoost = $('input[name="errorBoost-number"]').val();
             ADVANCED_TUNING.errorBoostLimit = $('input[name="errorBoostLimit-number"]').val();
@@ -1306,7 +1336,9 @@ TABS.pid_tuning.initialize = function(callback) {
                 ADVANCED_TUNING.feedforwardYaw = parseInt($('.pid_tuning .YAW input[name="f"]').val());
                 ADVANCED_TUNING.feedforwardTransition = parseInt($('input[name="feedforwardTransition-number"]').val() * 100);
             }
-            ADVANCED_TUNING.antiGravityMode = $('select[id="antiGravityMode"]').val();
+            if (semver.lte(CONFIG.apiVersion, "1.47.0")) { // was removed in 0.3.0
+                ADVANCED_TUNING.antiGravityMode = $('select[id="antiGravityMode"]').val();
+            }
 
             if (CONFIG.boardIdentifier !== "HESP" && CONFIG.boardIdentifier !== "SX10" && CONFIG.boardIdentifier !== "FLUX" && semver.lt(CONFIG.apiVersion, "1.42.0")) {
                 KALMAN_FILTER_CONFIG.gyro_filter_q = parseInt($('.pid_filter input[name="kalmanQCoefficient"]').val());
@@ -1767,6 +1799,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
         $('#pid-tuning .presetBuild').hide();
 
+        //PRESET PROCESSING
         $('.tab-pid_tuning select[name="preset"]').change(function() {
             var presetSelected = $('.tab-pid_tuning select[name="preset"]').val();
 
@@ -1887,8 +1920,11 @@ TABS.pid_tuning.initialize = function(callback) {
                 var iDecayNumberElement = $('input[name="throttleBoost-number"]');
                 iDecayNumberElement.val(presetJson[presetSelected]['throttle_boost']).trigger('input');
 
-                var iDecayNumberElement = $('input[name="absoluteControlGain-number"]');
-                iDecayNumberElement.val(presetJson[presetSelected]['abs_control_gain']).trigger('input');
+                //MSP 1.47 adjustment //semver.lt //was removed in 0.3.0
+                if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
+                    var iDecayNumberElement = $('input[name="absoluteControlGain-number"]');
+                    iDecayNumberElement.val(presetJson[presetSelected]['abs_control_gain']).trigger('input');
+                }
 
                 var iDecayNumberElement = $('input[name="iDecay-number"]');
                 iDecayNumberElement.val(presetJson[presetSelected]['i_decay']).trigger('input');
@@ -1974,6 +2010,160 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('.spa_yaw input[name="spaYaw_I"]').val(presetJson[presetSelected]['spa_rate_i_yaw']);
                     $('.spa_yaw input[name="spaYaw_D"]').val(presetJson[presetSelected]['spa_rate_d_yaw']);
                 }
+
+                //MSP 1.51 //0.4.0 Presets
+                if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+
+                    //df_yaw
+                    if (typeof presetJson[presetSelected]['df_yaw'] === 'undefined' || presetJson[presetSelected]['df_yaw'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="DFyaw-number"]').val('15');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="DFyaw-number"]').val(presetJson[presetSelected]['df_yaw']);
+                    }
+
+                    //emu_gravity
+                    if (typeof presetJson[presetSelected]['emu_gravity'] === 'undefined' || presetJson[presetSelected]['emu_gravity'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="emuGravity-number"]').val('50');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="emuGravity-number"]').val(presetJson[presetSelected]['emu_gravity']);
+                    }
+
+                    //Smith predictor toggle
+                    if (typeof presetJson[presetSelected]['smith_predict_enabled'] === 'undefined' || presetJson[presetSelected]['smith_predict_enabled'] === null) {
+                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked',false); //default OFF
+                    } else {
+                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked', presetJson[presetSelected]['smith_predict_enabled'] !== "OFF").change();
+                    }
+
+                    //gyro ABG alpha
+                    if (typeof presetJson[presetSelected]['gyro_ABG_alpha'] === 'undefined' || presetJson[presetSelected]['gyro_ABG_alpha'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="gyroABGalpha-number"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="gyroABGalpha-number"]').val(presetJson[presetSelected]['gyro_ABG_alpha']);
+                    }
+
+                    //gyro ABG boost
+                    if (typeof presetJson[presetSelected]['gyro_ABG_boost'] === 'undefined' || presetJson[presetSelected]['gyro_ABG_boost'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="gyroABGboost-number"]').val('275');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="gyroABGboost-number"]').val(presetJson[presetSelected]['gyro_ABG_boost']);
+                    }
+
+                    //gyro ABG halflife
+                    if (typeof presetJson[presetSelected]['gyro_ABG_half_life'] === 'undefined' || presetJson[presetSelected]['gyro_ABG_half_life'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="gyroABGhalflife-number"]').val('50');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="gyroABGhalflife-number"]').val(presetJson[presetSelected]['gyro_ABG_half_life']);
+                    }
+
+                    //dterm ABG alpha
+                    if (typeof presetJson[presetSelected]['dterm_ABG_alpha'] === 'undefined' || presetJson[presetSelected]['dterm_ABG_alpha'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="dtermABGalpha-number"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="dtermABGalpha-number"]').val(presetJson[presetSelected]['dterm_ABG_alpha']);
+                    }
+
+                    //dterm ABG boost
+                    if (typeof presetJson[presetSelected]['dterm_ABG_boost'] === 'undefined' || presetJson[presetSelected]['dterm_ABG_boost'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="dtermABGboost-number"]').val('275');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="dtermABGboost-number"]').val(presetJson[presetSelected]['dterm_ABG_boost']);
+                    }
+
+                    //dterm ABG halflife
+                    if (typeof presetJson[presetSelected]['dterm_ABG_half_life'] === 'undefined' || presetJson[presetSelected]['dterm_ABG_half_life'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="dtermABGhalflife-number"]').val('50');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="dtermABGhalflife-number"]').val(presetJson[presetSelected]['dterm_ABG_half_life']);
+                    }
+
+                    //motor output mixer implementation type
+                    if (typeof presetJson[presetSelected]['mixer_impl'] === 'undefined' || presetJson[presetSelected]['mixer_impl'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('select[name="MotorMixerImplSelect"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('select[name="MotorMixerImplSelect"]').val(presetJson[presetSelected]['mixer_impl']);
+                    }
+
+                    //Mixer Laziness toggle
+                    if (typeof presetJson[presetSelected]['mixer_laziness'] === 'undefined' || presetJson[presetSelected]['mixer_laziness'] === null) {
+                        $('input[id="MixerLazinessEnabled"]').prop('checked',false); //default OFF
+                    } else {
+                        $('input[id="MixerLazinessEnabled"]').prop('checked', presetJson[presetSelected]['mixer_laziness'] !== "OFF").change();
+                    }
+
+                    //2PassYawThrottleComp toggle
+                    if (typeof presetJson[presetSelected]['mixer_yaw_throttle_comp'] === 'undefined' || presetJson[presetSelected]['mixer_yaw_throttle_comp'] === null) {
+                        $('input[id="MixerThrottleCompEnabled"]').prop('checked'); //default ON
+                    } else {
+                        $('input[id="MixerThrottleCompEnabled"]').prop('checked', presetJson[presetSelected]['mixer_yaw_throttle_comp'] !== "OFF").change();
+                    }
+
+                    //linear thrust low output
+                    if (typeof presetJson[presetSelected]['linear_thrust_low_output'] === 'undefined' || presetJson[presetSelected]['linear_thrust_low_output'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="pidTuningTLLowOuput-number"]').val('65');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="pidTuningTLLowOuput-number"]').val(presetJson[presetSelected]['linear_thrust_low_output']);
+                    }
+
+                    //linear thrust high output
+                    if (typeof presetJson[presetSelected]['linear_thrust_high_output'] === 'undefined' || presetJson[presetSelected]['linear_thrust_high_output'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="pidTuningTLHighOuput-number"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="pidTuningTLHighOuput-number"]').val(presetJson[presetSelected]['linear_thrust_high_output']);
+                    }
+
+                    //axisLockMultiplier
+                    if (typeof presetJson[presetSelected]['axis_lock_multiplier'] === 'undefined' || presetJson[presetSelected]['axis_lock_multiplier'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="axisLockMultiplier-number"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="axisLockMultiplier-number"]').val(presetJson[presetSelected]['axis_lock_multiplier']);
+                    }
+
+                    //axisLockHz
+                    if (typeof presetJson[presetSelected]['axis_lock_hz'] === 'undefined' || presetJson[presetSelected]['axis_lock_hz'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="axisLockHz-number"]').val('2');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="axisLockHz-number"]').val(presetJson[presetSelected]['axis_lock_hz']);
+                    }
+
+                    //dTermLPF2Type
+                    if (typeof presetJson[presetSelected]['dterm_lowpass2_type'] === 'undefined' || presetJson[presetSelected]['dterm_lowpass2_type'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('select[name="dtermLowpass2Type"]').val('0');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('select[name="dtermLowpass2Type"]').val(presetJson[presetSelected]['dterm_lowpass2_type']);
+                    }
+
+                }
+                //end MSP 1.51 //0.4.0 Presets
+
 
 
                 // pid preset values
