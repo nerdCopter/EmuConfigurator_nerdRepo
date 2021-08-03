@@ -2063,7 +2063,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
                     //Smith predictor toggle
                     if (typeof presetJson[presetSelected]['smith_predict_enabled'] === 'undefined' || presetJson[presetSelected]['smith_predict_enabled'] === null) {
-                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked',true); //default ON
+                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked',true).change(); //default ON
                     } else {
                         $('input[id="SmithPredictorEnabledSwitch"]').prop('checked', presetJson[presetSelected]['smith_predict_enabled'] !== "OFF").change();
                     }
@@ -2133,14 +2133,14 @@ TABS.pid_tuning.initialize = function(callback) {
 
                     //Mixer Laziness toggle
                     if (typeof presetJson[presetSelected]['mixer_laziness'] === 'undefined' || presetJson[presetSelected]['mixer_laziness'] === null) {
-                        $('input[id="MixerLazinessEnabled"]').prop('checked',false); //default OFF
+                        $('input[id="MixerLazinessEnabled"]').prop('checked',false).change(); //default OFF
                     } else {
                         $('input[id="MixerLazinessEnabled"]').prop('checked', presetJson[presetSelected]['mixer_laziness'] !== "OFF").change();
                     }
 
                     //2PassYawThrottleComp toggle
                     if (typeof presetJson[presetSelected]['mixer_yaw_throttle_comp'] === 'undefined' || presetJson[presetSelected]['mixer_yaw_throttle_comp'] === null) {
-                        $('input[id="MixerThrottleCompEnabled"]').prop('checked'); //default ON
+                        $('input[id="MixerThrottleCompEnabled"]').prop('checked',true).change(); //default ON
                     } else {
                         $('input[id="MixerThrottleCompEnabled"]').prop('checked', presetJson[presetSelected]['mixer_yaw_throttle_comp'] !== "OFF").change();
                     }
