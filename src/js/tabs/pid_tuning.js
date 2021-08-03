@@ -491,6 +491,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     if (semver.gte(CONFIG.apiVersion, "1.51.0") && (IMUF_FILTER_CONFIG.imufCurrentVersion >= 256)) {
                         console.log("IMUF_FILTER_CONFIG.imufCurrentVersion >=256: "+IMUF_FILTER_CONFIG.imufCurrentVersion)
                         $('#imuf_ptn_order').val(IMUF_FILTER_CONFIG.imuf_ptn_order);
+                        $('.imufPTNorder').show();
                     } else {
                         $('.imufPTNorder').hide();
                         console.log("IMUF_FILTER_CONFIG.imufCurrentVersion <256: "+IMUF_FILTER_CONFIG.imufCurrentVersion)
@@ -1840,7 +1841,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     }
                     if (CONFIG.boardIdentifier === "HESP" || CONFIG.boardIdentifier === "SX10" || CONFIG.boardIdentifier === "FLUX") {
                         //MSP 1.51 presets/helio
-                        if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
+                        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
                             $('#imuf_ptn_order').val(presetJson[presetSelected]['imuf_ptn_order']);
                         }
                         //end MPS 1.51
