@@ -1025,7 +1025,7 @@
         "message": "Temporary boost I-Term on high throttle changes"
     },
     "featureDYNAMIC_FILTER": {
-        "message": "Dynamic gyro matrix filtering (Dynamic per-axis notch)"
+        "message": "Dynamic per-axis gyro notch filter"
     },
     "featureLEGACY_SA_SUPPORT": {
       "message": "Legacy AKK and Mach2 VTX Smart Audio support"
@@ -3293,91 +3293,83 @@
         "message": "Gyro Lowpass Filters"
     },
     "pidTuningGyroLowpassFrequency": {
-        "message": "Gyro Lowpass 1 Cutoff Frequency [Hz]"
+        "message": "Gyro Lowpass 1 Cutoff [Hz]"
     },
     "pidTuningGyroNotch1": {
-        "message": "Gyro Notch Filter 1 Frequency [Hz]"
+        "message": "Gyro Notch Filter 1 [Hz]"
     },
     "pidTuningGyroNotch2": {
-        "message": "Gyro Notch Filter 2 Frequency [Hz]"
+        "message": "Gyro Notch Filter 2 [Hz]"
     },
     "pidTuningGyroLowpassType": {
         "message": "Filter 1 Type"
     },
     "pidTuningGyroLowpassDynMinFrequency": {
-        "message": "Gyro Lowpass 1 Dynamic Min Cutoff Frequency [Hz]"
+        "message": "Gyro Lowpass 1 Dynamic Min Cutoff [Hz]"
     },
     "pidTuningGyroLowpassDynMaxFrequency": {
-        "message": "Gyro Lowpass 1 Dynamic Max Cutoff Frequency [Hz]"
+        "message": "Gyro Lowpass 1 Dynamic Max Cutoff [Hz]"
     },
     "pidTuningGyroLowpassDynType": {
         "message": "Gyro Lowpass 1 Dynamic Filter Type"
     },
     "pidTuningGyroLowpass2Frequency": {
-        "message": "Gyro Lowpass 2 Cutoff Frequency [Hz]"
+        "message": "Gyro Lowpass 2 Cutoff [Hz]"
     },
     "pidTuningGyroLowpass2Type": {
         "message": "Filter 2 Type"
     },
     "gyroLowpassFrequencyRoll": {
-        "message": " Roll Gyro Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Roll Gyro Lowpass 1 Cutoff [Hz]"
     },
     "gyroLowpassFrequencyPitch": {
-        "message": " Pitch Gyro Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Pitch Gyro Lowpass 1 Cutoff [Hz]"
     },
     "gyroLowpassFrequencyYaw": {
-        "message": " Yaw Gyro Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Yaw Gyro Lowpass 1 Cutoff [Hz]"
     },
     "gyroLowpass2FrequencyRoll": {
-        "message": " Roll Gyro Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Roll Gyro Lowpass 2 Cutoff [Hz]"
     },
     "gyroLowpass2FrequencyPitch": {
-        "message": " Pitch Gyro Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Pitch Gyro Lowpass 2 Cutoff [Hz]"
     },
     "gyroLowpass2FrequencyYaw": {
-        "message": " Yaw Gyro Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Yaw Gyro Lowpass 2 Cutoff [Hz]"
     },
     "pidTuningGyroNotchFiltersGroup": {
         "message": "Gyro Notch Filters"
     },
-    "pidTuningMatrixFilterGroup": {
-        "message": "MATRIX Filter"
+    "pidTuningDynGyroNotchFilterGroup": {
+        "message": "Dynamic Gyro Notch Filter"
     },
     "pidTuningGyroDynLpfGroup": {
         "message": "Gyro Dyn Filter"
     },
     "pidTuningGyroNotch1Frequency": {
-        "message": "Gyro Notch Filter 1 Center Frequency [Hz]"
+        "message": "Gyro Notch Filter 1 Center [Hz]"
     },
     "pidTuningGyroDynLpf": {
         "message": "Gyro Dynamic Filter"
     },
     "pidTuningGyroNotch2Frequency": {
-        "message": "Gyro Notch Filter 2 Center Frequency [Hz]"
+        "message": "Gyro Notch Filter 2 Center [Hz]"
     },
     "pidTuningGyroNotch1Cutoff": {
-        "message": "Gyro Notch Filter 1 Cutoff Frequency [Hz]"
+        "message": "Gyro Notch Filter 1 Cutoff [Hz]"
     },
     "pidTuningGyroNotch2Cutoff": {
-        "message": "Gyro Notch Filter 2 Cutoff Frequency [Hz]"
+        "message": "Gyro Notch Filter 2 Cutoff [Hz]"
     },
     "pidTuningNotchFilterHelp": {
         "message": "The Notch Filter has a Center and a Cutoff. The filter is symmetrical. The Center Frequency is the center of the filter and the Cutoff Frequency is where Notch filter starts. For example with Notch Cutoff of 160 and Notch Center of 260 it means the range is 160-360Hz with most attenuation around center"
     },
-    "pidTuningMatrixFilterHelp": {
-        "message": "The Matrix filter is a dynamic notch filter. It puts a notch on each axis where it finds the max noise. the min hz is the lowest value that the matrix filter will reach. The q is the width of the notch filter. ex: higher q is a more narrow notch filter "
-    },
-    "pidTuningMatrixNotchQ": {
-        "message": "Matrix filter notch Q"
-    },
-    "pidTuningMatrixNotchQMin": {
-        "message": "Matrix filter notch min"
-    },
+    "COMMENT": {"message": "some changes to 'pidTuningDynamicNotchFilter*' were made for MSP 1.51"},
     "pidTuningDynamicNotchFilterGroup": {
-        "message": "Dynamic Notch Filter"
+        "message": "Dynamic Filter (Gyro Notch Filters)"
     },
-    "pidTuningDynamicNotchFilterHelp": {
-        "message": "Dynamic Notch Filter tracks peak motors noise frequency and places one or two notch filters with their center at that frequency."
+    "pidTuningDynamicNotchFilterGroupHelp": {
+        "message": "This Dynamic Gyro Notch Filter tracks peak motors noise frequency and places notch filters with their center at that frequency. Q is the notch width, where higher values are narrower."
     },
     "pidTuningDynamicNotchFilterDisabledWarning": {
         "message": "<strong>Notice:</strong> The dynamic notch filter is disabled. In order to configure and use it, please enable the 'DYNAMIC_FILTER' feature in the '$t(configurationFeatures.message)' section of the '$t(tabConfiguration.message)' tab."
@@ -3388,11 +3380,17 @@
     "pidTuningDynamicNotchWidthPercent": {
         "message": "Dynamic Notch Width Percent"
     },
+    "pidTuningDynamicNotchCount": {
+        "message": "Dynamic Notch Count"
+    },
     "pidTuningDynamicNotchQ": {
         "message": "Dynamic Notch Q"
     },
     "pidTuningDynamicNotchMinHz": {
         "message": "Dynamic Notch Min Hz"
+    },
+    "pidTuningDynamicNotchMaxHz": {
+        "message": "Dynamic Notch Max Hz"
     },
     "pidTuningDynamicNotchRangeHelp": {
         "message": "The dynamic notch has three frequency ranges in which it can operate: LOW(80-330hz) for lower revving quads like 6+ inches, MEDIUM(140-550hz) for a normal 5 inch quad, HIGH(230-800hz) for very high revving 2.5-3 inch quads. AUTO option selects the range depending on the value of the Gyro Dynamic Lowpass 1 Filter's max cutoff frequency."
@@ -3406,8 +3404,16 @@
     "pidTuningDynamicNotchMinHzHelp": {
         "message": "Defines the lowest dynamic notch center frequency below which the dynamic notch will not go."
     },
-
     "COMMENT": {"message": "MSP 1.51"},
+    "pidTuningDynamicDNotchFilterGroup": {
+        "message": "Dynamic Filter (D Term Notch Filters)"
+    },
+    "pidTuningDynamicDNotchFilterGroupHelp": {
+        "message": "This Dynamic D-Term Notch Filter tracks peak motors noise frequency and places notch filters with their center at that frequency. Q is the notch width, where higher values are narrower. Default 400. Available only when `feature dynamic_filter' (Dynamic Gyro Filter) is enabled. Uses Min and Max and Count values from Dynamic Gyro Filter."
+    },
+    "pidTuningDynamicDNotchFilterQ": {
+        "message": "Dynamic D Term Notch Q"
+    },
     "pidTuningGyroABGFilterGroup": {
         "message": "Gyro ABG (α-β-γ) Filter"
     },
@@ -3451,37 +3457,37 @@
         "message": "Filter Type"
     },
     "pidTuningDTermLowpassFrequency": {
-        "message": "D Term Lowpass 1 Cutoff Frequency [Hz]"
+        "message": "D Term Lowpass 1 Cutoff [Hz]"
     },
     "pidTuningDTermLowpass2Frequency": {
-        "message": "D Term Lowpass 2 Cutoff Frequency [Hz]"
+        "message": "D Term Lowpass 2 Cutoff [Hz]"
     },
     "pidTuningDTermLowpass2Type": {
         "message": "D Term Lowpass 2 Filter Type"
     },
     "dtermLowpassFrequencyRoll": {
-        "message": " Roll D-Term Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Roll D-Term Lowpass 1 Cutoff [Hz]"
     },
     "dtermLowpassFrequencyPitch": {
-        "message": " Pitch D-Term Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Pitch D-Term Lowpass 1 Cutoff [Hz]"
     },
     "dtermLowpassFrequencyYaw": {
-        "message": " Yaw D-Term Lowpass 1 Cutoff Frequency [Hz]"
+        "message": " Yaw D-Term Lowpass 1 Cutoff [Hz]"
     },
     "dtermLowpass2FrequencyRoll": {
-        "message": " Roll D-Term Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Roll D-Term Lowpass 2 Cutoff [Hz]"
     },
     "dtermLowpass2FrequencyPitch": {
-        "message": " Pitch D-Term Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Pitch D-Term Lowpass 2 Cutoff [Hz]"
     },
     "dtermLowpass2FrequencyYaw": {
-        "message": " Yaw D-Term Lowpass 2 Cutoff Frequency [Hz]"
+        "message": " Yaw D-Term Lowpass 2 Cutoff [Hz]"
     },
     "pidTuningDTermLowpassDynMinFrequency": {
-        "message": "D Term Lowpass 1 Dynamic Min Cutoff Frequency [Hz]"
+        "message": "D Term Lowpass 1 Dynamic Min Cutoff [Hz]"
     },
     "pidTuningDTermLowpassDynMaxFrequency": {
-        "message": "D Term Lowpass 1 Dynamic Max Cutoff Frequency [Hz]"
+        "message": "D Term Lowpass 1 Dynamic Max Cutoff [Hz]"
     },
     "pidTuningDTermLowpassDynType": {
         "message": "D Term Lowpass 1 Dynamic Filter Type"
@@ -3493,19 +3499,19 @@
         "message": "D Term Dyn Filter"
     },
     "pidTuningDTermNotchFrequency": {
-        "message": "D Term Notch Filter Center Frequency [Hz]"
+        "message": "D Term Notch Filter Center [Hz]"
     },
     "pidTuningDTermDynLpf": {
         "message": "D Term Dynamc filter"
     },
     "pidTuningDTermNotchCutoff": {
-        "message": "D Term Notch Filter Cutoff Frequency [Hz]"
+        "message": "D Term Notch Filter Cutoff [Hz]"
     },
     "pidTuningYawLospassFiltersGroup": {
         "message": "Yaw Lowpass Filters"
     },
     "pidTuningYawLowpassFrequency": {
-        "message": "Yaw Lowpass Cutoff Frequency [Hz]"
+        "message": "Yaw Lowpass Cutoff [Hz]"
     },
     "pidTuningSmartDTermSmoothing":{
         "message": "Smart dTerm Smoothing"

@@ -506,6 +506,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     if (semver.gte(CONFIG.apiVersion, "1.51.0") && (IMUF_FILTER_CONFIG.imufCurrentVersion >= 256)) {
                         console.log("IMUF_FILTER_CONFIG.imufCurrentVersion >=256: "+IMUF_FILTER_CONFIG.imufCurrentVersion)
                         $('#imuf_ptn_order').val(IMUF_FILTER_CONFIG.imuf_ptn_order);
+                        $('.imufPTNorder').show();
                     } else {
                         $('.imufPTNorder').hide();
                         console.log("IMUF_FILTER_CONFIG.imufCurrentVersion <256: "+IMUF_FILTER_CONFIG.imufCurrentVersion)
@@ -797,12 +798,27 @@ TABS.pid_tuning.initialize = function(callback) {
                  rateWeightEndNumberElement.val(RC_tuning.rateWeightEnd).trigger('input');
             }
             if (FEATURE_CONFIG.features.isEnabled('DYNAMIC_FILTER') && (semver.gte(CONFIG.apiVersion, "1.47.0"))) {
-                $('.matrixFilter').show();
-                $('.pid_filter input[name="MatrixNotchQ"]').val(FILTER_CONFIG.dynamic_gyro_notch_q);
-                $('.pid_filter input[name="MatrixNotchMin"]').val(FILTER_CONFIG.dynamic_gyro_notch_min_hz);
+                $('.dynNotchFilter').show();
+                $('.pid_filter input[name="DynamicNotchQ"]').val(FILTER_CONFIG.dynamic_gyro_notch_q);
+                $('.pid_filter input[name="DynamicNotchMin"]').val(FILTER_CONFIG.dynamic_gyro_notch_min_hz);
+                //MSP 1.51
+                if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                    $('.dynNotchFilter151').show();
+                    $('.pid_filter input[name="DynamicNotchCount"]').val(FILTER_CONFIG.dynamic_gyro_notch_count);
+                    $('.pid_filter input[name="DynamicNotchMax"]').val(FILTER_CONFIG.dynamic_gyro_notch_max_hz);
+                } else {
+                    $('.dynNotchFilter151').hide();
+                }
+                //end MSP 1.51
             } else {
-                $('.matrixFilter').hide();
+                $('.dynNotchFilter').hide();
             }
+            //MSP 1.51
+            if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                $('.pid_filter input[id="dynamicDNotchFilterEnable"]').prop('checked', FILTER_CONFIG.dterm_dyn_notch_enable !== 0);
+                $('.pid_filter input[name="dynamicDNotchFilterNotch"]').val(FILTER_CONFIG.dterm_dyn_notch_q);
+            }
+            //end MSP 1.51
             var feedforwardTransitionNumberElement = $('input[name="feedforwardTransition-number"]');
             feedforwardTransitionNumberElement.val(ADVANCED_TUNING.feedforwardTransition / 100);
 
@@ -1411,9 +1427,22 @@ TABS.pid_tuning.initialize = function(callback) {
         }
 
         if ( FEATURE_CONFIG.features.isEnabled('DYNAMIC_FILTER') && semver.gte(CONFIG.apiVersion, "1.47.0")) {
-            FILTER_CONFIG.dynamic_gyro_notch_q  = parseFloat($('.pid_filter input[name="MatrixNotchQ"]').val());
-            FILTER_CONFIG.dynamic_gyro_notch_min_hz = parseFloat($('.pid_filter input[name="MatrixNotchMin"]').val());
+            FILTER_CONFIG.dynamic_gyro_notch_q  = parseFloat($('.pid_filter input[name="DynamicNotchQ"]').val());
+            FILTER_CONFIG.dynamic_gyro_notch_min_hz = parseFloat($('.pid_filter input[name="DynamicNotchMin"]').val());
+            //MSP 1.51
+            if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                FILTER_CONFIG.dynamic_gyro_notch_count  = parseFloat($('.pid_filter input[name="DynamicNotchCount"]').val());
+                FILTER_CONFIG.dynamic_gyro_notch_max_hz = parseFloat($('.pid_filter input[name="DynamicNotchMax"]').val());
+            }
+            //end MSP 1.51
         }
+
+        //MSP 1.51
+        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            FILTER_CONFIG.dterm_dyn_notch_enable = $('.pid_filter input[id="dynamicDNotchFilterEnable"]').is(':checked') ? 1 : 0;
+            FILTER_CONFIG.dterm_dyn_notch_q  = parseFloat($('.pid_filter input[name="dynamicDNotchFilterNotch"]').val());
+        }
+        //end MSP 1.51
 
         // MSP 1.51
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
@@ -1845,7 +1874,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     }
                     if (CONFIG.boardIdentifier === "HESP" || CONFIG.boardIdentifier === "SX10" || CONFIG.boardIdentifier === "FLUX") {
                         //MSP 1.51 presets/helio
-                        if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
+                        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
                             $('#imuf_ptn_order').val(presetJson[presetSelected]['imuf_ptn_order']);
                         }
                         //end MPS 1.51
