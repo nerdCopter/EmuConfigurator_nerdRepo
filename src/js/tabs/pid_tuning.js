@@ -2125,7 +2125,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     //motor output mixer implementation type
                     if (typeof presetJson[presetSelected]['mixer_impl'] === 'undefined' || presetJson[presetSelected]['mixer_impl'] === null) {
                         // variable is undefined or null (non-exist)
-                        $('select[name="MotorMixerImplSelect"]').val('0');  //default
+                        $('select[name="MotorMixerImplSelect"]').val('2');  //default
                     } else {
                         // preset exists, so use it.
                         $('select[name="MotorMixerImplSelect"]').val(presetJson[presetSelected]['mixer_impl']);
