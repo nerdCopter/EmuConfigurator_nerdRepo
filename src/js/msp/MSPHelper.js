@@ -1058,8 +1058,16 @@ MspHelper.prototype.process_data = function(dataHandler) {
                     }
 
                     if (semver.gte(CONFIG.apiVersion, "1.47.0")) {
+                        //MSP 1.51
+                        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                            FILTER_CONFIG.dynamic_gyro_notch_count = data.readU8();
+                        } //end MSP 1.51
                         FILTER_CONFIG.dynamic_gyro_notch_q = data.readU16();
                         FILTER_CONFIG.dynamic_gyro_notch_min_hz = data.readU16();
+                        //MSP 1.51
+                        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                            FILTER_CONFIG.dynamic_gyro_notch_max_hz = data.readU16();
+                        } //end MSP 1.51
                     }
 
                     //MSP 1.51
@@ -1071,6 +1079,13 @@ MspHelper.prototype.process_data = function(dataHandler) {
                         FILTER_CONFIG.dterm_ABG_alpha = data.readU16();
                         FILTER_CONFIG.dterm_ABG_boost = data.readU16();
                         FILTER_CONFIG.dterm_ABG_half_life = data.readU8();
+                    }
+                    //end MSP 1.51
+
+                    //MSP 1.51 dyn dterm notch
+                    if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                        FILTER_CONFIG.dterm_dyn_notch_enable = data.readU8();    //dterm_dyn_notch_enable
+                        FILTER_CONFIG.dterm_dyn_notch_q = data.readU16();        //dterm_dyn_notch_q
                     }
                     //end MSP 1.51
                 }
@@ -2029,8 +2044,16 @@ MspHelper.prototype.crunch = function(code) {
                     }
                 }
                 if (semver.gte(CONFIG.apiVersion, "1.47.0")) {
+                    //MSP 1.51
+                    if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                        buffer.push8(FILTER_CONFIG.dynamic_gyro_notch_count)
+                    } //end MSP 1.51
                     buffer.push16(FILTER_CONFIG.dynamic_gyro_notch_q)
                           .push16(FILTER_CONFIG.dynamic_gyro_notch_min_hz)
+                    //MSP 1.51
+                    if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                        buffer.push16(FILTER_CONFIG.dynamic_gyro_notch_max_hz)
+                    } //end MSP 1.51
                 }
 
                 //MSP 1.51
@@ -2042,6 +2065,13 @@ MspHelper.prototype.crunch = function(code) {
                           .push16(FILTER_CONFIG.dterm_ABG_alpha)
                           .push16(FILTER_CONFIG.dterm_ABG_boost)
                           .push8(FILTER_CONFIG.dterm_ABG_half_life)
+                }
+                //end MSP 1.51
+
+                //MSP 1.51 dyn dterm notch
+                if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                    buffer.push8(FILTER_CONFIG.dterm_dyn_notch_enable)    //dterm_dyn_notch_enable
+                    .push16(FILTER_CONFIG.dterm_dyn_notch_q)              //dterm_dyn_notch_q
                 }
                 //end MSP 1.51
             }
