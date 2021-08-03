@@ -2063,7 +2063,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
                     //Smith predictor toggle
                     if (typeof presetJson[presetSelected]['smith_predict_enabled'] === 'undefined' || presetJson[presetSelected]['smith_predict_enabled'] === null) {
-                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked',false); //default OFF
+                        $('input[id="SmithPredictorEnabledSwitch"]').prop('checked',true); //default ON
                     } else {
                         $('input[id="SmithPredictorEnabledSwitch"]').prop('checked', presetJson[presetSelected]['smith_predict_enabled'] !== "OFF").change();
                     }
@@ -2190,6 +2190,61 @@ TABS.pid_tuning.initialize = function(callback) {
                         $('select[name="dtermLowpass2Type"]').val(presetJson[presetSelected]['dterm_lowpass2_type']);
                     }
 
+                    //Dynamic Gyro Notch Q
+                    if (typeof presetJson[presetSelected]['dynamic_gyro_notch_q'] === 'undefined' || presetJson[presetSelected]['dynamic_gyro_notch_q'] === null) {
+                        // variable is undefined or null (non-exist)
+                        if (CONFIG.boardIdentifier == "HESP" || CONFIG.boardIdentifier == "SX10" || CONFIG.boardIdentifier == "FLUX") {
+                            $('input[name="DynamicNotchQ"]').val('400');  //helio default
+                        } else {
+                            $('input[name="DynamicNotchQ"]').val('350');  //non-helio default
+                        }
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="DynamicNotchQ"]').val(presetJson[presetSelected]['dynamic_gyro_notch_q']);
+                    }
+
+                    //Dynamic Gyro Notch Count
+                    if (typeof presetJson[presetSelected]['dynamic_gyro_notch_count'] === 'undefined' || presetJson[presetSelected]['dynamic_gyro_notch_count'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="DynamicNotchCount"]').val('3');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="DynamicNotchCount"]').val(presetJson[presetSelected]['dynamic_gyro_notch_count']);
+                    }
+
+                    //Dynamic Gyro Notch Min
+                    if (typeof presetJson[presetSelected]['dynamic_gyro_notch_min_hz'] === 'undefined' || presetJson[presetSelected]['dynamic_gyro_notch_min_hz'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="DynamicNotchMin"]').val('150');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="DynamicNotchMin"]').val(presetJson[presetSelected]['dynamic_gyro_notch_min_hz']);
+                    }
+
+                    //Dynamic Gyro Notch Max
+                    if (typeof presetJson[presetSelected]['dynamic_gyro_notch_max_hz'] === 'undefined' || presetJson[presetSelected]['dynamic_gyro_notch_max_hz'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="DynamicNotchMax"]').val('600');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="DynamicNotchMax"]').val(presetJson[presetSelected]['dynamic_gyro_notch_max_hz']);
+                    }
+
+                    //Dynamic D Term Notch Enable
+                    if (typeof presetJson[presetSelected]['dterm_dyn_notch_enable'] === 'undefined' || presetJson[presetSelected]['dterm_dyn_notch_enable'] === null) {
+                        $('input[id="dynamicDNotchFilterEnable"]').prop('checked',false).change(); //default OFF
+                    } else {
+                        $('input[id="dynamicDNotchFilterEnable"]').prop('checked', presetJson[presetSelected]['dterm_dyn_notch_enable'] !== "OFF").change();
+                    }
+
+                    //Dynamic D Term Notch Q
+                    if (typeof presetJson[presetSelected]['dterm_dyn_notch_q'] === 'undefined' || presetJson[presetSelected]['dterm_dyn_notch_q'] === null) {
+                        // variable is undefined or null (non-exist)
+                        $('input[name="dynamicDNotchFilterNotch"]').val('400');  //default
+                    } else {
+                        // preset exists, so use it.
+                        $('input[name="dynamicDNotchFilterNotch"]').val(presetJson[presetSelected]['dterm_dyn_notch_q']);
+                    }
                 }
                 //end MSP 1.51 //0.4.0 Presets
 
