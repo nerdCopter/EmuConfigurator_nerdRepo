@@ -3722,7 +3722,7 @@
         "message": "Mixer Implementation"
     },
     "pidTuningMixerImplementationHelp": {
-        "message": "EmuFlight introduces SMOOTH and 2PASS variants for the motor output mixer.  SMOOTH is a simple variant that avoids clipping.  2PASS is a smooth variant that treats Roll and Pitch separately from Yaw in order to guarantee thrust linearity. Default 'mixer_impl = LEGACY'."
+        "message": "EmuFlight introduces SMOOTH and 2PASS variants for the motor output mixer.  SMOOTH is a simple variant that avoids clipping.  2PASS is a smooth variant that treats Roll and Pitch separately from Yaw in order to guarantee thrust linearity. Default 'mixer_impl = 2PASS'."
     },
     "pidTuningMixerLaziness": {
         "message": "Mixer Laziness"
