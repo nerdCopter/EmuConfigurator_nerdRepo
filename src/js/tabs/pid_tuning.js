@@ -29,7 +29,7 @@ TABS.pid_tuning.initialize = function(callback) {
     }
 
     //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
-    existingEepromFeatureBitMask = FEATURE_CONFIG.features._featureMask;
+    existingEepromFeatureBitMask = FEATURE_CONFIG.features.getMask();
     //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
 
     // Update filtering defaults based on API version
@@ -2865,7 +2865,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     }
                 }).then(function() {
                     if (dynamicFilterWasModded) { //MSP 1.51 Dynamic_Filter Preset - Experimental Toggle
-                        existingEepromFeatureBitMask = FEATURE_CONFIG.features._featureMask; //store new saved
+                        existingEepromFeatureBitMask = FEATURE_CONFIG.features.getMask(); //store new saved
                         return MSP.promise(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG));
                     }
                 }).then(function() {
@@ -2964,7 +2964,7 @@ TABS.pid_tuning.refresh = function(callback) {
         if (dynamicFilterWasModded) {
             //reset it for next round
             dynamicFilterWasModded = false;
-            FEATURE_CONFIG.features._featureMask = existingEepromFeatureBitMask;
+            FEATURE_CONFIG.features.setMask(existingEepromFeatureBitMask);
         }
         //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
         self.initialize();
