@@ -221,6 +221,16 @@ Features.prototype.findFeatureByBit = function (bit) {
     }
 }
 
+Features.prototype.findFeatureByName = function (name) {
+    var self = this;
+
+    for (var i = 0; i < self._features.length; i++) {
+        if (self._features[i].bit == name) {
+            return self._features[i];
+        }
+    }
+}
+
 Features.prototype.updateData = function (featureElement) {
     var self = this;
 

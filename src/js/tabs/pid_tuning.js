@@ -1,5 +1,10 @@
 'use strict';
 
+    //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+    var dynamicFilterWasModded = false;
+    var existingEepromFeatureBitMask;
+    //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+
 TABS.pid_tuning = {
     RATE_PROFILE_MASK: 128,
     showAllPids: false,
@@ -22,6 +27,10 @@ TABS.pid_tuning.initialize = function(callback) {
         GUI.active_tab = 'pid_tuning';
         self.activeSubtab = 'pid';
     }
+
+    //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+    existingEepromFeatureBitMask = FEATURE_CONFIG.features._featureMask;
+    //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
 
     // Update filtering defaults based on API version
     var FILTER_DEFAULT = FC.getFilterDefaults();
@@ -2248,7 +2257,35 @@ TABS.pid_tuning.initialize = function(callback) {
                 }
                 //end MSP 1.51 //0.4.0 Presets
 
-
+                //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+                // very hacky to hard-code bit 28
+                if (typeof presetJson[presetSelected]['dynamic_filter'] === 'undefined' || presetJson[presetSelected]['dynamic_filter'] === null) {
+                        //set default or do nothing? // let's do nothing, it's easier & legacy
+                        console.log('dynamic filter preset not defined');
+                } else {
+                    var presetDFbool = presetJson[presetSelected]['dynamic_filter'] !== "OFF";
+                    console.log('preset Dynamic_Filter is set: '+presetDFbool);
+                    if (presetDFbool !== FEATURE_CONFIG.features.isEnabled('DYNAMIC_FILTER')) {
+                        console.log('preset Dynamic_Filter is different from saved eeprom');
+                        if (presetDFbool) {
+                            console.log('setting dynamic filter bit');
+                            FEATURE_CONFIG.features._featureMask = bit_set(FEATURE_CONFIG.features._featureMask, 28);
+                            //show
+                            $('.dynNotchFilter151').show();
+                            $('.dynNotchFilter').show();
+                        } else {
+                            console.log('clearing dynamic filter bit');
+                            FEATURE_CONFIG.features._featureMask = bit_clear(FEATURE_CONFIG.features._featureMask, 28);
+                            //hide
+                            $('.dynNotchFilter151').hide();
+                            $('.dynNotchFilter').hide();
+                        }
+                        dynamicFilterWasModded = true;
+                    } else {
+                        console.log('preset Dynamic_Filter was the same as saved eeprom (no change)');
+                    }
+                }
+                //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
 
                 // pid preset values
                 PID_names.forEach(function(elementPid, indexPid) {
@@ -2827,12 +2864,22 @@ TABS.pid_tuning.initialize = function(callback) {
                         return MSP.promise(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG));
                     }
                 }).then(function() {
+                    if (dynamicFilterWasModded) { //MSP 1.51 Dynamic_Filter Preset - Experimental Toggle
+                        existingEepromFeatureBitMask = FEATURE_CONFIG.features._featureMask; //store new saved
+                        return MSP.promise(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG));
+                    }
+                }).then(function() {
                     return MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
                 }).then(function() {
                     self.updating = false;
                     self.setDirty(false);
 
                     GUI.log(i18n.getMessage('pidTuningEepromSaved'));
+                    //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+                    if (dynamicFilterWasModded) {
+                        $('a.refresh').click(); //refresh UI (show dynamic filter fields)
+                    }
+                    //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
                 }).then(function() {
                     //GUI.log(i18n.getMessage('configurationEepromSaved'));
                     if (save_and_reboot == true) {
@@ -2913,6 +2960,13 @@ TABS.pid_tuning.cleanup = function(callback) {
 TABS.pid_tuning.refresh = function(callback) {
     var self = this;
     GUI.tab_switch_cleanup(function() {
+        //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
+        if (dynamicFilterWasModded) {
+            //reset it for next round
+            dynamicFilterWasModded = false;
+            FEATURE_CONFIG.features._featureMask = existingEepromFeatureBitMask;
+        }
+        //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
         self.initialize();
         self.setDirty(false);
         if (callback) {
