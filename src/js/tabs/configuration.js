@@ -752,6 +752,12 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                 );
             }
 
+            if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+                spiRxTypes.push(
+                    'REDPINE'
+                );
+            }
+
             var spiRx_e = $('select.spiRx');
             for (var i = 0; i < spiRxTypes.length; i++) {
                 spiRx_e.append('<option value="' + i + '">' + spiRxTypes[i] + '</option>');
