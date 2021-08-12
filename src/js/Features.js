@@ -225,11 +225,22 @@ Features.prototype.findFeatureByName = function (name) {
     var self = this;
 
     for (var i = 0; i < self._features.length; i++) {
-        if (self._features[i].bit == name) {
+        if (self._features[i].name == name) {
             return self._features[i];
         }
     }
 }
+
+Features.prototype.findBitValueByName = function (name) {
+    var self = this;
+
+    for (var i = 0; i < self._features.length; i++) {
+        if (self._features[i].name == name) {
+            return self._features[i].bit;
+        }
+    }
+}
+
 
 Features.prototype.updateData = function (featureElement) {
     var self = this;

@@ -2289,15 +2289,20 @@ TABS.pid_tuning.initialize = function(callback) {
                     console.log('preset Dynamic_Filter is set: '+presetDFbool);
                     if (presetDFbool !== FEATURE_CONFIG.features.isEnabled('DYNAMIC_FILTER')) {
                         console.log('preset Dynamic_Filter is different from saved eeprom');
+
+                        //Find the BIT that is Dynamic_Filter
+                        var featDFBitValue = FEATURE_CONFIG.features.findBitValueByName('DYNAMIC_FILTER');
+                        console.log('featDFBitValue: '+featDFBitValue);
+
                         if (presetDFbool) {
                             console.log('setting dynamic filter bit');
-                            FEATURE_CONFIG.features._featureMask = bit_set(FEATURE_CONFIG.features._featureMask, 28);
+                            FEATURE_CONFIG.features.setMask(bit_set(FEATURE_CONFIG.features._featureMask, featDFBitValue));
                             //show
                             $('.dynNotchFilter151').show();
                             $('.dynNotchFilter').show();
                         } else {
                             console.log('clearing dynamic filter bit');
-                            FEATURE_CONFIG.features._featureMask = bit_clear(FEATURE_CONFIG.features._featureMask, 28);
+                            FEATURE_CONFIG.features.setMask(bit_clear(FEATURE_CONFIG.features._featureMask, featDFBitValue));
                             //hide
                             $('.dynNotchFilter151').hide();
                             $('.dynNotchFilter').hide();
