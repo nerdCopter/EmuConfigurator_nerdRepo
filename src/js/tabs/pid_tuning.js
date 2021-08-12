@@ -1900,15 +1900,28 @@ TABS.pid_tuning.initialize = function(callback) {
                 $('input[id="gyroLowpass2Enabled"]').prop('checked', presetJson[presetSelected]['gyro_lowpass2_enabled'] !== "OFF").change();
                 $('.pid_filter select[name="gyroLowpass2Type"]').val(presetJson[presetSelected]['gyro_lowpass2_type']);
                 if (semver.gte(CONFIG.apiVersion, "1.44.0")) {
+                    console.log('setting per axis gyro_lowpass_hz_*');
                     $('.pid_filter input[name="gyroLowpassFrequencyRoll"]').val(presetJson[presetSelected]['gyro_lowpass_hz_roll']);
                     $('.pid_filter input[name="gyroLowpassFrequencyPitch"]').val(presetJson[presetSelected]['gyro_lowpass_hz_pitch']);
                     $('.pid_filter input[name="gyroLowpassFrequencyYaw"]').val(presetJson[presetSelected]['gyro_lowpass_hz_yaw']);
                     $('.pid_filter input[name="gyroLowpass2FrequencyRoll"]').val(presetJson[presetSelected]['gyro_lowpass2_hz_roll']);
                     $('.pid_filter input[name="gyroLowpass2FrequencyPitch"]').val(presetJson[presetSelected]['gyro_lowpass2_hz_pitch']);
                     $('.pid_filter input[name="gyroLowpass2FrequencyYaw"]').val(presetJson[presetSelected]['gyro_lowpass2_hz_yaw']);
+
+                    $('.pid_filter input[name="gyroLowpassFrequency"]').val(presetJson[presetSelected]['gyro_lowpass_hz_roll']);
+                    $('.pid_filter input[name="gyroLowpass2Frequency"]').val(presetJson[presetSelected]['gyro_lowpass2_hz_roll']);
                 } else {
+                    console.log('setting general gyro_lowpass_hz');
                     $('.pid_filter input[name="gyroLowpassFrequency"]').val(presetJson[presetSelected]['gyro_lowpass_hz']);
                     $('.pid_filter input[name="gyroLowpass2Frequency"]').val(presetJson[presetSelected]['gyro_lowpass2_hz']);
+                }
+
+                if (presetJson[presetSelected]['gyro_lowpass_enabled'] == "OFF") {
+                    $('input[id="gyroLowpassEnabled"]').change(); //force internal logic to set 0's when disabled //preExisting bugfix
+                }
+
+                if (presetJson[presetSelected]['gyro_lowpass2_enabled'] == "OFF") {
+                    $('input[id="gyroLowpass2Enabled"]').change(); //force internal logic to set 0's when disabled //preExisting bugfix
                 }
 
                 $('input[id="gyroNotch1Enabled"]').prop('checked', presetJson[presetSelected]['gyro_notch1_enabled'] !== "OFF").change();
@@ -1934,6 +1947,15 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('.pid_filter input[name="dtermLowpassFrequency"]').val(presetJson[presetSelected]['dterm_lowpass_hz']);
                     $('.pid_filter input[name="dtermLowpass2Frequency"]').val(presetJson[presetSelected]['dterm_lowpass2_hz']);
                 }
+
+                if (presetJson[presetSelected]['dterm_lowpass_enabled'] == "OFF") {
+                    $('input[id="dtermLowpassEnabled"]').change(); //force internal logic to set 0's when disabled //preExisting bugfix
+                }
+
+                if (presetJson[presetSelected]['dterm_lowpass2_enabled'] == "OFF") {
+                    $('input[id="dtermLowpass2Enabled"]').change(); //force internal logic to set 0's when disabled //preExisting bugfix
+                }
+
                 if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
                     $('.smartDTermWitchBox input[name="smartdTermRoll"]').val(presetJson[presetSelected]['smart_dterm_smoothing_roll']);
                     $('.smartDTermWitchBox input[name="smartdTermPitch"]').val(presetJson[presetSelected]['smart_dterm_smoothing_pitch']);
