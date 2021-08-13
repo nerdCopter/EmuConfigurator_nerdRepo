@@ -431,7 +431,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 $('.pid_filter input[name="gyroLowpass2FrequencyRoll"]').val(FILTER_CONFIG.gyro_lowpass2_hz_roll);
                 $('.pid_filter input[name="gyroLowpass2FrequencyPitch"]').val(FILTER_CONFIG.gyro_lowpass2_hz_pitch);
                 $('.pid_filter input[name="gyroLowpass2FrequencyYaw"]').val(FILTER_CONFIG.gyro_lowpass2_hz_yaw);
-                console.log('dterm_lowpass2_hz_roll' + FILTER_CONFIG.dterm_lowpass2_hz_roll);
                 $('.pid_filter input[name="dtermLowpass2FrequencyRoll"]').val(FILTER_CONFIG.dterm_lowpass2_hz_roll);
                 $('.pid_filter input[name="dtermLowpass2FrequencyPitch"]').val(FILTER_CONFIG.dterm_lowpass2_hz_pitch);
                 $('.pid_filter input[name="dtermLowpass2FrequencyYaw"]').val(FILTER_CONFIG.dterm_lowpass2_hz_yaw);
@@ -498,7 +497,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('#imuf_sharpness').val(IMUF_FILTER_CONFIG.imuf_sharpness);
                 } else { // MSP 1.51 adjustment
                     $('.imufSharpness').hide();
-                    console.log('sharpness hide MSP 1.51');
+                    console.log('sharpness hide for MSP 1.51');
                 }
                 if (CONFIG.boardIdentifier === "HESP" || CONFIG.boardIdentifier === "SX10" || CONFIG.boardIdentifier === "FLUX") {
                     //MSP 1.51
@@ -986,7 +985,6 @@ TABS.pid_tuning.initialize = function(callback) {
         $('input[id="dtermLowpass2Enabled"]').change(function() {
             var checked = $(this).is(':checked');
             var cutoff = FILTER_CONFIG.dterm_lowpass2_hz > 0 ? FILTER_CONFIG.dterm_lowpass2_hz : FILTER_DEFAULT.dterm_lowpass2_hz;
-            console.log('check valeuir' + FILTER_CONFIG.dterm_lowpass2_hz_roll);
             var cutoffRoll = FILTER_CONFIG.dterm_lowpass2_hz_roll > 0 ? FILTER_CONFIG.dterm_lowpass2_hz_roll : FILTER_DEFAULT.dterm_lowpass2_hz;
             var cutoffPitch = FILTER_CONFIG.dterm_lowpass2_hz_pitch > 0 ? FILTER_CONFIG.dterm_lowpass2_hz_pitch : FILTER_DEFAULT.dterm_lowpass2_hz;
             var cutoffYaw = FILTER_CONFIG.dterm_lowpass2_hz_yaw > 0 ? FILTER_CONFIG.dterm_lowpass2_hz_yaw : FILTER_DEFAULT.dterm_lowpass2_hz;
@@ -1891,7 +1889,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 $('input[id="gyroLowpass2Enabled"]').prop('checked', presetJson[presetSelected]['gyro_lowpass2_enabled'] !== "OFF").change();
                 $('.pid_filter select[name="gyroLowpass2Type"]').val(presetJson[presetSelected]['gyro_lowpass2_type']);
                 if (semver.gte(CONFIG.apiVersion, "1.44.0")) {
-                    console.log('setting per axis gyro_lowpass_hz_*');
                     $('.pid_filter input[name="gyroLowpassFrequencyRoll"]').val(presetJson[presetSelected]['gyro_lowpass_hz_roll']);
                     $('.pid_filter input[name="gyroLowpassFrequencyPitch"]').val(presetJson[presetSelected]['gyro_lowpass_hz_pitch']);
                     $('.pid_filter input[name="gyroLowpassFrequencyYaw"]').val(presetJson[presetSelected]['gyro_lowpass_hz_yaw']);
@@ -1902,7 +1899,6 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('.pid_filter input[name="gyroLowpassFrequency"]').val(presetJson[presetSelected]['gyro_lowpass_hz_roll']);
                     $('.pid_filter input[name="gyroLowpass2Frequency"]').val(presetJson[presetSelected]['gyro_lowpass2_hz_roll']);
                 } else {
-                    console.log('setting general gyro_lowpass_hz');
                     $('.pid_filter input[name="gyroLowpassFrequency"]').val(presetJson[presetSelected]['gyro_lowpass_hz']);
                     $('.pid_filter input[name="gyroLowpass2Frequency"]').val(presetJson[presetSelected]['gyro_lowpass2_hz']);
                 }
@@ -1947,7 +1943,8 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('input[id="dtermLowpass2Enabled"]').change(); //force internal logic to set 0's when disabled //preExisting bugfix
                 }
 
-                if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
+                //MSP 1.51 adjust - SDS/WC semver.lt
+                if (semver.gte(CONFIG.apiVersion, "1.46.0") && semver.lt(CONFIG.apiVersion, "1.51.0")) {
                     $('.smartDTermWitchBox input[name="smartdTermRoll"]').val(presetJson[presetSelected]['smart_dterm_smoothing_roll']);
                     $('.smartDTermWitchBox input[name="smartdTermPitch"]').val(presetJson[presetSelected]['smart_dterm_smoothing_pitch']);
                     $('.smartDTermWitchBox input[name="smartdTermYaw"]').val(presetJson[presetSelected]['smart_dterm_smoothing_yaw']);
@@ -1960,37 +1957,34 @@ TABS.pid_tuning.initialize = function(callback) {
                 $('.pid_filter input[name="dTermNotchFrequency"]').val(presetJson[presetSelected]['dterm_notch_hz']);
                 $('.pid_filter input[name="dTermNotchCutoff"]').val(presetJson[presetSelected]['dterm_notch_cutoff']);
 
-                $('input[id="yawLowpassEnabled"]').prop('checked', presetJson[presetSelected]['yaw_lowpass_enabled'] !== "OFF").change();
-                $('.pid_filter input[name="yawLowpassFrequency"]').val(presetJson[presetSelected]['yaw_lowpass_hz']);
+                //MSP 1.51 adjust - semver.lt
+                if  (semver.lt(CONFIG.apiVersion, "1.51.0")) {
+                    $('input[id="yawLowpassEnabled"]').prop('checked', presetJson[presetSelected]['yaw_lowpass_enabled'] !== "OFF").change();
+                    $('.pid_filter input[name="yawLowpassFrequency"]').val(presetJson[presetSelected]['yaw_lowpass_hz']);
+                }
 
                 // Other settings
 
-                var iDecayNumberElement = $('input[name="feedforwardTransition-number"]');
-                iDecayNumberElement.val(presetJson[presetSelected]['feedforward_transition'] / 100).trigger('input');
+                if  (semver.lt(CONFIG.apiVersion, "1.46.0")) {  //stick-pids (rateDynamics) removed this in MSP 1.46
+                    $('input[name="feedforwardTransition-number"]').val(presetJson[presetSelected]['feedforward_transition'] / 100).trigger('input');
+                }
 
-                var iDecayNumberElement = $('input[name="throttleBoost-number"]');
-                iDecayNumberElement.val(presetJson[presetSelected]['throttle_boost']).trigger('input');
+                $('input[name="throttleBoost-number"]').val(presetJson[presetSelected]['throttle_boost']).trigger('input');
 
                 //MSP 1.47 adjustment //semver.lt //was removed in 0.3.0
                 if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
-                    var iDecayNumberElement = $('input[name="absoluteControlGain-number"]');
-                    iDecayNumberElement.val(presetJson[presetSelected]['abs_control_gain']).trigger('input');
+                    $('input[name="absoluteControlGain-number"]').val(presetJson[presetSelected]['abs_control_gain']).trigger('input');
                 }
 
-                var iDecayNumberElement = $('input[name="iDecay-number"]');
-                iDecayNumberElement.val(presetJson[presetSelected]['i_decay']).trigger('input');
+                $('input[name="iDecay-number"]').val(presetJson[presetSelected]['i_decay']).trigger('input');
 
-                var errorBoostNumberElement = $('input[name="errorBoost-number"]');
-                errorBoostNumberElement.val(presetJson[presetSelected]['emu_boost']).trigger('input');
+                $('input[name="errorBoost-number"]').val(presetJson[presetSelected]['emu_boost']).trigger('input');
 
-                var errorBoostLimitNumberElement = $('input[name="errorBoostLimit-number"]');
-                errorBoostLimitNumberElement.val(presetJson[presetSelected]['emu_boost_limit']).trigger('input');
+                $('input[name="errorBoostLimit-number"]').val(presetJson[presetSelected]['emu_boost_limit']).trigger('input');
 
-                var errorBoostYawNumberElement = $('input[name="errorBoostYaw-number"]');
-                errorBoostYawNumberElement.val(presetJson[presetSelected]['emu_boost_yaw']).trigger('input');
+                $('input[name="errorBoostYaw-number"]').val(presetJson[presetSelected]['emu_boost_yaw']).trigger('input');
 
-                var errorBoostLimitYawNumberElement = $('input[name="errorBoostLimitYaw-number"]');
-                errorBoostLimitYawNumberElement.val(presetJson[presetSelected]['emu_boost_limit_yaw']).trigger('input');
+                $('input[name="errorBoostLimitYaw-number"]').val(presetJson[presetSelected]['emu_boost_limit_yaw']).trigger('input');
 
                 //dBoost and iRelaxV2 presets //msp 1.49
                 // if non-existing preset, use hardcoded defaults
@@ -2030,12 +2024,16 @@ TABS.pid_tuning.initialize = function(callback) {
 
                 $('input[name="featheredPids-number"]').val(presetJson[presetSelected]['feathered_pids']);
                 $('input[id="itermrotation"]').prop('checked', presetJson[presetSelected]['iterm_rotation'] !== "OFF").change();
-                $('input[id="vbatpidcompensation"]').prop('checked', presetJson[presetSelected]['vbat_pid_gain'] !== "OFF").change();
-                $('input[id="smartfeedforward"]').prop('checked', presetJson[presetSelected]['smart_feedforward'] !== "OFF").change();
-                $('input[id="itermrelax"]').prop('checked', presetJson[presetSelected]['iterm_relax_enabled'] !== "OFF").change();
-                $('select[id="itermrelaxAxes"]').val(presetJson[presetSelected]['iterm_relax'] + 1);
-                $('select[id="itermrelaxType"]').val(presetJson[presetSelected]['iterm_relax_type']);
-                $('input[name="itermRelaxCutoff"]').val(presetJson[presetSelected]['iterm_relax_cutoff']);
+
+                //MSP 1.51 adjust - semver.lt
+                if  (semver.lt(CONFIG.apiVersion, "1.51.0")) {
+                    $('input[id="vbatpidcompensation"]').prop('checked', presetJson[presetSelected]['vbat_pid_gain'] !== "OFF").change();
+                    $('input[id="smartfeedforward"]').prop('checked', presetJson[presetSelected]['smart_feedforward'] !== "OFF").change();
+                    $('input[id="itermrelax"]').prop('checked', presetJson[presetSelected]['iterm_relax_enabled'] !== "OFF").change();
+                    $('select[id="itermrelaxAxes"]').val(presetJson[presetSelected]['iterm_relax'] + 1);
+                    $('select[id="itermrelaxType"]').val(presetJson[presetSelected]['iterm_relax_type']);
+                    $('input[name="itermRelaxCutoff"]').val(presetJson[presetSelected]['iterm_relax_cutoff']);
+                }
 
                 // TPA settings
                 $('.tpa input[name="tpa_P"]').val(presetJson[presetSelected]['tpa_rate_p'] / 100);
