@@ -795,23 +795,15 @@ function updateTabList(features) {
         $('.smartDTermWitchBox').hide();
     }
 
-    // MSP 1.51
+    //MSP 1.51
     //expermode show/hide
     if (isExpertModeEnabled()) {
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
             //debug
             console.log("expert-toggle: MSP 1.51 -- show stuff");
-            // feel tab not expert now. $('.tab_container .subtab-feel').show();
-            //$('.subtab-feel').show();
-            //$('.feel').hide();
             $('.emuGravity').show();
-            //$('.DFyaw').show();
             $('.GyroABGFilter').show();
             $('.DTermABGFilter').show();
-            // feel tab not expert now.$('.MotorMixer').show();
-            // feel tab not expert now.$('.ThrustLinear').show();
-            // feel tab not expert now.$('.ThrottleLinear').show();
-            // feel tab not expert now.$('.AxisLock').show();
         } else { //not MSP 1.51
             //debug
             console.log("expert-toggle: not MSP 1.51 -- hide stuff");
@@ -819,7 +811,6 @@ function updateTabList(features) {
             $('.subtab-feel').hide();
             $('.feel').hide(); //hacky but works
             $('.emuGravity').hide();
-            //$('.DFyaw').hide();
             $('.GyroABGFilter').hide();
             $('.DTermABGFilter').hide();
             $('.MotorMixer').hide();
@@ -827,19 +818,8 @@ function updateTabList(features) {
             $('.ThrottleLinear').hide();
             $('.AxisLock').hide();
         }
-    } //else { //not expert
-      //  //unfocus feel tab
-      //  //debug
-      //  console.log("expert-toggle: not expertMode; ");
-      //  $('.tab_container .subtab-feel').hide();
-      //  $('.subtab-feel').hide();
-      //  if ( semver.gte(CONFIG.apiVersion, "1.51.0") && TABS.pid_tuning.activeSubtab == 'feel' ) {
-      //      //debug
-      //      console.log("Active subtab is :"+ TABS.pid_tuning.activeSubtab + 'Setting to PID');
-      //      $('.tab-pid_tuning .tab_container .pid').click();  //jQuery specific command
-      //  }
-      // }
-    // end MSP 1.51
+    }
+    //end MSP 1.51
 } //end updateTabList
 
 function zeroPad(value, width) {
