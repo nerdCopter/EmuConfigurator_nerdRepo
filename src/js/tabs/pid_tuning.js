@@ -60,6 +60,7 @@ TABS.pid_tuning.initialize = function(callback) {
                 return MSP.promise(MSPCodes.MSP_FAST_KALMAN);
             } else {
                 return MSP.promise(MSPCodes.MSP_IMUF_CONFIG);
+
             }
         }
     //MSP 1.51
@@ -505,7 +506,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     $('#imuf_sharpness').val(IMUF_FILTER_CONFIG.imuf_sharpness);
                 } else { // MSP 1.51 adjustment
                     $('.imufSharpness').hide();
-                    console.log('sharpness hide for MSP 1.51');
+                    console.log('sharpness hide MSP 1.51');
                 }
                 if (CONFIG.boardIdentifier === "HESP" || CONFIG.boardIdentifier === "SX10" || CONFIG.boardIdentifier === "FLUX") {
                     //MSP 1.51
@@ -1283,17 +1284,6 @@ TABS.pid_tuning.initialize = function(callback) {
             FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
         }
         //end MSP 1.51
-
-        //MSP 1.51
-        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
-            FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
-        }
-
-        //MSP 1.51
-        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
-            FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
-        }
-
 
         if (semver.gte(CONFIG.apiVersion, "1.39.0")) {
             if (semver.gte(CONFIG.apiVersion, "1.44.0")) {
