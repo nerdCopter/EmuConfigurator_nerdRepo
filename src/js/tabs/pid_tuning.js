@@ -60,7 +60,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 return MSP.promise(MSPCodes.MSP_FAST_KALMAN);
             } else {
                 return MSP.promise(MSPCodes.MSP_IMUF_CONFIG);
-
             }
         }
     //MSP 1.51
