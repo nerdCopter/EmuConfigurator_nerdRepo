@@ -60,7 +60,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 return MSP.promise(MSPCodes.MSP_FAST_KALMAN);
             } else {
                 return MSP.promise(MSPCodes.MSP_IMUF_CONFIG);
-
             }
         }
     //MSP 1.51
@@ -1283,6 +1282,12 @@ TABS.pid_tuning.initialize = function(callback) {
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
             FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
         }
+        //end MSP 1.51
+
+        //MSP 1.51
+        if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            FILTER_CONFIG.dterm_lowpass2_type = $('.pid_filter select[name="dtermLowpass2Type"]').val();
+        }
 
         //MSP 1.51
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
@@ -2278,7 +2283,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 //end MSP 1.51 //0.4.0 Presets
 
                 //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
-                // very hacky to hard-code bit 28
                 if (typeof presetJson[presetSelected]['dynamic_filter'] === 'undefined' || presetJson[presetSelected]['dynamic_filter'] === null) {
                         //set default or do nothing? // let's do nothing, it's easier & legacy
                         console.log('dynamic filter preset not defined');

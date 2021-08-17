@@ -4497,6 +4497,15 @@
     "osdDescElementGPSLat": {
         "message": "GPS latitude coordinate"
     },
+    "COMMENT": {"message": "MSP 1.51"},
+    "osdTextElementGPSPlusCode": {
+        "message": "GPS Plus Code",
+        "description": "One of the elements of the OSD"
+    },
+    "osdDescElementGPSPlusCode": {
+        "message": "GPS Plus Code"
+    },
+    "COMMENT": {"message": "end MSP 1.51"},
     "osdTextElementDebug": {
         "message": "Debug",
         "description": "One of the elements of the OSD"
