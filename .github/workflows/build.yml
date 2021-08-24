@@ -87,7 +87,7 @@ jobs:
 
       - name: yarn gulp release  --win32 --win64
         if: ${{ startsWith(matrix.os, 'windows') }}
-        run: yarn gulp release  --win32 --win64
+        run: yarn gulp release  --win32 --win64 --armv7
         continue-on-error: false
 
       - name: Upload Artifacts
