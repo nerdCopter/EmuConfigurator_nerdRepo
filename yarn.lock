@@ -2586,10 +2586,10 @@ i18next-xhr-backend@^3.2.2:
   dependencies:
     "@babel/runtime" "^7.5.5"
 
-i18next@^20.3.0:
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-20.3.0.tgz#9558b431241fb1dbbd445174391ede65d0a68ed9"
-  integrity sha512-eFv4aQvaGykp48mI4JEaCcoD/j4zoYjFnDYhChe3ukwvbHx3q4mKZlB8YnmhYrHQR5FopLlCrzcSuY0ZWfiakA==
+i18next@^21.3.1:
+  version "21.3.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.3.1.tgz#cb132b6e0975de7d5472b26c4cdec57ecca96cf0"
+  integrity sha512-VElMm+LoeEuhViVwnDw1gR3snTItK9NJqgok8PZ5WU870MVO1x+5KEbzLO/6GC1zu42Uc3EuGj3nsGMGMNwT0A==
   dependencies:
     "@babel/runtime" "^7.12.0"
 
@@ -4203,9 +4203,9 @@ path-key@^2.0.0, path-key@^2.0.1:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-root-regex@^0.1.0:
   version "0.1.2"
