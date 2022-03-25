@@ -1154,7 +1154,7 @@ OSD.loadDisplayFields = function() {
 
 OSD.constants = {
     VISIBLE: function () {
-                if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                if (semver.gte(CONFIG.APIVersion, "1.52.0") && OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
                     return 0x2000;
                 } else {
                     return 0x0800;
