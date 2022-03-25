@@ -1153,7 +1153,14 @@ OSD.loadDisplayFields = function() {
 };
 
 OSD.constants = {
-    VISIBLE: 0x2000,
+    VISIBLE: function () {
+                if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                    return 0x2000;
+                } else {
+                    return 0x0800;
+                }
+            },
+
     VIDEO_TYPES: [
         'AUTO',
         'PAL',
@@ -1689,11 +1696,16 @@ OSD.updateDisplaySize = function () {
 	// Not sure I can do this! This will mess with the calculation of the y position of the widget
 	//FONT.constants.SIZES.LINE = OSD.constants.VIDEO_COLS[video_type];
 
+
+    FONT.constants.SIZES.LINE = OSD.constants.VIDEO_COLS[video_type];
+    OSD.constants.VIDEO_TYPES[OSD.data.video_system] = video_type;
+
     // compute the size
     OSD.data.display_size = {
         x: OSD.constants.VIDEO_COLS[video_type],
         y: OSD.constants.VIDEO_LINES[video_type],
-        total: null
+        //total: null
+        total: OSD.constants.VIDEO_BUFFER_CHARS[video_type]
     };
 };
 
@@ -1736,8 +1748,16 @@ OSD.msp = {
 
                 display_item.positionable = positionable;
                 if (semver.gte(CONFIG.apiVersion, "1.21.0")) {
-                    // size * y + x
-                    display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+
+                    if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                        //display_item.x = bits & 0x3F;
+                        //display_item.y = (bits >> 6) & 0x3F;
+                        //display_item.position = (display_item.y) * FONT.constants.SIZES.LINE + (display_item.x);
+                        display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+                    } else { //gte 1.21 & lt 1.52
+                        // size * y + x
+                        display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
+                    }
 
                     display_item.isVisible = [];
                     for (let osd_profile = 0; osd_profile < OSD.getNumberOfProfiles(); osd_profile++) {
@@ -1769,7 +1789,14 @@ OSD.msp = {
                     for (let osd_profile = 0; osd_profile < OSD.getNumberOfProfiles(); osd_profile++) {
                         packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE << osd_profile : 0;
                     }
-                    return packed_visible | (((position / FONT.constants.SIZES.LINE) & 0x003F) << 6) | (position % FONT.constants.SIZES.LINE);
+
+                    if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                        return packed_visible | ((display_item.y & 0x3F) << 6) | (display_item.x & 0x3F);
+                        //return packed_visible | (((position / FONT.constants.SIZES.LINE) & 0x003F) << 6) | (position % FONT.constants.SIZES.LINE);
+                    } else { //gte 1.21 & lt 1.52
+                        return packed_visible | (((position / FONT.constants.SIZES.LINE) & 0x001F) << 5) | (position % FONT.constants.SIZES.LINE);
+                    }
+
                 } else {
                     return isVisible[0] ? (position == -1 ? 0 : position) : -1;
                 }
