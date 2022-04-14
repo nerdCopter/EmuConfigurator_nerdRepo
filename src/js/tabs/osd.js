@@ -1757,8 +1757,8 @@ OSD.msp = {
                         } else {
                             display_item.position = positionable ? FONT.constants.SIZES.LINE_SD * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
                         }
-                    } else {
-                        display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
+                    } else { //lt MSP 1.52
+                        display_item.position = positionable ? FONT.constants.SIZES.LINE_SD * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
                     }
 
                     display_item.isVisible = [];
@@ -2725,7 +2725,12 @@ TABS.osd.initialize = function (callback) {
                                             ctx.drawImage(img, j * 12, i * 18);
                                         }
                                     }
-                                    selectedPosition = selectedPosition - element.length + FONT.constants.SIZES.LINE;
+                                    switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                                    case 'HD':
+                                        selectedPosition = selectedPosition - element.length + FONT.constants.SIZES.LINE;
+                                    default:
+                                        selectedPosition = selectedPosition - element.length + FONT.constants.SIZES.LINE_SD;
+                                    }
                                 } else {
                                     var limits = OSD.searchLimitsElement(arrayElements);
                                     var offsetX = 0;
@@ -2738,7 +2743,14 @@ TABS.osd.initialize = function (callback) {
                                         }
                                         // Add the character to the preview
                                         var charCode = element.sym;
-                                        OSD.drawByOrder(selectedPosition + element.x + element.y * FONT.constants.SIZES.LINE, field, charCode, element.x, element.y);
+
+                                        switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                                        case 'HD':
+                                            OSD.drawByOrder(selectedPosition + element.x + element.y * FONT.constants.SIZES.LINE, field, charCode, element.x, element.y);
+                                        default:
+                                            OSD.drawByOrder(selectedPosition + element.x + element.y * FONT.constants.SIZES.LINE_SD, field, charCode, element.x, element.y);
+                                        }
+
                                         // Image used when "dragging" the element
                                         if (field.positionable) {
                                             var img = new Image();
