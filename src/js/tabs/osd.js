@@ -542,8 +542,11 @@ OSD.loadDisplayFields = function() {
             desc: 'osdDescElementHorizonSidebars',
             default_position: function () {
                 var position = 194;
-                if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] != 'NTSC') {
+                switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                case 'HD':
                     position += FONT.constants.SIZES.LINE;
+                default:
+                    position += FONT.constants.SIZES.LINE_SD;
                 }
                 return position;
             },
@@ -1696,6 +1699,7 @@ OSD.updateDisplaySize = function () {
 
 	// Not sure I can do this! This will mess with the calculation of the y position of the widget
 	//FONT.constants.SIZES.LINE = OSD.constants.VIDEO_COLS[video_type];
+    //FONT.constants.SIZES.LINE = OSD.constants.VIDEO_LINES[video_type];
 
     // compute the size
     OSD.data.display_size = {
@@ -1745,19 +1749,23 @@ OSD.msp = {
                 display_item.positionable = positionable;
                 if (semver.gte(CONFIG.apiVersion, "1.21.0")) {
                     // size * y + x
-                    if (semver.gte(CONFIG.apiVersion, "1.52.0") && OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
-                        display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
-                    }
-                    else {
-                        display_item.position = positionable ? FONT.constants.SIZES.LINE_SD * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
+                    //FONT.constants.SIZES.LINE = OSD.constants.VIDEO_LINES[OSD.data.video_system];
+
+                    if (semver.gte(CONFIG.apiVersion, "1.52.0")) { //&& OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                        if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                            display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+                        } else {
+                            display_item.position = positionable ? FONT.constants.SIZES.LINE_SD * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+                        }
+                    } else {
+                        display_item.position = positionable ? FONT.constants.SIZES.LINE * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
                     }
 
                     display_item.isVisible = [];
                     for (let osd_profile = 0; osd_profile < OSD.getNumberOfProfiles(); osd_profile++) {
-                        if (semver.gte(CONFIG.apiVersion, "1.52.0") && OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
-                            display_item.isVisible[osd_profile] = (bits & (OSD.constants.VISIBLE << osd_profile)) != 0;
-                        }
-                        else {
+                        if (semver.gte(CONFIG.apiVersion, "1.52.0")) { //&& OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                            display_item.isVisible[osd_profile] = (bits & (OSD.constants.VISIBLE << osd_profile)) != 0; //x2000 no matter SD/HD
+                        } else {
                             display_item.isVisible[osd_profile] = (bits & (OSD.constants.VISIBLE_SD << osd_profile)) != 0;
                         }
                     }
@@ -1785,20 +1793,25 @@ OSD.msp = {
 
                     let packed_visible = 0;
                     for (let osd_profile = 0; osd_profile < OSD.getNumberOfProfiles(); osd_profile++) {
-                        if (semver.gte(CONFIG.apiVersion, "1.52.0") && OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                        if (semver.gte(CONFIG.apiVersion, "1.52.0")) { //&& OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
                             packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE << osd_profile : 0;
                         }
                         else {
                             packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE_SD << osd_profile : 0;
                         }
                     }
-                    if (semver.gte(CONFIG.apiVersion, "1.52.0") && OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
-                        return packed_visible | (((position / FONT.constants.SIZES.LINE) & 0x003F) << 6) | (position % FONT.constants.SIZES.LINE);
+                    //FONT.constants.SIZES.LINE = OSD.constants.VIDEO_LINES[OSD.data.video_system];
+                    if (semver.gte(CONFIG.apiVersion, "1.52.0")) { //&& OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                        if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                            return packed_visible | (((position / FONT.constants.SIZES.LINE) & 0x003F) << 6) | (position % FONT.constants.SIZES.LINE);
+                        } else {
+                            return packed_visible | (((position / FONT.constants.SIZES.LINE_SD) & 0x003F) << 6) | (position % FONT.constants.SIZES.LINE_SD);
+                        }
                     }
                     else {
                         return packed_visible | (((position / FONT.constants.SIZES.LINE_SD) & 0x001F) << 5) | (position % FONT.constants.SIZES.LINE_SD);
                     }
-                        
+
                 } else {
                     return isVisible[0] ? (position == -1 ? 0 : position) : -1;
                 }
@@ -2065,7 +2078,12 @@ OSD.GUI.preview = {
         var display_item = OSD.data.display_items[field_id];
         var position = $(this).removeAttr('style').data('position');
         var cursor = position;
-        var cursorX = cursor % FONT.constants.SIZES.LINE;
+
+        if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+            var cursorX = cursor % FONT.constants.SIZES.LINE;
+        } else {
+            var cursorX = cursor % FONT.constants.SIZES.LINE_SD;
+        }
 
         if (display_item.preview.constructor === Array) {
             console.log('Initial Drop Position: ' + position);
@@ -2073,14 +2091,22 @@ OSD.GUI.preview = {
             var y = parseInt(ev.dataTransfer.getData('y'))
             console.log('XY Co-ords:' + x + '-' + y);
             position -= x;
-            position -= (y * FONT.constants.SIZES.LINE)
+            if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                position -= (y * FONT.constants.SIZES.LINE)
+            } else {
+                position -= (y * FONT.constants.SIZES.LINE_SD)
+            }
             console.log('Calculated Position: ' + position);
         }
 
         if (!display_item.ignoreSize) {
             if (display_item.preview.constructor !== Array) {
                 // Standard preview, string type
-                var overflows_line = FONT.constants.SIZES.LINE - ((position % FONT.constants.SIZES.LINE) + display_item.preview.length);
+                if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                    var overflows_line = FONT.constants.SIZES.LINE - ((position % FONT.constants.SIZES.LINE) + display_item.preview.length);
+                } else {
+                    var overflows_line = FONT.constants.SIZES.LINE_SD - ((position % FONT.constants.SIZES.LINE_SD) + display_item.preview.length);
+                }
                 if (overflows_line < 0) {
                     position += overflows_line;
                 }
@@ -2088,34 +2114,53 @@ OSD.GUI.preview = {
                 // Advanced preview, array type
                 var arrayElements = display_item.preview;
                 var limits = OSD.searchLimitsElement(arrayElements);
-                var selectedPositionX = position % FONT.constants.SIZES.LINE;
-                var selectedPositionY = Math.trunc(position / FONT.constants.SIZES.LINE);
+                if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                    var selectedPositionX = position % FONT.constants.SIZES.LINE;
+                } else {
+                    var selectedPositionX = position % FONT.constants.SIZES.LINE_SD;
+                }
+
+                if (OSD.constants.VIDEO_TYPES[OSD.data.video_system] == 'HD') {
+                    var selectedPositionY = Math.trunc(position / FONT.constants.SIZES.LINE);
+                } else {
+                    var selectedPositionY = Math.trunc(position / FONT.constants.SIZES.LINE_SD);
+                }
+
+                var lineMultiplier;
+                switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                case 'HD':
+                    lineMultiplier = FONT.constants.SIZES.LINE;
+                default:
+                    lineMultiplier = FONT.constants.SIZES.LINE_SD;
+                }
+
+
                 if (arrayElements[0].constructor === String) {
                     if (position < 0 ) {
                         return;
                     }
                     if (selectedPositionX > cursorX) { // TRUE -> Detected wrap around
-                        position += FONT.constants.SIZES.LINE - selectedPositionX;
+                        position += lineMultiplier - selectedPositionX;
                         selectedPositionY++;
-                    } else if (selectedPositionX + limits.maxX > FONT.constants.SIZES.LINE) { // TRUE -> right border of the element went beyond left edge of screen.
-                        position -= selectedPositionX + limits.maxX - FONT.constants.SIZES.LINE;
+                    } else if (selectedPositionX + limits.maxX > lineMultiplier) { // TRUE -> right border of the element went beyond left edge of screen.
+                        position -= selectedPositionX + limits.maxX - lineMultiplier;
                     }
                     if (selectedPositionY < 0 ) {
-                        position += Math.abs(selectedPositionY) * FONT.constants.SIZES.LINE;
+                        position += Math.abs(selectedPositionY) * lineMultiplier;
                     } else if ((selectedPositionY + limits.maxY ) > OSD.data.display_size.y) {
-                        position -= (selectedPositionY + limits.maxY  - OSD.data.display_size.y) * FONT.constants.SIZES.LINE;
+                        position -= (selectedPositionY + limits.maxY  - OSD.data.display_size.y) * lineMultiplier;
                     }
 
                 } else {
                     if ((limits.minX < 0) && ((selectedPositionX + limits.minX) < 0)) {
                         position += Math.abs(selectedPositionX + limits.minX);
-                    } else if ((limits.maxX > 0) && ((selectedPositionX + limits.maxX) >= FONT.constants.SIZES.LINE)) {
-                        position -= (selectedPositionX + limits.maxX + 1) - FONT.constants.SIZES.LINE;
+                    } else if ((limits.maxX > 0) && ((selectedPositionX + limits.maxX) >= lineMultiplier)) {
+                        position -= (selectedPositionX + limits.maxX + 1) - lineMultiplier;
                     }
                     if ((limits.minY < 0) && ((selectedPositionY + limits.minY) < 0)) {
-                        position += Math.abs(selectedPositionY + limits.minY) * FONT.constants.SIZES.LINE;
+                        position += Math.abs(selectedPositionY + limits.minY) * lineMultiplier;
                     } else if ((limits.maxY > 0) && ((selectedPositionY + limits.maxY) >= OSD.data.display_size.y)) {
-                        position -= (selectedPositionY + limits.maxY - OSD.data.display_size.y + 1) * FONT.constants.SIZES.LINE;
+                        position -= (selectedPositionY + limits.maxY - OSD.data.display_size.y + 1) * lineMultiplier;
                     }
                 }
             }
