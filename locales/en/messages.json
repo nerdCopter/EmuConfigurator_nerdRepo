@@ -1427,11 +1427,11 @@
     "portsFunction_RUNCAM_DEVICE_CONTROL": {
         "message": "Camera (RunCam Protocol)"
     },
-    "portsFunction_HDZERO_OSD": {
-        "message": "HDZero OSD"
+    "portsFunction_HD720_OSD": {
+        "message": "HD OSD (720p)"
     },
-    "osdSetupVideoFormatOptionHd": {
-        "message": "HD (HDZero)"
+    "osdSetupVideoFormatOptionHd720": {
+        "message": "HD (720p)"
     },
     "pidTuningProfileOption": {
         "message": "Profile $1"
