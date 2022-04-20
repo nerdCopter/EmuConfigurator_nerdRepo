@@ -395,22 +395,22 @@ OSD.constants = {
         'AUTO',
         'PAL',
         'NTSC',
-        'HD720'
+        'HD'
     ],
     VIDEO_LINES: {
         PAL: 16,
         NTSC: 13,
-        HD720: 18
+        HD: 18
     },
     VIDEO_COLS: {
         PAL: 30,
         NTSC: 30,
-        HD720: 50
+        HD: 50
     },
     VIDEO_BUFFER_CHARS: {
         PAL: 480,
         NTSC: 390,
-        HD720: 900
+        HD: 900
     },
     UNIT_TYPES: [
         'IMPERIAL',
@@ -753,8 +753,8 @@ OSD.loadDisplayFields = function() {
             default_position: function () {
                 var position = 193;
                 switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                    case 'HD720':
-                        position += OSD.constants.VIDEO_COLS['HD720'];
+                    case 'HD':
+                        position += OSD.constants.VIDEO_COLS['HD'];
                         break;
                     default:
                         position += OSD.constants.VIDEO_COLS['PAL'];  // PAL and NTSC = same column width
@@ -776,8 +776,8 @@ OSD.loadDisplayFields = function() {
             default_position: function () {
                 var position = 74;
                 switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                    case 'HD720':
-                        position += OSD.constants.VIDEO_COLS['HD720'];
+                    case 'HD':
+                        position += OSD.constants.VIDEO_COLS['HD'];
                         break;
                     default:
                         position += OSD.constants.VIDEO_COLS['PAL'];  // PAL and NTSC = same column width
@@ -818,8 +818,8 @@ OSD.loadDisplayFields = function() {
             default_position: function () {
                 var position = 194;
                 switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                    case 'HD720':
-                        position += OSD.constants.VIDEO_COLS['HD720'];
+                    case 'HD':
+                        position += OSD.constants.VIDEO_COLS['HD'];
                         break;
                     default:
                         position += OSD.constants.VIDEO_COLS['PAL'];  // PAL and NTSC = same column width
@@ -1744,10 +1744,10 @@ OSD.updateDisplaySize = function () {
         video_type = 'PAL';
     }
 
-    $('.third_left').toggleClass('preview_hd_side', video_type == 'HD720');
-    $('.third_center').toggleClass('preview_hd', video_type == 'HD720');
-    $('.preview').toggleClass('preview_hd', video_type == 'HD720');
-    $('.third_right').toggleClass('preview_hd_side', video_type == 'HD720');
+    $('.third_left').toggleClass('preview_hd_side', video_type == 'HD');
+    $('.third_center').toggleClass('preview_hd', video_type == 'HD');
+    $('.preview').toggleClass('preview_hd', video_type == 'HD');
+    $('.third_right').toggleClass('preview_hd_side', video_type == 'HD');
 
     // compute the size
     OSD.data.display_size = {
@@ -1800,8 +1800,8 @@ OSD.msp = {
 
                     var OSDlineWidth;
                     switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                        case 'HD720':
-                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD720'];
+                        case 'HD':
+                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD'];
                             break;
                         default:
                             OSDlineWidth = OSD.constants.VIDEO_COLS['PAL']; // PAL and NTSC = same column width
@@ -1855,8 +1855,8 @@ OSD.msp = {
 
                     var OSDlineWidth;
                     switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                        case 'HD720':
-                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD720'];
+                        case 'HD':
+                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD'];
                             break;
                         default:
                             OSDlineWidth = OSD.constants.VIDEO_COLS['PAL']; // PAL and NTSC = same column width
@@ -2137,8 +2137,8 @@ OSD.GUI.preview = {
 
         var OSDlineWidth;
         switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-          case 'HD720':
-               OSDlineWidth = OSD.constants.VIDEO_COLS['HD720'];
+          case 'HD':
+               OSDlineWidth = OSD.constants.VIDEO_COLS['HD'];
               break;
           default:
                OSDlineWidth = OSD.constants.VIDEO_COLS['PAL']; // PAL and NTSC = same column width
@@ -2719,8 +2719,8 @@ TABS.osd.initialize = function (callback) {
 
                     var OSDlineWidth;
                     switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
-                        case 'HD720':
-                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD720'];
+                        case 'HD':
+                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD'];
                             break;
                         default:
                             OSDlineWidth = OSD.constants.VIDEO_COLS['PAL']; // PAL and NTSC = same column width
