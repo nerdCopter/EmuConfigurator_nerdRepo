@@ -98,9 +98,7 @@ FONT.constants = {
         /** NVM ram field size for one font char, last 10 bytes dont matter **/
         MAX_NVM_FONT_CHAR_FIELD_SIZE: 64,
         CHAR_HEIGHT: 18,
-        CHAR_WIDTH: 12,
-        LINE: 50,
-        LINE_SD: 30
+        CHAR_WIDTH: 12
     },
     COLORS: {
         // black
@@ -392,7 +390,7 @@ OSD.drawStickOverlayPreview = function () {
 //moved OSD.constants
 OSD.constants = {
     VISIBLE: 0x2000,
-    VISIBLE_SD: 0x0800,
+    VISIBLE_SD: 0x0800,  //SD is a misnomer, it's technically "Legacy" as SD in MSP 1.52 will be x2000 as well
     VIDEO_TYPES: [
         'AUTO',
         'PAL',
@@ -1054,7 +1052,15 @@ OSD.loadDisplayFields = function() {
             name: 'POWER',
             text: 'osdTextElementPower',
             desc: 'osdDescElementPower',
-            default_position: (15 << 5) | 2,
+            default_position: function () {
+                var position = 194;
+                if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                    return (15 << 6) | 2;
+                } else {
+                    return (15 << 5) | 2;
+                }
+            },
+            //(15 << 5) | 2,
             draw_order: 200,
             positionable: true,
             preview: function () {
@@ -1091,7 +1097,15 @@ OSD.loadDisplayFields = function() {
             name: 'AVG_CELL_VOLTAGE',
             text: 'osdTextElementAvgCellVoltage',
             desc: 'osdDescElementAvgCellVoltage',
-            default_position: 12 << 5,
+            default_position: function () {
+                var position = 194;
+                if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
+                    return 12 << 6;
+                } else {
+                    return 12 << 5;
+                }
+            },
+            //12 << 5,
             draw_order: 230,
             positionable: true,
             preview: FONT.symbol(SYM.BATTERY) + '3.98' + FONT.symbol(SYM.VOLT)
@@ -1796,7 +1810,7 @@ OSD.msp = {
                     if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
                         display_item.position = positionable ? OSDlineWidth * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
                     } else { //lt MSP 1.52
-                        display_item.position = positionable ? OSDlineWidth * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
+                        display_item.position = positionable ? OSDlineWidth * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position; //legacy
                     }
 
                     display_item.isVisible = [];
@@ -1851,7 +1865,7 @@ OSD.msp = {
                     if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
                         return packed_visible | (((position / OSDlineWidth) & 0x003F) << 6) | (position % OSDlineWidth);
                     } else {
-                        return packed_visible | (((position / OSDlineWidth) & 0x001F) << 5) | (position % OSDlineWidth);
+                        return packed_visible | (((position / OSDlineWidth) & 0x001F) << 5) | (position % OSDlineWidth); //legacy
                     }
 
                 } else {
@@ -2701,6 +2715,15 @@ TABS.osd.initialize = function (callback) {
                     // clear the buffer
                     for (var i = 0; i < OSD.data.display_size.total; i++) {
                         OSD.data.preview.push([null, ' '.charCodeAt(0), null, null]);
+                    }
+
+                    var OSDlineWidth;
+                    switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                        case 'HD720':
+                            OSDlineWidth = OSD.constants.VIDEO_COLS['HD720'];
+                            break;
+                        default:
+                            OSDlineWidth = OSD.constants.VIDEO_COLS['PAL']; // PAL and NTSC = same column width
                     }
 
                     // draw all the displayed items and the drag and drop preview images
