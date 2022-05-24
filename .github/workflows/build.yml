@@ -121,13 +121,14 @@ jobs:
       - name: git checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0 #fetch all history
-          ref: master
+          # fetch all history
+          fetch-depth: 0
         continue-on-error: true
       - name: Credits
         run: |
           echo "git shortlog --summary --numbered" > CREDITS.TXT
-          git shortlog --summary --numbered | tee --append CREDITS.TXT
+          git shortlog --summary --numbered >> CREDITS.TXT
+          git shortlog --summary --numbered
         continue-on-error: true
       - name: Upload Credits
         uses: actions/upload-artifact@v2
@@ -242,7 +243,7 @@ jobs:
           allowUpdates: true
           # tag: use the build Number, but we MUST manually change to version so that it creates a version-tag on release
           tag: "${{ github.RUN_NUMBER }}"
-          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*,./Artifacts/CREDITS.TXT
+          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*,./Artifacts/CREDITS/CREDITS.TXT
           artifactContentType: raw
           name:  "DRAFT / EmuConfigurator / GitHub Build ${{ github.RUN_NUMBER }}"
           body: |
