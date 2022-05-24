@@ -127,8 +127,8 @@ jobs:
       - name: Credits
         run: |
           echo "git shortlog --summary --numbered" > CREDITS.TXT
-          git shortlog --summary --numbered >> CREDITS.TXT
-          git shortlog --summary --numbered
+          echo "$(git shortlog --summary --numbered)"  >> CREDITS.TXT
+          echo "$(git shortlog --summary --numbered)"
         continue-on-error: true
       - name: Upload Credits
         uses: actions/upload-artifact@v2
