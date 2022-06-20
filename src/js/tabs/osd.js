@@ -2736,9 +2736,10 @@ TABS.osd.initialize = function (callback) {
             GUI.log(i18n.getMessage('osdSettingsSaved'));
             var oldText = $(this).text();
             $(this).html(i18n.getMessage('osdButtonSaved'));
-            setTimeout(function () {
+            var saveTimeout = setTimeout(function () {
                 $(self).html(oldText);
             }, 2000);
+            clearTimeout(saveTimeout);
         });
 
         // font preview window

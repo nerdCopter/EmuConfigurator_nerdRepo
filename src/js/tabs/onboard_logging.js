@@ -351,6 +351,7 @@ TABS.onboard_logging.initialize = function (callback) {
                     });
                 }
             }, 2000);
+            clearTimeout(sdcardTimer);
         }
     }
     
@@ -521,7 +522,8 @@ TABS.onboard_logging.initialize = function (callback) {
                 if (DATAFLASH.ready) {
                     $(".dataflash-confirm-erase")[0].close();
                 } else {
-                    setTimeout(poll_for_erase_completion, 500);
+                    var pollTimeout = setTimeout(poll_for_erase_completion, 500);
+                    clearTimeout(pollTimeout);
                 }
             }
         });

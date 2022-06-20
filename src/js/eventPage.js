@@ -42,7 +42,7 @@ function startApplication() {
 
                 chrome.serial.send(connectionId, bufferOut, function () { console.log('Send exit') });
 
-                setTimeout(function() {
+                var bufferTimeout = setTimeout(function() {
                     bufferOut = new ArrayBuffer(22);
                     bufView = new Uint8Array(bufferOut);
                     var checksum = 0;
@@ -71,6 +71,7 @@ function startApplication() {
                         });
                     });
                 }, 100);
+                clearTimeout(bufferTimeout);
             } else if (connectionId) {
                 chrome.serial.disconnect(connectionId, function (result) {
                     console.log('SERIAL: Connection closed - ' + result);

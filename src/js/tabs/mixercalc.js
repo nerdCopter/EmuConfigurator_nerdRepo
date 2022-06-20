@@ -60,7 +60,8 @@ function mixerCalcMain() {
 
     window.requestAnimFrame = (function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
-            window.setTimeout(callback, 1000 / 60);
+            var windowAnimTimeout = window.setTimeout(callback, 1000 / 60);
+            clearTimeout(windowAnimTimeout);
         };
     }());
 
@@ -533,6 +534,7 @@ function mixerCalcMain() {
         reparseTimer = setTimeout(function() {
             doReparse();
         }, 2000);
+        clearTimeout(reparseTimer);
     }
 
     function addMotorsRadial(howMany, layout) {
@@ -898,7 +900,8 @@ function mixerCalcMain() {
          *        Var divId = $(this).attr("divid");
          *        $("." + divId).slideToggle("slow");
          *    });
-         *    //setTimeout(function(){listLessons();}, 200);
+         *    //var animToggleTimeout = setTimeout(function(){listLessons();}, 200);
+         *    clearTimeout(animToggleTimeout);
          *    $("#animtoggle").click(function() {
          *        Run = !run;
          *        If (run) animate();

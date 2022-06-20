@@ -504,7 +504,8 @@ STM32DFU_protocol.prototype.clearStatus = function (callback) {
             } else {
                 var delay = data[1] | (data[2] << 8) | (data[3] << 16);
 
-                setTimeout(clear_status, delay);
+                var clearStatusTimeout = setTimeout(clear_status, delay);
+                clearTimeout(clearStatusTimeout);
             }
         });
     }
@@ -524,7 +525,7 @@ STM32DFU_protocol.prototype.loadAddress = function (address, callback, abort) {
             if (data[4] == self.state.dfuDNBUSY) {
                 var delay = data[1] | (data[2] << 8) | (data[3] << 16);
 
-                setTimeout(function () {
+                let controlTransferTimeout =  setTimeout(function () {
                     self.controlTransfer('in', self.request.GETSTATUS, 0, 0, 6, 0, function (data) {
                         if (data[4] == self.state.dfuDNLOAD_IDLE) {
                             callback(data);
@@ -538,6 +539,7 @@ STM32DFU_protocol.prototype.loadAddress = function (address, callback, abort) {
                         }
                     });
                 }, delay);
+                clearTimeout(controlTransferTimeout);
             } else {
                 console.log('Failed to request address load');
                 self.upload_procedure(99);
@@ -716,7 +718,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
 							    if (data[4] == self.state.dfuDNBUSY) {
 								var delay = data[1] | (data[2] << 8) | (data[3] << 16);
 
-								setTimeout(function () {
+								var controlTransferTimeout = setTimeout(function () {
 								    self.controlTransfer('in', self.request.GETSTATUS, 0, 0, 6, 0, function (data) {
 									if (data[4] == self.state.dfuDNLOAD_IDLE) {
 									    console.log('Failed to write ob');
@@ -727,6 +729,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
 									}
 								    });
 								}, delay);
+                                clearTimeout(controlTransferTimeout);
 							    } else {
 								console.log('Failed to initiate write ob');
 								self.upload_procedure(99);
@@ -826,7 +829,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             if (data[4] == self.state.dfuDNBUSY) { // completely normal
                                 var delay = data[1] | (data[2] << 8) | (data[3] << 16);
 
-                                setTimeout(function () {
+                                let controlTransferTimeout = setTimeout(function () {
                                     self.controlTransfer('in', self.request.GETSTATUS, 0, 0, 6, 0, function (data) {
                                         if (data[4] == self.state.dfuDNLOAD_IDLE) {
                                             // update progress bar
@@ -846,6 +849,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                                         }
                                     });
                                 }, delay);
+                                clearTimeout(controlTransferTimeout);
                             } else {
                                 console.log('Failed to initiate page erase, page 0x' + page_addr.toString(16));
                                 self.upload_procedure(99);
@@ -887,7 +891,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             if (data[4] == self.state.dfuDNBUSY) {
                                 var delay = data[1] | (data[2] << 8) | (data[3] << 16);
 
-                                setTimeout(function () {
+                                let controlTransferTimeout = setTimeout(function () {
                                     self.controlTransfer('in', self.request.GETSTATUS, 0, 0, 6, 0, function (data) {
                                         if (data[4] == self.state.dfuDNLOAD_IDLE) {
                                             // update progress bar
@@ -901,6 +905,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                                         }
                                     });
                                 }, delay);
+                                clearTimeout(controlTransferTimeout);
                             } else {
                                 console.log('Failed to initiate write ' + bytes_to_write + 'bytes to 0x' + address.toString(16));
                                 self.upload_procedure(99);

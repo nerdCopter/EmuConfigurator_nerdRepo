@@ -530,6 +530,7 @@ TABS.motors.initialize = function (callback) {
                     buffering_set_motor = [];
                     buffer_delay = false;
                 }, 10);
+                clearTimeout(buffer_delay);
             }
         });
 

@@ -28,11 +28,12 @@ CliAutoComplete.isOpen = function() {
  */
 CliAutoComplete.openLater = function(force) {
     var self = this;
-    setTimeout(function() {
+    var openLaterTimeout = setTimeout(function() {
         self.forceOpen = !!force;
         self.$textarea.textcomplete('trigger');
         self.forceOpen = false;
     }, 0);
+    //clearTimeout(openLaterTimeout);
 };
 
 CliAutoComplete.setEnabled = function(enable) {
@@ -256,12 +257,13 @@ CliAutoComplete._initTextcomplete = function() {
                 // some strategies may set sendOnEnter only at the replace stage, thus we call with timeout
                 // since this handler [onKeydown] is triggered before replace()
                 if (e.which == 13) {
-                    setTimeout(function() {
+                    var sendOnEnterTimeout = setTimeout(function() {
                         if (sendOnEnter) {
                             // fake "enter" to run the textarea's handler
                             $textarea.trigger($.Event('keypress', {which:13}))
                         }
                     }, 0);
+                    //clearTimeout(sendOnEnterTimeout);
                 }
             }
         }

@@ -2625,7 +2625,7 @@ TABS.pid_tuning.initialize = function(callback) {
         rcCurveElement.height = 1000;
 
         function updateRates(event) {
-            setTimeout(function() { // let global validation trigger and adjust the values first
+            var updateRatesTimout = setTimeout(function() { // let global validation trigger and adjust the values first
                 if (event) { // if an event is passed, then use it
                     var targetElement = $(event.target),
                         targetValue = checkInput(targetElement);
@@ -2704,6 +2704,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     updateNeeded = false;
                 }
             }, 0);
+            clearTimeout(updateRatesTimout);
         }
 
         // UI Hooks
@@ -2712,7 +2713,7 @@ TABS.pid_tuning.initialize = function(callback) {
         $('.pid_tuning').on('input change', updateRates).trigger('input');
 
         $('.throttle input').on('input change', function() {
-            setTimeout(function() { // let global validation trigger and adjust the values first
+            var throttleInputTimeout = setTimeout(function() { // let global validation trigger and adjust the values first
                 var throttleMidE = $('.throttle input[name="mid"]'),
                     throttleExpoE = $('.throttle input[name="expo"]'),
                     mid = parseFloat(throttleMidE.val()),
@@ -2752,6 +2753,7 @@ TABS.pid_tuning.initialize = function(callback) {
                 context.strokeStyle = '#2297eb';
                 context.stroke();
             }, 0);
+            clearTimeout(throttleInputTimeout);
         }).trigger('input');
 
         $('a.refresh').click(function() {

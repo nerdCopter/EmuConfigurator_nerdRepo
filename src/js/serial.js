@@ -85,7 +85,7 @@ var serial = {
                         case 'overrun':
                             // wait 50 ms and attempt recovery
                             self.error = info.error;
-                            setTimeout(function() {
+                            var overrunTimeout = setTimeout(function() {
                                 chrome.serial.setPaused(info.connectionId, false, function() {
                                     self.getInfo(function (info) {
                                         if (info) {
@@ -107,6 +107,7 @@ var serial = {
                                     });
                                 });
                             }, 50);
+                            clearTimeout(overrunTimeout);
                             break;
 
                         case 'timeout':
@@ -144,13 +145,14 @@ var serial = {
                 console.log('SERIAL: Connection opened with ID: ' + connectionInfo.connectionId + ', but request was canceled, disconnecting');
 
                 // some bluetooth dongles/dongle drivers really doesn't like to be closed instantly, adding a small delay
-                setTimeout(function initialization() {
+                var openCanceledTimeout = setTimeout(function initialization() {
                     self.openRequested = false;
                     self.openCanceled = false;
                     self.disconnect(function resetUI() {
                         if (callback) callback(false);
                     });
                 }, 150);
+                clearTimeout(openCanceledTimeout);
             } else if (self.openCanceled) {
                 // connection didn't open and sequence was canceled, so we will do nothing
                 console.log('SERIAL: Connection didn\'t open and request was canceled');

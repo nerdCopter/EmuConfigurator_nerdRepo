@@ -1,7 +1,7 @@
 'use strict';
 
 TABS.cli = {
-    lineDelayMs: 30,
+    lineDelayMs: 0,
     profileSwitchDelayMs: 1000,  //1 second
     outputHistory: "",
     cliBuffer: "",
@@ -54,13 +54,14 @@ function copyToClipboard(text, nwGui) {
             width: origWidth,
             textAlign: "center",
         });
-        setTimeout(() => {
+        var copyTimeout = setTimeout(function() {
             button.text(origText);
             button.css({
                 width: "",
                 textAlign: "",
             });
         }, 1500);
+        clearTimeout(copyTimeout);
     }
 
     function onCopyFailed(ex) {

@@ -201,6 +201,7 @@ GUI_control.prototype.timeout_add = function (name, code, timeout) {
         var index = self.timeout_array.indexOf(data);
         if (index > -1) self.timeout_array.splice(index, 1);
     }, timeout);
+    clearTimeout(data.timer);
 
     this.timeout_array.push(data); // push to primary timeout array
 

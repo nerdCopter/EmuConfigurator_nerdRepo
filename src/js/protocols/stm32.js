@@ -102,7 +102,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                         if (result) {
                             // delay to allow board to boot in bootloader mode
                             // required to detect if a DFU device appears
-                            setTimeout(function() {
+                            var portHandlerTimeout = setTimeout(function() {
                                 // refresh device list
                                 PortHandler.check_usb_devices(function(dfu_available) {
                                     if(dfu_available) {
@@ -119,6 +119,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                     }
                                 });
                             }, 1000);
+                            clearTimeout(portHandlerTimeout);
                         } else {
                             GUI.connect_lock = false;
                         }
