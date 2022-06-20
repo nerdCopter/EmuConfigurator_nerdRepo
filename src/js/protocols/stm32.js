@@ -119,7 +119,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                     }
                                 });
                             }, 1000);
-                            clearTimeout(portHandlerTimeout);
+                            //clearTimeout(portHandlerTimeout);
                         } else {
                             GUI.connect_lock = false;
                         }

@@ -344,14 +344,13 @@ TABS.onboard_logging.initialize = function (callback) {
         if (SDCARD.supported && !sdcardTimer) {
             // Poll for changes in SD card status
             sdcardTimer = setTimeout(function() {
-                sdcardTimer = false;
+                sdcardTimer = false;  // same as clearTimeout(sdcardTimer);
                 if (CONFIGURATOR.connectionValid) {
                     MSP.send_message(MSPCodes.MSP_SDCARD_SUMMARY, false, false, function() {
                         update_html();
                     });
                 }
             }, 2000);
-            clearTimeout(sdcardTimer);
         }
     }
     
@@ -523,7 +522,7 @@ TABS.onboard_logging.initialize = function (callback) {
                     $(".dataflash-confirm-erase")[0].close();
                 } else {
                     var pollTimeout = setTimeout(poll_for_erase_completion, 500);
-                    clearTimeout(pollTimeout);
+                    //clearTimeout(pollTimeout);  clearTimeout breaks erase-completion
                 }
             }
         });

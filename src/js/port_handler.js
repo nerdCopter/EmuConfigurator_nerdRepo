@@ -145,7 +145,7 @@ PortHandler.check = function () {
         var timeOutCheckTimeout = setTimeout(function () {
             self.check();
         }, TIMEOUT_CHECK);
-        clearTimeout(timeOutCheckTimeout);
+        //clearTimeout(timeOutCheckTimeout);  //breaks
     });
 };
 
@@ -195,9 +195,8 @@ PortHandler.port_detected = function(name, code, timeout, ignore_timeout) {
             var index = self.port_detected_callbacks.indexOf(obj);
             if (index > -1) self.port_detected_callbacks.splice(index, 1);
         }, (timeout) ? timeout : 10000);
-        //clearTimeout(obj.timer);
     } else {
-        obj.timer = false;
+        obj.timer = false;  //same as clearTimer(obj.timer)
         obj.timeout = false;
     }
 
@@ -221,9 +220,8 @@ PortHandler.port_removed = function (name, code, timeout, ignore_timeout) {
             var index = self.port_removed_callbacks.indexOf(obj);
             if (index > -1) self.port_removed_callbacks.splice(index, 1);
         }, (timeout) ? timeout : 10000);
-        //clearTimeout(obj.timer);
     } else {
-        obj.timer = false;
+        obj.timer = false; //same as clearTimer(obj.timer)
         obj.timeout = false;
     }
 

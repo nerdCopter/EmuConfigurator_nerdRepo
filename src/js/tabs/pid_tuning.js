@@ -2704,7 +2704,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     updateNeeded = false;
                 }
             }, 0);
-            clearTimeout(updateRatesTimout);
+            //clearTimeout(updateRatesTimout); //breaks
         }
 
         // UI Hooks
@@ -2753,7 +2753,7 @@ TABS.pid_tuning.initialize = function(callback) {
                 context.strokeStyle = '#2297eb';
                 context.stroke();
             }, 0);
-            clearTimeout(throttleInputTimeout);
+            //clearTimeout(throttleInputTimeout); //breaks
         }).trigger('input');
 
         $('a.refresh').click(function() {
