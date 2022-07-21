@@ -1,0 +1,263 @@
+on:
+  push:
+    tags:
+    - '*'
+    #branches:
+    #- '*'
+  pull_request:
+    branches:
+    - '*'
+  # repository_dispatch is a newer github-actions feature that will allow building from triggers other than code merge/PR
+  repository_dispatch:
+    types: [build]
+
+name: Build EmuConfigurator
+jobs:
+  build:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    timeout-minutes: 40
+    continue-on-error: false
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      max-parallel: 4
+      matrix:
+        include:
+          - name: Android
+            os: ubuntu-latest
+            releaseArgs: --android
+
+          - name: Linux
+            os: ubuntu-latest
+            releaseArgs: --linux64
+
+          - name: macOS
+            os: macos-latest
+            releaseArgs: --osx64
+
+          - name: Windows
+            os: windows-latest
+            releaseArgs: --win64
+    outputs:
+      buildtag: ${{ steps.ids.outputs.buildtag }}
+      shortsha: ${{ steps.ids.outputs.shortsha }}
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+        continue-on-error: false
+
+      - name: get tag & short-sha
+        run: |
+          echo "REVISION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - id: ids
+        name : set outputs
+        run: |
+          echo "::set-output name=buildtag::${{ env.REVISION_TAG }}"
+          echo "::set-output name=shortsha::${{ env.SHORT_SHA }}"
+        continue-on-error: true
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: yarn
+        continue-on-error: false
+
+      # for debugging
+      - name: show variables
+        run: |
+          echo "Build: ${{ github.RUN_NUMBER }}"
+          echo "Commit: ${{ github.SHA }}"
+          echo "ShortSHA: ${{ env.SHORT_SHA }}"
+          echo "Ref: ${{ GITHUB.REF }}"
+          echo "Rev Tag: ${{ env.REVISION_TAG }}"
+          echo "Actor: ${{ github.ACTOR }}"
+          echo "Repo: ${{ github.REPOSITORY }}"
+          echo "BuildTag: ${{ steps.ids.outputs.buildtag }}"
+          echo "ShortSha: ${{ steps.ids.outputs.shortsha }}"
+        continue-on-error: true
+
+      # pre-requisites
+      - name: Android - Install Java JDK 8
+        uses: actions/setup-java@v2
+        if: ${{ matrix.name == 'Android' }}
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Linux - add RPM
+        if: ${{ matrix.name == 'Linux' }}
+        run: |
+          sudo apt install -y rpm
+        continue-on-error: false
+
+      # build prep
+      - name: yarn install
+        run: yarn install --immutable --immutable-cache --check-cache
+
+      - name: yarn gulp clean-release
+        run: yarn gulp clean-release
+
+      # build
+      - name: ${{ matrix.name }} - yarn gulp release
+        run: |
+          yarn gulp release ${{ matrix.releaseArgs }}
+        continue-on-error: false
+
+      # artifacts
+      - name: ${{ matrix.name }} - Upload Artifacts
+        if: ${{ matrix.name == 'Android' }}
+        uses: actions/upload-artifact@master
+        with:
+          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-Android
+          path: |
+            release/*.apk
+      - name: ${{ matrix.name }} - Upload Artifacts
+        if: ${{ matrix.name == 'Linux' }}
+        uses: actions/upload-artifact@master
+        with:
+          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-Linux
+          path: |
+            release/*.rpm
+            release/*.deb
+            release/*.zip
+      - name: ${{ matrix.name }} - Upload Artifacts
+        if: ${{ matrix.name == 'macOS' }
+        uses: actions/upload-artifact@master
+        with:
+          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-OSX
+          path: release/*.dmg
+      - name: ${{ matrix.name }} - Upload Artifacts
+        if: ${{ matrix.name == 'Windows' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-Windows
+          path: |
+            release/*win*.exe
+            release/*win*.zip
+
+  releases:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      # for debugging
+      - name: show variables
+        run: |
+          echo "Build: ${{ github.RUN_NUMBER }}"
+          echo "Commit: ${{ github.SHA }}"
+          echo "Ref: ${{ GITHUB.REF }}"
+          echo "Actor: ${{ github.ACTOR }}"
+          echo "Repo: ${{ github.REPOSITORY }}"
+          echo "outputs.buildtag: ${{ needs.build.outputs.buildtag }}"
+          echo "outputs.shortsha: ${{ needs.build.outputs.shortsha }}"
+        continue-on-error: true
+
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: ./Artifacts
+        continue-on-error: false
+
+      - name: list artifacts
+        run: |
+          echo "######## debug find emuflight* ########"
+          find ./ -iname "emuflight-configurator*.*"
+        continue-on-error: true
+
+      # Draft Dev-Unstable releases via ncipollo/release-action
+      # softprops/action-gh-release fails to release on separate repo
+      - name: dev-unstable draft
+        if: contains(github.ref, 'test') || contains(github.ref, 'unstab')
+        uses: ncipollo/release-action@v1
+        with:
+          repo: dev-unstable
+          owner: emuflight
+          token: ${{ secrets.NC_PAT_EMUF }}
+          tag: "cfg-${{ github.run_number }}"
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
+          artifactContentType: raw
+          name:  "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator BUILD for TESTING
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            ### What to Test/Feedback: (Feedback in EmuFlight's Discord or GitHub Discussions)
+            <details><summary>Changes in this Build:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: true
+
+      # Draft Dev-master releases via ncipollo/release-action
+      # softprops/action-gh-release fails to release on separate repo
+      - name: dev-master draft
+        if: contains(github.ref, 'master')
+        uses: ncipollo/release-action@v1
+        with:
+          repo: dev-master
+          owner: emuflight
+          token: ${{ secrets.NC_PAT_EMUF }}
+          tag: "cfg-${{ github.run_number }}"
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
+          artifactContentType: raw
+          name:  "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator BUILD of MASTER
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            ### Feedback Welcome in EmuFlight's Discord or GitHub Discussions.
+            <details><summary>Changes in this Build:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: true
+
+      - name: main-repo draft release
+        if: contains(github.ref, 'releas')
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          # tag: use the build Number, but we MUST manually change to version so that it creates a version-tag on release
+          tag: "${{ github.RUN_NUMBER }}"
+          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
+          artifactContentType: raw
+          name:  "DRAFT / EmuConfigurator / GitHub Build ${{ github.RUN_NUMBER }}"
+          body: |
+            ## EmuConfigurator
+            ### Build: ${{ github.RUN_NUMBER }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            <details><summary>Changes in this Release:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: false

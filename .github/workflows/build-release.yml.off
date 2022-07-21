@@ -1,11 +1,11 @@
 ## This is triggered by the publishing of a release, and will build the assets and attach them.
 
-name: On Release 
+name: On Release
 
 on:
   release:
     types: [published]
-        
+
 jobs:
   ci:
     name: CI
@@ -25,13 +25,13 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: List assets
-        run: ls -al Betaflight-*/*
+        run: ls -al EmuFlight-*/*
 
       - name: Attach assets to release
         run: |
           set -x
           assets=()
-          for asset in Betaflight-*/*; do
+          for asset in EmuFlight-*/*; do
             assets+=("-a" "$asset")
             echo "$asset"
           done

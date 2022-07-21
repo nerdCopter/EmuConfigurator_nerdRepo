@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a report to help us fix bugs in Betaflight Configurator.
+description: Create a report to help us fix bugs in EmuFlight Configurator.
 labels: ["Template: Bug"]
 body:
 
@@ -37,7 +37,14 @@ body:
   - type: input
     attributes:
       label: Configurator version
-      description: Specify the version of the configurator (as displayed in the app).
+      description: Specify the full version of the configurator (as displayed in the app, bottom right corner).
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Operating System version
+      description: Specify the full version of the the opretaing System (e.g. Windows 11, OSX 12, Ubuntu 22.04).
     validations:
       required: true
 
@@ -46,10 +53,9 @@ body:
       label: Flight controller configuration
       description: |
         If this bug is related to a specific flight controller and/or configuration please specify it here.
-        Create a `diff` and post it here. Instructions on how to do a diff: https://oscarliang.com/use-diff-not-dump-betaflight/
-        Don't add three backticks or any other format symbol at the start or end of the block, they will be added automatically.
+        Create a `diff` and post it here. In some cases, maybe a `dump` is better.
       placeholder: |
-          # PASTE HERE THE OUTPUT OF `diff` COMMAND IN THE CLI TAB
+          # PASTE HERE THE OUTPUT OF `diff` or `dump` COMMAND FROM THE CLI TAB
       render: txt
 
   - type: markdown
@@ -60,3 +66,8 @@ body:
   - type: textarea
     attributes:
       label: Add any other context about the problem that you think might be relevant here
+
+  - type: markdown
+    attributes:
+      value: |
+        # Any screenshots may be added to a follow-up comment once the issue is opened.

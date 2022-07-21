@@ -1,13 +1,7 @@
 name: Feature Request
-description: Suggest a new feature idea for Betaflight Configurator.
+description: Suggest a new feature idea for EmuFlight Configurator.
 labels: ["Template: Feature Request"]
 body:
-
-  - type: markdown
-    attributes:
-      value: |
-        **Please note that feature requests are not 'fire and forget'.**
-        It is a lot more likely that the feature you would like to have will be implemented if you keep watching your feature request, and provide more details to developers looking into implementing your feature, and help them with testing.
 
   - type: textarea
     attributes:

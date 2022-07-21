@@ -1,4 +1,4 @@
-# Builds Betaflight Configurator on Windows, Android, Linux and macOS platforms.
+# Builds EmuFlight Configurator on Windows, Android, Linux and macOS platforms.
 #
 # After building, artifacts are released to a seperate repository.
 
@@ -86,6 +86,6 @@ jobs:
       - name: Publish build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Betaflight-Configurator${{ inputs.debug_build == 'true' && '-Debug' || '' }}-${{ matrix.name }}
+          name: EmuFlight-Configurator${{ inputs.debug_build == 'true' && '-Debug' || '' }}-${{ matrix.name }}
           path: release/
           retention-days: 90
