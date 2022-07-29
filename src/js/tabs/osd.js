@@ -1808,7 +1808,14 @@ OSD.msp = {
                     }
 
                     if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
-                        display_item.position = positionable ? OSDlineWidth * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+                        switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                            case 'HD':
+                                display_item.position = positionable ? OSDlineWidth * ((bits >> 6) & 0x003F) + (bits & 0x003F) : default_position;
+                                break;
+                            default:
+                                display_item.position = positionable ? OSDlineWidth * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position;
+                                break;
+                        }
                     } else { //lt MSP 1.52
                         display_item.position = positionable ? OSDlineWidth * ((bits >> 5) & 0x001F) + (bits & 0x001F) : default_position; //legacy
                     }
@@ -1846,10 +1853,10 @@ OSD.msp = {
                     let packed_visible = 0;
                     for (let osd_profile = 0; osd_profile < OSD.getNumberOfProfiles(); osd_profile++) {
                         if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
-                            packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE << osd_profile : 0;
+                            packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE << osd_profile : 0; //new x2000
                         }
                         else {
-                            packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE_SD << osd_profile : 0;
+                            packed_visible |= isVisible[osd_profile] ? OSD.constants.VISIBLE_SD << osd_profile : 0; //legacy x0800
                         }
                     }
 
@@ -1863,7 +1870,14 @@ OSD.msp = {
                     }
 
                     if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
-                        return packed_visible | (((position / OSDlineWidth) & 0x003F) << 6) | (position % OSDlineWidth);
+                        switch (OSD.constants.VIDEO_TYPES[OSD.data.video_system]) {
+                            case 'HD':
+                                return packed_visible | (((position / OSDlineWidth) & 0x003F) << 6) | (position % OSDlineWidth);
+                                break;
+                            default:
+                                return packed_visible | (((position / OSDlineWidth) & 0x001F) << 5) | (position % OSDlineWidth);
+                                break;
+                        }
                     } else {
                         return packed_visible | (((position / OSDlineWidth) & 0x001F) << 5) | (position % OSDlineWidth); //legacy
                     }
