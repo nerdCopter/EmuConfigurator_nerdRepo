@@ -129,7 +129,7 @@
 }
 
 .cli-textcomplete-dropdown .active {
-    background-color: rgb(255, 187, 0);
+    background-color: #00a3e0;
 }
 
 .cli-textcomplete-dropdown a:hover {

@@ -1,11 +1,11 @@
 :root {
-    --accent: #ffbb00;
+    --accent: #00a3e0;
     --subtleAccent: #9c9c9c;
-    --quietHeader: #bf8606;
+    --quietHeader: #0078a3;
     --defaultText: #ffffff;
     --subtleText: #c0c0c0;
     --mutedText: #d6d6d6;
-    --linkText: #ffc549;
+    --linkText: #00a3e0;
     --boxBackground: #3a3a3a;
     --alternativeBackground: #4e4e4e;
     --sideBackground: #404040;
@@ -16,9 +16,9 @@
     --switcherysecond: #858585;
     --pushedButton-background:  #616161;
     --pushedButton-fontColor:  #ffffff;
-    --hoverButton-background: #ffcc3e;
+    --hoverButton-background: #2fc8ff;
     --superSubtleAccent: #595959;
-    --accentBorder: #bf8606;
+    --accentBorder: #0078a3;
 }
 
 .background_paper {
@@ -58,7 +58,7 @@ body {
 dialog {
     background-color: #3a3d3c;
     color:white;
-    border: 1px solid #ffbb2a;
+    border: 1px solid #00a3e0;
 }
 
 /* Note */
@@ -72,11 +72,11 @@ dialog {
 }
 
 .content_toolbar .btn a {
-    border: 1px solid #ffbb2a;
+    border: 1px solid #00a3e0;
 }
 
 .content_toolbar .btn a.disabled {
-    border: 1px solid #ffbb2a;
+    border: 1px solid #00a3e0;
 }
 
 .gui_box {
@@ -106,11 +106,11 @@ dialog {
 
 .default_btn a.disabled {
     background-color: #393b3a;
-    border: 1px solid #ffbb2a;
+    border: 1px solid #00a3e0;
 }
 
 .small a {
-    border: 1px solid #ffbb2a;
+    border: 1px solid #00a3e0;
 }
 
 .standard_input {
@@ -123,8 +123,8 @@ dialog {
 }
 
 button {
-    border: 1px solid #ffbb2a;
-    background-color: #ffbb2a;
+    border: 1px solid #00a3e0;
+    background-color: #00a3e0;
     color: black;
 }
 
@@ -543,7 +543,7 @@ progress[value]::-webkit-progress-bar {
 }
 
 .tab-osd input[type='checkbox']:checked:after {
-    background: #ffbb00;
+    background: #00a3e0;
     border: 1px solid #404040;
 }
 

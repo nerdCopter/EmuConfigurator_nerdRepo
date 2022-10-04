@@ -1937,7 +1937,7 @@ TABS.pid_tuning.initialize = function (callback) {
             context.moveTo(midx, midy);
             context.quadraticCurveTo(midxr, midyr, canvasWidth, 0);
             context.lineWidth = 2;
-            context.strokeStyle = '#ffbb00';
+            context.strokeStyle = '#00a3e0';
             context.stroke();
             context.beginPath();
             context.arc(thrpos.x, thrpos.y, 4, 0, 2 * Math.PI);
