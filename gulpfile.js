@@ -41,7 +41,7 @@ const RELEASE_DIR = './release/';
 const CORDOVA_DIR = './cordova/';
 const CORDOVA_DIST_DIR = './dist_cordova/';
 
-const LINUX_INSTALL_DIR = '/opt/betaflight';
+const LINUX_INSTALL_DIR = '/opt/emuflight';
 
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
@@ -50,9 +50,9 @@ const NAME_REGEX = /-/g;
 const nwBuilderOptions = {
     version: '0.62.0',
     files: `${DIST_DIR}**/*`,
-    macIcns: './src/images/bf_icon.icns',
-    macPlist: { 'CFBundleDisplayName': 'Betaflight Configurator'},
-    winIco: './src/images/bf_icon.ico',
+    macIcns: './src/images/ef_icon.icns',
+    macPlist: { 'CFBundleDisplayName': 'EmuFlight Configurator'},
+    winIco: './src/images/ef_icon.ico',
     zip: false,
 };
 
@@ -1041,7 +1041,7 @@ function cordova_configxml() {
             { path: '//xmlns:author', text: metadata.author },
         ], 'http://www.w3.org/ns/widgets'))
         .pipe(xmlTransformer([
-            { path: '.', attr: { 'id': `com.betaflight.${androidName}` } },
+            { path: '.', attr: { 'id': `com.emuflight.${androidName}` } },
             { path: '.', attr: { 'version': metadata.storeVersion ? metadata.storeVersion : metadata.version } },
         ]))
         .pipe(gulp.dest(CORDOVA_DIST_DIR));

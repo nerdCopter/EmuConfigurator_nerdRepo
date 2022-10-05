@@ -8,7 +8,7 @@ import i18next from 'i18next';
 import Vue from "vue";
 import vueI18n from "./vueI18n.js";
 import BatteryLegend from "./quad-status/BatteryLegend.vue";
-import BetaflightLogo from "./betaflight-logo/BetaflightLogo.vue";
+import Logo from "./logo/Logo.vue";
 import StatusBar from "./status-bar/StatusBar.vue";
 
 // Most of the global objects can go here at first.
@@ -36,7 +36,7 @@ i18next.on('initialized', function() {
         el: '#main-wrapper',
         components: {
             BatteryLegend,
-            BetaflightLogo,
+            Logo,
             StatusBar,
         },
         data: betaflightModel,

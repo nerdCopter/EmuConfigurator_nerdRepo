@@ -180,10 +180,10 @@
         "message": "未検証バージョンの更新通知を表示"
     },
     "configuratorUpdateNotice": {
-        "message": "<b>Betaflight Configurator</b>の旧バージョンを使用しています。<br>$t(configuratorUpdateHelp.message)"
+        "message": "<b>EmuFlight Configurator</b>の旧バージョンを使用しています。<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "旧バージョンのBetaflight Configuratorで新バージョンのファームウェアを使用した場合、一部の設定を変更すると<strong>ファームウェア設定が破損し機体が動作しない状態となります。</strong>さらに、ファームウェアの一部の機能はCLIでのみ設定が可能です。<br><strong>Betaflight Configurator <b>$1</b>バージョンはオンラインでダウンロードできます。</strong><a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">このページ</a>にアクセスし、修正および改善された最新バージョンをダウンロードしてインストールしてください。<br>更新する前にBetaflight Configuratorウィンドウを閉じてください。"
+        "message": "旧バージョンのEmuFlight Configuratorで新バージョンのファームウェアを使用した場合、一部の設定を変更すると<strong>ファームウェア設定が破損し機体が動作しない状態となります。</strong>さらに、ファームウェアの一部の機能はCLIでのみ設定が可能です。<br><strong>EmuFlight Configurator <b>$1</b>バージョンはオンラインでダウンロードできます。</strong><a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">このページ</a>にアクセスし、修正および改善された最新バージョンをダウンロードしてインストールしてください。<br>更新する前にEmuFlight Configuratorウィンドウを閉じてください。"
     },
     "configuratorUpdateWebsite": {
         "message": "リリースサイトに移動"
@@ -432,7 +432,7 @@
         "message": "このファームウェアバージョンは<span class=\"message-negative\">サポートされていません</span>。<strong>$1</strong>以上のバージョンのAPIをサポートするファームウェアにアップグレードしてください。書き換えする前にCLIを使用してバックアップしてください。CLIのバックアップ / リストア手順はドキュメントに記載されています。<br/>または、アップグレードする準備ができていない場合は、旧バージョンのConfiguratorをダウンロードして使用してください。"
     },
     "firmwareTypeNotSupported": {
-        "message": "CLIモードを除き、Betaflight以外のファームウェアは<span class=\"message-negative\">サポートされていません</span>。"
+        "message": "CLIモードを除き、EmuFlight以外のファームウェアは<span class=\"message-negative\">サポートされていません</span>。"
     },
     "firmwareUpgradeRequired": {
         "message": "このデバイスのファームウェアは、新しいバージョンにアップグレードする必要があります。 書き換えする前にCLIを使用してバックアップしてください。 CLIのバックアップ / リストア手順はドキュメントに記載されています。<br/>または、アップグレードする準備ができていない場合は、旧バージョンのConfiguratorをダウンロードして使用してください。"
@@ -494,7 +494,7 @@
         "message": "今この操作を行うことは<span class=\"message-negative\">できません</span>。現在の操作が完了するまでお待ちください..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "$1タブを使用するには、ファームウェアをBetaflightの最新バージョンに<strong>アップグレード</strong>する必要があります。"
+        "message": "$1タブを使用するには、ファームウェアをEmuFlightの最新バージョンに<strong>アップグレード</strong>する必要があります。"
     },
     "firmwareVersion": {
         "message": "ファームウェア: <strong>$1</strong>"
@@ -590,26 +590,8 @@
     "eeprom_saved_ok": {
         "message": "EEPROM <span class=\"message-positive\">保存しました</span>"
     },
-    "defaultWelcomeIntro": {
-        "message": "<strong>Betaflight - Configurator</strong>へようこそ。<br />このユーティリティは、フライトコントローラの設定やチューニングを簡単に更新できるよう設計されています。"
-    },
-    "defaultWelcomeHead": {
-        "message": "ハードウェア"
-    },
-    "defaultWelcomeText": {
-        "message": "このアプリケーションは、Betaflightを実行するすべてのハードウェアをサポートします。対応するハードウェアの完全なリストについては、 [ファームフラッシャー] タブをご確認ください。<br /><br /><a href=\"https://github.com/betaflight/blackbox-log-viewer/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight Blackbox Log Viewerをダウンロード</a><br /><br /><a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight TX Lua Script</a><br /><br />ファームウェアのソースコードのダウンロード先は<a href=\"https://github.com/betaflight/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a><br /><br />最新の<b>STM USB VCPドライバ</b>のダウンロード先は<a href=\"http://www.st.com/web/en/catalog/tools/PF257938\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a><br />CP210X USBシリアルチップを使用するレガシーハードウェアの場合:<br />最新の<b>CP210Xドライバ</b>のダウンロード先は<a href=\"https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a><br />最新のWindows用 <b>Zadig</b> USBドライバインストーラのダウンロード先は<a href=\"http://zadig.akeo.ie/\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a><br /><b>ImpulseRC Driver Fixer</b>のダウンロードは<a href=\"https://impulserc.com/pages/downloads\" target=\"blank\" rel=\"noopener noreferrer\">こちら</a>"
-    },
     "defaultContributingHead": {
         "message": "開発への協力・貢献"
-    },
-    "defaultContributingText": {
-        "message": "Betaflightを今後より良く改善したい場合は、以下を含むさまざまな方法で支援できます:<br /><ul><li>あなたが持つBetaflightナレッジを用いて<a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki</a>コンテンツの作成または更新、オンラインフォーラムで他のユーザの質問に回答する;</li><li>新機能や修正、改善されたファームウェアとConfiguratorへの<a href=\"https://github.com/betaflight/betaflight/blob/master/docs/development/Development.md\" target=\"_blank\" rel=\"noopener noreferrer\">コード提供</a>;</li><li><a href=\"https://github.com/Betaflight/betaflight/pulls\" target=\"_blank\" rel=\"noopener noreferrer\">新機能と修正</a>、テスト、フィードバックの提供;</li><li><a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">Issue tracker</a>で他ユーザから報告された問題を解決支援し、新機能リクエストに関する議論に協力;</li>\n<li>またBetaflight Configuratorを未対応な言語に<a href=\"https://github.com/betaflight/betaflight/tree/master/README.md#Translators\" target=\"_blank\" rel=\"noopener noreferrer\">翻訳</a>、または既存翻訳の維持を行いましょう。</li></ul>"
-    },
-    "defaultFacebookText": {
-        "message": "私たちは<a href=\"https://www.facebook.com/groups/betaflightgroup/\" target=\"_blank\" rel=\"noopener noreferrer\">Facebookグループ</a>も運営しています。<br />私たちと一緒にBetaflightについて語り合い、設定に関する質問をしたり、パイロット同士で交流してみましょう。"
-    },
-    "defaultDiscordText": {
-        "message": "Betaflight <a href=\"https://discord.betaflight.com/invite\" target=\"_blank\" rel=\"noopener noreferrer\">Discord Server</a>.<br />貴方の飛行体験を共有したり、Betaflightについて話したり、他の人を救済しコミュニティから自分自身助けを得たりすることができます。"
     },
     "defaultChangelogHead": {
         "message": "Configurator - 変更履歴"
@@ -619,16 +601,6 @@
     },
     "defaultDonateHead": {
         "message": "オープンソース / 寄付について"
-    },
-    "defaultDonateText": {
-        "message": "<p><strong>Betaflight</strong>は<strong>オープンソース</strong>であり、すべてのユーザに対し保証なしで<strong>無償</strong>にて提供されるフライトコントローラソフトウェアです。</p><p>もし、あなたがBetaflightやBetaflight Configuratorが役立つものと感じたら、寄付による開発の<strong>サポート</strong>をご検討ください。</p>"
-    },
-    "defaultDonateBottom": {
-        "message": "<p>引き続き経済的に貢献したい場合は <a href='https://www.patreon.com/betaflight'>Patreon</a> で私達の支援者になることをご検討ください。</p>"
-    },
-    "patreonLink": {
-        "message": "<a href=\"https://www.patreon.com/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">Patreon</a>",
-        "description": "Patreon is name, and should not require translation"
     },
     "defaultDonate": {
         "message": "寄付"
@@ -640,13 +612,13 @@
         "message": "ドキュメント / マニュアル"
     },
     "defaultDocumentation": {
-        "message": "Betaflightドキュメントは、リリースノートおよびWikiにてご利用いただけます。<br /><br />"
+        "message": "EmuFlightドキュメントは、リリースノートおよびWikiにてご利用いただけます。<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Betaflight Wiki はすばらしい情報リソースを<a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>で検索・確認することができます。"
+        "message": "EmuFlight Wiki はすばらしい情報リソースを<a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>で検索・確認することができます。"
     },
     "defaultDocumentation2": {
-        "message": "ファームウェア リリースノートは、GitHub リリースページの<a href=\"https://github.com/Betaflight/Betaflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>でご確認いただけます。"
+        "message": "ファームウェア リリースノートは、GitHub リリースページの<a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>でご確認いただけます。"
     },
     "defaultSupportHead": {
         "message": "サポート"
@@ -660,23 +632,8 @@
     "defaultSupport": {
         "message": "サポートに関しては、最初に検索フォーラムやWiki、もしくはベンダーにお問い合わせください。<br /><br />"
     },
-    "defaultSupport1": {
-        "message": "<a href=\"http://www.rcgroups.com/forums/showthread.php?t=2464844&page=1\" target=\"_blank\" rel=\"noopener noreferrer\">RC Groups スレッド</a>"
-    },
-    "defaultSupport2": {
-        "message": "<a href=\"http://betaflight.info\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight Wiki</a>"
-    },
-    "defaultSupport3": {
-        "message": "<a href=\"https://www.youtube.com/playlist?list=PLwoDb7WF6c8nT4jjsE4VENEmwu9x8zDiE\" target=\"_blank\" rel=\"noopener noreferrer\">Joshua Bardwell Betaflight 4.3 動画集</a>"
-    },
-    "defaultSupport4": {
-        "message": "<a href=\"https://github.com/Betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>"
-    },
-    "defaultSupport5": {
-        "message": "<a href=\"https://slack.betaflight.com\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight devs on slack</a>"
-    },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">バックアップと復元の機能が無効です。</span>ファームウェアのAPIバージョンは<span class=\"message-negative\">$1</span>ですが、バックアップと復元には<span class=\"message-positive\">$2</span>が必要です。バックアップにはCLIをご利用ください。方法についてはBetaflightドキュメントを参照してください。"
+        "message": "<span class=\"message-negative\">バックアップと復元の機能が無効です。</span>ファームウェアのAPIバージョンは<span class=\"message-negative\">$1</span>ですが、バックアップと復元には<span class=\"message-positive\">$2</span>が必要です。バックアップにはCLIをご利用ください。方法についてはEmuFlightドキュメントを参照してください。"
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "水平 キャリブレーション"
@@ -876,7 +833,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "おそらくこのBetaflight Configuratorで、MSP接続は有効です",
+        "message": "おそらくこのEmuFlight Configuratorで、MSP接続は有効です",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1252,7 +1209,7 @@
         "message": "ビーコントーン"
     },
     "configurationDshotBeaconHelp": {
-        "message": "DShotビーコンは、ESCおよびモーターを使用してビーコン音を生成します。これは同時に、モーターが回転しているときにDShotビーコンを使用できないことを意味します。 Betaflight 3.4以降では、DShotビーコンが有効な状態である時にアーミングを試みると、機体がアームされる前、最後に鳴らしたDShotビーコントーンの後に2秒の遅延が起こります。これはDShotビーコン機能が、アーミング中に送信されたDshotコマンドを妨害しないようにするためです。\n<br/><strong>注:</strong> DShotビーコンは、有効な状態のときにモーターへ電流を流しているため、ビーコン強度が強すぎると過剰な熱の発生やモーター、ESCの損傷を招く場合があります。ビーコン強度を調整してテストするには、BLHeli ConfiguratorまたはBLHeli Suiteを使用してください。"
+        "message": "DShotビーコンは、ESCおよびモーターを使用してビーコン音を生成します。これは同時に、モーターが回転しているときにDShotビーコンを使用できないことを意味します。 EmuFlight 3.4以降では、DShotビーコンが有効な状態である時にアーミングを試みると、機体がアームされる前、最後に鳴らしたDShotビーコントーンの後に2秒の遅延が起こります。これはDShotビーコン機能が、アーミング中に送信されたDshotコマンドを妨害しないようにするためです。\n<br/><strong>注:</strong> DShotビーコンは、有効な状態のときにモーターへ電流を流しているため、ビーコン強度が強すぎると過剰な熱の発生やモーター、ESCの損傷を招く場合があります。ビーコン強度を調整してテストするには、BLHeli ConfiguratorまたはBLHeli Suiteを使用してください。"
     },
     "configurationBeeper": {
         "message": "ビープ音 設定"
@@ -1385,7 +1342,7 @@
         "description": "Option to use Galileo in the GPS configuration"
     },
     "configurationGPSGalileoHelp": {
-        "message": "有効にした場合、GPSモジュールはGalileo衛星システムも追跡し通常より多くの衛星を捕捉します。Betaflight 4.2.x以前ではQZSS拡張システムも無効になります。",
+        "message": "有効にした場合、GPSモジュールはGalileo衛星システムも追跡し通常より多くの衛星を捕捉します。EmuFlight 4.2.x以前ではQZSS拡張システムも無効になります。",
         "description": "Help text for the option to use Galileo in the GPS configuration"
     },
     "configurationGPSHomeOnce": {
@@ -1973,7 +1930,7 @@
         "message": "<strong>PIDチューニング スライダーモード</strong><br><br>PIDチューニング スライダーモードは以下のように使用します: <br><br>&bull; OFF - スライダーを使用せず手動で値を入力<br>&bull; RP - スライダーはロールとピッチのみをコントロールし、ヨーの値は手動で入力<br>&bull; RPY - スライダーにてすべてのPID値をコントロール<br><br><span class=\"message-negative\"><b>警告:</b></span>RPモードからRPYモードに切り替えると、ヨーの設定がファームウェアのデフォルト値に上書きされます。"
     },
     "receiverHelp": {
-        "message": "&#8226; <b><strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">フェイルセーフが正しく動作していることを常に確認してください！</a></strong></b>設定は『フェイルセーフ』タブにあり、Expertモードが必要です。<br> &#8226; <b>最新の送信ファームウェアを使用してください！</b><br> &#8226; OpenTx または EdgeTx を使用している場合は、送信機の<strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">ハードウェア ADC フィルタを無効</a></strong>にします。<br>基本セットアップ: 『受信機』設定を正しく行ってください。送信機の正しい『チャンネルマップ』を選択します。ロール、ピッチ、その他のスライダーグラフが正しく動作することを確認します。送信機のチャンネル始点・終点または範囲の値を1000以下、2000以上に調整し、中心点を1500に設定します。詳しくは<strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">ドキュメント</a></strong>をお読みください。"
+        "message": "&#8226; <b><strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">フェイルセーフが正しく動作していることを常に確認してください！</a></strong></b>設定は『フェイルセーフ』タブにあり、Expertモードが必要です。<br> &#8226; <b>最新の送信ファームウェアを使用してください！</b><br> &#8226; OpenTx または EdgeTx を使用している場合は、送信機の<strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">ハードウェア ADC フィルタを無効</a></strong>にします。<br>基本セットアップ: 『受信機』設定を正しく行ってください。送信機の正しい『チャンネルマップ』を選択します。ロール、ピッチ、その他のスライダーグラフが正しく動作することを確認します。送信機のチャンネル始点・終点または範囲の値を1000以下、2000以上に調整し、中心点を1500に設定します。詳しくは<strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">ドキュメント</a></strong>をお読みください。"
     },
     "receiverThrottleMid": {
         "message": "スロットルMID"
@@ -2066,7 +2023,7 @@
         "message": "プレビュー"
     },
     "receiverMspWarningText": {
-        "message": "これらのスティックは、送信機または受信機が存在しない状態でBetaflightにてアームし、テストすることができます。ただし、<strong>この機能を利用する際は飛行目的ではないため、プロペラを取り付けないで下さい。</strong><br /><br />この機能は機体への信頼性の高い制御機能を保証致しません。<strong>プロペラをそのまま外さずに放置しますと重傷を負う危険性があります。</strong>"
+        "message": "これらのスティックは、送信機または受信機が存在しない状態でEmuFlightにてアームし、テストすることができます。ただし、<strong>この機能を利用する際は飛行目的ではないため、プロペラを取り付けないで下さい。</strong><br /><br />この機能は機体への信頼性の高い制御機能を保証致しません。<strong>プロペラをそのまま外さずに放置しますと重傷を負う危険性があります。</strong>"
     },
     "receiverMspEnableButton": {
         "message": "コントロール有効"
@@ -2331,7 +2288,7 @@
         "message": "EEPROM <span class=\"message-positive\">保存しました</span>"
     },
     "servosFirmwareUpgradeRequired": {
-        "message": "サーボの利用はBetaflight Configurator 1.10.0か、それ以上が必要であり、サポートするファームウェアが必要です。"
+        "message": "サーボの利用はEmuFlight Configurator 1.10.0か、それ以上が必要であり、サポートするファームウェアが必要です。"
     },
     "servosChangeDirection": {
         "message": "一致する送信機のサーボ有効範囲の変更"
@@ -2602,7 +2559,7 @@
         "message": "<strong>注意事項</strong><br /><strong class=\"message-negative\">怪我を防止するために、すべてのプロペラを取り外してください！</strong><br />モーターが<strong>回転します！</strong>"
     },
     "motorsRemapDialogExplanations": {
-        "message": "<strong>お知らせ</strong><br />モーターは1つずつ回転し、どのモーターが回転しているかを選択できます。バッテリーを接続し、正しいESCプロトコルを選択してください。このユーティリティは、現在有効となるモーターのみを再配置できます。より複雑な再マッピングは、CLI Resourceコマンドをご利用ください。詳しくはこちらの<a href=\"https://github.com/betaflight/betaflight/wiki/Betaflight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wikiページ</a>をご覧ください。"
+        "message": "<strong>お知らせ</strong><br />モーターは1つずつ回転し、どのモーターが回転しているかを選択できます。バッテリーを接続し、正しいESCプロトコルを選択してください。このユーティリティは、現在有効となるモーターのみを再配置できます。より複雑な再マッピングは、CLI Resourceコマンドをご利用ください。詳しくはこちらの<a href=\"https://github.com/emuflight/emuflight/wiki/EmuFlight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wikiページ</a>をご覧ください。"
     },
     "motorsRemapDialogSave": {
         "message": "保存"
@@ -2674,10 +2631,10 @@
         "message": "この機能はDSHOT対応ESCのみで動作します。<br />お使いのESC (electric speed controller) がDSHOTプロトコルに対応していることを確認し $t(tabMotorTesting.message) タブで変更してください。"
     },
     "escDshotDirectionDialog-WrongMixerText": {
-        "message": "モーター数は0です。<br />現在のミキサー設定を $t(tabMotorTesting.message) タブで確認するか、CLIを使ってカスタムミキサーとして設定してください。詳しくはこちらの<a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wikiページ</a>をご覧ください。"
+        "message": "モーター数は0です。<br />現在のミキサー設定を $t(tabMotorTesting.message) タブで確認するか、CLIを使ってカスタムミキサーとして設定してください。詳しくはこちらの<a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wikiページ</a>をご覧ください。"
     },
     "escDshotDirectionDialog-WrongFirmwareText": {
-        "message": "ファームウェアを更新します。<br /> 最新ファームウェア (Betaflight 4.3以降) を使用していることを確認してください。"
+        "message": "ファームウェアを更新します。<br /> 最新ファームウェア (EmuFlight 4.3以降) を使用していることを確認してください。"
     },
     "escDshotDirectionDialog-WizardActionHint": {
         "message": "回転方向を変更するにはモーター番号を個別にクリックしてください"
@@ -2992,7 +2949,7 @@
         "message": "FCボードを任意選択もしくは自動検出すると、オンラインでファームウェアの確認ができます - 適切なファームウェアを選択して下さい。"
     },
     "firmwareFlasherOnlineSelectBoardHint": {
-        "message": "Betaflight 4.1以降、Betaflightは <strong>Unified Targets</strong> のサポートを導入しています。Unified Targetsという概念は、同じファームウェア[.hexファイル]が同じMCU (F4, F7) を搭載するすべてのFCボードに適用できることを意味します。異なるFCボードを同じファームウェアで動作させるために、Unified Targetsがファームフラッシュされると、ファームウェアとともに特定の設定ファイルが展開されます。<br>このバージョンのBetaflight Configuratorは、1回のステップでそれぞれのFCボード固有の設定に合わせたUnified Targets書き込みをサポートします。各FCボードで使用可能な様々なファームウェアタイプが、次のようにドロップダウンにて表示されます:<br /><br /><strong>&lt;board name&gt;</strong> or <br><strong>&lt;board name&gt; (レガシー) </strong>:<br>non-unified target, or pre-4.1 versions of the firmware for Unified Targets.<br /><br /><strong>&lt;board name&gt; (&lt;manufacturer id&gt;)</strong>:<br> (4文字の製造元ID) <br>Unified Target.<br /><br /><strong>利用可能であればUnified Targetsを使用してください。</strong>もしUnified Targetsを使用して問題が発生した場合には、<a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">issue</a>を開いてから問題が解決するまでnon-unified targetを使用してください。"
+        "message": "EmuFlight 4.1以降、EmuFlightは <strong>Unified Targets</strong> のサポートを導入しています。Unified Targetsという概念は、同じファームウェア[.hexファイル]が同じMCU (F4, F7) を搭載するすべてのFCボードに適用できることを意味します。異なるFCボードを同じファームウェアで動作させるために、Unified Targetsがファームフラッシュされると、ファームウェアとともに特定の設定ファイルが展開されます。<br>このバージョンのEmuFlight Configuratorは、1回のステップでそれぞれのFCボード固有の設定に合わせたUnified Targets書き込みをサポートします。各FCボードで使用可能な様々なファームウェアタイプが、次のようにドロップダウンにて表示されます:<br /><br /><strong>&lt;board name&gt;</strong> or <br><strong>&lt;board name&gt; (レガシー) </strong>:<br>non-unified target, or pre-4.1 versions of the firmware for Unified Targets.<br /><br /><strong>&lt;board name&gt; (&lt;manufacturer id&gt;)</strong>:<br> (4文字の製造元ID) <br>Unified Target.<br /><br /><strong>利用可能であればUnified Targetsを使用してください。</strong>もしUnified Targetsを使用して問題が発生した場合には、<a href=\"https://github.com/emuflight/emuflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">issue</a>を開いてから問題が解決するまでnon-unified targetを使用してください。"
     },
     "firmwareFlasherOnlineSelectFirmwareVersionDescription": {
         "message": "FCボードのファームウェアバージョンを選択してください。"
@@ -3100,13 +3057,13 @@
         "message": "メッセージ:"
     },
     "firmwareFlasherWarningText": {
-        "message": "このファームフラッシャーで<strong>Betaflight以外</strong>のフラッシュイメージを<span class=\"message-negative\">書き換えないで</span>下さい。<br />書き換えをしている間はボードを<strong>取り外したり</strong>コンピュータの<strong>電源を切ったり</strong><span class=\"message-negative\">しないで</span>下さい。<br /><br /><strong>注:</strong> STM32ブートローダーはROMに格納されており、別途生成や改修はできません。<br /><strong>注:</strong> ファームフラッシャーモードの間は、<span class=\"message-negative\">自動接続</span>は常に無効になっています。<br /><strong>注:</strong> バックアップがあることを確認して下さい。アップグレード／ダウングレードでいくつかの設定が消去される場合があります。<br /><strong>注:</strong> 書き換えに問題がある場合は、<strong>FCからすべてのケーブルを取り外し</strong>最初に再起動を行いドライバのアップグレードをお試し下さい。<br /><strong>注:</strong> (大部分の最新FCボードに) 直接USBソケットを搭載しているFCボードに対してファームウェアを書き換えるときは、Betaflightマニュアルの [USB Flashing] 章を読み、正しいソフトウェアとドライバをインストールして下さい。"
+        "message": "このファームフラッシャーで<strong>EmuFlight以外</strong>のフラッシュイメージを<span class=\"message-negative\">書き換えないで</span>下さい。<br />書き換えをしている間はボードを<strong>取り外したり</strong>コンピュータの<strong>電源を切ったり</strong><span class=\"message-negative\">しないで</span>下さい。<br /><br /><strong>注:</strong> STM32ブートローダーはROMに格納されており、別途生成や改修はできません。<br /><strong>注:</strong> ファームフラッシャーモードの間は、<span class=\"message-negative\">自動接続</span>は常に無効になっています。<br /><strong>注:</strong> バックアップがあることを確認して下さい。アップグレード／ダウングレードでいくつかの設定が消去される場合があります。<br /><strong>注:</strong> 書き換えに問題がある場合は、<strong>FCからすべてのケーブルを取り外し</strong>最初に再起動を行いドライバのアップグレードをお試し下さい。<br /><strong>注:</strong> (大部分の最新FCボードに) 直接USBソケットを搭載しているFCボードに対してファームウェアを書き換えるときは、EmuFlightマニュアルの [USB Flashing] 章を読み、正しいソフトウェアとドライバをインストールして下さい。"
     },
     "firmwareFlasherRecoveryHead": {
         "message": "<strong>リカバリー / 通信ロスト</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "FCボードとの通信が切断された場合は、次の手順に従って通信を復元してください: <ul><li>電源をオフします。</li><li>[再起動シーケンスなし] を有効にし [チップメモリの完全消去] を有効にします。</li><li>BOOTピンをジャンパするか、またはBOOTボタンを押し続けます。</li><li>電源をオンします。(正しく行われればアクティビティLEDは点滅しません) </li><li>必要に応じて、すべてのSTM32ドライバとZadigをインストールします。(Betaflightマニュアルの [<a href=\"https://github.com/betaflight/betaflight/wiki/Installing-Betaflight\"target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a>] 章を参照) </li><li>Configuratorを閉じ、Configuratorを再起動します。</li><li>FCのBOOTボタン1つだけであれば、BOOTボタンを放してください。</li><li>正常なファームウェアをフラッシュしてください。(FCのマニュアルで指定されている場合は手動で伝送速度を調整してください) </li><li>電源をオフします。</li><li>BOOTピンのジャンパを取り外します。</li><li>電源をオンします。(アクティビティLEDが点滅するはずです) </li><li>再度、通常通り接続してください。</li></ul>"
+        "message": "FCボードとの通信が切断された場合は、次の手順に従って通信を復元してください: <ul><li>電源をオフします。</li><li>[再起動シーケンスなし] を有効にし [チップメモリの完全消去] を有効にします。</li><li>BOOTピンをジャンパするか、またはBOOTボタンを押し続けます。</li><li>電源をオンします。(正しく行われればアクティビティLEDは点滅しません) </li><li>必要に応じて、すべてのSTM32ドライバとZadigをインストールします。(EmuFlightマニュアルの [<a href=\"https://github.com/emuflight/emuflight/wiki/Installing-EmuFlight\"target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a>] 章を参照) </li><li>Configuratorを閉じ、Configuratorを再起動します。</li><li>FCのBOOTボタン1つだけであれば、BOOTボタンを放してください。</li><li>正常なファームウェアをフラッシュしてください。(FCのマニュアルで指定されている場合は手動で伝送速度を調整してください) </li><li>電源をオフします。</li><li>BOOTピンのジャンパを取り外します。</li><li>電源をオンします。(アクティビティLEDが点滅するはずです) </li><li>再度、通常通り接続してください。</li></ul>"
     },
     "firmwareFlasherButtonLeave": {
         "message": "ファームフラッシャーより退避"
@@ -3161,15 +3118,15 @@
         "description": "Make a quick connection to read firmware target and never flash a wrong target again"
     },
     "firmwareFlasherBoardVerificationSuccess": {
-        "message": "Betaflight ConfiguratorはFC基板の検出と検証に<span class=\"message-positive\">成功</span>しました: <strong>{{boardName}}</strong>",
+        "message": "EmuFlight ConfiguratorはFC基板の検出と検証に<span class=\"message-positive\">成功</span>しました: <strong>{{boardName}}</strong>",
         "description": "Board verification has succeeded."
     },
     "firmwareFlasherBoardVerficationTargetNotAvailable": {
-        "message": "Betaflight ConfiguratorはFCボードを検出: <strong>{{boardName}}</strong> しかしながらBetaflightにて公式ターゲットが見つかりませんでした",
-        "description": "Board verification has succeeded, but the target is not available as offical Betaflight target."
+        "message": "EmuFlight ConfiguratorはFCボードを検出: <strong>{{boardName}}</strong> しかしながらEmuFlightにて公式ターゲットが見つかりませんでした",
+        "description": "Board verification has succeeded, but the target is not available as offical EmuFlight target."
     },
     "firmwareFlasherBoardVerificationFail": {
-        "message": "Betaflight Configuratorでボードの検証に<span class=\"message-negative\">失敗</span>しました。うまくいかない場合はタブをゆっくりと切り替え再試行してください。またUSB接続を改めてやり直すか、カスタムデフォルトを適用し忘れた場合は最初から接続し直してください。",
+        "message": "EmuFlight Configuratorでボードの検証に<span class=\"message-negative\">失敗</span>しました。うまくいかない場合はタブをゆっくりと切り替え再試行してください。またUSB接続を改めてやり直すか、カスタムデフォルトを適用し忘れた場合は最初から接続し直してください。",
         "description": "Sometimes MSP values cannot be read from firmware correctly"
     },
     "firmwareFlasherButtonAbort": {
@@ -3523,7 +3480,7 @@
         "message": "RC Expoパワー"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "RC Expoを計算する際に使用される指数です。Version 3.0.0より前のBetaflightバージョンでは、値は3に固定されています。"
+        "message": "RC Expoを計算する際に使用される指数です。Version 3.0.0より前のEmuFlightバージョンでは、値は3に固定されています。"
     },
     "pidTuningLevel": {
         "message": "アングル / ホライゾン"
@@ -3801,7 +3758,7 @@
         "message": "ジャイロ ローパス2"
     },
     "pidTuningGyroLowpass2Help": {
-        "message": "2つのジャイロ ローパスフィルターのうち、2つ目のフィルターとなります。<br /><br />このフィルターはジャイロループで動作し、PIDループに入る前に信号をフィルタリングします。常に静的 (固定カットオフ) モードとなります。<br /><br />PIDループ周波数がジャイロループの周波数より低い場合、例えば4KのPIDループと8Kのジャイロループの場合、8K ⇒- 4Kのダウン・サンプリングによるエイリアシング問題を防ぐために、このフィルターを保持する必要があります。<br /><br />単一ジャイロ ローパス2設定は、500、1000Hzのどこかに設定し、Betaflight 4.3以上ではRPMフィルタリングを有効にして、少なくともデフォルトのD値フィルタリングを行い新造機体のためにうまく機能させましょう。",
+        "message": "2つのジャイロ ローパスフィルターのうち、2つ目のフィルターとなります。<br /><br />このフィルターはジャイロループで動作し、PIDループに入る前に信号をフィルタリングします。常に静的 (固定カットオフ) モードとなります。<br /><br />PIDループ周波数がジャイロループの周波数より低い場合、例えば4KのPIDループと8Kのジャイロループの場合、8K ⇒- 4Kのダウン・サンプリングによるエイリアシング問題を防ぐために、このフィルターを保持する必要があります。<br /><br />単一ジャイロ ローパス2設定は、500、1000Hzのどこかに設定し、EmuFlight 4.3以上ではRPMフィルタリングを有効にして、少なくともデフォルトのD値フィルタリングを行い新造機体のためにうまく機能させましょう。",
         "description": "Gyro lowpass filter helpicon message"
     },
     "pidTuningGyroLowpassFilterHelp": {
@@ -3972,7 +3929,7 @@
         "message": "Vbat サグ値補正"
     },
     "pidTuningVbatSagCompensationHelp": {
-        "message": "バッテリー電圧の低下に応じてモーター出力を増加させることで、使用可能なバッテリー電圧範囲にて一貫したスロットルとPIDパフォーマンスを提供します。<br /><br />補正量は0～100%の間で変更でき、完全な補正 (100%) を推奨します。<br /><br />詳しくは<a href=\"https://github.com/betaflight/betaflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">このWikiエントリ</a>をご覧ください。"
+        "message": "バッテリー電圧の低下に応じてモーター出力を増加させることで、使用可能なバッテリー電圧範囲にて一貫したスロットルとPIDパフォーマンスを提供します。<br /><br />補正量は0～100%の間で変更でき、完全な補正 (100%) を推奨します。<br /><br />詳しくは<a href=\"https://github.com/emuflight/emuflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">このWikiエントリ</a>をご覧ください。"
     },
     "pidTuningVbatSagValue": {
         "message": "%"
@@ -4053,7 +4010,7 @@
         "message": "動的アイドル値 [* 100 RPM]"
     },
     "pidTuningIdleMinRpmHelp": {
-        "message": "動的アイドルにより、低回転時の制御性が向上し、モーター非同期のリスクを低減します。<br /><br /> PID制御、ゼロスロットルの安定性、反転時の滞空時間、モーターブレーキが改善されます。<br /><br />動的アイドルの最小回転数を3000～3500rpm程度に設定します。BF4.2の場合、DShotのアイドル値を1％など低めに設定します。BF4.3ではDShotアイドル値を調整する必要はありません。<br /><br />詳しくは<a href=\"https://github.com/betaflight/betaflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">こちらのWikiエントリ</a>をご覧ください。"
+        "message": "動的アイドルにより、低回転時の制御性が向上し、モーター非同期のリスクを低減します。<br /><br /> PID制御、ゼロスロットルの安定性、反転時の滞空時間、モーターブレーキが改善されます。<br /><br />動的アイドルの最小回転数を3000～3500rpm程度に設定します。BF4.2の場合、DShotのアイドル値を1％など低めに設定します。BF4.3ではDShotアイドル値を調整する必要はありません。<br /><br />詳しくは<a href=\"https://github.com/emuflight/emuflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">こちらのWikiエントリ</a>をご覧ください。"
     },
     "pidTuningIdleMinRpmDisabled": {
         "message": "Dshotテレメトリー がオフのため動的アイドルはオフとなります"
@@ -4068,7 +4025,7 @@
         "message": "統合ヨー制御"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">注意</span>: この機能を有効にした場合は、それに応じてヨーのPIDを調整する必要があります。詳しくは<a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>"
+        "message": "<span class=\"message-negative\">注意</span>: この機能を有効にした場合は、それに応じてヨーのPIDを調整する必要があります。詳しくは<a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>"
     },
     "pidTuningIntegratedYawHelp": {
         "message": "統合ヨー制御は、ヨーP、I、Dの値を統合し、ピッチとロールを調整するのと同じようにヨーのP、I、D値を調整することができます。<br><br>統合されたP値はI値のように、統合されたD値はP値のように作用するため、I値はほとんど必要がなくなります。<br><br>備考: 統合ヨー制御ではI値が必要ないため、アブソリュート コントロールを使用する必要があります。"
@@ -4077,7 +4034,7 @@
         "message": "横向き / 下向き / 任意な回転による取付けが可能なFCボードの回転角度です。外部センサーを使用する場合は、センサーのアライメント (Gyro、Accel、コンパス) を使用して、ボードの向きから独立したセンサー位置を定義します。 "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "フェイルセーフ設定が大幅に変更されました。 改善された設定パネルを有効にするには、Betaflight <strong>v1.12.0 以上</strong> を使用してください。"
+        "message": "フェイルセーフ設定が大幅に変更されました。 改善された設定パネルを有効にするには、EmuFlight <strong>v1.12.0 以上</strong> を使用してください。"
     },
     "failsafePaneTitleOld": {
         "message": "受信機フェイルセーフ"
@@ -4236,7 +4193,7 @@
         "message": "保存"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "ファームウェアのアップグレードが<span class=\"message-negative\">必要です</span>。使用されるバッテリー / 電流 / 電圧構成API &lt; 1.33.0 (Betaflight release &lt;=3.1.7) はサポートされていません。"
+        "message": "ファームウェアのアップグレードが<span class=\"message-negative\">必要です</span>。使用されるバッテリー / 電流 / 電圧構成API &lt; 1.33.0 (EmuFlight release &lt;=3.1.7) はサポートされていません。"
     },
     "powerBatteryVoltageMeterSource": {
         "message": "電圧メーターソース"
@@ -5400,10 +5357,10 @@
         "message": "不明 統計値 (将来のリリースで対応予定)"
     },
     "osdDescribeFontVersion1": {
-        "message": "フォントバージョン: 1 (Betaflight 4.0以前)"
+        "message": "フォントバージョン: 1 (EmuFlight 4.0以前)"
     },
     "osdDescribeFontVersion2": {
-        "message": "フォントバージョン: 2 (Betaflight 4.1以降)"
+        "message": "フォントバージョン: 2 (EmuFlight 4.1以降)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "フォントバージョン: ユーザ指定"
@@ -5622,7 +5579,7 @@
         "message": "保存しました"
     },
     "vtxHelp": {
-        "message": "ここで映像伝送用送信機 (VTX) の値を設定します。フライトコントローラとVTXがサポートしている場合、VTXテーブルの値を表示および変更できます。<br>VTXを設定するには、次の手順を使用します。<br>1. <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\">こちらのページ</a>に進みます;<br>2. 地域およびVTXモデルに適したVTX設定ファイルを見つけダウンロードしてください。<br>3. 下の『$t(vtxButtonLoadFile.message)』をクリックし、VTX設定ファイルを選択し、ロードしてください;<br>4. 正しく設定されていることを確認してください;<br>5. 『$t(vtxButtonSave.message)』をクリックし、フライトコントローラにVTXの設定を保存します。\n<br>6. オプションで『$t(vtxButtonSaveLua.message)』をクリックして、betaflight Luaスクリプトで使用できるLua設定ファイルを保存します。(<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">こちら</a>を参照)",
+        "message": "ここで映像伝送用送信機 (VTX) の値を設定します。フライトコントローラとVTXがサポートしている場合、VTXテーブルの値を表示および変更できます。<br>VTXを設定するには、次の手順を使用します。<br>1. <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\">こちらのページ</a>に進みます;<br>2. 地域およびVTXモデルに適したVTX設定ファイルを見つけダウンロードしてください。<br>3. 下の『$t(vtxButtonLoadFile.message)』をクリックし、VTX設定ファイルを選択し、ロードしてください;<br>4. 正しく設定されていることを確認してください;<br>5. 『$t(vtxButtonSave.message)』をクリックし、フライトコントローラにVTXの設定を保存します。\n<br>6. オプションで『$t(vtxButtonSaveLua.message)』をクリックして、emuflight Luaスクリプトで使用できるLua設定ファイルを保存します。(<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">こちら</a>を参照)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -5646,7 +5603,7 @@
         "description": "Text of one of the fields of the VTX tab"
     },
     "vtxFrequencyChannelHelp": {
-        "message": "これを有効にするとBetaflight Configuratorで通常のバンド/チャンネルの代わりに周波数を選択できます。これを機能させるにはVTXがこの機能をサポートしている必要があります。",
+        "message": "これを有効にするとEmuFlight Configuratorで通常のバンド/チャンネルの代わりに周波数を選択できます。これを機能させるにはVTXがこの機能をサポートしている必要があります。",
         "description": "Help text for the frequency or channel select field of the VTX tab"
     },
     "vtxSelectedMode": {
@@ -5790,7 +5747,7 @@
         "description": "Help for the number of power levels field of the VTX Table element in the VTX tab"
     },
     "vtxTablePowerLevelsTableHelp": {
-        "message": "このテーブルはVTXに使用できる送信出力のさまざまな値を表しており、大きく2つに分かれています:<br><b>- $t(vtxTablePowerLevelsValue.message):</b> \n各送信出力レベルには、ハードウェアの製造元にて定義された値が必要です。\n製造元に正しい値を問い合わせるか、Betaflight WikiのVTXテーブルを参照してサンプルを入手してください。<br><b>- $t(vtxTablePowerLevelsLabel.message):</b>各送信出力レベル毎に、ここに必要なラベルを設定することができます。 数値 (25, 200, 600, 1.2) 、文字 (OFF, MIN, MAX)、またはそれらの組み合わせを指定します。<br /><br />あなたの国で合法となる送信出力レベル<b>のみ</b>を設定しなければなりません。",
+        "message": "このテーブルはVTXに使用できる送信出力のさまざまな値を表しており、大きく2つに分かれています:<br><b>- $t(vtxTablePowerLevelsValue.message):</b> \n各送信出力レベルには、ハードウェアの製造元にて定義された値が必要です。\n製造元に正しい値を問い合わせるか、EmuFlight WikiのVTXテーブルを参照してサンプルを入手してください。<br><b>- $t(vtxTablePowerLevelsLabel.message):</b>各送信出力レベル毎に、ここに必要なラベルを設定することができます。 数値 (25, 200, 600, 1.2) 、文字 (OFF, MIN, MAX)、またはそれらの組み合わせを指定します。<br /><br />あなたの国で合法となる送信出力レベル<b>のみ</b>を設定しなければなりません。",
         "description": "Help for the table of power levels (value-label) that appears in the VTX tab"
     },
     "vtxTablePowerLevelsValue": {
@@ -5826,7 +5783,7 @@
         "description": "Text of one of the titles of the VTX Table element in the VTX tab"
     },
     "vtxTableBandsChannelsTableHelp": {
-        "message": "次の表は、VTXで使用できるすべての周波数を表しています。複数バンドを保持、各バンドに対して設定する必要があります:<br><b>- $t(vtxTableBandTitleName.message):</b> BOSCAM_A、FATSHARK、RACEBAND等、これらバンドに割り当てる名称です。<br><b>- $t(vtxTableBandTitleLetter.message):</b> バンドを表す略称です。<br><b>- $t(vtxTableBandTitleFactory.message):</b> これは工場出荷時バンドかどうかを示します。有効にすると、BetaflightはVTXにバンドとチャンネル番号を送信します。次にVTXは組み込みの周波数テーブルを使用し、ここで設定された周波数はOSDおよび他の場所で値を表示するためだけのものとなります。有効になっていない場合、Betaflightはここで設定した実際の周波数をVTXに送信します。<br><b>- 周波数:</b> このバンドの周波数です。<br /><br />すべての周波数があなたの国で合法であるとは限らないことに注意してください。無効とするためには、使用できない各周波数インデックスに<b>ゼロ</b>の値を設定する必要があります。",
+        "message": "次の表は、VTXで使用できるすべての周波数を表しています。複数バンドを保持、各バンドに対して設定する必要があります:<br><b>- $t(vtxTableBandTitleName.message):</b> BOSCAM_A、FATSHARK、RACEBAND等、これらバンドに割り当てる名称です。<br><b>- $t(vtxTableBandTitleLetter.message):</b> バンドを表す略称です。<br><b>- $t(vtxTableBandTitleFactory.message):</b> これは工場出荷時バンドかどうかを示します。有効にすると、EmuFlightはVTXにバンドとチャンネル番号を送信します。次にVTXは組み込みの周波数テーブルを使用し、ここで設定された周波数はOSDおよび他の場所で値を表示するためだけのものとなります。有効になっていない場合、EmuFlightはここで設定した実際の周波数をVTXに送信します。<br><b>- 周波数:</b> このバンドの周波数です。<br /><br />すべての周波数があなたの国で合法であるとは限らないことに注意してください。無効とするためには、使用できない各周波数インデックスに<b>ゼロ</b>の値を設定する必要があります。",
         "description": "Help for the table of bands-channels that appears in the VTX tab"
     },
     "vtxSavedFileOk": {
@@ -5862,7 +5819,7 @@
         "description": "Save Lua script button in the VTX tab"
     },
     "vtxLuaFileHelp": {
-        "message": "『$t(vtxButtonSaveLua.message)』ボタンをクリックすると、<a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight TX Lua Scripts</a>で使用できるVTXテーブル設定を含む<i>mcuid</i>.luaファイルを保存することができます。<br><br>バージョン1.6.0以降ではこのファイルをそのまま使用できますが、古いバージョンのスクリプトでは送信機のモデル名に合わせてファイル名を変更する必要があります。",
+        "message": "『$t(vtxButtonSaveLua.message)』ボタンをクリックすると、<a href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">EmuFlight TX Lua Scripts</a>で使用できるVTXテーブル設定を含む<i>mcuid</i>.luaファイルを保存することができます。<br><br>バージョン1.6.0以降ではこのファイルをそのまま使用できますが、古いバージョンのスクリプトでは送信機のモデル名に合わせてファイル名を変更する必要があります。",
         "description": "Tooltip message for the Save Lua script button in the VTX tab"
     },
     "vtxButtonLoadFile": {
@@ -6015,7 +5972,7 @@
         "message": "<b>Derivative from Error</b>は、よりダイレクトなスティックレスポンスを提供し、レースでの使用に適しています。 <br /><br /><b>Derivative from Measurement</b>は、よりスムーズなスティックレスポンスを提供し、フリースタイルでの使用に適しています。"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs Betaflight (float):</b> PIDスケーリングとPIDロジックはまったく同じ仕様です。必ずしも再調整は必要ありません。Legacyは、整数演算に基づく基本的なPIDコントローラである旧ベータ版の進化型演算方式です。 Betaflight PIDコントローラは浮動小数点演算を使用し、マルチローター用に特別に設計された多くの新機能を備えています。<br><b>Float vs Integer:</b> PIDスケーリングとPIDロジックはまったく同じ仕様です。再調整は必要ありません。F1ボードにはオンボードFPUがないため、浮動小数点演算によってCPU負荷が増加するため、整数演算にて性能が向上しますが、浮動小数点演算の方がわずかに精度が向上します。"
+        "message": "<b>Legacy vs EmuFlight (float):</b> PIDスケーリングとPIDロジックはまったく同じ仕様です。必ずしも再調整は必要ありません。Legacyは、整数演算に基づく基本的なPIDコントローラである旧ベータ版の進化型演算方式です。 EmuFlight PIDコントローラは浮動小数点演算を使用し、マルチローター用に特別に設計された多くの新機能を備えています。<br><b>Float vs Integer:</b> PIDスケーリングとPIDロジックはまったく同じ仕様です。再調整は必要ありません。F1ボードにはオンボードFPUがないため、浮動小数点演算によってCPU負荷が増加するため、整数演算にて性能が向上しますが、浮動小数点演算の方がわずかに精度が向上します。"
     },
     "pidTuningFilterTip": {
         "message": "<b>ジャイロフィルター:</b> ジャイロのローパスフィルターです。より多くフィルタリングするには低い値を使用します。 <br><b>D値フィルター:</b> D値のローパスフィルターです。 D値のチューニングに反映されます。より多くフィルタリングするには低い値を使用します。<br><b>ヨーフィルター:</b> ヨー出力をフィルタリングします。ノイズの多いヨー軸設定に効果が表れます。"
@@ -6162,7 +6119,7 @@
         "message": "ファイル名"
     },
     "dialogFileNameDescription": {
-        "message": "このファイルは内部ストレージの『Android/data/betaflight-configurator/{{folder}}』フォルダに保存されます。"
+        "message": "このファイルは内部ストレージの『Android/data/emuflight-configurator/{{folder}}』フォルダに保存されます。"
     },
     "dialogFileAlreadyExistsTitle": {
         "message": "このファイルは既に存在します！"
@@ -6177,7 +6134,7 @@
         "message": "互換性のないWebView"
     },
     "cordovaWebviewTroubleshootingMsg": {
-        "message": "Betaflight Configuratorを使用するにはデバイスのWebViewを更新する必要があります。"
+        "message": "EmuFlight Configuratorを使用するにはデバイスのWebViewを更新する必要があります。"
     },
     "cordovaWebviewTroubleshootingMsg2": {
         "message": "以下のツールは新しいWebViewをインストールしたり、既にインストール済のWebViewを更新したりするのに役立ちます。"
@@ -6225,7 +6182,7 @@
         "message": "確認中"
     },
     "cordovaExitAppMessage": {
-        "message": "Betaflight Configuratorを終了しても良いですか？"
+        "message": "EmuFlight Configuratorを終了しても良いですか？"
     },
     "dropDownSelectAll": {
         "message": "[すべて選択/選択解除]",

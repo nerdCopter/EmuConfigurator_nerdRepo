@@ -1,7 +1,7 @@
 {
-  "name": "betaflight-configurator",
-  "productName": "Betaflight Configurator",
-  "description": "Crossplatform configuration tool for Betaflight flight control system.",
+  "name": "emuflight-configurator",
+  "productName": "EmuFlight Configurator",
+  "description": "Crossplatform configuration tool for EmuFlight flight control system.",
   "version": "10.8.0",
   "main": "main.html",
   "chromium-args": "--disable-features=nw2",
@@ -20,15 +20,15 @@
     "storybook": "start-storybook -p 6006"
   },
   "window": {
-    "icon": "images/bf_icon_128.png",
+    "icon": "images/ef_icon_128.png",
     "id": "main-window",
     "min_width": 1024,
     "min_height": 550,
-    "title": "Betaflight Configurator"
+    "title": "EmuFlight Configurator"
   },
   "repository": {
     "type": "git",
-    "url": "github.com/betaflight/betaflight-configurator"
+    "url": "github.com/emuflight/emuflight-configurator"
   },
   "webview": {
     "partitions": [
@@ -45,7 +45,7 @@
       }
     ]
   },
-  "author": "The Betaflight open source project.",
+  "author": "The EmuFlight open source project.",
   "license": "GPL-3.0",
   "engines": {
     "node": "16.x"

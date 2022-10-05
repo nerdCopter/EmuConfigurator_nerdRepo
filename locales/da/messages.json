@@ -180,10 +180,10 @@
         "message": "Vis opdateringsadviseringer for foreløbige versioner af konfiguratoren"
     },
     "configuratorUpdateNotice": {
-        "message": "Du bruger en forældet version af <b>Betaflight Configurator</b>.<br>$t(configuratorUpdateHelp.message)"
+        "message": "Du bruger en forældet version af <b>EmuFlight Configurator</b>.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "Brug af en nyere version af firmwaren med en ældre version af Configurator betyder, at ændring af indstillinger kan resultere i en <strong>beskadiget firmware konfiguration og en ikke-fungerende FC</strong>. Desuden vil nogle funktioner i firmwaren kun kunne konfigureres i CLI.<br><strong>Betaflight Configurator version <b>$1</b> er tilgængelig for download online</strong>, besøg <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">denne side</a> for at downloade og installere den nyeste version med rettelser og forbedringer.<br>Luk venligst konfiguratorvinduet før du opdaterer."
+        "message": "Brug af en nyere version af firmwaren med en ældre version af Configurator betyder, at ændring af indstillinger kan resultere i en <strong>beskadiget firmware konfiguration og en ikke-fungerende FC</strong>. Desuden vil nogle funktioner i firmwaren kun kunne konfigureres i CLI.<br><strong>EmuFlight Configurator version <b>$1</b> er tilgængelig for download online</strong>, besøg <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">denne side</a> for at downloade og installere den nyeste version med rettelser og forbedringer.<br>Luk venligst konfiguratorvinduet før du opdaterer."
     },
     "configuratorUpdateWebsite": {
         "message": "Åbn udgivelseswebsted"
@@ -432,7 +432,7 @@
         "message": "Denne version af firmware er <span class=\"message-negative\">ikke understøttet</span>. Opgradér til firmware der mindst understøtter API-version <strong>$1</strong>. Benyt CLI til sikkerhedskopiering inden brænding. CLI-sikkerhedskopierings-/-gendannelsesproceduren fremgår af dokumentationen.<br />Download og benyt evt. en ældre version af konfigurator, hvis du ikke er klar til at opgradere firmware."
     },
     "firmwareTypeNotSupported": {
-        "message": "Kun Cleanflight/-Betaflight firmware image <span class=\"message-negative\">kan anvendes</span>, dog gælder det ikke i CLI tilstand."
+        "message": "Kun Cleanflight/-EmuFlight firmware image <span class=\"message-negative\">kan anvendes</span>, dog gælder det ikke i CLI tilstand."
     },
     "firmwareUpgradeRequired": {
         "message": "Denne FC har firmware som skal opgraderes til en nyere version. Benyt inden brænding CLI til sikkerhedskopiering. CLI-sikkerhedskopierings-/-gendannelsesproceduren findes i dokumentationen.<br />Download og benyt evt. en ældre version af Configurator, hvis du ikke er klar til at opgradere."
@@ -494,7 +494,7 @@
         "message": "Du <span class=\"message-negative\">kan ikke</span> gøre dette lige nu, afvent aktuel operations færdiggørelse..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Du skal <strong>opgradere</strong> din firmware til seneste version af Betaflight, inden du kan benytte $1-fanen."
+        "message": "Du skal <strong>opgradere</strong> din firmware til seneste version af EmuFlight, inden du kan benytte $1-fanen."
     },
     "firmwareVersion": {
         "message": "Firmware version: <strong>$1</strong>"
@@ -590,26 +590,8 @@
     "eeprom_saved_ok": {
         "message": "Konfiguration  <span class=\"message-positive\">gemt</span> i EEPROM"
     },
-    "defaultWelcomeIntro": {
-        "message": "Velkommen til <strong>Betaflight - Configurator</strong>, et værktøj til opdatering, opsætning og tuning af din flight controller (FC)."
-    },
-    "defaultWelcomeHead": {
-        "message": "Hardware"
-    },
-    "defaultWelcomeText": {
-        "message": "Programmet understøtter hardware, der kan køre Betaflight. Tjek fanen Brænd firmware for liste over hardware muligheder.<br /><br /> <a href=\"https://github.com/betaflight/blackbox-log-viewer/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Hent Betaflight Blackbox Log Viewer</a><br /><br /><a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Hent Betaflight TX Lua Scripts</a><br /><br />Firmware kildekoden kan downloades <a href=\"https://github.com/betaflight/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">her</a><br /><br />Den seneste <b>STM USB VCP driver</b> kan downloades <a href=\"http://www.st.com/web/en/catalog/tools/PF257938\" target=\"_blank\" rel=\"noopener noreferrer\">her</a><br />Ældre hardware brug en CP210x USB til seriel chip:<br />Den seneste <b>CP210x Drivers</b> kan downloades <a href=\"https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers\" target=\"_blank\" rel=\"noopener noreferrer\">her</a><br />Den seneste <b>Zadig</b> til Windows USB driverinstallation kan downloades <a href=\"http://zadig.akeo.ie/\" target=\"_blank\" rel=\"noopener noreferrer\">her</a><br /><b>ImpulseRC Driver Fixer</b> kan downloades <a href=\"https://impulserc.com/pages/downloads\" target=\"blank\" rel=\"noopener noreferrer\">her</a> </a>"
-    },
     "defaultContributingHead": {
         "message": "Bidrag"
-    },
-    "defaultContributingText": {
-        "message": "Hvis du gerne vil hjælpe med at gøre Betaflight endnu bedre, kan du hjælpe på mange måder. herunder:<br /><ul><li>ved at bruge din viden om Betaflight til at oprette eller opdatere indhold på <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">vores Wiki</a>, eller ved at besvare andre brugeres spørgsmål i onlinefora</li><li><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/development/Development.md\" target=\"_blank\" rel=\"noopener noreferrer\">bidrage med kode</a> til firmware og Configurator - nye funktioner, rettelser, forbedringer,</li><li>test <a href=\"https://github.com/Betaflight/betaflight/pulls\" target=\"_blank\" rel=\"noopener noreferrer\">nye funktioner og rettelser</a> og give feedback;</li><li>hjælper andre brugere med at løse de problemer, de rapporterer i <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">vores issue tracker</a>, deltagelse i diskussioner om ønsker til rettelser og forbedringer</li><li><a href=\"https://github.com/betaflight/betaflight/tree/master/README.md#Translators\" target=\"_blank\" rel=\"noopener noreferrer\">oversætter</a> Betaflight Configurator til et nyt sprog eller hjælpe med at vedligeholde de eksisterende oversættelser.</li></ul>"
-    },
-    "defaultFacebookText": {
-        "message": "Vi har også en <a href=\"https://www.facebook.com/groups/betaflightgroup/\" target=\"_blank\" rel=\"noopener noreferrer\">Facebook-gruppe</a>.<br />Meld dig ind i gruppen vedrørende Betaflight, for at stille spørgsmål om opsætning eller blot hænge ud med andre piloter."
-    },
-    "defaultDiscordText": {
-        "message": "Betaflight <a href=\"https://discord.betaflight.com/invite\" target=\"_blank\" rel=\"noopener noreferrer\">Discord Server</a>.<br />Del din flyve oplevelse, skriv om Betaflight, hjælp andre eller få hjælp til dig selv fra Betaflight fællesskabet."
     },
     "defaultChangelogHead": {
         "message": "Konfigurator - Ændringslog"
@@ -619,16 +601,6 @@
     },
     "defaultDonateHead": {
         "message": "Open Source/Donations meddelelse"
-    },
-    "defaultDonateText": {
-        "message": "<p><strong>Betaflight</strong> er <strong>open source</strong> programmel til opsætning af flight controller (FC) som er tilgængelig uden beregning, for alle brugere, men også <strong>uden garanti</strong>.</p><p>Hvis du fandt Betaflight eller Betaflight-Configurator nyttig, så overvej venligst at <strong>støtte</strong> udviklingen ved en donation.</p>"
-    },
-    "defaultDonateBottom": {
-        "message": "<p>Hvis du løbende vil støtte op om projektet, bør du overveje a blive patreon for os på $t(patreonLink.message).</p>"
-    },
-    "patreonLink": {
-        "message": "<a href=\"https://www.patreon.com/betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">Patreon</a>",
-        "description": "Patreon is name, and should not require translation"
     },
     "defaultDonate": {
         "message": "Donere"
@@ -640,13 +612,13 @@
         "message": "Dokumentation/Brugervejledning"
     },
     "defaultDocumentation": {
-        "message": "Betaflight dokumentation er tilgængelig i release notes og wiki.<br /><br />"
+        "message": "EmuFlight dokumentation er tilgængelig i release notes og wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Betaflight wiki er en god informationskilde og kan findes <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">hér</a>."
+        "message": "EmuFlight wiki er en god informationskilde og kan findes <a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">hér</a>."
     },
     "defaultDocumentation2": {
-        "message": "Releasenotes til firmware kan læses på GitHub under Releases <a href=\"https://github.com/Betaflight/Betaflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">hér</a>."
+        "message": "Releasenotes til firmware kan læses på GitHub under Releases <a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">hér</a>."
     },
     "defaultSupportHead": {
         "message": "Support"
@@ -660,23 +632,8 @@
     "defaultSupport": {
         "message": "For support bedes du først søge i fora og wiki eller kontakte sælgeren.<br /><br />"
     },
-    "defaultSupport1": {
-        "message": "<a href=\"http://www.rcgroups.com/forums/showthread.php?t=2464844&page=1\" target=\"_blank\" rel=\"noopener noreferrer\">RC-gruppe debatter</a>"
-    },
-    "defaultSupport2": {
-        "message": "<a href=\"http://betaflight.info\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight Wiki</a>"
-    },
-    "defaultSupport3": {
-        "message": "<a href=\"https://www.youtube.com/playlist?list=PLwoDb7WF6c8nT4jjsE4VENEmwu9x8zDiE\" target=\"_blank\" rel=\"noopener noreferrer\">Joshua Bardwell Betaflight videoer</a>"
-    },
-    "defaultSupport4": {
-        "message": "<a href=\"https://github.com/Betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>"
-    },
-    "defaultSupport5": {
-        "message": "<a href=\"https://slack.betaflight.com\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight udvikling på slack</a>"
-    },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Sikkerhedskopierings- og gendannelsesfunktionalitet deaktiveret.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>. Sikkerhedskopiering/gendannelse kræver <span class=\"message-positive\">$2</span>. Sikkerhedskopiér dine indstillinger via CLI'en, se proceduren i Betaflight-dokumentationen."
+        "message": "<span class=\"message-negative\">Sikkerhedskopierings- og gendannelsesfunktionalitet deaktiveret.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>. Sikkerhedskopiering/gendannelse kræver <span class=\"message-positive\">$2</span>. Sikkerhedskopiér dine indstillinger via CLI'en, se proceduren i EmuFlight-dokumentationen."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrering af Accelerometer"
@@ -876,7 +833,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP-forbindelsen er aktiv, antagelig med denne Betaflight Configurator",
+        "message": "MSP-forbindelsen er aktiv, antagelig med denne EmuFlight Configurator",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1252,7 +1209,7 @@
         "message": "Motor tone"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Motor bip benytter ESC'erne og motorerne til lydafgivelse. Motor bip kan ikke bruges, når motorerne roterer.<br/>Fra Betaflight 3.4: Forsøges aktivering, mens motor bip er aktivt, er der en 2 sekunders forsinkelse efter det seneste motor bip, før fartøjet aktiveres. Dette forhindrer motor bip funktionen i at forstyrre Dshot kommandoer.<br/><br/><strong>Advarsel:</strong> Når aktiveret, sender mottor bip strøm gennem motorerne, hvilket kan resultere i for høj varmeudvikling og beskadigelse af motorer og/eller ESC'er, hvis bip styrken er for høj. Benyt BLHeli Configurator eller BLHeli Suite til at justere og teste bip styrken."
+        "message": "Motor bip benytter ESC'erne og motorerne til lydafgivelse. Motor bip kan ikke bruges, når motorerne roterer.<br/>Fra EmuFlight 3.4: Forsøges aktivering, mens motor bip er aktivt, er der en 2 sekunders forsinkelse efter det seneste motor bip, før fartøjet aktiveres. Dette forhindrer motor bip funktionen i at forstyrre Dshot kommandoer.<br/><br/><strong>Advarsel:</strong> Når aktiveret, sender mottor bip strøm gennem motorerne, hvilket kan resultere i for høj varmeudvikling og beskadigelse af motorer og/eller ESC'er, hvis bip styrken er for høj. Benyt BLHeli Configurator eller BLHeli Suite til at justere og teste bip styrken."
     },
     "configurationBeeper": {
         "message": "Opsætning af bip"
@@ -1385,7 +1342,7 @@
         "description": "Option to use Galileo in the GPS configuration"
     },
     "configurationGPSGalileoHelp": {
-        "message": "Når aktiveret, vil GPS-modulet vil også spore Galileo-satellitsystemet, hvilket normalt resulterer i flere låste satellitter. På Betaflight 4.2.x eller tidligere, deaktiverer det også QZSS forstærkningssystemet.",
+        "message": "Når aktiveret, vil GPS-modulet vil også spore Galileo-satellitsystemet, hvilket normalt resulterer i flere låste satellitter. På EmuFlight 4.2.x eller tidligere, deaktiverer det også QZSS forstærkningssystemet.",
         "description": "Help text for the option to use Galileo in the GPS configuration"
     },
     "configurationGPSHomeOnce": {
@@ -1973,7 +1930,7 @@
         "message": "<strong>Pid Tuning Slider tilstand</strong><br><br>Pidtuning slider mode kan være:<br><br>&bull; FRA - ingen skydere, indtast værdier manuelt<br>&bull; RP - skydere kontrol Roll og Pitch kun, indtast sideror værdier manuelt<br>&bull; RPY - skydere styrer alle PID værdier<br><br><span class=\"message-negative\"><b>Advarsel:</b></span>At gå fra RP til RPY tilstand vil overskrive sideror indstillinger med firmware indstillinger."
     },
     "receiverHelp": {
-        "message": "&#8226;  <b><strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">Kontrollér altid, at din Fejlsikring fungerer korrekt!</a></strong></b> Indstillingerne på fanen Fejlsikring kræver Configuration er i Eksperttilstand.<br> &#8226; <b>Brug den seneste Tx firmware!</b><br> &#8226; <strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">Deaktivér hardware-ADC-filteret</a></strong> i senderen, hvis du bruger OpenTx eller EdgeTx.<br>Grundlæggende opsætning: Indstil indstillingerne 'Modtager' korrekt. Vælg det korrekte 'Kanalkort' for din radio. Kontroller at krængeror, højderor og andre søjlegrafer bevæger sig korrekt. Justér kanalens endepunkt eller intervalværdier i senderen til ~1000 til ~2000, og sæt midtpunktet til 1500. <br>For mere information, læs <strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">dokumentationen</a></strong>."
+        "message": "&#8226;  <b><strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">Kontrollér altid, at din Fejlsikring fungerer korrekt!</a></strong></b> Indstillingerne på fanen Fejlsikring kræver Configuration er i Eksperttilstand.<br> &#8226; <b>Brug den seneste Tx firmware!</b><br> &#8226; <strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">Deaktivér hardware-ADC-filteret</a></strong> i senderen, hvis du bruger OpenTx eller EdgeTx.<br>Grundlæggende opsætning: Indstil indstillingerne 'Modtager' korrekt. Vælg det korrekte 'Kanalkort' for din radio. Kontroller at krængeror, højderor og andre søjlegrafer bevæger sig korrekt. Justér kanalens endepunkt eller intervalværdier i senderen til ~1000 til ~2000, og sæt midtpunktet til 1500. <br>For mere information, læs <strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">dokumentationen</a></strong>."
     },
     "receiverThrottleMid": {
         "message": "Speeder MID"
@@ -2066,7 +2023,7 @@
         "message": "Forhåndsvisning modtager"
     },
     "receiverMspWarningText": {
-        "message": "Disse pinde tillader indkobling og test af Betaflight, uden en sender/modtager er til stede. Bemærk, <strong>at denne funktion ikke er beregnet til flyvning, og propeller må ikke monteres.</strong><br /><br />Denne funktion garanterer ikke pålidelig kontrol med dit fartøj. <strong>Risiko for alvorlig skade, hvis propellerne er påsat.</strong>"
+        "message": "Disse pinde tillader indkobling og test af EmuFlight, uden en sender/modtager er til stede. Bemærk, <strong>at denne funktion ikke er beregnet til flyvning, og propeller må ikke monteres.</strong><br /><br />Denne funktion garanterer ikke pålidelig kontrol med dit fartøj. <strong>Risiko for alvorlig skade, hvis propellerne er påsat.</strong>"
     },
     "receiverMspEnableButton": {
         "message": "Aktivér kontroller"
@@ -2602,7 +2559,7 @@
         "message": "<strong>Sikkerheds meddelelse</strong><br /><strong class=\"message-negative\">Fjern alle propeller for at forhindre skader!</strong><br />Motorerne vil <strong>rotere !</strong>"
     },
     "motorsRemapDialogExplanations": {
-        "message": "<strong>Bemærk</strong><br />Motorer vil rotere en efter en, og du vil være i stand til at vælge hvilken motor der skal rotere. Batteriet skal tilsluttes, den korrekte ESC-protokol skal vælges. Dette værktøj kan kun omarrangere motorer som er opdaget af FC . Mere komplekse ommapping kræver CLI Resource kommandoen. Se denne <a href=\"https://github.com/betaflight/betaflight/wiki/Betaflight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki side</a>."
+        "message": "<strong>Bemærk</strong><br />Motorer vil rotere en efter en, og du vil være i stand til at vælge hvilken motor der skal rotere. Batteriet skal tilsluttes, den korrekte ESC-protokol skal vælges. Dette værktøj kan kun omarrangere motorer som er opdaget af FC . Mere komplekse ommapping kræver CLI Resource kommandoen. Se denne <a href=\"https://github.com/emuflight/emuflight/wiki/EmuFlight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki side</a>."
     },
     "motorsRemapDialogSave": {
         "message": "Gem"
@@ -2674,10 +2631,10 @@
         "message": "Funktionen fungerer kun med DSHOT ESC'er.<br />Kontroller, at din ESC understøtter Dshot protokol og sæt protokol på fanen $t(tabMotorTesting.message)."
     },
     "escDshotDirectionDialog-WrongMixerText": {
-        "message": "Antallet af motorer er 0.<br />Kontroller den aktuelle Mix på fanen $t(tabMotorTesting.message), eller vælg en brugerdefineret via CLI. Se denne <a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki side</a>."
+        "message": "Antallet af motorer er 0.<br />Kontroller den aktuelle Mix på fanen $t(tabMotorTesting.message), eller vælg en brugerdefineret via CLI. Se denne <a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki side</a>."
     },
     "escDshotDirectionDialog-WrongFirmwareText": {
-        "message": "Opdater firmwaren.<br /> Sørg for at du bruger den seneste firmware: Betaflight 4.3 eller nyere."
+        "message": "Opdater firmwaren.<br /> Sørg for at du bruger den seneste firmware: EmuFlight 4.3 eller nyere."
     },
     "escDshotDirectionDialog-WizardActionHint": {
         "message": "Klik på individuel motor for at skifte rotations retning"
@@ -2992,7 +2949,7 @@
         "message": "Vælg eller detekter automatisk FC type, for at se mulige firmware versioner - Vælg den rette firmware version som passer til din FC."
     },
     "firmwareFlasherOnlineSelectBoardHint": {
-        "message": "Fra Betaflight 4.1 introducerer Betaflight understøttelse af <strong>FC fælles type:</strong>. Begrebet FC fælles type betyder, at den samme firmware .hex fil kan bruges til alle FC med samme MCU (F4, F7). For at få de forskellige FC til at arbejde med den samme firmware, er en specifik konfigurationsfil indsat sammen med firmwaren når et FC fælles type image brændes.<br>Denne version af Betaflight-konfiguratoren understøtter brænding af FC fælles type med de respektive FC specifikke konfigurationer i ét trin. De forskellige firmware-typer, der er tilgængelige for hver FC, vises i drop-down på følgende måde:<br /><br /><strong>&lt;FC navn&gt;</strong> eller<br><strong>&lt;FC navn&gt; (Legacy)</strong>:<br>ikke FC fælles type, et før 4. versioner af firmwaren til FC fælles type.<br /><br /><strong>&lt;FC navn&gt; (&lt;leverandør id&gt;)</strong>:<br>(4 tegn producent id)<br>FC fælles type.<br /><br /><strong>Brug venligst FC fælles type, hvis det er muligt.</strong> Hvis du støder på problemer med at bruge FCC fælles type, åbn et <a href=\"https://github.com/betaflight/betaflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">problem</a> og brug det et ikke-FC fælles type image, indtil problemet er blevet løst."
+        "message": "Fra EmuFlight 4.1 introducerer EmuFlight understøttelse af <strong>FC fælles type:</strong>. Begrebet FC fælles type betyder, at den samme firmware .hex fil kan bruges til alle FC med samme MCU (F4, F7). For at få de forskellige FC til at arbejde med den samme firmware, er en specifik konfigurationsfil indsat sammen med firmwaren når et FC fælles type image brændes.<br>Denne version af EmuFlight-konfiguratoren understøtter brænding af FC fælles type med de respektive FC specifikke konfigurationer i ét trin. De forskellige firmware-typer, der er tilgængelige for hver FC, vises i drop-down på følgende måde:<br /><br /><strong>&lt;FC navn&gt;</strong> eller<br><strong>&lt;FC navn&gt; (Legacy)</strong>:<br>ikke FC fælles type, et før 4. versioner af firmwaren til FC fælles type.<br /><br /><strong>&lt;FC navn&gt; (&lt;leverandør id&gt;)</strong>:<br>(4 tegn producent id)<br>FC fælles type.<br /><br /><strong>Brug venligst FC fælles type, hvis det er muligt.</strong> Hvis du støder på problemer med at bruge FCC fælles type, åbn et <a href=\"https://github.com/emuflight/emuflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">problem</a> og brug det et ikke-FC fælles type image, indtil problemet er blevet løst."
     },
     "firmwareFlasherOnlineSelectFirmwareVersionDescription": {
         "message": "Vælg firmware version."
@@ -3100,13 +3057,13 @@
         "message": "Besked:"
     },
     "firmwareFlasherWarningText": {
-        "message": "Prøv venligst <span class=\"message-negative\">ikke</span> at brænde <strong>ikke-Betaflight</strong> hardware med denne firmware brænder.<br />Du må <span class=\"message-negative\">ikke</span> <strong>frakoble</strong> FC eller <strong>slukke</strong> din pc under brænding.<br /><br /><strong>Bemærk: </strong>STM32 bootloader er gemt i ROM, som ikke kan ændres.<br /><strong>Bemærk: </strong><span class=\"message-negative\">Auto-Connect</span> er altid deaktiveret, mens du er inde i firmware brænder.<br /><strong>Bemærk: </strong>Sørg for at du har en sikkerhedskopi af din FC konfiguration; nogle opgraderinger/nedgraderinger vil slette/ændre din konfiguration.<br /><strong>Bemærk:</strong> Hvis du har problemer efter brænding <strong>prøv først at frakoble alle kabler fra din FC</strong> prøv genstart, genindstaller/opgrader drivere.<br /><strong>Bemærk:</strong> Når du brænder FC, som er direkte tilsluttet USB (de fleste nyere FC), sørg for at have læst afsnittet USB Flashing i Betaflight manual og at du har installeret den korrekte software og drivere"
+        "message": "Prøv venligst <span class=\"message-negative\">ikke</span> at brænde <strong>ikke-EmuFlight</strong> hardware med denne firmware brænder.<br />Du må <span class=\"message-negative\">ikke</span> <strong>frakoble</strong> FC eller <strong>slukke</strong> din pc under brænding.<br /><br /><strong>Bemærk: </strong>STM32 bootloader er gemt i ROM, som ikke kan ændres.<br /><strong>Bemærk: </strong><span class=\"message-negative\">Auto-Connect</span> er altid deaktiveret, mens du er inde i firmware brænder.<br /><strong>Bemærk: </strong>Sørg for at du har en sikkerhedskopi af din FC konfiguration; nogle opgraderinger/nedgraderinger vil slette/ændre din konfiguration.<br /><strong>Bemærk:</strong> Hvis du har problemer efter brænding <strong>prøv først at frakoble alle kabler fra din FC</strong> prøv genstart, genindstaller/opgrader drivere.<br /><strong>Bemærk:</strong> Når du brænder FC, som er direkte tilsluttet USB (de fleste nyere FC), sørg for at have læst afsnittet USB Flashing i EmuFlight manual og at du har installeret den korrekte software og drivere"
     },
     "firmwareFlasherRecoveryHead": {
         "message": "<strong>Gendannelse / tabt kommunikation</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Hvis du har mistet kommunikationen med din FC, skal du følge disse trin for at gendanne kommunikation: <ul><li>Sluk</li><li>Aktiver 'Ingen genstartssekvens', aktiver 'Slet alt på chip'.</li><li>Hold FC BOOT knap nede eller BOOT kontakt sluttet.</li><li>Tænd (aktivitet LED vil IKKE blinke, hvis det er gjort korrekt).</li><li>Installer alle STM32 drivere og Zadig om nødvendigt (se <a href=\"https://github.com/betaflight/betaflight/wiki/Installing-Betaflight\"target=\"_blank\" rel=\"noopener noreferrer\">USB blinkende</a> sektion i Betaflight manual).</li><li>Luk konfigurator, Genstart konfigurator.</li><li>Slip BOOT-knappen eller fjern jumper på FC BOOT kontakt, på din FC.</li><li>Flash med korrekt firmware (ved hjælp af manuel baud sats, hvis angivet i din FC's manual).</li><li>Sluk FC.</li><li>Fjern BOOT jumper.</li><li>Tænd (aktivitet LED skal blinke).</li><li>Forbind normalt.</li></ul>"
+        "message": "Hvis du har mistet kommunikationen med din FC, skal du følge disse trin for at gendanne kommunikation: <ul><li>Sluk</li><li>Aktiver 'Ingen genstartssekvens', aktiver 'Slet alt på chip'.</li><li>Hold FC BOOT knap nede eller BOOT kontakt sluttet.</li><li>Tænd (aktivitet LED vil IKKE blinke, hvis det er gjort korrekt).</li><li>Installer alle STM32 drivere og Zadig om nødvendigt (se <a href=\"https://github.com/emuflight/emuflight/wiki/Installing-EmuFlight\"target=\"_blank\" rel=\"noopener noreferrer\">USB blinkende</a> sektion i EmuFlight manual).</li><li>Luk konfigurator, Genstart konfigurator.</li><li>Slip BOOT-knappen eller fjern jumper på FC BOOT kontakt, på din FC.</li><li>Flash med korrekt firmware (ved hjælp af manuel baud sats, hvis angivet i din FC's manual).</li><li>Sluk FC.</li><li>Fjern BOOT jumper.</li><li>Tænd (aktivitet LED skal blinke).</li><li>Forbind normalt.</li></ul>"
     },
     "firmwareFlasherButtonLeave": {
         "message": "Forlad Firmware brænder"
@@ -3165,8 +3122,8 @@
         "description": "Board verification has succeeded."
     },
     "firmwareFlasherBoardVerficationTargetNotAvailable": {
-        "message": "Konfigurator har detekteret FC: <strong>{{boardName}}</strong>, men der blev ikke fundet et officielt Betaflight firmware image",
-        "description": "Board verification has succeeded, but the target is not available as offical Betaflight target."
+        "message": "Konfigurator har detekteret FC: <strong>{{boardName}}</strong>, men der blev ikke fundet et officielt EmuFlight firmware image",
+        "description": "Board verification has succeeded, but the target is not available as offical EmuFlight target."
     },
     "firmwareFlasherBoardVerificationFail": {
         "message": "Configurator <span class=\"message-negative\">mislykkedes</span> med at bestemme FC, hvis dette ikke virker, så prøv at skifte fane langsomt for at prøve igen, opret en ny USB-forbindelse eller opret forbindelse først, måske du ikke har acceperet at konfiguerer med standardopsætninger efter brænding af nyt image",
@@ -3523,7 +3480,7 @@
         "message": "RC Expo Effekt"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Den eksponent, der bruges ved beregning af RC Expo. I Betaflight versioner før 3.0, er værdien fastsat til 3."
+        "message": "Den eksponent, der bruges ved beregning af RC Expo. I EmuFlight versioner før 3.0, er værdien fastsat til 3."
     },
     "pidTuningLevel": {
         "message": "Vinkel/horisont"
@@ -3801,7 +3758,7 @@
         "message": "Gyro Lowpass 2"
     },
     "pidTuningGyroLowpass2Help": {
-        "message": "Den anden af to Gyro lowpass filtre.<br /><br />Dette filter kører i gyro loop, filtrering af signalet før det kommer ind i PID loop'et. Det er altid i statisk (fast cutoff) tilstand.<br /><br />Hvis PID loop frekvensen er mindre end gyro loop frekvens, fx en 4k PID loop med en 8k gyro loop, dette filter bør bibeholdes for at forhindre aliasing problemer på grund af 8k->4k nedprøvetagning.<br /><br />En enkelt gyro lowpass 2 konfiguration, der er sat til et sted 500 og 1000Hz, fungerer godt for Betaflight 4. eller højere, for rene builds med RPM filtrering aktiv og i det mindste standard D filtrering.",
+        "message": "Den anden af to Gyro lowpass filtre.<br /><br />Dette filter kører i gyro loop, filtrering af signalet før det kommer ind i PID loop'et. Det er altid i statisk (fast cutoff) tilstand.<br /><br />Hvis PID loop frekvensen er mindre end gyro loop frekvens, fx en 4k PID loop med en 8k gyro loop, dette filter bør bibeholdes for at forhindre aliasing problemer på grund af 8k->4k nedprøvetagning.<br /><br />En enkelt gyro lowpass 2 konfiguration, der er sat til et sted 500 og 1000Hz, fungerer godt for EmuFlight 4. eller højere, for rene builds med RPM filtrering aktiv og i det mindste standard D filtrering.",
         "description": "Gyro lowpass filter helpicon message"
     },
     "pidTuningGyroLowpassFilterHelp": {
@@ -3972,7 +3929,7 @@
         "message": "Vbat Sag Compensation"
     },
     "pidTuningVbatSagCompensationHelp": {
-        "message": "Giver konsekvent gspeeder og PID ydeevne over det brugbare batteri spændingsområde ved at øge motorens output som batteri spænding falder.<br /><br />Kompensationen kan variere mellem 0 og 100%. Fuld kompensation (100%) anbefales.<br /><br />Besøg <a href=\"https://github.com/betaflight/betaflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">denne wiki-post</a> for mere info."
+        "message": "Giver konsekvent gspeeder og PID ydeevne over det brugbare batteri spændingsområde ved at øge motorens output som batteri spænding falder.<br /><br />Kompensationen kan variere mellem 0 og 100%. Fuld kompensation (100%) anbefales.<br /><br />Besøg <a href=\"https://github.com/emuflight/emuflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">denne wiki-post</a> for mere info."
     },
     "pidTuningVbatSagValue": {
         "message": "%"
@@ -4053,7 +4010,7 @@
         "message": "Dynamisk tomgang [* 100 RPM]"
     },
     "pidTuningIdleMinRpmHelp": {
-        "message": "Dynamisk tomgang forbedrer styringen ved lav omdr/min og reducerer risikoen for desynkronisering af motor. <br /><br />Det forbedrer PID myndighed, nul gashåndtag stabilitet, omvendt hænge tid og motorbremsning.<br /><br />Dynamic Idle min rpm skal sættes til omkring 3000 - 3500 rpm. For 4.2, indstille Dshot inaktiv værdi lav, fx 1%. Der er ingen grund til at justere Dshot tomgang værdi i 4.3. <br /><br />Besøg <a href=\"https://github.com/betaflight/betaflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">denne wiki-post</a> for mere info."
+        "message": "Dynamisk tomgang forbedrer styringen ved lav omdr/min og reducerer risikoen for desynkronisering af motor. <br /><br />Det forbedrer PID myndighed, nul gashåndtag stabilitet, omvendt hænge tid og motorbremsning.<br /><br />Dynamic Idle min rpm skal sættes til omkring 3000 - 3500 rpm. For 4.2, indstille Dshot inaktiv værdi lav, fx 1%. Der er ingen grund til at justere Dshot tomgang værdi i 4.3. <br /><br />Besøg <a href=\"https://github.com/emuflight/emuflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">denne wiki-post</a> for mere info."
     },
     "pidTuningIdleMinRpmDisabled": {
         "message": "Dynamisk tomgang er slået fra, fordi Dshot Telemetry er slået FRA"
@@ -4068,7 +4025,7 @@
         "message": "Integreret sideror"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">FORSIKRING</span>: Hvis du aktiverer denne funktion, skal du justere sideror PID i overensstemmelse hermed (Yaw PID). Mere info <a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">her</a>"
+        "message": "<span class=\"message-negative\">FORSIKRING</span>: Hvis du aktiverer denne funktion, skal du justere sideror PID i overensstemmelse hermed (Yaw PID). Mere info <a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">her</a>"
     },
     "pidTuningIntegratedYawHelp": {
         "message": "Integreret sideror integrerer sideror P, I og D værdier, der tillader at sideror P, I og D kan tunes lidt, som hvis du tuner højderor og krængeror.<br><br>Meget lidt I er påkrævet, fordi den integrerede P fungerer som I, og integreret D fungerer som P.<br><br>BEMÆRK: Integreret sideror kræver brug af Absolut kontrol, da der ikke er brug for I med Integreret sideror."
@@ -4077,7 +4034,7 @@
         "message": "Voldgiftspanelrotation i grader, for at tillade montering det sidelæns / på hovedet / roteret osv. Når du kører eksterne sensorer, skal du bruge sensorindstillingerne (Gyro, Acc, Mag) til at definere sensorpositionen uafhængigt af brætretning. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Fejlsikring konfiguration er ændret betydeligt. Brug Betaflight <strong>v1.12.0+</strong> for at aktivere det forbedrede konfigurationspanel."
+        "message": "Fejlsikring konfiguration er ændret betydeligt. Brug EmuFlight <strong>v1.12.0+</strong> for at aktivere det forbedrede konfigurationspanel."
     },
     "failsafePaneTitleOld": {
         "message": "Modtager fejlsikring"
@@ -4236,7 +4193,7 @@
         "message": "Gem"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Firmware opgradering <span class=\"message-negative\">kræves</span>. Batteri/Amperage/Spænding konfigurationer ved hjælp af API &lt; 1.33.0 (Betaflight release &lt;= 3.17) understøttes ikke."
+        "message": "Firmware opgradering <span class=\"message-negative\">kræves</span>. Batteri/Amperage/Spænding konfigurationer ved hjælp af API &lt; 1.33.0 (EmuFlight release &lt;= 3.17) understøttes ikke."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Kilde for spændingsmåling"
@@ -5400,10 +5357,10 @@
         "message": "Ukendt statistik (detaljer, der skal tilføjes i en fremtidig udgivelse)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Skrifttype version: 1 (Betaflight 4.0 eller ældre)"
+        "message": "Skrifttype version: 1 (EmuFlight 4.0 eller ældre)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Skrifttype version: 2 (Betaflight 4.1 eller ældre)"
+        "message": "Skrifttype version: 2 (EmuFlight 4.1 eller ældre)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Skrifttype version: bruger angivet"
@@ -5622,7 +5579,7 @@
         "message": "Gemt"
     },
     "vtxHelp": {
-        "message": "Her kan du konfigurere værdierne for din videosender (VTX). Du kan se og ændre transmissionsværdierne, herunder VTX-tabellerne, hvis FC og VTX sender understøtter det.<br>For at opsætte din VTX skal du bruge følgende trin:<br>1. Gå til <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\">denne</a> side;<br>2. Find den passende VTX-konfigurationsfil til dit land og din VTX-model og hent den;<br>3. Klik på '$t(vtxButtonLoadFile.message)' nedenfor, vælg VTX konfigurationsfilen, indlæs den;<br>4. Kontroller, at indstillingerne er korrekte;<br>5. Klik på '$t(vtxButtonSave.message)' for at gemme VTX-indstillingerne på FC.<br>6. Klik eventuelt på '$t(vtxButtonSaveLua.message)' for at gemme en lua konfigurationsfil, som du kan bruge med betaflight lua scripts (Se mere <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">her</a>.)",
+        "message": "Her kan du konfigurere værdierne for din videosender (VTX). Du kan se og ændre transmissionsværdierne, herunder VTX-tabellerne, hvis FC og VTX sender understøtter det.<br>For at opsætte din VTX skal du bruge følgende trin:<br>1. Gå til <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\">denne</a> side;<br>2. Find den passende VTX-konfigurationsfil til dit land og din VTX-model og hent den;<br>3. Klik på '$t(vtxButtonLoadFile.message)' nedenfor, vælg VTX konfigurationsfilen, indlæs den;<br>4. Kontroller, at indstillingerne er korrekte;<br>5. Klik på '$t(vtxButtonSave.message)' for at gemme VTX-indstillingerne på FC.<br>6. Klik eventuelt på '$t(vtxButtonSaveLua.message)' for at gemme en lua konfigurationsfil, som du kan bruge med emuflight lua scripts (Se mere <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">her</a>.)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -5790,7 +5747,7 @@
         "description": "Help for the number of power levels field of the VTX Table element in the VTX tab"
     },
     "vtxTablePowerLevelsTableHelp": {
-        "message": "Denne tabel repræsenterer de forskellige værdier af effekt, der kan bruges til VTX. De er opdelt i to: <br><b>- $t(vtxTablePowerLevelsValue.message):</b> hvert effektniveau kræver en værdi, der er defineret af hardwareproducenten. Spørg din producent om den korrekte værdi eller konsulter Betaflight wiki of VTX Tabeller for at få fat i nogle prøver. <br><b>- $t(vtxTablePowerLevelsLabel.message):</b> kan du her sætte den etiket, du ønsker for hver effektniveauværdi. Det kan være tal (25, 200, 600, 1. ), bogstaver (OFF, MIN, MAX) eller en blanding af dem. <br /><br />Du skal kun konfigurere <b></b> de strømniveauer, der er lovlige på dit land.",
+        "message": "Denne tabel repræsenterer de forskellige værdier af effekt, der kan bruges til VTX. De er opdelt i to: <br><b>- $t(vtxTablePowerLevelsValue.message):</b> hvert effektniveau kræver en værdi, der er defineret af hardwareproducenten. Spørg din producent om den korrekte værdi eller konsulter EmuFlight wiki of VTX Tabeller for at få fat i nogle prøver. <br><b>- $t(vtxTablePowerLevelsLabel.message):</b> kan du her sætte den etiket, du ønsker for hver effektniveauværdi. Det kan være tal (25, 200, 600, 1. ), bogstaver (OFF, MIN, MAX) eller en blanding af dem. <br /><br />Du skal kun konfigurere <b></b> de strømniveauer, der er lovlige på dit land.",
         "description": "Help for the table of power levels (value-label) that appears in the VTX tab"
     },
     "vtxTablePowerLevelsValue": {
@@ -5826,7 +5783,7 @@
         "description": "Text of one of the titles of the VTX Table element in the VTX tab"
     },
     "vtxTableBandsChannelsTableHelp": {
-        "message": "Denne tabel repræsenterer alle de frekvenser, der kan bruges til din VTX. Du kan have flere bånd og for hvert bånd skal du konfigurere:<br><b>- $t(vtxTableBandTitleName.message):</b> Navn, som du ønsker at tildele til dette bånd, ligesom BOSCAM_A, FATSHARK eller RACEBAND.<br><b>- $t(vtxTableBandTitleLetter.message):</b> Alias som refererer til båndet.<br><b>- $t(vtxTableBandTitleFactory.message):</b> Dette angiver, om det er et fabrik defineret bånd. Hvis aktiveret sender Betaflight til VTX et bånd og kanalnummer. VTX vil derefter bruge sin indbyggede frekvenstabel og de frekvenser, der er konfigureret her, og kun vise værdien i fx. OSD. Hvis den ikke er aktiveret, sender Betaflight den konfigurede frekvens til VTX.<br><b>- Frekvenser:</b> Frekvenser for dette band.<br />Husk at ikke alle frekvenser er lovlige i dit land. Du skal sætte en værdi på <b>nul</b> til hvert frekvensindeks, som du ikke har tilladelse til at anvende i dit land, for at deaktivere.",
+        "message": "Denne tabel repræsenterer alle de frekvenser, der kan bruges til din VTX. Du kan have flere bånd og for hvert bånd skal du konfigurere:<br><b>- $t(vtxTableBandTitleName.message):</b> Navn, som du ønsker at tildele til dette bånd, ligesom BOSCAM_A, FATSHARK eller RACEBAND.<br><b>- $t(vtxTableBandTitleLetter.message):</b> Alias som refererer til båndet.<br><b>- $t(vtxTableBandTitleFactory.message):</b> Dette angiver, om det er et fabrik defineret bånd. Hvis aktiveret sender EmuFlight til VTX et bånd og kanalnummer. VTX vil derefter bruge sin indbyggede frekvenstabel og de frekvenser, der er konfigureret her, og kun vise værdien i fx. OSD. Hvis den ikke er aktiveret, sender EmuFlight den konfigurede frekvens til VTX.<br><b>- Frekvenser:</b> Frekvenser for dette band.<br />Husk at ikke alle frekvenser er lovlige i dit land. Du skal sætte en værdi på <b>nul</b> til hvert frekvensindeks, som du ikke har tilladelse til at anvende i dit land, for at deaktivere.",
         "description": "Help for the table of bands-channels that appears in the VTX tab"
     },
     "vtxSavedFileOk": {
@@ -5862,7 +5819,7 @@
         "description": "Save Lua script button in the VTX tab"
     },
     "vtxLuaFileHelp": {
-        "message": "Knappen '$t(vtxButtonSaveLua.message)' vil give dig mulighed for at gemme en <i>mcuid</i>.lua fil der indeholder en konfiguration med VTX tabel, der kan bruges med <a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight TX Lua Scripts</a>.<br><br>Version 1.6. og derover kan bruge filen uændret, men for ældre RC sendere skal der omdøbes til at matche modelnavnet på TX.",
+        "message": "Knappen '$t(vtxButtonSaveLua.message)' vil give dig mulighed for at gemme en <i>mcuid</i>.lua fil der indeholder en konfiguration med VTX tabel, der kan bruges med <a href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">EmuFlight TX Lua Scripts</a>.<br><br>Version 1.6. og derover kan bruge filen uændret, men for ældre RC sendere skal der omdøbes til at matche modelnavnet på TX.",
         "description": "Tooltip message for the Save Lua script button in the VTX tab"
     },
     "vtxButtonLoadFile": {
@@ -6015,7 +5972,7 @@
         "message": "<b>Derivativ fra Fejl</b> giver mere direkte stick respons og er for det meste foretrukket til Racing.<br /><br /><b>Derivative fra Måling</b> giver glattere stick respons, hvad der er mere nyttigt til freestyling"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy kontra Betaflight (flydende):</b> PID-skalering og -logik er nøjagtig den samme. Gentuning er ikke absolut nødvendig. Legacy er gammel betaflight-udviklet omskrivning, der er basis PID-controller baseret på heltal beregninger. Betaflight PID-controller benytter flydende decimal beregninger og har mange nye funktioner, som er specielt designet til multirotorbrug <br> <b>Flydende decimal kontra heltal:</b> PID-skalering og -logik er identisk. Ingen gentuning behøves. F1-boards har ingen indbygget FPU og flydende decimal proccessor og forøger derfor CPU-belastningen og heltals beregniger forbedrer derfor ydeevnen, men flydende deccimal beregninger kan give bedre præcision."
+        "message": "<b>Legacy kontra EmuFlight (flydende):</b> PID-skalering og -logik er nøjagtig den samme. Gentuning er ikke absolut nødvendig. Legacy er gammel emuflight-udviklet omskrivning, der er basis PID-controller baseret på heltal beregninger. EmuFlight PID-controller benytter flydende decimal beregninger og har mange nye funktioner, som er specielt designet til multirotorbrug <br> <b>Flydende decimal kontra heltal:</b> PID-skalering og -logik er identisk. Ingen gentuning behøves. F1-boards har ingen indbygget FPU og flydende decimal proccessor og forøger derfor CPU-belastningen og heltals beregniger forbedrer derfor ydeevnen, men flydende deccimal beregninger kan give bedre præcision."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft Filter:</b> Lowpass filter til gyro. Brug lavere værdi for mere filtrering.<br><b>D Term Filter:</b> Lowpass filter til Dterm. Kan påvirke D tuning. Brug lavere værdi for mere filtrering. <br><b>Yaw Filter:</b> Filters sideror output. Det kan hjælpe på opsætninger med støjende sideror akse."
@@ -6162,7 +6119,7 @@
         "message": "Filnavn"
     },
     "dialogFileNameDescription": {
-        "message": "Filen vil blive gemt i mappen 'Android/data/betaflight-configurator/{{folder}}' i dit interne lager."
+        "message": "Filen vil blive gemt i mappen 'Android/data/emuflight-configurator/{{folder}}' i dit interne lager."
     },
     "dialogFileAlreadyExistsTitle": {
         "message": "Filen findes allerede!"

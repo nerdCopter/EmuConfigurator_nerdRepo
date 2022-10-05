@@ -471,7 +471,7 @@
         "message": "Du <span class=\"message-negative\">kan inte</span> göra detta just nu, vänta tills den pågående processen är avsluten."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Du måste <strong>uppgradera</strong> din firmware till den senaste versionen av Betaflight innan du kan använda $1 fliken."
+        "message": "Du måste <strong>uppgradera</strong> din firmware till den senaste versionen av EmuFlight innan du kan använda $1 fliken."
     },
     "firmwareVersion": {
         "message": "Firmware-version: <strong>$1</strong>"
@@ -552,12 +552,6 @@
     "eeprom_saved_ok": {
         "message": "EEPROM <span class=\"message-positive\">sparad</span>"
     },
-    "defaultWelcomeIntro": {
-        "message": "Välkommmen till <strong>Betaflight - Configurator</strong>, ett verktyg utformat för att förenkla uppdateringen, konfigurationen och inställningen av din flygkontroller."
-    },
-    "defaultWelcomeHead": {
-        "message": "Hårdvara"
-    },
     "defaultContributingHead": {
         "message": "Medverka"
     },
@@ -570,9 +564,6 @@
     "defaultDonateHead": {
         "message": "Öppen källkod- / Donations-notis"
     },
-    "defaultDonateBottom": {
-        "message": "<p>Om du vill fortsätta bidra ekonomiskt bör du överväga att bli en \"patron\" för oss på $t(patreonLink.message).</p>"
-    },
     "defaultDonate": {
         "message": "Donera"
     },
@@ -583,7 +574,7 @@
         "message": "Dokumentation / Manual"
     },
     "defaultDocumentation": {
-        "message": "Betaflight-dokumentation finns i versionskommentarerna och wiki.<br /><br />"
+        "message": "EmuFlight-dokumentation finns i versionskommentarerna och wiki.<br /><br />"
     },
     "defaultSupportHead": {
         "message": "Support"
@@ -598,7 +589,7 @@
         "message": "För support, var vänlig sök i forumen och wikin först eller kontakta din försäljare.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Säkerhetskopierings- och återställningsfunktioner inaktiverade.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>, säkerhetskopiering och återställning kräver <span class=\"message-positive\">$2</span>.  Vänligen säkerhetskopiera dina inställningar via CLI, se Betaflight-dokumentation för förfarandet."
+        "message": "<span class=\"message-negative\">Säkerhetskopierings- och återställningsfunktioner inaktiverade.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>, säkerhetskopiering och återställning kräver <span class=\"message-positive\">$2</span>.  Vänligen säkerhetskopiera dina inställningar via CLI, se EmuFlight-dokumentation för förfarandet."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrera Accelerometer"
@@ -789,7 +780,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "En MSP-koppling är aktiv, troligen via denna Betaflight-konfigurator",
+        "message": "En MSP-koppling är aktiv, troligen via denna EmuFlight-konfigurator",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1096,7 +1087,7 @@
         "message": "Signalfyr-ton"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Dshot-signalfyren använder ESC:erna och motorerna för att producera ljud. Detta innebär att Dshot-signalfyren inte kan användas medan motorerna roterar. I Betaflight 3.4 och nyare, när motoraktivering påbörjas medan Dshot-signalfyren är aktiv, blir det en 2-sekunders paus efter den sista Dshot-signalfyrtonen innan farkosten aktiveras. Detta är för att förhindra att Dshot-signalfyrfunktionen stör Dshot-kommandon som sänds vid motoraktivering.<br/><strong>Varning:</strong> Eftersom Dshot-signalfyren skickar ström genom motorerna när den är aktiv, kan detta orsaka alltför stor värmeproduktion och skador på motorerna och / eller ESC:erna om signalfyrens styrka är för hög. Använd BLHeli Configurator eller BLHeli Suite för att justera och testa signalfyrens styrka."
+        "message": "Dshot-signalfyren använder ESC:erna och motorerna för att producera ljud. Detta innebär att Dshot-signalfyren inte kan användas medan motorerna roterar. I EmuFlight 3.4 och nyare, när motoraktivering påbörjas medan Dshot-signalfyren är aktiv, blir det en 2-sekunders paus efter den sista Dshot-signalfyrtonen innan farkosten aktiveras. Detta är för att förhindra att Dshot-signalfyrfunktionen stör Dshot-kommandon som sänds vid motoraktivering.<br/><strong>Varning:</strong> Eftersom Dshot-signalfyren skickar ström genom motorerna när den är aktiv, kan detta orsaka alltför stor värmeproduktion och skador på motorerna och / eller ESC:erna om signalfyrens styrka är för hög. Använd BLHeli Configurator eller BLHeli Suite för att justera och testa signalfyrens styrka."
     },
     "configurationBeeper": {
         "message": "Konfiguration av ljudsignal"
@@ -2796,7 +2787,7 @@
         "message": "RC Expo-styrka"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Exponenten som används vid beräkning av RC Expo. I Betaflight-versioner före 3.0 är värdet satt till 3."
+        "message": "Exponenten som används vid beräkning av RC Expo. I EmuFlight-versioner före 3.0 är värdet satt till 3."
     },
     "pidTuningLevel": {
         "message": "Angle/Horizon"
@@ -2979,7 +2970,7 @@
         "message": "Godtycklig styrkortsrotation i grader, för att möjliggöra montering sidledes / upp och ner / roterat etc. Vid användning av externa sensorer, använd sensorinriktning (Gyro, Acc, Mag) för att definiera sensorpositionen oberoende från styrkortsrotationen."
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Konfigurationen av Failsafe har förändrats kraftigt. Använd Betaflight <strong>v1.12.0+</strong> för att aktivera den förbättrade konfigurationspanelen."
+        "message": "Konfigurationen av Failsafe har förändrats kraftigt. Använd EmuFlight <strong>v1.12.0+</strong> för att aktivera den förbättrade konfigurationspanelen."
     },
     "failsafePaneTitleOld": {
         "message": "Mottagar-failsafe"
@@ -3102,7 +3093,7 @@
         "message": "Spara"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Firmware-uppdatering <span class=\"message-negative\">krävs</span>. Batteri/Ampere/Volt-konfiguration via API &lt; 1.33.0 (Betaflight utgåva &lt;= 3.17) stöds ej."
+        "message": "Firmware-uppdatering <span class=\"message-negative\">krävs</span>. Batteri/Ampere/Volt-konfiguration via API &lt; 1.33.0 (EmuFlight utgåva &lt;= 3.17) stöds ej."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Spänningsmätnings-källa"
@@ -4165,10 +4156,10 @@
         "message": "Okänt element (detaljer tillkommer i en kommande utgåva)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Teckensnittsversion: 1 (Betaflight 4.0 eller äldre)"
+        "message": "Teckensnittsversion: 1 (EmuFlight 4.0 eller äldre)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Teckensnittsversion: 2 (Betaflight 4.1 eller nyare)"
+        "message": "Teckensnittsversion: 2 (EmuFlight 4.1 eller nyare)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Typsnittsversion: från användaren"
@@ -4683,7 +4674,7 @@
         "message": "Mätning"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs Betaflight (float):</b> PID-skalning och PID-logik är exakt samma. Omjustering behövs inte nödvändigtvis. Legacy är en äldre version som är en grundläggande PID-kontroller baserad på heltalsmatematik. Betaflight PID-kontroller använder flyttalsmatematik och har många nya funktioner som designats specifikt för multirotorapplikationer<br><b>Float vs Integer:</b>PID-skalning och PID-logik är exakt samma. Ingen omjustering behövs. F1-kort har ingen inbyggd FPU och flyttalsmatematik ökar belastningen på CPU:n. Heltalsmatematik ger bättre prestanda, men flyttalsmatematik kan ge något bättre precision."
+        "message": "<b>Legacy vs EmuFlight (float):</b> PID-skalning och PID-logik är exakt samma. Omjustering behövs inte nödvändigtvis. Legacy är en äldre version som är en grundläggande PID-kontroller baserad på heltalsmatematik. EmuFlight PID-kontroller använder flyttalsmatematik och har många nya funktioner som designats specifikt för multirotorapplikationer<br><b>Float vs Integer:</b>PID-skalning och PID-logik är exakt samma. Ingen omjustering behövs. F1-kort har ingen inbyggd FPU och flyttalsmatematik ökar belastningen på CPU:n. Heltalsmatematik ger bättre prestanda, men flyttalsmatematik kan ge något bättre precision."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft Filter:</b> Lågpassfilter för gyro. Använd ett lägre värde för ökad filtrering.<br><b>D Term Filter:</b> Lågpassfilter för Dterm. Kan påverka D tuning. Använd ett lägre värde för ökad filtrering. <br><b>Gir-filter:</b> Filtrerar gir-output. Det kan hjälpa system med brus i gir-axeln."

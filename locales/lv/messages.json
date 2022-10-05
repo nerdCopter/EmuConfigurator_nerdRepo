@@ -398,7 +398,7 @@
         "message": "Jūs patreiz to <span class=\"message-negative\">nevarat</span> izdarīt, lūdzu, uzgaidiet kamēr esošā operācija beigsies ..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Jums vajag <strong>atjaunot</strong> jūsu programmatūras versiju uz jaunāko Betaflight versiju pirms varat sākt izmantot $1 cilni."
+        "message": "Jums vajag <strong>atjaunot</strong> jūsu programmatūras versiju uz jaunāko EmuFlight versiju pirms varat sākt izmantot $1 cilni."
     },
     "firmwareVersion": {
         "message": "Programmaparatūras versija: <strong>$1</strong>"
@@ -479,12 +479,6 @@
     "eeprom_saved_ok": {
         "message": "EEPROM <span class=\"message-positive\"> saglabāts</span>"
     },
-    "defaultWelcomeIntro": {
-        "message": "Laipni lūgti <strong>Betaflight - Configurator</strong>, utilītā, kas paredzēta, lai vienkāršotu lidojuma kontroliera atjaunināšanu, konfigurēšanu un noregulēšanu."
-    },
-    "defaultWelcomeHead": {
-        "message": "Aparatūra"
-    },
     "defaultContributingHead": {
         "message": "Atbalstīt"
     },
@@ -497,9 +491,6 @@
     "defaultDonateHead": {
         "message": "Atvērtā koda / ziedojuma paziņojums"
     },
-    "defaultDonateBottom": {
-        "message": "<p>Ja vēlies regulāri finansiāli palīdzēt, apsver iespēju kļūt par ziedotāju iekš $t(patreonLink.message).</p>"
-    },
     "defaultDonate": {
         "message": "Ziedot"
     },
@@ -510,7 +501,7 @@
         "message": "Dokumentācija / Manuāli"
     },
     "defaultDocumentation": {
-        "message": "Betaflight dokumentācija ir pieejama relīzes dokumentācijā un wiki.<br /><br />"
+        "message": "EmuFlight dokumentācija ir pieejama relīzes dokumentācijā un wiki.<br /><br />"
     },
     "defaultSupportHead": {
         "message": "Atbalsts"
@@ -525,7 +516,7 @@
         "message": "Palīdzībai, lūdzu, apmeklējiet forumus un wiki vai sazināties ar savu pārdevēju.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Dublēšanas un atjaunošanas funkcionalitāte ir atslēgta.</span>Jūsu programmatūras API versija <span class=\"message-negative\">$1</span>, dublēšanai un atjaunošanai nepieciešama <span class=\"message-positive\">$2</span>.  Lūdzu, dublējat savus iestatījumus ar CLI, procedūras aprakstu skatīt Betaflight dokumentācijā."
+        "message": "<span class=\"message-negative\">Dublēšanas un atjaunošanas funkcionalitāte ir atslēgta.</span>Jūsu programmatūras API versija <span class=\"message-negative\">$1</span>, dublēšanai un atjaunošanai nepieciešama <span class=\"message-positive\">$2</span>.  Lūdzu, dublējat savus iestatījumus ar CLI, procedūras aprakstu skatīt EmuFlight dokumentācijā."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrēt akselerometru"
@@ -716,7 +707,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP savienojums ir aktīvs, visdrīzāk ar Betaflight Configurator",
+        "message": "MSP savienojums ir aktīvs, visdrīzāk ar EmuFlight Configurator",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1020,7 +1011,7 @@
         "message": "Skaņas signāla tonis"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Dshot beacon izmanto ESC un motorus lai atskaņotu skaņas. Tas nozīmē, ka Dshot beacon nevar tikt izmantots kamēr motori griežas. Betaflight 3.4 un jaunākos, ja mēģina aktivizēt gaisa kuģi kamēr Dshot beacon ir aktīvs, būs 2 sekunžu aizture pēc pēdēja Dshot beacon skaņas signāla, pirms gaisa kuģa aktivizēšanās. Tas novērš Dshot beacon funkcionalitātes interferenci ar Dshot komandām kas tiek sūtītas kad notiek aktivizēšana. <br/><strong>Brīdinājums:</strong> Tā kā Dshot beacon savas aktivitātes laikā caur motoru laiž ievērojamu strāvu, tas var novēst pie pārmērīgas siltumizdales un bojāt motorus un / vai ESC ja \"beacon strength\" ir uzstādīts pārāk augstu. Izmantojiet BLHeli Configurator vai BLHeli Suite lai pieregulētu \"beacon strength\"."
+        "message": "Dshot beacon izmanto ESC un motorus lai atskaņotu skaņas. Tas nozīmē, ka Dshot beacon nevar tikt izmantots kamēr motori griežas. EmuFlight 3.4 un jaunākos, ja mēģina aktivizēt gaisa kuģi kamēr Dshot beacon ir aktīvs, būs 2 sekunžu aizture pēc pēdēja Dshot beacon skaņas signāla, pirms gaisa kuģa aktivizēšanās. Tas novērš Dshot beacon funkcionalitātes interferenci ar Dshot komandām kas tiek sūtītas kad notiek aktivizēšana. <br/><strong>Brīdinājums:</strong> Tā kā Dshot beacon savas aktivitātes laikā caur motoru laiž ievērojamu strāvu, tas var novēst pie pārmērīgas siltumizdales un bojāt motorus un / vai ESC ja \"beacon strength\" ir uzstādīts pārāk augstu. Izmantojiet BLHeli Configurator vai BLHeli Suite lai pieregulētu \"beacon strength\"."
     },
     "configurationBeeper": {
         "message": "Pīkstuļa konfigurācija"
@@ -2679,7 +2670,7 @@
         "message": "RC Ekspo jauda"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Eksponents tiek lietots RC Ekspo kalkulācijās. Iekš Betaflight versijās pirms 3.0, vērtība fiksēta uz 3."
+        "message": "Eksponents tiek lietots RC Ekspo kalkulācijās. Iekš EmuFlight versijās pirms 3.0, vērtība fiksēta uz 3."
     },
     "pidTuningLevel": {
         "message": "Leņķa/Horizonta"
@@ -2805,7 +2796,7 @@
         "message": "Patvaļīga plates pagriešana grādos, lai atļautu uzstādīt to sāniski / augšpēdus / pagrieztu utt. Kad darbojas ar ārējo sensoru, izmantojiet sensora pielāgošanu (Žiro, Aksel, Mag), lai definētu sensora pozīciju neatkarīgi no plates orientācijas. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Failsafe konfigurācija ir ievērojami mainījusies. Lietojiet Betaflight <strong>v1.12.0+</strong> lai piekļūtu uzlabotajam konfigurācijas panelim."
+        "message": "Failsafe konfigurācija ir ievērojami mainījusies. Lietojiet EmuFlight <strong>v1.12.0+</strong> lai piekļūtu uzlabotajam konfigurācijas panelim."
     },
     "failsafePaneTitleOld": {
         "message": "Uztvērēja Failsafe"
@@ -2928,7 +2919,7 @@
         "message": "Saglabāt"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Programmatūras atjaunināšana <span class=\"message-negative\">nepieciešama</span>. Akumulatora/Strāvas stipruma/Sprieguma konfigurācija lietojot API &lt; 1.33.0 (Betaflight relīzi &lt;= 3.17) nav pieejama."
+        "message": "Programmatūras atjaunināšana <span class=\"message-negative\">nepieciešama</span>. Akumulatora/Strāvas stipruma/Sprieguma konfigurācija lietojot API &lt; 1.33.0 (EmuFlight relīzi &lt;= 3.17) nav pieejama."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Voltmetra avots"
@@ -4351,7 +4342,7 @@
         "message": "Mērījums"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Mantojuma vs Betaflight (peldošais):</b> PID mērogošana un PID loģika ir tāda pati. Nav obligāti nepieciešama atkārtota pieregulēšana. Mantojums ir vecais betaflight, kura pamata PID kontrolieris balstīts uz veselo skaitļu matemātikas. Betaflight PID kontrolieris pielieto peldošā punkta matemātiku un tas dod daudz jaunu iespēju, īpaši izstrādātu priekš multirotoriem<br> <b>Peldošais vs veselais:</b> PID mērogošana un PID loģika ir tāda pati. Nav nepieciešama atkārtota pieregulēšana. F1 platēm nav integrēta FPU un peldoša punkta matemātika ievērojami palielina CPU noslodzi un veselo skaitļu matemātika uzlabo ātrdarbību, bet samazina precizitāti."
+        "message": "<b>Mantojuma vs EmuFlight (peldošais):</b> PID mērogošana un PID loģika ir tāda pati. Nav obligāti nepieciešama atkārtota pieregulēšana. Mantojums ir vecais emuflight, kura pamata PID kontrolieris balstīts uz veselo skaitļu matemātikas. EmuFlight PID kontrolieris pielieto peldošā punkta matemātiku un tas dod daudz jaunu iespēju, īpaši izstrādātu priekš multirotoriem<br> <b>Peldošais vs veselais:</b> PID mērogošana un PID loģika ir tāda pati. Nav nepieciešama atkārtota pieregulēšana. F1 platēm nav integrēta FPU un peldoša punkta matemātika ievērojami palielina CPU noslodzi un veselo skaitļu matemātika uzlabo ātrdarbību, bet samazina precizitāti."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft filtrs:</b>Žiroskopa zemfrekvenču filtrs. Izmantojiet zemākas vērtības, lai panāktu efektīvāku filtrēšanu.<br><b>D Term Filtrs:</b> Dterm zemfrekvenču filtrs. Var ietekmēt D regulējumu. Izmantojiet zemākas vērtības, lai panāktu efektīvāku filtrēšanu. <br><b>Yaw filtrs:</b> Filtrē Yaw izvadi. Tas var palīdzēt ar konstrukcijas trokšņiem uz Yaw ass."

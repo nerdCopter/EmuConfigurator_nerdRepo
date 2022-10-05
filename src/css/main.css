@@ -1291,15 +1291,15 @@ li.active .ic_motor {
 }
 
 .ic_welcome {
-    background-image: url(../images/icons/cf_icon_welcome_grey.svg);
+    background-image: url(../images/icons/ef_icon_welcome.svg);
 }
 
 .ic_welcome:hover {
-    background-image: url(../images/icons/cf_icon_welcome_white.svg);
+    background-image: url(../images/icons/ef_icon_welcome.svg);
 }
 
 li.active .ic_welcome {
-    background-image: url(../images/icons/cf_icon_welcome_white.svg);
+    background-image: url(../images/icons/ef_icon_welcome.svg);
 }
 
 .ic_help {
