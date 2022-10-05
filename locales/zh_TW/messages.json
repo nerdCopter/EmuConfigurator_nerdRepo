@@ -155,7 +155,7 @@
         "message": "$ t（configuratorUpdateHelp.message）"
     },
     "configuratorUpdateHelp": {
-        "message": "在舊版本的配置程式上使用新版本固件可能會使修改某些設置時導致 <strong>固件配置損壞且飛行器無法工作</strong>。此外，固件的某些功能將僅能在 CLI 中配置。 <br><strong>EmuFlight 配置程式版本<b>$1</b> 可下載</strong>，請訪問<a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">這個頁面</ a>下載並安裝最新的配置程式，以獲取全部的修復與改進。 <br>更新前請關閉配置程式窗口。"
+        "message": "在舊版本的配置程式上使用新版本固件可能會使修改某些設置時導致 <strong>固件配置損壞且飛行器無法工作</strong>。此外，固件的某些功能將僅能在 CLI 中配置。 <br><strong>Betaflight 配置程式版本<b>$1</b> 可下載</strong>，請訪問<a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">這個頁面</ a>下載並安裝最新的配置程式，以獲取全部的修復與改進。 <br>更新前請關閉配置程式窗口。"
     },
     "configuratorUpdateWebsite": {
         "message": "打開版本發佈網站"
@@ -452,7 +452,7 @@
         "message": "<span class=\"message-negative\">不能</span>執行當前操作，請等待上一個操作完成…"
     },
     "tabSwitchUpgradeRequired": {
-        "message": "需要<strong>更新</strong>到最新版本的 EmuFlight 固件才能使用 $1 頁面"
+        "message": "需要<strong>更新</strong>到最新版本的 Betaflight 固件才能使用 $1 頁面"
     },
     "firmwareVersion": {
         "message": "固件版本：<strong>$1</strong>"
@@ -555,13 +555,13 @@
         "message": "文檔/手冊"
     },
     "defaultDocumentation": {
-        "message": "EmuFlight 的文檔和發佈說明可以在 wiki 裡面找到。<br /><br />"
+        "message": "Betaflight 的文檔和發佈說明可以在 wiki 裡面找到。<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "學習 EmuFlight 最好的資源是使用 EmuFlight wiki，而不是聽信各種“老師”，它在<a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">這裡</a>。"
+        "message": "學習 Betaflight 最好的資源是使用 Betaflight wiki，而不是聽信各種“老師”，它在<a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">這裡</a>。"
     },
     "defaultDocumentation2": {
-        "message": "最新的固件發佈訊息可以在<a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">這裡</a>找到。"
+        "message": "最新的固件發佈訊息可以在<a href=\"https://github.com/emuflight/emuflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">這裡</a>找到。"
     },
     "defaultSupportHead": {
         "message": "支援"
@@ -576,7 +576,7 @@
         "message": "需要幫助時請先檢索論壇或者咨詢飛控板的生產商。<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">備份和恢復功能被禁用。</span>當前飛控固件的API版本為 <span class=\"message-negative\">$1</span>，而備份和恢復功能需要版本 <span class=\"message-positive\">$2</span>。請通過 CLI 命令列手工備份，具體操作流程請參閱 EmuFlight 文檔。"
+        "message": "<span class=\"message-negative\">備份和恢復功能被禁用。</span>當前飛控固件的API版本為 <span class=\"message-negative\">$1</span>，而備份和恢復功能需要版本 <span class=\"message-positive\">$2</span>。請通過 CLI 命令列手工備份，具體操作流程請參閱 Betaflight 文檔。"
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "校準加速度計"
@@ -1107,7 +1107,7 @@
         "message": "信標音調"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Dshot 信標使用電調和電機產生聲音。這意味著當電機旋轉時，Dshot 信標無法工作。在 EmuFlight 3.4 和以後的版本中，若在 Dshot 信標激活時嘗試解鎖，飛控會在發出最後一聲信標音後延遲2秒再解鎖。這是為了防止 Dshot 信標功能干擾在解鎖時發送的 Dshot 命令。<br/><strong>警告：</strong> 由於 Dshot 信標會有電流流過，如果信標鳴叫強度設置得太高，可能會噪聲電機/電調過熱甚至孫奎。建議使用 BLHeli 配置程式或 BLHeliSuite 來調整和測試信標的鳴叫強度。"
+        "message": "Dshot 信標使用電調和電機產生聲音。這意味著當電機旋轉時，Dshot 信標無法工作。在 Betaflight 3.4 和以後的版本中，若在 Dshot 信標激活時嘗試解鎖，飛控會在發出最後一聲信標音後延遲2秒再解鎖。這是為了防止 Dshot 信標功能干擾在解鎖時發送的 Dshot 命令。<br/><strong>警告：</strong> 由於 Dshot 信標會有電流流過，如果信標鳴叫強度設置得太高，可能會噪聲電機/電調過熱甚至孫奎。建議使用 BLHeli 配置程式或 BLHeliSuite 來調整和測試信標的鳴叫強度。"
     },
     "configurationBeeper": {
         "message": "蜂鳴器配置"
@@ -2918,7 +2918,7 @@
         "message": "RC Expo 權重"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "該指數用以計算RC Expo。在 EmuFlight 3.0版本之前，該值固定為3。"
+        "message": "該指數用以計算RC Expo。在 Betaflight 3.0版本之前，該值固定為3。"
     },
     "pidTuningLevel": {
         "message": "自穩/半自穩"
@@ -3151,13 +3151,13 @@
         "message": "整合式偏航"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">注意</span>: 如果你啟用此功能，則必須相應地調整偏航PID。更多訊息在<a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">此處</a>"
+        "message": "<span class=\"message-negative\">注意</span>: 如果你啟用此功能，則必須相應地調整偏航PID。更多訊息在<a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">此處</a>"
     },
     "configHelp2": {
         "message": "任意角度（直立，反轉，旋轉等）安裝飛控板。當使用外部傳感器時，請使用傳感器校正設置(陀螺，加速度計，磁場計)來決定獨立於飛控板的傳感器位置。"
     },
     "failsafeFeaturesHelpOld": {
-        "message": "失控保護功能被大量重做。請使用EmuFlight <strong>v1.12.0+</strong> 來啟用增強的失控保護設置頁。"
+        "message": "失控保護功能被大量重做。請使用Betaflight <strong>v1.12.0+</strong> 來啟用增強的失控保護設置頁。"
     },
     "failsafePaneTitleOld": {
         "message": "接收器失控保護"
@@ -3301,7 +3301,7 @@
         "message": "保存"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "固件更新 <span class=\"message-negative\">要求</span>。電池/電流/電壓通過API &lt; 1.33.0 設置。（EmuFlight 版本&lt;=3.17）不支援。"
+        "message": "固件更新 <span class=\"message-negative\">要求</span>。電池/電流/電壓通過API &lt; 1.33.0 設置。（Betaflight 版本&lt;=3.17）不支援。"
     },
     "powerBatteryVoltageMeterSource": {
         "message": "電壓計選擇"
@@ -4397,10 +4397,10 @@
         "message": "未知統計 (會在將來的版本中添加詳細訊息)"
     },
     "osdDescribeFontVersion1": {
-        "message": "字體版本: 1 (EmuFlight 4.0或更舊版本)"
+        "message": "字體版本: 1 (Betaflight 4.0或更舊版本)"
     },
     "osdDescribeFontVersion2": {
-        "message": "字體版本: 2 (EmuFlight 4.1或更新版本)"
+        "message": "字體版本: 2 (Betaflight 4.1或更新版本)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "字庫版本: 用戶提供"
@@ -4619,7 +4619,7 @@
         "message": "已儲存"
     },
     "vtxHelp": {
-        "message": "這裡可以定義圖傳用到的值。如果你的圖傳支援，你可以查看和修改發送功率和圖傳表。 <br>按以下步驟設置你的圖傳：<br>1. 打開<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX- tables\">這個</a>頁面；<br>2. 找到並下載適合你的圖傳型號和所在地區的圖傳配置文件；<br>3. 點擊下方'$t(vtxButtonLoadFile.message)'，選擇並加載圖傳配置文件；<br>4. 確認設置正確；<br>5. 點擊'$t(vtxButtonSave.message)'保存圖傳設置到飛控。 <br>6. （可選）點擊'$t(vtxButtonSaveLua.message)'保存 Lua 配置文件供 EmuFlight Lua 腳本使用。 （在<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">這裡</a>查看更多。）",
+        "message": "這裡可以定義圖傳用到的值。如果你的圖傳支援，你可以查看和修改發送功率和圖傳表。 <br>按以下步驟設置你的圖傳：<br>1. 打開<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX- tables\">這個</a>頁面；<br>2. 找到並下載適合你的圖傳型號和所在地區的圖傳配置文件；<br>3. 點擊下方'$t(vtxButtonLoadFile.message)'，選擇並加載圖傳配置文件；<br>4. 確認設置正確；<br>5. 點擊'$t(vtxButtonSave.message)'保存圖傳設置到飛控。 <br>6. （可選）點擊'$t(vtxButtonSaveLua.message)'保存 Lua 配置文件供 Betaflight Lua 腳本使用。 （在<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">這裡</a>查看更多。）",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -4989,7 +4989,7 @@
         "message": "測量模式"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>傳統 vs EmuFlight (浮點數):</b> PID 比例和 PID 邏輯是完全一樣的。理論上，在兩者之間進行切換不需要重新調參。傳統的也是emuflight參與的重寫算法，使用整數進行計算。 EmuFlight PID 控制器使用浮點數進行計算，並專門為多軸飛行器設計了許多新功能<br> <b>浮點vs 整數:</b> PID 比例和PID邏輯完全一樣的. 理論上，在兩者之間進行切換不需要重新調參。 F1晶片缺乏FPU，使用浮點運算將會增加CPU負荷，使用整數運算會得到更加好的運行效果。但是浮點運算會獲得稍高的精準度。"
+        "message": "<b>傳統 vs Betaflight (浮點數):</b> PID 比例和 PID 邏輯是完全一樣的。理論上，在兩者之間進行切換不需要重新調參。傳統的也是Betaflight參與的重寫算法，使用整數進行計算。 Betaflight PID 控制器使用浮點數進行計算，並專門為多軸飛行器設計了許多新功能<br> <b>浮點vs 整數:</b> PID 比例和PID邏輯完全一樣的. 理論上，在兩者之間進行切換不需要重新調參。 F1晶片缺乏FPU，使用浮點運算將會增加CPU負荷，使用整數運算會得到更加好的運行效果。但是浮點運算會獲得稍高的精準度。"
     },
     "pidTuningFilterTip": {
         "message": "<b>陀螺儀軟件濾波器：</b> 陀螺儀的低通濾波。更低的數字會提供更多的過濾效果。 <br><b>D Term 濾波器：</b>Dterm 低通濾波器。會影響D值的調參，更低的數字會提供更多的過濾效果。 <br><b>方向濾波器：</b> 對偏航輸出進行濾波。對偏航軸震動或者噪聲很嚴重的情況會有幫助。"

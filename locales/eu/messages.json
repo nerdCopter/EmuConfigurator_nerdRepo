@@ -155,10 +155,10 @@
         "message": "Erakutsi konfiguratzailearen bertsio ezegonkorretarako eguneratze jakinarazpenak"
     },
     "configuratorUpdateNotice": {
-        "message": "<b>EmuFlight Konfiguratzailearen</b> bertsio zaharkitua erabiltzen ari zara.<br>$t(configuratorUpdateHelp.message)"
+        "message": "<b>Betaflight Konfiguratzailearen</b> bertsio zaharkitua erabiltzen ari zara.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "Firmwarearen bertsio berriak konfiguratzailearen bertsio zaharkituekin erabiltzen baduzu, ezarpen batzuk aldatzerakoan, <strong> firmware konfigurazio eta gailu hondatuak</strong> ekar daitezke. Gainera, firmwarearen zenbait ezaugarri CLI erabiltzen bakarrik konfiguratu daitezke.<br><strong> EmuFlight Konfiguratzaile bertsioa <b>$1</b> sarean deskargatzeko erabilgarri dago </strong>. Mesedez bisitatu<a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">orri hau</a> azken bertsioa deskargatzeko, konponketak eta hobekuntzak jasotzen.<br>Mesedez, itxi konfiguratzaile leiho hau eguneratu aurretik."
+        "message": "Firmwarearen bertsio berriak konfiguratzailearen bertsio zaharkituekin erabiltzen baduzu, ezarpen batzuk aldatzerakoan, <strong> firmware konfigurazio eta gailu hondatuak</strong> ekar daitezke. Gainera, firmwarearen zenbait ezaugarri CLI erabiltzen bakarrik konfiguratu daitezke.<br><strong> Betaflight Konfiguratzaile bertsioa <b>$1</b> sarean deskargatzeko erabilgarri dago </strong>. Mesedez bisitatu<a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">orri hau</a> azken bertsioa deskargatzeko, konponketak eta hobekuntzak jasotzen.<br>Mesedez, itxi konfiguratzaile leiho hau eguneratu aurretik."
     },
     "configuratorUpdateWebsite": {
         "message": "Bertsio agirien webgunera joan"
@@ -576,10 +576,10 @@
         "message": "Betafligth-eko dokumentazioa, bertsio oharretan eta Wiki-an eskuragarri dago.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Betafligth Wika-a ikaragarrizko informazio iturria da. <a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\"> Hemen </a>aurkitu dezakezu."
+        "message": "Betafligth Wika-a ikaragarrizko informazio iturria da. <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\"> Hemen </a>aurkitu dezakezu."
     },
     "defaultDocumentation2": {
-        "message": "Firmwarearentzako oharrak GitHub-en bertsioen orrian irakur daitezke <a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">hemen</a>."
+        "message": "Firmwarearentzako oharrak GitHub-en bertsioen orrian irakur daitezke <a href=\"https://github.com/emuflight/emuflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">hemen</a>."
     },
     "defaultSupportHead": {
         "message": "Laguntza"
@@ -594,7 +594,7 @@
         "message": "Laguntza lortzeko mesedez, bilatu foro eta wikian edo jarri harremanetan saltzaileekin. <br/> <br/>"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Backupak eta leheneratzea funtzioak itzalita daude.</span> Zuk daukazun firmwarearen API bertsioa <span class=\"message-negative\">$1</span>, Backupa eta leheneratzea beharrezkoak dira<span class=\"message-positive\">$2</span>.  Mezedez, gorde zure backupa CLI-re bitartez, begiratu EmuFlight-ren dokumentazioa jakiteko nola egin."
+        "message": "<span class=\"message-negative\">Backupak eta leheneratzea funtzioak itzalita daude.</span> Zuk daukazun firmwarearen API bertsioa <span class=\"message-negative\">$1</span>, Backupa eta leheneratzea beharrezkoak dira<span class=\"message-positive\">$2</span>.  Mezedez, gorde zure backupa CLI-re bitartez, begiratu Betaflight-ren dokumentazioa jakiteko nola egin."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Azelerometroa kalibratu"
@@ -785,7 +785,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP konexioa aktiboa da, seguruenik EmuFlight Configurator honekin",
+        "message": "MSP konexioa aktiboa da, seguruenik Betaflight Configurator honekin",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1125,7 +1125,7 @@
         "message": "Balizaren tonua"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Dshot balizak ESCak eta motorrak erabiltzen ditu soinua sortzeko. Horrek esan nahi du Dshot baliza ezin dela erabili motorrak biratzen ari direnean. EmuFlight 3.4 eta hurrengoetan, Dshot baliza aktibo dagoen bitartean armatzen saiatzean, Dshot balizaren azken tonuaren ondoren 2 segundoko eten bat dago armatu aurretik. Hau egin behar da Dshot balizaren funtzionaltasunak armagabetzean bidaltzen diren Dshot komandoak oztopatzeko. <br/><strong>Arreta:</strong> Dshot baliza korrontea igaroko denez, balizaren intentsitatea altua bada ere, motorra / elektrikoa gehiegi berotu edo kalteak eragin ditzake. Erabil ezazu BLHeli konfiguratzailea edo BLHeli kit-a balizaren indarra doitzeko eta probatzeko."
+        "message": "Dshot balizak ESCak eta motorrak erabiltzen ditu soinua sortzeko. Horrek esan nahi du Dshot baliza ezin dela erabili motorrak biratzen ari direnean. Betaflight 3.4 eta hurrengoetan, Dshot baliza aktibo dagoen bitartean armatzen saiatzean, Dshot balizaren azken tonuaren ondoren 2 segundoko eten bat dago armatu aurretik. Hau egin behar da Dshot balizaren funtzionaltasunak armagabetzean bidaltzen diren Dshot komandoak oztopatzeko. <br/><strong>Arreta:</strong> Dshot baliza korrontea igaroko denez, balizaren intentsitatea altua bada ere, motorra / elektrikoa gehiegi berotu edo kalteak eragin ditzake. Erabil ezazu BLHeli konfiguratzailea edo BLHeli kit-a balizaren indarra doitzeko eta probatzeko."
     },
     "configurationBeeper": {
         "message": "Beeper-en konfigurazioa"
@@ -2984,7 +2984,7 @@
         "message": "RC Expo potentzia"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "RC Expo kalkulatzeko erabiltzen den esponentea. 3.0 bertsio aurreko EmuFlight bertsioetan, balioa 3an finkatzen da."
+        "message": "RC Expo kalkulatzeko erabiltzen den esponentea. 3.0 bertsio aurreko Betaflight bertsioetan, balioa 3an finkatzen da."
     },
     "pidTuningLevel": {
         "message": "Angle/Horizon"
@@ -3223,13 +3223,13 @@
         "message": "Yaw Integratua"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">ABISUA</span>: Ezaugarri hau gaitzen baduzu, YAW PID horren arabera egokitu behar duzu. Informazio gehiago <a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">hemen</a>"
+        "message": "<span class=\"message-negative\">ABISUA</span>: Ezaugarri hau gaitzen baduzu, YAW PID horren arabera egokitu behar duzu. Informazio gehiago <a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">hemen</a>"
     },
     "configHelp2": {
         "message": "Hegaldi kontroladorea edozein angeluan biratu(zutik, atzeraka, biraketa...). Kanpoko sentsoreak erabiltzen dituzunean, sentsoreen lerrokatzea erabili sentsoreen posizioak definitzeko, hegaldi kontroladorearen orientazioa edozein dela ere. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Segurtasun moduaren konfigurazioa asko aldatu da. Erabili EmuFlight <strong>v1.12.0+</strong> konfigurazio panela hobetzeko."
+        "message": "Segurtasun moduaren konfigurazioa asko aldatu da. Erabili Betaflight <strong>v1.12.0+</strong> konfigurazio panela hobetzeko."
     },
     "failsafePaneTitleOld": {
         "message": "Hartzaileak huts egin du"
@@ -3373,7 +3373,7 @@
         "message": "Gorde"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Firmwarea eguneratzea<span class=\"message-negative\">beharrezkoa da</span>. Bateria/Intentsitate/Tentsio konfigurazioak API &lt; 1.33.0 (EmuFlight release &lt;= 3.17) es du onartzen."
+        "message": "Firmwarea eguneratzea<span class=\"message-negative\">beharrezkoa da</span>. Bateria/Intentsitate/Tentsio konfigurazioak API &lt; 1.33.0 (Betaflight release &lt;= 3.17) es du onartzen."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Tentsio Sentsorearen Iturburua"
@@ -4480,10 +4480,10 @@
         "message": "Estatistika ezezagunak (xehetasunak etorkizuneko bertsioan gehituko dira)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Letra-motaren bertsioa: 1 (EmuFlight 4.0 edo berriagoa)"
+        "message": "Letra-motaren bertsioa: 1 (Betaflight 4.0 edo berriagoa)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Letra-motaren bertsioa: 2 (EmuFlight 4.1 edo berriagoa)"
+        "message": "Letra-motaren bertsioa: 2 (Betaflight 4.1 edo berriagoa)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Letra-motaren bertsioa: erabiltzaileak emana"
@@ -4702,7 +4702,7 @@
         "message": "Gordeta"
     },
     "vtxHelp": {
-        "message": "Hemen zure Bideo Argailuaren (VTX) balioak konfigura ditzakezu. Transmisioaren balioak ikusi eta alda ditzakezu, VTX taulak barne, hegaldi-kontroladoreak eta VTX onartzen badituzte.<br>Urrats hauek egin zure VTX konfiguratzeko:<br>1. Ireki <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\"> </a>orria;<br>2. Bilatu zure herrialderako VTX konfigurazio fitxategi egokia eta deskargatu;<br>3. Egin klik '$t(vtxButtonLoadFile.message)' botoian, hautatu VTX konfigurazio fitxategia, kargatu,<br>4. Egiaztatu ezarpenak zuzenak direla;<br>5. Sakatu '$t(vtxButtonSave.message)' VTX balioak hegaldi kontroladorean gordetzeko.<br>6. Aukeran klik '$t(vtxButtonSaveLua.message)' lua konfigurazio-fitxategia emuflight lua gidoiak batera erabili ahal izango dituzu (Ikusi gehiago <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">hemen</a>.)",
+        "message": "Hemen zure Bideo Argailuaren (VTX) balioak konfigura ditzakezu. Transmisioaren balioak ikusi eta alda ditzakezu, VTX taulak barne, hegaldi-kontroladoreak eta VTX onartzen badituzte.<br>Urrats hauek egin zure VTX konfiguratzeko:<br>1. Ireki <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\"> </a>orria;<br>2. Bilatu zure herrialderako VTX konfigurazio fitxategi egokia eta deskargatu;<br>3. Egin klik '$t(vtxButtonLoadFile.message)' botoian, hautatu VTX konfigurazio fitxategia, kargatu,<br>4. Egiaztatu ezarpenak zuzenak direla;<br>5. Sakatu '$t(vtxButtonSave.message)' VTX balioak hegaldi kontroladorean gordetzeko.<br>6. Aukeran klik '$t(vtxButtonSaveLua.message)' lua konfigurazio-fitxategia Betaflight lua gidoiak batera erabili ahal izango dituzu (Ikusi gehiago <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">hemen</a>.)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -5072,7 +5072,7 @@
         "message": "Neurketa"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs EmuFlight (flotatzen):</b> PIDaren eskala eta logika berdinak dira. Ez da beharrezkoa berriro egokitzea. Legatua EmuFlight eboluzionatu berria da rewrite erabiliz. Oinarrizko matematikaren oinarritutako PID kontroladorea da. EmuFlight PID kontroladoreek kontrol flotagarria duten matematika erabiltzen du eta funtzio anitzeko aplikazioetarako bereziki diseinatutako ezaugarri berriak ditu. <br><b>Flotatzen vs Osoa:</b> PIDaren eskala eta logika berdinak dira. Ez da beharrezkoa berriro egokitzea. F1 taulek ez dute FPU integratua eta puntu mugikorreko kalkuluak CPUaren karga handitzen du eta matematika osoak errendimendua hobetuko luke, baina puntu flotagarriek matematikako zehaztasun gehiago eman dezakete."
+        "message": "<b>Legacy vs Betaflight (flotatzen):</b> PIDaren eskala eta logika berdinak dira. Ez da beharrezkoa berriro egokitzea. Legatua Betaflight eboluzionatu berria da rewrite erabiliz. Oinarrizko matematikaren oinarritutako PID kontroladorea da. Betaflight PID kontroladoreek kontrol flotagarria duten matematika erabiltzen du eta funtzio anitzeko aplikazioetarako bereziki diseinatutako ezaugarri berriak ditu. <br><b>Flotatzen vs Osoa:</b> PIDaren eskala eta logika berdinak dira. Ez da beharrezkoa berriro egokitzea. F1 taulek ez dute FPU integratua eta puntu mugikorreko kalkuluak CPUaren karga handitzen du eta matematika osoak errendimendua hobetuko luke, baina puntu flotagarriek matematikako zehaztasun gehiago eman dezakete."
     },
     "pidTuningFilterTip": {
         "message": "<b>Giro Soft iragazkia:</b> Giroren Behe-paseko Iragazkia. Erabili iragazki gehiagorako balio txikiagoa. <br><b>D Epe iragazkia:</b> Dterm Behe-paseko Iragazkia. D sintonizazioak eragin dezake. Erabili iragazki gehiagorako balio txikiagoa. <br><b>Yaw Iragazkia:</b> Yaw irteera iragazten du. Yaw ardatz zaratatsua duten konfigurazioetan lagun dezake."

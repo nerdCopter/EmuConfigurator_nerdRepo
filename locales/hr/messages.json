@@ -407,7 +407,7 @@
         "message": "<span class=\"message-negative\">Ne možete</span> to učiniti sada, molimo pričekajte da se trenutna operacija završi ..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Morate <strong>ažurirati</strong> firmware na posljednju verziju EmuFlighta prije nego što možete koristiti karticu $1."
+        "message": "Morate <strong>ažurirati</strong> firmware na posljednju verziju Betaflighta prije nego što možete koristiti karticu $1."
     },
     "firmwareVersion": {
         "message": "Firmware Verzija: <strong>$1</strong>"
@@ -510,7 +510,7 @@
         "message": "Dokumentacija / Uputsvo"
     },
     "defaultDocumentation": {
-        "message": "EmuFlight dokumentacija je dostupna u napomenama izdanja i na EmuFlight wikiju.<br /><br />"
+        "message": "Betaflight dokumentacija je dostupna u napomenama izdanja i na Betaflight wikiju.<br /><br />"
     },
     "defaultSupportHead": {
         "message": "Podrška"
@@ -522,10 +522,10 @@
         "message": "Developeri"
     },
     "defaultSupport": {
-        "message": "Za podršku molimo potražite na forumima i na EmuFlight wikiju ili kontaktirajte vašek proizvođaća<br /><br />"
+        "message": "Za podršku molimo potražite na forumima i na Betaflight wikiju ili kontaktirajte vašek proizvođaća<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Izrada i korištenje sigurnosnih kopija onemogućeno.</span> Koristite firmware s API verzijom <span class=\"message-negative\">$1</span>, sigurnosne kopije zahtijevaju <span class=\"message-positive\">$2</span>.  Molimo napravite sigurnosne kopije postavki kroz CLI sučelje, pogledajte EmuFlight dokumentaciju za proceduru."
+        "message": "<span class=\"message-negative\">Izrada i korištenje sigurnosnih kopija onemogućeno.</span> Koristite firmware s API verzijom <span class=\"message-negative\">$1</span>, sigurnosne kopije zahtijevaju <span class=\"message-positive\">$2</span>.  Molimo napravite sigurnosne kopije postavki kroz CLI sučelje, pogledajte Betaflight dokumentaciju za proceduru."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibracija akcelerometra"
@@ -645,7 +645,7 @@
         "message": "Arming dozvoljen"
     },
     "initialSetupArmingDisableFlagsTooltip": {
-        "message": "Popis zastavica koje pokazuju zašto arming trenutno nije dozvoljen. Pređite mišem preko zastavice ili posjetiti poglavlje 'Arming Sequence & Safety' u EmuFlight Wikiju za više informacija."
+        "message": "Popis zastavica koje pokazuju zašto arming trenutno nije dozvoljen. Pređite mišem preko zastavice ili posjetiti poglavlje 'Arming Sequence & Safety' u Betaflight Wikiju za više informacija."
     },
     "initialSetupArmingDisableFlagsTooltipNO_GYRO": {
         "message": "Žiroskop nije pronađen",
@@ -716,7 +716,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP veza je aktivna, vjerojatno s ovim EmuFlight Konfiguratorom",
+        "message": "MSP veza je aktivna, vjerojatno s ovim Betaflight Konfiguratorom",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1021,7 +1021,7 @@
         "message": "Ton beacona"
     },
     "configurationDshotBeaconHelp": {
-        "message": "DShot beacon koristi ESCove i motore da proizvede zvuk. To znači da se DShot beacon ne može koristiti dok se motori vrte. U EmuFlight verziji 3.4 i kasnijoj, kada se pokuša armirati dok je DShot beacon aktivan, postoji kašnjenje od 2 sekunde nakon posljednjeg zvuka prije nego što se letjelica armira. To služi tome da se spriječi ometanje arming procedure. <br/><strong>Upozorenje:</strong>Budući da DShot beacon koristi motore da bi proizveo zvuk, postoji mogućnost od pregrijavanja i oštećenja samih motora ako je postavljena jačina beacona prevelika. Koristite BLHeli konfigurator ili BLHeli Suite kako biste postavili i testirali jačinu beacona."
+        "message": "DShot beacon koristi ESCove i motore da proizvede zvuk. To znači da se DShot beacon ne može koristiti dok se motori vrte. U Betaflight verziji 3.4 i kasnijoj, kada se pokuša armirati dok je DShot beacon aktivan, postoji kašnjenje od 2 sekunde nakon posljednjeg zvuka prije nego što se letjelica armira. To služi tome da se spriječi ometanje arming procedure. <br/><strong>Upozorenje:</strong>Budući da DShot beacon koristi motore da bi proizveo zvuk, postoji mogućnost od pregrijavanja i oštećenja samih motora ako je postavljena jačina beacona prevelika. Koristite BLHeli konfigurator ili BLHeli Suite kako biste postavili i testirali jačinu beacona."
     },
     "configurationBeeper": {
         "message": "Konfiguracija beepera"
@@ -2715,7 +2715,7 @@
         "message": "RC Expo snaga"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Exponent koji se koristi pri izračunu RC Expoa. U EmuFlight verzijama prije 3.0, vrijednost je fiksna na 3."
+        "message": "Exponent koji se koristi pri izračunu RC Expoa. U Betaflight verzijama prije 3.0, vrijednost je fiksna na 3."
     },
     "pidTuningLevel": {
         "message": "Angle/Horizon"
@@ -3022,7 +3022,7 @@
         "message": "Spremi"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Ažuriranje firmwarea <span class=\"message-negative\">potrebno</span>. Konfiguracije baterije/struje/napona koristeći API &lt; 1.33.0 (EmuFlight izdanje &lt;=3.17) nisu podržane."
+        "message": "Ažuriranje firmwarea <span class=\"message-negative\">potrebno</span>. Konfiguracije baterije/struje/napona koristeći API &lt; 1.33.0 (Betaflight izdanje &lt;=3.17) nisu podržane."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Izvor mjerača napona"
@@ -3286,7 +3286,7 @@
         "message": "<strong>Napomena:</strong> OSD pretprikaz možda neće prikazati stvarni font koji je instaliran na kontroleru leta. Raspored individualnih elemenata može izgledati znatno drugačije kada se koriste starije verzije firmwarea - molimo provjerite raspored kroz FPV sustav prije leta."
     },
     "osdSetupUnsupportedNote1": {
-        "message": "Kontroler leta ne odgovara na OSD komande. Ovo vjerojatno znači da nema integrirani EmuFlight OSD."
+        "message": "Kontroler leta ne odgovara na OSD komande. Ovo vjerojatno znači da nema integrirani Betaflight OSD."
     },
     "osdSetupProfilesTitle": {
         "message": "Broj profila OSD-a",
@@ -4069,10 +4069,10 @@
         "message": "Nepoznata statistika(detalji će biti dodani u budućim verzijama)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Font verzija: 1 (EmuFlight 4.0 i stariji)"
+        "message": "Font verzija: 1 (Betaflight 4.0 i stariji)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Font verzija: 2 (EmuFlight 4.1 i noviji)"
+        "message": "Font verzija: 2 (Betaflight 4.1 i noviji)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Font verzija: od korisnika"
@@ -4543,7 +4543,7 @@
         "message": "Mjerenje"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs EmuFlight(float):</b> PID skaliranje i PID logika su potpuno isti. Nije potrebno ponovno tunirati. Legacy koristi jednostavni PID kontroler baziran na cjelobrojnom izračunu. EmuFlight PID kontroler koristi kompleksnije decimalne izračune i ima mnog drugih značajki posebno dizajniranih za letjelice s više propelera. <br><b>Float vs Integer:</b> PID skaliranje i PID logika su potpuno isti. Nije potrebno ponovno tunirati. F1 procesori nemaju FPU i operacije s pomičnim zarezom povećavaju korištenje prcesora, a cjelobrojne(Integer) operacije će poboljšati performanse, ali će biti manje precizne."
+        "message": "<b>Legacy vs Betaflight(float):</b> PID skaliranje i PID logika su potpuno isti. Nije potrebno ponovno tunirati. Legacy koristi jednostavni PID kontroler baziran na cjelobrojnom izračunu. Betaflight PID kontroler koristi kompleksnije decimalne izračune i ima mnog drugih značajki posebno dizajniranih za letjelice s više propelera. <br><b>Float vs Integer:</b> PID skaliranje i PID logika su potpuno isti. Nije potrebno ponovno tunirati. F1 procesori nemaju FPU i operacije s pomičnim zarezom povećavaju korištenje prcesora, a cjelobrojne(Integer) operacije će poboljšati performanse, ali će biti manje precizne."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft Filter:</b> Lowpass filter žiroskopa. Koristite niže vrijednosti za više filtriranja.<br><b>D Term Filter:</b> Lowpass filter za Dterm. Može utjecati na D term tuning. Koristite niže vrijednosti za više filtriranja. <br><b>Yaw Filter:</b> Filtrira yaw izlaz. Može pomoći na letjelicama koje imaju šum na yaw osi."

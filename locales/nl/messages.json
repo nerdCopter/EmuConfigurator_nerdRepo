@@ -179,10 +179,10 @@
         "message": "Update meldingen voor onstabiele versies van de configurator weergeven"
     },
     "configuratorUpdateNotice": {
-        "message": "U gebruikt een verouderde versie van de <b>EmuFlight Configurator</b>.<br>$t(configuratorUpdateHelp.message)"
+        "message": "U gebruikt een verouderde versie van de <b>Betaflight Configurator</b>.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "Het gebruik van een nieuwere versie van de firmware met een verouderde versie van Configurator betekent dat het wijzigen van sommige instellingen zal resulteren in een <strong>corrupte firmware configuratie en een niet werkende drone</strong>. Bovendien zullen sommige functies van de firmware alleen configureerbaar zijn in de CLI.<br><strong>EmuFlight Configurator versie <b>$1</b> is online te downloaden</strong>, bezoek <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">deze pagina</a> om de nieuwste versie te downloaden en te installeren.<br>Sluit het configuratorvenster voordat u deze bijwerkt."
+        "message": "Het gebruik van een nieuwere versie van de firmware met een verouderde versie van Configurator betekent dat het wijzigen van sommige instellingen zal resulteren in een <strong>corrupte firmware configuratie en een niet werkende drone</strong>. Bovendien zullen sommige functies van de firmware alleen configureerbaar zijn in de CLI.<br><strong>Betaflight Configurator versie <b>$1</b> is online te downloaden</strong>, bezoek <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">deze pagina</a> om de nieuwste versie te downloaden en te installeren.<br>Sluit het configuratorvenster voordat u deze bijwerkt."
     },
     "configuratorUpdateWebsite": {
         "message": "Ga naar de Release Pagina"
@@ -493,7 +493,7 @@
         "message": "U kunt dit nu <span class=\"message-negative\">niet</span> doen, wacht tot de huidige bewerking is voltooid ..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "U moet uw firmware <strong>upgraden</strong> naar de nieuwste versie van EmuFlight voordat u het tabblad $1 kunt gebruiken."
+        "message": "U moet uw firmware <strong>upgraden</strong> naar de nieuwste versie van Betaflight voordat u het tabblad $1 kunt gebruiken."
     },
     "firmwareVersion": {
         "message": "Besturingssysteem Versie: <strong>$1</strong>"
@@ -608,13 +608,13 @@
         "message": "Documentatie / Handleiding"
     },
     "defaultDocumentation": {
-        "message": "EmuFlight documentatie is beschikbaar in de release notes en de wiki.<br /><br />"
+        "message": "Betaflight documentatie is beschikbaar in de release notes en de wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "De EmuFlight wiki is een goede bron voor informatie, deze kan <a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">hier worden gevonden</a>."
+        "message": "De Betaflight wiki is een goede bron voor informatie, deze kan <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">hier worden gevonden</a>."
     },
     "defaultDocumentation2": {
-        "message": "De release opmerkingen voor het besturingssysteem kunnen gelezen worden op de pagina van GitHub, <a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Link</a>."
+        "message": "De release opmerkingen voor het besturingssysteem kunnen gelezen worden op de pagina van GitHub, <a href=\"https://github.com/emuflight/emuflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">Link</a>."
     },
     "defaultSupportHead": {
         "message": "Ondersteuning"
@@ -629,7 +629,7 @@
         "message": "Bezoek voor ondersteuning alstublieft eerst de forums en wiki of neem contact op met uw leverancier.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Back-up en herstel functionaliteit uitgeschakeld.</span> U heeft firmware met API versie <span class=\"message-negative\">$1</span>, back-up en terugzetten vereist <span class=\"message-positive\">$2-</span>.  Maak alstublieft een backup via de CLI. Raadpleeg de EmuFlight documentatie voor de procedure."
+        "message": "<span class=\"message-negative\">Back-up en herstel functionaliteit uitgeschakeld.</span> U heeft firmware met API versie <span class=\"message-negative\">$1</span>, back-up en terugzetten vereist <span class=\"message-positive\">$2-</span>.  Maak alstublieft een backup via de CLI. Raadpleeg de Betaflight documentatie voor de procedure."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibreer Versnellingsmeter"
@@ -820,7 +820,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "MSP-verbinding is actief, waarschijnlijk met deze EmuFlight Configurator",
+        "message": "MSP-verbinding is actief, waarschijnlijk met deze Betaflight Configurator",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1160,7 +1160,7 @@
         "message": "Beacon Toon"
     },
     "configurationDshotBeaconHelp": {
-        "message": "De Dshot beacon gebruikt de ESC's en motoren om geluid te maken. Dit betekent dat de Dshot beacon niet gebruikt kan worden wanneer de motoren draaien. In emuflight 3.4 en later, wanneer er wordt geprobeerd te armen terwijl de Dshot beacon actief is, is er een 2 seconden vertraging na de laatste Dshot beacon toon voor de done is gearmt. Dit om te voorkomen dat de Dshot beacon functionaliteit de Dshot commands stoort bij armen.<br/><strong>Waarschuwing:</strong> Dshot beacon laat stroom door je motoren lopen als het actief is. Dit kan overmatige hitte en mogelijk schade aan je motoren en of ESC's toedoen als de beacon sterkte te hoog is ingesteld. Gebruik de BLHeli Configurator of de BLHeli Suite om de beacon sterkte te testen en aan te passen."
+        "message": "De Dshot beacon gebruikt de ESC's en motoren om geluid te maken. Dit betekent dat de Dshot beacon niet gebruikt kan worden wanneer de motoren draaien. In Betaflight 3.4 en later, wanneer er wordt geprobeerd te armen terwijl de Dshot beacon actief is, is er een 2 seconden vertraging na de laatste Dshot beacon toon voor de done is gearmt. Dit om te voorkomen dat de Dshot beacon functionaliteit de Dshot commands stoort bij armen.<br/><strong>Waarschuwing:</strong> Dshot beacon laat stroom door je motoren lopen als het actief is. Dit kan overmatige hitte en mogelijk schade aan je motoren en of ESC's toedoen als de beacon sterkte te hoog is ingesteld. Gebruik de BLHeli Configurator of de BLHeli Suite om de beacon sterkte te testen en aan te passen."
     },
     "configurationBeeper": {
         "message": "Bieper Configuratie"
@@ -2280,7 +2280,7 @@
         "message": "<strong>Veiligheidswaarschuwing</strong><br /><strong class=\"message-negative\">Verwijder alle propellers om letsel te voorkomen!</strong><br />De motoren zullen gaan <strong>draaien!</strong>"
     },
     "motorsRemapDialogExplanations": {
-        "message": "<strong>Informatiemelding</strong><br />Motoren zullen een voor een gaan draaien en u kunt selecteren welke motor er draait. De batterij moet aangesloten zijn, het juiste ESC-protocol moet geselecteerd zijn. Dit hulpprogramma kan momenteel alleen actieve motoren opnieuw rangschikken. Voor complexere toewijzingen dien je gebruik te maken van het commando Resource in de CLI. Raadpleeg hiervoor deze <a href=\"https://github.com/emuflight/emuflight/wiki/EmuFlight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki-pagina</a>."
+        "message": "<strong>Informatiemelding</strong><br />Motoren zullen een voor een gaan draaien en u kunt selecteren welke motor er draait. De batterij moet aangesloten zijn, het juiste ESC-protocol moet geselecteerd zijn. Dit hulpprogramma kan momenteel alleen actieve motoren opnieuw rangschikken. Voor complexere toewijzingen dien je gebruik te maken van het commando Resource in de CLI. Raadpleeg hiervoor deze <a href=\"https://github.com/betaflight/betaflight/wiki/Betaflight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki-pagina</a>."
     },
     "motorsRemapDialogSave": {
         "message": "Opslaan"
@@ -2352,10 +2352,10 @@
         "message": "Deze functie werkt alleen met DSHOT ESC's.<br />Controleer of uw ESC (elektrische snelheidsregelaar) het DSHOT-protocol ondersteunt en wijzig het zo nodig op het tabblad $t(tabMotorTesting.message)."
     },
     "escDshotDirectionDialog-WrongMixerText": {
-        "message": "Het aantal motoren is 0.<br />Controleer de huidige mixer op het tabblad $t(tabMotorTesting.message) of stel een aangepaste mixer in via de CLI. Raadpleeg deze <a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki-pagina</a>."
+        "message": "Het aantal motoren is 0.<br />Controleer de huidige mixer op het tabblad $t(tabMotorTesting.message) of stel een aangepaste mixer in via de CLI. Raadpleeg deze <a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">Wiki-pagina</a>."
     },
     "escDshotDirectionDialog-WrongFirmwareText": {
-        "message": "Update de firmware.<br />Zorg ervoor dat u de nieuwste firmware gebruikt: EmuFlight 4.3 of nieuwer."
+        "message": "Update de firmware.<br />Zorg ervoor dat u de nieuwste firmware gebruikt: Betaflight 4.3 of nieuwer."
     },
     "escDshotDirectionDialog-WizardActionHint": {
         "message": "Klik afzonderlijk op motornummers om de draairichting te veranderen"
@@ -2772,13 +2772,13 @@
         "message": "Bericht:"
     },
     "firmwareFlasherWarningText": {
-        "message": "Probeer alsjeblieft <span class=\"message-negative\">niet</span> om <strong>niet-EmuFlight-hardware</strong> te flashen met deze firmware-flasher.<br /><span class=\"message-negative\">Ontkoppel</span><strong>niet</strong> het bord <strong> gedurende </strong> het flashen.<br /> <br /> <strong>Opmerking:</strong>STM32 bootloader wordt opgeslagen in ROM, deze kan niet worden gebricked.<br /><strong>Opmerking:</strong><span class=\"message-negative\">Auto-Connect</span>is altijd uitgeschakeld als u zich in de firmware-flasher bevindt.<br /><strong>Opmerking:</strong> zorg ervoor dat u een back-up heeft; sommige upgrades / downgrades zullen al uw configuratie wissen.<br /><strong>Opmerking:</strong>Als u problemen heeft met flashen<strong> probeer dan eerst alle kabels van uw FC los te koppelen</strong>, probeer vervolgens opnieuw op te starten en upgrade uw stuurprogramma's.<br /><strong>Opmerking: </strong> bij het flashen van kaarten die rechtstreeks aangesloten USB-aansluitingen hebben (de meeste nieuwere kaarten), zorg ervoor dat u de sectie USB Flashing van de EmuFlight-handleiding heeft gelezen en dat de juiste software en stuurprogramma's zijn geïnstalleerd"
+        "message": "Probeer alsjeblieft <span class=\"message-negative\">niet</span> om <strong>niet-Betaflight-hardware</strong> te flashen met deze firmware-flasher.<br /><span class=\"message-negative\">Ontkoppel</span><strong>niet</strong> het bord <strong> gedurende </strong> het flashen.<br /> <br /> <strong>Opmerking:</strong>STM32 bootloader wordt opgeslagen in ROM, deze kan niet worden gebricked.<br /><strong>Opmerking:</strong><span class=\"message-negative\">Auto-Connect</span>is altijd uitgeschakeld als u zich in de firmware-flasher bevindt.<br /><strong>Opmerking:</strong> zorg ervoor dat u een back-up heeft; sommige upgrades / downgrades zullen al uw configuratie wissen.<br /><strong>Opmerking:</strong>Als u problemen heeft met flashen<strong> probeer dan eerst alle kabels van uw FC los te koppelen</strong>, probeer vervolgens opnieuw op te starten en upgrade uw stuurprogramma's.<br /><strong>Opmerking: </strong> bij het flashen van kaarten die rechtstreeks aangesloten USB-aansluitingen hebben (de meeste nieuwere kaarten), zorg ervoor dat u de sectie USB Flashing van de Betaflight-handleiding heeft gelezen en dat de juiste software en stuurprogramma's zijn geïnstalleerd"
     },
     "firmwareFlasherRecoveryHead": {
         "message": "<strong>Herstellen / Communicatie verloren</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Als je de communicatie met je board bent verloren, volg dan deze stappen om de communicatie te herstellen: <ul><li>Uitschakelen</li><li> Schakel 'Geen herstartsequentie' in, schakel 'Volledige chip wissen' in.</li><li>Sluit de BOOT-pinnen kort of houd de BOOT-knop ingedrukt.</li><li>Inschakelen (activiteits-LED knippert NIET indien correct gedaan).</li><li>Installeer alle STM32-stuurprogramma's en Zadig indien nodig (zie <a href = \"https://github.com/emuflight/emuflight/wiki/Installing-EmuFlight\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> sectie van de EmuFlight-handleiding).</li><li>Sluit de configurator, herstart de Configurator.</li><li>Laat de BOOT-knop los.</li><li>Flash met de juiste firmware (gebruik handmatige baudrate indien dit gespecificeerd in de handleiding van je FC).</li><li>Uitschakelen.</li><li>BOOT-jumper verwijderen.</li><li> Inschakelen (activiteits-LED moet knipperen).</li><li>Maak normaal verbinding.</li></ul>"
+        "message": "Als je de communicatie met je board bent verloren, volg dan deze stappen om de communicatie te herstellen: <ul><li>Uitschakelen</li><li> Schakel 'Geen herstartsequentie' in, schakel 'Volledige chip wissen' in.</li><li>Sluit de BOOT-pinnen kort of houd de BOOT-knop ingedrukt.</li><li>Inschakelen (activiteits-LED knippert NIET indien correct gedaan).</li><li>Installeer alle STM32-stuurprogramma's en Zadig indien nodig (zie <a href = \"https://github.com/betaflight/betaflight/wiki/Installing-Betaflight\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> sectie van de Betaflight-handleiding).</li><li>Sluit de configurator, herstart de Configurator.</li><li>Laat de BOOT-knop los.</li><li>Flash met de juiste firmware (gebruik handmatige baudrate indien dit gespecificeerd in de handleiding van je FC).</li><li>Uitschakelen.</li><li>BOOT-jumper verwijderen.</li><li> Inschakelen (activiteits-LED moet knipperen).</li><li>Maak normaal verbinding.</li></ul>"
     },
     "firmwareFlasherButtonLeave": {
         "message": "Firmware Flasher verlaten"
@@ -3182,7 +3182,7 @@
         "message": "RC Expo Power"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "De exponent die wordt gebruikt bij het berekenen van RC Expo. In EmuFlight versies vóór 3.0 is de waarde vastgezet op 3."
+        "message": "De exponent die wordt gebruikt bij het berekenen van RC Expo. In Betaflight versies vóór 3.0 is de waarde vastgezet op 3."
     },
     "pidTuningLevel": {
         "message": "Hoek/horizon"
@@ -3428,13 +3428,13 @@
         "message": "Geïntegreerde Yaw"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">WAARSCHUWING</span>: als je deze functie inschakelt, moet je de YAW PID instellingen aanpassen. Meer informatie <a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">hier</a>"
+        "message": "<span class=\"message-negative\">WAARSCHUWING</span>: als je deze functie inschakelt, moet je de YAW PID instellingen aanpassen. Meer informatie <a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">hier</a>"
     },
     "configHelp2": {
         "message": "Willekeurige rotatie van het bord in graden. Hiermee maak je het mogelijk de vluchtcontroller gedraaid, ondersteboven of in een andere dan gebruikelijke positie te monteren. Gebruik bij externe sensoren de sensoruitlijningen (Gyro, Acc, Mag) om de sensorpositie onafhankelijk van de oriëntatie van het bord te definiëren. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Failsafe configuratie is aanzienlijk gewijzigd. Gebruik EmuFlight <strong>v1.12.0+</strong> om het verbeterde configuratiescherm in te schakelen."
+        "message": "Failsafe configuratie is aanzienlijk gewijzigd. Gebruik Betaflight <strong>v1.12.0+</strong> om het verbeterde configuratiescherm in te schakelen."
     },
     "failsafePaneTitleOld": {
         "message": "Ontvanger failsafe"
@@ -3584,7 +3584,7 @@
         "message": "Opslaan"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Firmware upgrade <span class=\"message-negative\">vereist</span>. Batterij/Amperage/Voltage configuraties met API &lt; 1.33.0 (EmuFlight release &lt;= 3.17) wordt niet ondersteund."
+        "message": "Firmware upgrade <span class=\"message-negative\">vereist</span>. Batterij/Amperage/Voltage configuraties met API &lt; 1.33.0 (Betaflight release &lt;= 3.17) wordt niet ondersteund."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Bron Voltage Meter"
@@ -4748,10 +4748,10 @@
         "message": "Onbekende statistiek (details worden toegevoegd in een toekomstige release)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Lettertype versie: 1 (EmuFlight 4.0 of ouder)"
+        "message": "Lettertype versie: 1 (Betaflight 4.0 of ouder)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Lettertype versie: 2 (EmuFlight 4.1 of nieuwer)"
+        "message": "Lettertype versie: 2 (Betaflight 4.1 of nieuwer)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Lettertype versie: door gebruiker aangeleverd"
@@ -4970,7 +4970,7 @@
         "message": "Opgeslagen"
     },
     "vtxHelp": {
-        "message": "Hier kun u de waarden voor uw video zender (VTX) configureren. U kunt de transmissiewaarden en de VTX-tabellen bekijken maar ook wijzigen als de vluchtcontroller en de VTX dit ondersteunen.<br>Om uw VTX in te stellen volgt u de volgende stappen:<br>1. Ga naar <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\">deze</a> pagina;<br>2. Zoek het juiste VTX-configuratiebestand op voor uw land en uw VTX model en download deze;<br>3. Klik hieronder op '$t(vtxButtonLoadFile.message)', selecteer het VTX configuratiebestand wat u gedownload heeft en laad deze in;<br>4. Controleer of de instellingen correct zijn;<br>5. Klik op ''$t(vtxButtonSave.message)' om de instellingen op te slaan op uw vluchtcontroller.<br>6. Klik optioneel op '$t(vtxButtonSaveLua.message)' om een lua configuratiebestand op te slaan dat u kunt gebruiken met de emuflight lua scripts (Lees meer hierover op <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">deze link</a>.)",
+        "message": "Hier kun u de waarden voor uw video zender (VTX) configureren. U kunt de transmissiewaarden en de VTX-tabellen bekijken maar ook wijzigen als de vluchtcontroller en de VTX dit ondersteunen.<br>Om uw VTX in te stellen volgt u de volgende stappen:<br>1. Ga naar <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\">deze</a> pagina;<br>2. Zoek het juiste VTX-configuratiebestand op voor uw land en uw VTX model en download deze;<br>3. Klik hieronder op '$t(vtxButtonLoadFile.message)', selecteer het VTX configuratiebestand wat u gedownload heeft en laad deze in;<br>4. Controleer of de instellingen correct zijn;<br>5. Klik op ''$t(vtxButtonSave.message)' om de instellingen op te slaan op uw vluchtcontroller.<br>6. Klik optioneel op '$t(vtxButtonSaveLua.message)' om een lua configuratiebestand op te slaan dat u kunt gebruiken met de Betaflight lua scripts (Lees meer hierover op <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">deze link</a>.)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -5202,7 +5202,7 @@
         "description": "Save Lua script button in the VTX tab"
     },
     "vtxLuaFileHelp": {
-        "message": "Met de knop '$t(vtxButtonSaveLua.message)' kunt u een <i>mcuid</i>.lua-bestand opslaan met daarin de VTX-tabelconfiguratie. Welke kan worden gebruikt met de <a href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">EmuFlight TX Lua-scripts</a>.<br><br>Versie 1.6.0 en hoger kunnen het bestand gebruiken zoals het nu is, maar voor oudere versies van de scripts moet het bestand worden hernoemd zodat het overeenkomt met de modelnaam op de TX.",
+        "message": "Met de knop '$t(vtxButtonSaveLua.message)' kunt u een <i>mcuid</i>.lua-bestand opslaan met daarin de VTX-tabelconfiguratie. Welke kan worden gebruikt met de <a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight TX Lua-scripts</a>.<br><br>Versie 1.6.0 en hoger kunnen het bestand gebruiken zoals het nu is, maar voor oudere versies van de scripts moet het bestand worden hernoemd zodat het overeenkomt met de modelnaam op de TX.",
         "description": "Tooltip message for the Save Lua script button in the VTX tab"
     },
     "vtxButtonLoadFile": {
@@ -5355,7 +5355,7 @@
         "message": "<b>Afgeleide van Fout</b> zorgt voor een directere stick-respons en heeft vooral de voorkeur bij racen.<br /><br /><b>Afgeleide van Meting</b> zorgt voor een soepelere stick-respons, wat handiger is voor freestylen"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs EmuFlight (float):</b> PID-schaling en PID-logica zijn bij beide precies hetzelfde. Het is daardoor niet noodzakelijk om opnieuw te PID-tunen. Legacy is de oude emuflight welke werkt met een PID-controller die op basis van integers werkt. De nieuwe EmuFlight PID-controller maakt gebruik van floating point berekeningen. <br><b>Float vs Integer:</b> PID-schaalverdeling en PID-logica werken bij beide precies hetzelfde. Er is geen extra tuning benodigd. Integer berekeningen zijn eenvoudiger en is minder belastend voor de CPU. Bij F1 boards heeft dit de voorkeur. Berekeningen met behulp van Floats kost de CPU meer maar daar krijg je meer precisie voor terug."
+        "message": "<b>Legacy vs Betaflight (float):</b> PID-schaling en PID-logica zijn bij beide precies hetzelfde. Het is daardoor niet noodzakelijk om opnieuw te PID-tunen. Legacy is de oude Betaflight welke werkt met een PID-controller die op basis van integers werkt. De nieuwe Betaflight PID-controller maakt gebruik van floating point berekeningen. <br><b>Float vs Integer:</b> PID-schaalverdeling en PID-logica werken bij beide precies hetzelfde. Er is geen extra tuning benodigd. Integer berekeningen zijn eenvoudiger en is minder belastend voor de CPU. Bij F1 boards heeft dit de voorkeur. Berekeningen met behulp van Floats kost de CPU meer maar daar krijg je meer precisie voor terug."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft-filter:</b> Lowpass-filter voor de gyro. Gebruik een lagere waarde voor meer filtering.<br><b>D Term Filter:</b> Lowpass-filter voor D-term. Kan de tuning van de D-waarde beïnvloeden. Gebruik een lagere waarde voor meer filtering.<br><b>Yaw Filter:</b> Filtert yaw. Dit kan helpen bij quads die ruis op de yaw-as hebben."

@@ -180,10 +180,10 @@
         "message": "Mostrar notificações de atualizações para versões instáveis do configurador"
     },
     "configuratorUpdateNotice": {
-        "message": "Está a usar uma versão desatualizada do <b>Configurador EmuFlight</b>.<br>$t(configuratorUpdateHelp.message)"
+        "message": "Está a usar uma versão desatualizada do <b>Configurador Betaflight</b>.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "Usar uma versão mais recente do firmware com uma versão desatualizada do Configurador significa que a alteração de algumas definições resultará numa <strong>configuração de firmware corrompida e num aparelho sem funcionar</strong>. Além disso, algumas funcionalidades do firmware só serão configuráveis na CLI.<br><strong>Configurador de EmuFlight <b>$1</b> está disponível para download online</strong>, por favor, visite <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">esta página</a> para download e instalação da versão mais recente com correções e melhorias.<br>Por favor, feche a janela do configurador antes de atualizar."
+        "message": "Usar uma versão mais recente do firmware com uma versão desatualizada do Configurador significa que a alteração de algumas definições resultará numa <strong>configuração de firmware corrompida e num aparelho sem funcionar</strong>. Além disso, algumas funcionalidades do firmware só serão configuráveis na CLI.<br><strong>Configurador de Betaflight <b>$1</b> está disponível para download online</strong>, por favor, visite <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">esta página</a> para download e instalação da versão mais recente com correções e melhorias.<br>Por favor, feche a janela do configurador antes de atualizar."
     },
     "configuratorUpdateWebsite": {
         "message": "Ir para a Página Web do lançamento"
@@ -494,7 +494,7 @@
         "message": "Você <span class=\"message-negative\">não pode</span> realizar esta operação neste momento, por favor aguarde o fim da operação em execução..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Tem de <strong>atualizar</strong> o firmware para a última versão do EmuFlight antes de poder usar a aba $1."
+        "message": "Tem de <strong>atualizar</strong> o firmware para a última versão do Betaflight antes de poder usar a aba $1."
     },
     "firmwareVersion": {
         "message": "Versão do firmware: <strong>$1</strong>"
@@ -612,13 +612,13 @@
         "message": "Documentação / Manual"
     },
     "defaultDocumentation": {
-        "message": "A documentação do EmuFlight está disponível nas notas de lançamento e no wiki.<br /><br />"
+        "message": "A documentação do Betaflight está disponível nas notas de lançamento e no wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "A wiki do EmuFlight é um ótimo recurso para informações, pode ser encontrada <a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>."
+        "message": "A wiki do Betaflight é um ótimo recurso para informações, pode ser encontrada <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>."
     },
     "defaultDocumentation2": {
-        "message": "As notas de lançamento do firmware podem ser lidas na página de lançamentos do GitHub, <a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>."
+        "message": "As notas de lançamento do firmware podem ser lidas na página de lançamentos do GitHub, <a href=\"https://github.com/emuflight/emuflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>."
     },
     "defaultSupportHead": {
         "message": "Suporte"
@@ -633,7 +633,7 @@
         "message": "Para suporte por favor pesquise os fóruns e o wiki primeiro ou contacte o seu vendedor.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Funcionalidades de Backup e restauração desativadas.</span>Tem firmware com versão de API <span class=\"message-negative\">$1</span>, O backup e restauração requer a versão <span class=\"message-positive\">$2</span>. Por favor realize uma cópia de segurança pelo CLI, veja a documentação do EmuFlight para o procedimento."
+        "message": "<span class=\"message-negative\">Funcionalidades de Backup e restauração desativadas.</span>Tem firmware com versão de API <span class=\"message-negative\">$1</span>, O backup e restauração requer a versão <span class=\"message-positive\">$2</span>. Por favor realize uma cópia de segurança pelo CLI, veja a documentação do Betaflight para o procedimento."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrar Acelerómetro"
@@ -833,7 +833,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "A conexão MSP está ativa, provavelmente com este configurador EmuFlight",
+        "message": "A conexão MSP está ativa, provavelmente com este configurador Betaflight",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1209,7 +1209,7 @@
         "message": "Tom do sinalizador"
     },
     "configurationDshotBeaconHelp": {
-        "message": "O sinalizador do Dshot usa os ESCs e motores para emitir som. Isto significa que o sinalizador do Dshot não pode ser usado quando os motores estão a rodar. No EmuFlight 3.4 e mais recentes, quando tentar armar com o sinalizador do Dshot ativo, há um atraso de 2 segundos depois do último tom de sinal Dshot antes de o aparelho ser armado. Isto evita que o sinalizador interfira com os comando Dshot enviados durante o processo de armar.<br/><strong>Atenção:</strong> Uma vez que o sinalizador do Dshot envia uma corrente elétrica para os motores quando ativo, isto pode gerar calor excessivo e danificar os seus motores e/ou ESCs se a potência do sinalizador estiver muito alta. Use o configurador BLHeli ou o BLHeli Suite para ajustar e testar a potência do sinalizador."
+        "message": "O sinalizador do Dshot usa os ESCs e motores para emitir som. Isto significa que o sinalizador do Dshot não pode ser usado quando os motores estão a rodar. No Betaflight 3.4 e mais recentes, quando tentar armar com o sinalizador do Dshot ativo, há um atraso de 2 segundos depois do último tom de sinal Dshot antes de o aparelho ser armado. Isto evita que o sinalizador interfira com os comando Dshot enviados durante o processo de armar.<br/><strong>Atenção:</strong> Uma vez que o sinalizador do Dshot envia uma corrente elétrica para os motores quando ativo, isto pode gerar calor excessivo e danificar os seus motores e/ou ESCs se a potência do sinalizador estiver muito alta. Use o configurador BLHeli ou o BLHeli Suite para ajustar e testar a potência do sinalizador."
     },
     "configurationBeeper": {
         "message": "Configuração do Beeper"
@@ -1342,7 +1342,7 @@
         "description": "Option to use Galileo in the GPS configuration"
     },
     "configurationGPSGalileoHelp": {
-        "message": "Quando ativado, o módulo GPS também irá rastrear o sistema de satélite Galileo, resultando normalmente em mais satélites localizados. No EmuFlight 4.2.x ou anterior, também desabilita o sistema de acréscimo QZSS.",
+        "message": "Quando ativado, o módulo GPS também irá rastrear o sistema de satélite Galileo, resultando normalmente em mais satélites localizados. No Betaflight 4.2.x ou anterior, também desabilita o sistema de acréscimo QZSS.",
         "description": "Help text for the option to use Galileo in the GPS configuration"
     },
     "configurationGPSHomeOnce": {
@@ -1930,7 +1930,7 @@
         "message": "<strong>Modo Slider de Ajuste dos Pid</strong><br><br>O modo Slider de ajuste Pid pode ser:<br><br>&bull; DESLIGADO - sem sliders, insira os valores manualmente<br>&bull; RP - os sliders ajustam somente o Roll e o Pitch, digite os valores do Yaw manualmente<br>&bull; RPY - os sliders ajustam todos os valores do PID<br><br><span class=\"message-negative\"><b>Aviso:</b></span>Indo do modo RP para RPY irão sobrescrever as configurações do Yaw com definições do firmware."
     },
     "receiverHelp": {
-        "message": "&#8226;  <b><strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">Verifique sempre que o seu Failsafe está a funcionar corretamente!</a></strong></b> As definições estão na aba Failsafe, que requer o modo de Perito.<br> &#8226; <b>Use o último firmware do rádio!</b><br> &#8226; <strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">Desative o filtro hardware ADC</a></strong> no rádio se estiver a usar OpenTx ou EdgeTx.<br>Configuração básica: Configure as definições do 'recetor' corretamente. Escolha o 'Mapa de canais' correto para o seu rádio. Verifique que o Roll, Pitch e as outras barras do gráfico se movem corretamente. Ajuste os pontos extremos dos canais no rádio para ~1000 até ~2000, e o ponto médio para 1500. Para mais informação, leia a <strong><a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">documentação</a></strong>."
+        "message": "&#8226;  <b><strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Failsafe.md#testing\" target=\"_blank\" rel=\"noopener noreferrer\">Verifique sempre que o seu Failsafe está a funcionar corretamente!</a></strong></b> As definições estão na aba Failsafe, que requer o modo de Perito.<br> &#8226; <b>Use o último firmware do rádio!</b><br> &#8226; <strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md#disabling-the-opentxedgetx-adc-filter\" target=\"_blank\" rel=\"noopener noreferrer\">Desative o filtro hardware ADC</a></strong> no rádio se estiver a usar OpenTx ou EdgeTx.<br>Configuração básica: Configure as definições do 'recetor' corretamente. Escolha o 'Mapa de canais' correto para o seu rádio. Verifique que o Roll, Pitch e as outras barras do gráfico se movem corretamente. Ajuste os pontos extremos dos canais no rádio para ~1000 até ~2000, e o ponto médio para 1500. Para mais informação, leia a <strong><a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Rx.md\" target=\"_blank\" rel=\"noopener noreferrer\">documentação</a></strong>."
     },
     "receiverThrottleMid": {
         "message": "MEIO do Acelerador"
@@ -2023,7 +2023,7 @@
         "message": "Pré-visualizar"
     },
     "receiverMspWarningText": {
-        "message": "Estes sticks permitem ao EmuFlight ser armado e testado sem um transmissor ou receptor disponíveis. Porém, <strong>esta funcionalidade não foi feita para voos e as hélices não devem estar montadas.</strong><br /><br />Esta função não garante um controle fiável do seu aparelho. <strong>Podem ocorrer ferimentos graves se as hélices forem deixadas montadas.</strong>"
+        "message": "Estes sticks permitem ao Betaflight ser armado e testado sem um transmissor ou receptor disponíveis. Porém, <strong>esta funcionalidade não foi feita para voos e as hélices não devem estar montadas.</strong><br /><br />Esta função não garante um controle fiável do seu aparelho. <strong>Podem ocorrer ferimentos graves se as hélices forem deixadas montadas.</strong>"
     },
     "receiverMspEnableButton": {
         "message": "Habilitar controles"
@@ -2559,7 +2559,7 @@
         "message": "<strong>Aviso de segurança</strong><br /><strong class=\"message-negative\">Remova todas as hélices para evitar ferimentos!</strong><br />Os motores vão <strong>girar!</strong>"
     },
     "motorsRemapDialogExplanations": {
-        "message": "<strong>Aviso de informação</strong><br />Os motores vão girar um a um e poderá selecionar que motor está a girar. A bateria deve estar conetada, deve estar selecionado o protocolo ESC correto. Este utilitário só pode reorganizar os motores atualmente ativos. O re-mapeamento mais complexo requer o comando CLI Resource. Consulte esta <a href=\"https://github.com/emuflight/emuflight/wiki/EmuFlight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">página Wiki</a>."
+        "message": "<strong>Aviso de informação</strong><br />Os motores vão girar um a um e poderá selecionar que motor está a girar. A bateria deve estar conetada, deve estar selecionado o protocolo ESC correto. Este utilitário só pode reorganizar os motores atualmente ativos. O re-mapeamento mais complexo requer o comando CLI Resource. Consulte esta <a href=\"https://github.com/betaflight/betaflight/wiki/Betaflight-resource-remapping\" target=\"_blank\" rel=\"noopener noreferrer\">página Wiki</a>."
     },
     "motorsRemapDialogSave": {
         "message": "Gravar"
@@ -2631,10 +2631,10 @@
         "message": "A funcionalidade funciona apenas com ESCs DSHOT.<br />Verifique se o seu ESC (electronic speed controller) suporta o protocolo DSHOT e altere-o na aba $t(tabMotorTesting.message)."
     },
     "escDshotDirectionDialog-WrongMixerText": {
-        "message": "Número de motores é 0.<br />Verifique o Mixer atual na aba $t(tabMotorTesting.message) ou configure um personalizado através do CLI. Consulte esta <a href=\"https://github.com/emuflight/emuflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">página Wiki</a>."
+        "message": "Número de motores é 0.<br />Verifique o Mixer atual na aba $t(tabMotorTesting.message) ou configure um personalizado através do CLI. Consulte esta <a href=\"https://github.com/betaflight/betaflight/blob/master/docs/Mixer.md\" target=\"_blank\" rel=\"noopener noreferrer\">página Wiki</a>."
     },
     "escDshotDirectionDialog-WrongFirmwareText": {
-        "message": "Atualize o firmware.<br /> Certifique-se de que está a utilizar o último firmware: EmuFlight 4.3 ou mais recente."
+        "message": "Atualize o firmware.<br /> Certifique-se de que está a utilizar o último firmware: Betaflight 4.3 ou mais recente."
     },
     "escDshotDirectionDialog-WizardActionHint": {
         "message": "Carregue nos números dos motores individualmente para mudar a direção de rotação"
@@ -2949,7 +2949,7 @@
         "message": "Selecione ou detete automaticamente a sua placa para ver os Firmwares disponíveis online - Selecione o firmware apropriado para a sua placa."
     },
     "firmwareFlasherOnlineSelectBoardHint": {
-        "message": "Começando no EmuFlight 4.1, o EmuFlight está a introduzir suporte para <strong>Unified Targets</strong>. O conceito de Unified Targets significa que o mesmo ficheiro .hex pode ser usado para todas as controladoras que usem o mesmo MCU (F4, F7). Para permitir que as diferentes controladoras funcionem com o mesmo firmware, um ficheiro de configuração específico é implementado junto do firmware quando um Unified Target é flashado.<br>Esta versão do configurador EmuFlight suporta o flash de Unified Targets com as respectivas configurações específicas da respetiva controladora num só passo. Os diferentes tipos de firmware que estão disponíveis para cada controladora são mostrados no menu suspenso da seguinte forma:<br /><br /><strong>&lt;board name&gt;</strong> ou<br><strong>&lt;board name&gt; (Legacy)</strong>:<br>non-unified target, ou pré-4.1 versões do firmware para Unified Targets.<br /><br /><strong>&lt;board name&gt; (&lt;manufacturer id&gt;)</strong>:<br>(4 caracteres id)<br>Unified Target.<br /><br /><strong>Por favor, use Unified Targets quando disponível.</strong> Se encontrar problemas ao usar um Unified Target, por favor, abra um <a href=\"https://github.com/emuflight/emuflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">problema</a> e depois use o non-unified target até que o problema seja resolvido."
+        "message": "Começando no Betaflight 4.1, o Betaflight está a introduzir suporte para <strong>Unified Targets</strong>. O conceito de Unified Targets significa que o mesmo ficheiro .hex pode ser usado para todas as controladoras que usem o mesmo MCU (F4, F7). Para permitir que as diferentes controladoras funcionem com o mesmo firmware, um ficheiro de configuração específico é implementado junto do firmware quando um Unified Target é flashado.<br>Esta versão do configurador Betaflight suporta o flash de Unified Targets com as respectivas configurações específicas da respetiva controladora num só passo. Os diferentes tipos de firmware que estão disponíveis para cada controladora são mostrados no menu suspenso da seguinte forma:<br /><br /><strong>&lt;board name&gt;</strong> ou<br><strong>&lt;board name&gt; (Legacy)</strong>:<br>non-unified target, ou pré-4.1 versões do firmware para Unified Targets.<br /><br /><strong>&lt;board name&gt; (&lt;manufacturer id&gt;)</strong>:<br>(4 caracteres id)<br>Unified Target.<br /><br /><strong>Por favor, use Unified Targets quando disponível.</strong> Se encontrar problemas ao usar um Unified Target, por favor, abra um <a href=\"https://github.com/emuflight/emuflight/issues\" target=\"_blank\" rel=\"noopener noreferrer\">problema</a> e depois use o non-unified target até que o problema seja resolvido."
     },
     "firmwareFlasherOnlineSelectFirmwareVersionDescription": {
         "message": "Selecione a versão do firmware para a sua placa."
@@ -3057,13 +3057,13 @@
         "message": "Mensagem:"
     },
     "firmwareFlasherWarningText": {
-        "message": "Por favor <span class=\"message-negative\">não</span> tente flashar hardware<strong>não-EmuFlight</strong>com este instalador de firmware.<br />Não <span class=\"message-negative\"></span> <strong>desconecte</strong> a controladora ou <strong>desligue</strong> o seu computador enquanto estiver a flashar.<br /><br /><strong>Nota: </strong>STM32 bootloader está guardado na ROM, não pode ser apagado.<br /><strong>Note: </strong><span class=\"message-negative\">Auto-Ligar</span> está sempre desativado quando está dentro do instalador de firmware.<br /><strong>Note: </strong>Assegure-se que tem um backup; alguns upgrades/downgrades vão apagar as suas configurações.<br /><strong>Note:</strong> Se tem problemas a flashar <strong>tente desconectar todos os cabos da controladora</strong> Primeiro, tente reiniciá-la, atualize os drivers.<br /><strong>Nota:</strong> Quando flashar controladoras com conetores USB diretos (maioria das mais recentes) assegure-se que leu a secção USB Flashing do manual do EmuFlight e que tem instalados o software e os drivers corretos"
+        "message": "Por favor <span class=\"message-negative\">não</span> tente flashar hardware<strong>não-Betaflight</strong>com este instalador de firmware.<br />Não <span class=\"message-negative\"></span> <strong>desconecte</strong> a controladora ou <strong>desligue</strong> o seu computador enquanto estiver a flashar.<br /><br /><strong>Nota: </strong>STM32 bootloader está guardado na ROM, não pode ser apagado.<br /><strong>Note: </strong><span class=\"message-negative\">Auto-Ligar</span> está sempre desativado quando está dentro do instalador de firmware.<br /><strong>Note: </strong>Assegure-se que tem um backup; alguns upgrades/downgrades vão apagar as suas configurações.<br /><strong>Note:</strong> Se tem problemas a flashar <strong>tente desconectar todos os cabos da controladora</strong> Primeiro, tente reiniciá-la, atualize os drivers.<br /><strong>Nota:</strong> Quando flashar controladoras com conetores USB diretos (maioria das mais recentes) assegure-se que leu a secção USB Flashing do manual do Betaflight e que tem instalados o software e os drivers corretos"
     },
     "firmwareFlasherRecoveryHead": {
         "message": "<strong>Recuperação / Comunicação perdida</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Se perdeu a comunicação com a sua controladora siga estes passos para restaurar a comunicação: <ul><li>Desligue</li><li>Ative 'Sem sequência de reinicialização', habilitar 'Apagar completo do chip'.</li><li>Una os pinos de BOOT ou mantenha pressionado o botão BOOT.</li><li>Ligue (LED de atividade NÃO acenderá se feito corretamente).</li><li>Instale todos os drivers STM32 e Zadig se necessário (veja <a href=\"https://github.com/emuflight/emuflight/wiki/Installing-EmuFlight\"target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> - secção do manual do EmuFlight).</li><li>Feche o configurador, Reinicie o Configurador.</li><li>Solte o botão BOOT se a sua controladora tiver um.</li><li>Flash o firmware correto (usando a taxa de transmissão manual se especificado no manual da sua controladora).</li><li>Desligue.</li><li>Desuna os pinos de BOOT.</li><li>Ligue (LED de atividade deve piscar).</li><li>Conecte-se normalmente.</li></ul>"
+        "message": "Se perdeu a comunicação com a sua controladora siga estes passos para restaurar a comunicação: <ul><li>Desligue</li><li>Ative 'Sem sequência de reinicialização', habilitar 'Apagar completo do chip'.</li><li>Una os pinos de BOOT ou mantenha pressionado o botão BOOT.</li><li>Ligue (LED de atividade NÃO acenderá se feito corretamente).</li><li>Instale todos os drivers STM32 e Zadig se necessário (veja <a href=\"https://github.com/betaflight/betaflight/wiki/Installing-Betaflight\"target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> - secção do manual do Betaflight).</li><li>Feche o configurador, Reinicie o Configurador.</li><li>Solte o botão BOOT se a sua controladora tiver um.</li><li>Flash o firmware correto (usando a taxa de transmissão manual se especificado no manual da sua controladora).</li><li>Desligue.</li><li>Desuna os pinos de BOOT.</li><li>Ligue (LED de atividade deve piscar).</li><li>Conecte-se normalmente.</li></ul>"
     },
     "firmwareFlasherButtonLeave": {
         "message": "Sair do Flasher de Firmware"
@@ -3122,8 +3122,8 @@
         "description": "Board verification has succeeded."
     },
     "firmwareFlasherBoardVerficationTargetNotAvailable": {
-        "message": "Configurador detetou a controladora: <strong>{{boardName}}</strong> mas não foi encontrado nenhum target oficial do EmuFlight",
-        "description": "Board verification has succeeded, but the target is not available as offical EmuFlight target."
+        "message": "Configurador detetou a controladora: <strong>{{boardName}}</strong> mas não foi encontrado nenhum target oficial do Betaflight",
+        "description": "Board verification has succeeded, but the target is not available as offical Betaflight target."
     },
     "firmwareFlasherBoardVerificationFail": {
         "message": "Configurador <span class=\"message-negative\">falhou</span> a verificar a controladora, se isto não funcionar por favor tente mudar lentamente de aba para tentar novamente, faça uma nova ligação usb ou conecte primeiro se se puder ter esquecido de aplicar os padrões personalizados",
@@ -3480,7 +3480,7 @@
         "message": "Potência do Expo do RC"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "O expoente que é usado ao calcular o Expo do RC. nas versões do EmuFlight anteriores a 3.0, o valor é fixo em 3."
+        "message": "O expoente que é usado ao calcular o Expo do RC. nas versões do Betaflight anteriores a 3.0, o valor é fixo em 3."
     },
     "pidTuningLevel": {
         "message": "Ângulo/Horizonte"
@@ -3758,7 +3758,7 @@
         "message": "Gyro Lowpass 2"
     },
     "pidTuningGyroLowpass2Help": {
-        "message": "O segundo de dois filtros Gyro lowpass.<br /><br />Este filtro é executado no loop do gyro, filtrando o sinal antes de entrar no loop do PID. Está sempre no modo estático (corte fixo).<br /><br />Se a frequência do loop do PID é menor que a frequência do loop do gyro, por exemplo, um loop do PID de 4k com um loop de gyro de 8k, este filtro deve ser mantido para evitar problemas de aliasing devido a redução de amostragem 8k->4k.<br /><br />Uma configuração com um único gyro lowpass 2, definido entre 500 e 1000Hz, funciona bem no EmuFlight 4.3 ou superior, para builds limpas com filtragem RPM ativa e com pelo menos filtragem padrão do D.",
+        "message": "O segundo de dois filtros Gyro lowpass.<br /><br />Este filtro é executado no loop do gyro, filtrando o sinal antes de entrar no loop do PID. Está sempre no modo estático (corte fixo).<br /><br />Se a frequência do loop do PID é menor que a frequência do loop do gyro, por exemplo, um loop do PID de 4k com um loop de gyro de 8k, este filtro deve ser mantido para evitar problemas de aliasing devido a redução de amostragem 8k->4k.<br /><br />Uma configuração com um único gyro lowpass 2, definido entre 500 e 1000Hz, funciona bem no Betaflight 4.3 ou superior, para builds limpas com filtragem RPM ativa e com pelo menos filtragem padrão do D.",
         "description": "Gyro lowpass filter helpicon message"
     },
     "pidTuningGyroLowpassFilterHelp": {
@@ -3929,7 +3929,7 @@
         "message": "Compensação Vbat Sag"
     },
     "pidTuningVbatSagCompensationHelp": {
-        "message": "Dá uma aceleração consistente e desempenho de PID acima da faixa utilizável de tensão da bateria, aumentando o nível de saída do motor consoante a tensão da bateria cai.<br /><br />O valor de compensação pode variar entre 0 e 100% É recomendada compensação total (100%).<br /><br />Visite <a href=\"https://github.com/emuflight/emuflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">esta entrada wiki</a> para mais informações."
+        "message": "Dá uma aceleração consistente e desempenho de PID acima da faixa utilizável de tensão da bateria, aumentando o nível de saída do motor consoante a tensão da bateria cai.<br /><br />O valor de compensação pode variar entre 0 e 100% É recomendada compensação total (100%).<br /><br />Visite <a href=\"https://github.com/betaflight/betaflight/wiki/4.2-Tuning-Notes#dynamic-battery-sag-compensation\"target=\"_blank\" rel=\"noopener noreferrer\">esta entrada wiki</a> para mais informações."
     },
     "pidTuningVbatSagValue": {
         "message": "%"
@@ -4010,7 +4010,7 @@
         "message": "Valor Idle Dinâmico [* 100 RPM]"
     },
     "pidTuningIdleMinRpmHelp": {
-        "message": "O Idle Dinâmico melhora o controle em baixas rpm e reduz o risco de dessincronização dos motores. <br /><br /> Melhora a autoridade do PID, estabilidade com acelerador a zero, tempo invertido no ar, e a travagem do motor.<br /><br />O min rpm do Idle Dinâmico deve ser definido para cerca de 3000 - 3500 rpm. Na 4.2, defina um valor idle de DShot baixo, por exemplo, 1%. Não há necessidade de ajustar o valor do DShot Idle na 4.3. <br /><br />Visite <a href=\"https://github.com/emuflight/emuflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">esta entrada wiki</a> para mais informações."
+        "message": "O Idle Dinâmico melhora o controle em baixas rpm e reduz o risco de dessincronização dos motores. <br /><br /> Melhora a autoridade do PID, estabilidade com acelerador a zero, tempo invertido no ar, e a travagem do motor.<br /><br />O min rpm do Idle Dinâmico deve ser definido para cerca de 3000 - 3500 rpm. Na 4.2, defina um valor idle de DShot baixo, por exemplo, 1%. Não há necessidade de ajustar o valor do DShot Idle na 4.3. <br /><br />Visite <a href=\"https://github.com/betaflight/betaflight/wiki/Tuning-Dynamic-Idle\"target=\"_blank\" rel=\"noopener noreferrer\">esta entrada wiki</a> para mais informações."
     },
     "pidTuningIdleMinRpmDisabled": {
         "message": "O Idle Dinâmico está DESLIGADO porque a Telemetria Dshot está DESLIGADA"
@@ -4025,7 +4025,7 @@
         "message": "Yaw Integrado"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">ATENÇÃO</span>: se ativar esta funcionalidade, deverá ajustar o PID YAW de acordo. Mais informações <a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>"
+        "message": "<span class=\"message-negative\">ATENÇÃO</span>: se ativar esta funcionalidade, deverá ajustar o PID YAW de acordo. Mais informações <a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">aqui</a>"
     },
     "pidTuningIntegratedYawHelp": {
         "message": "Yaw Integrado integra os valores do yaw P, I e D, permitindo aos yaw P, I e D serem afinados um pouco como a afinação do pitch e roll.<br><br>É necessário muito pouco I, porque o P integrado atua como I, e o D integrado atua como P.<br><br>NOTA: O Yaw Integrado requer o uso de Controle Absoluto, uma vez que nenhum I é necessário com Yaw Integrado."
@@ -4034,7 +4034,7 @@
         "message": "Rotação arbitrária da placa em graus, permite que a placa seja montada de lado, de cabeça para baixo, rodada, etc. Quando usar sensores externos, use o alinhamento dos sensores (Gyro, Accel, Mag) para definir uma posição do sensor independente da orientação da placa. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "As configurações do Failsafe mudaram consideravelmente. Use o EmuFlight <strong>v1.12.0+</strong> para ativar o painel de configuração melhorado."
+        "message": "As configurações do Failsafe mudaram consideravelmente. Use o Betaflight <strong>v1.12.0+</strong> para ativar o painel de configuração melhorado."
     },
     "failsafePaneTitleOld": {
         "message": "Failsafe do Receptor"
@@ -4193,7 +4193,7 @@
         "message": "Gravar"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Atualização de Firmware <span class=\"message-negative\">necessária</span>. As configurações de Bateria/Corrente/Voltagem utilizando a API &lt; 1.33.0 (Lançamento EmuFlight &lt;=3.17) não são suportadas."
+        "message": "Atualização de Firmware <span class=\"message-negative\">necessária</span>. As configurações de Bateria/Corrente/Voltagem utilizando a API &lt; 1.33.0 (Lançamento Betaflight &lt;=3.17) não são suportadas."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Origem do Medidor de Voltagem"
@@ -4466,7 +4466,7 @@
         "message": "<span class=\"message-negative\"><b>AVISO:</b></span> Nenhum chip OSD detetado. Algumas controladoras de voo não ligarão corretamente o chip OSD, a menos que estejam ligadas a energia da bateria. Conecte a bateria antes de conectar o USB (HÉLICES REMOVIDAS!)."
     },
     "osdSetupPreviewHelp": {
-        "message": "<strong>Nota:</strong> A fonte da pré-visualização do OSD pode não mostrar a mesma fonte instalada na controladora de voo. O layout de alguns elementos individuais podem ser diferentesquando são usadas versões mais antigas do EmuFlight - verifique o aspeto através dos seus óculos antes de voar."
+        "message": "<strong>Nota:</strong> A fonte da pré-visualização do OSD pode não mostrar a mesma fonte instalada na controladora de voo. O layout de alguns elementos individuais podem ser diferentesquando são usadas versões mais antigas do Betaflight - verifique o aspeto através dos seus óculos antes de voar."
     },
     "osdSetupUnsupportedNote1": {
         "message": "A sua controladora de voo não está a responder a comandos OSD. Isto provavelmente significa que não tem um OSD BetaFlight integrado."
@@ -5357,10 +5357,10 @@
         "message": "Estatística desconhecida (detalhes a serem adicionados numa versão futura)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Versão da fonte: 1 (EmuFlight 4.0 ou mais antigo)"
+        "message": "Versão da fonte: 1 (Betaflight 4.0 ou mais antigo)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Versão da fonte: 2 (EmuFlight 4.1 ou mais recente)"
+        "message": "Versão da fonte: 2 (Betaflight 4.1 ou mais recente)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Versão da Fonte: fornecida pelo utilizador"
@@ -5579,7 +5579,7 @@
         "message": "Gravado"
     },
     "vtxHelp": {
-        "message": "Aqui pode configurar os valores para o seu transmissor de vídeo (VTX). Pode ver e alterar os valores de transmissão, incluindo as tabelas VTX, se a controladora de voo e o VTX o suportarem.br>Para configurar o seu VTX use os seguintes passos:<br>1. Vá a <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\">esta</a> página;<br>2. Encontre o ficheiro apropriado de configuração do VTX para o seu país e modelo de VTX e faça download;<br>3. Clique '$t(vtxButtonLoadFile.message)' abaixo, selecione o ficheiro de configuração do VTX, carregue-o;<br>4. Verifique que as definições estão corretas;<br>5. Clique '$t(vtxButtonSave.message)' para guardar as definições do VTX na controladora de voo.<br>6. Opcionalmente clique '$t(vtxButtonSaveLua.message)' para guardar o ficheiro de configuração lua que pode usar com os scripts lua do EmuFlight (Veja mais <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">aqui</a>.)",
+        "message": "Aqui pode configurar os valores para o seu transmissor de vídeo (VTX). Pode ver e alterar os valores de transmissão, incluindo as tabelas VTX, se a controladora de voo e o VTX o suportarem.br>Para configurar o seu VTX use os seguintes passos:<br>1. Vá a <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\">esta</a> página;<br>2. Encontre o ficheiro apropriado de configuração do VTX para o seu país e modelo de VTX e faça download;<br>3. Clique '$t(vtxButtonLoadFile.message)' abaixo, selecione o ficheiro de configuração do VTX, carregue-o;<br>4. Verifique que as definições estão corretas;<br>5. Clique '$t(vtxButtonSave.message)' para guardar as definições do VTX na controladora de voo.<br>6. Opcionalmente clique '$t(vtxButtonSaveLua.message)' para guardar o ficheiro de configuração lua que pode usar com os scripts lua do Betaflight (Veja mais <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">aqui</a>.)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {
@@ -5747,7 +5747,7 @@
         "description": "Help for the number of power levels field of the VTX Table element in the VTX tab"
     },
     "vtxTablePowerLevelsTableHelp": {
-        "message": "Essa tabela representa os diferentes valores de potência que podem ser usados para os VTX. Eles estão divididos em dois: <br><b>- $t(vtxTablePowerLevelsValue.message):</b> cada nível de potência requer um valor definido pelo fabricante de hardware. Peça ao seu fabricante o valor correto ou consulte o wiki do EmuFlight das tabelas de VTX para retirar algumas amostras. <br><b>- $t(vtxTablePowerLevelsLabel.message):</b> Pode colocar aqui o rótulo que quiser para cada nível de potência. Podem ser números (25, 200, 600, 1. 2), letras (OFF, MIN, MAX) ou um misto deles. <br /><br />Deve configurar <b>apenas</b> os níveis de potência que são legais no seu país.",
+        "message": "Essa tabela representa os diferentes valores de potência que podem ser usados para os VTX. Eles estão divididos em dois: <br><b>- $t(vtxTablePowerLevelsValue.message):</b> cada nível de potência requer um valor definido pelo fabricante de hardware. Peça ao seu fabricante o valor correto ou consulte o wiki do Betaflight das tabelas de VTX para retirar algumas amostras. <br><b>- $t(vtxTablePowerLevelsLabel.message):</b> Pode colocar aqui o rótulo que quiser para cada nível de potência. Podem ser números (25, 200, 600, 1. 2), letras (OFF, MIN, MAX) ou um misto deles. <br /><br />Deve configurar <b>apenas</b> os níveis de potência que são legais no seu país.",
         "description": "Help for the table of power levels (value-label) that appears in the VTX tab"
     },
     "vtxTablePowerLevelsValue": {
@@ -5783,7 +5783,7 @@
         "description": "Text of one of the titles of the VTX Table element in the VTX tab"
     },
     "vtxTableBandsChannelsTableHelp": {
-        "message": "Esta tabela representa todas as frequências que podem ser usadas para seus VTX. Você pode ter várias bandas e para cada banda deve configurar:<br><b>- $t(vtxTableBandTitleName.message):</b> Nome que deseja atribuir a esta banda como BOSCAM_A, FATSHARK ou RACEBAND.<br><b>- $t(vtxTableBandTitleLetter.message):</b> Carta curta que faz referência à banda.<br><b>- $t(vtxTableBandTitleFactory.message):</b> Isto indica se é uma banda de fábrica. Se ativado o EmuFlight envia para os VTX um número de banda e de canal. O VTX usará a sua tabela de frequência embutida e as frequências configuradas aqui só para mostrar o valor no OSD e noutros locais. Se não estiver habilitado, então o EmuFlight enviará para os VTX a frequência real aqui configurada.<br><b>- Frequências:</b> Frequências para esta banda.<br /><br />Lembre-se que nem todas as frequências são legais no seu país. Deve colocar um valor de <b>zero</b> para cada índice de frequência que não está autorizado a usar para desativá-lo.",
+        "message": "Esta tabela representa todas as frequências que podem ser usadas para seus VTX. Você pode ter várias bandas e para cada banda deve configurar:<br><b>- $t(vtxTableBandTitleName.message):</b> Nome que deseja atribuir a esta banda como BOSCAM_A, FATSHARK ou RACEBAND.<br><b>- $t(vtxTableBandTitleLetter.message):</b> Carta curta que faz referência à banda.<br><b>- $t(vtxTableBandTitleFactory.message):</b> Isto indica se é uma banda de fábrica. Se ativado o Betaflight envia para os VTX um número de banda e de canal. O VTX usará a sua tabela de frequência embutida e as frequências configuradas aqui só para mostrar o valor no OSD e noutros locais. Se não estiver habilitado, então o Betaflight enviará para os VTX a frequência real aqui configurada.<br><b>- Frequências:</b> Frequências para esta banda.<br /><br />Lembre-se que nem todas as frequências são legais no seu país. Deve colocar um valor de <b>zero</b> para cada índice de frequência que não está autorizado a usar para desativá-lo.",
         "description": "Help for the table of bands-channels that appears in the VTX tab"
     },
     "vtxSavedFileOk": {
@@ -5819,7 +5819,7 @@
         "description": "Save Lua script button in the VTX tab"
     },
     "vtxLuaFileHelp": {
-        "message": "O botão '$t(vtxButtonSaveLua.message)' permitirá que grave um ficheiro <i>mcuid</i>.lua contendo a configuração da tabela VTX que pode ser usado com os <a href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">EmuFlight TX Lua Scripts</a>.<br><br>Versão 1.6. e acima podem usar o ficheiro como está, mas para versões mais antigas dos scripts deve ser renomeado para corresponder ao nome do modelo no TX.",
+        "message": "O botão '$t(vtxButtonSaveLua.message)' permitirá que grave um ficheiro <i>mcuid</i>.lua contendo a configuração da tabela VTX que pode ser usado com os <a href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\" target=\"_blank\" rel=\"noopener noreferrer\">Betaflight TX Lua Scripts</a>.<br><br>Versão 1.6. e acima podem usar o ficheiro como está, mas para versões mais antigas dos scripts deve ser renomeado para corresponder ao nome do modelo no TX.",
         "description": "Tooltip message for the Save Lua script button in the VTX tab"
     },
     "vtxButtonLoadFile": {
@@ -5972,7 +5972,7 @@
         "message": "<b>Derivativo a partir de erro</b> fornece uma resposta mais direta e é principalmente preferido para Corridas.<br /><br /><b>Derivativo a partir de Medição</b> fornece uma resposta mais suave pelo que é mais útil para freestyling"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legado vs EmuFlight (flutuante):</b> A lógica e a escala do PID é exatamente a mesma. Não é necessário reajustar. O modo Legado é o antigo EmuFlight Evolved Rewrite, que é um controlador PID básico baseado em matemática de números inteiros. O controlador PID EmuFlight usa matemática de vírgula flutuante e tem várias novas funcionalidades especificamente desenhadas para multirotores<br><b>Inteiro vs Flutuante:</b> A lógica e a escala do PID é exatamente a mesma. Não é necessário reajustar. placas F1 não tem um FPU a bordo e a matemática de vírgula flutuante aumenta a carga de CPU; Matemática com inteiros melhora a performance, mas a matemática flutuante pode ganhar mais precisão."
+        "message": "<b>Legado vs Betaflight (flutuante):</b> A lógica e a escala do PID é exatamente a mesma. Não é necessário reajustar. O modo Legado é o antigo Betaflight Evolved Rewrite, que é um controlador PID básico baseado em matemática de números inteiros. O controlador PID Betaflight usa matemática de vírgula flutuante e tem várias novas funcionalidades especificamente desenhadas para multirotores<br><b>Inteiro vs Flutuante:</b> A lógica e a escala do PID é exatamente a mesma. Não é necessário reajustar. placas F1 não tem um FPU a bordo e a matemática de vírgula flutuante aumenta a carga de CPU; Matemática com inteiros melhora a performance, mas a matemática flutuante pode ganhar mais precisão."
     },
     "pidTuningFilterTip": {
         "message": "<b>Filtro Soft para o Giroscópio:</b> Um filtro Lowpass para o Giroscópio. Use valores mais baixos para filtrar mais.<br><b>Filtro do Dterm:</b> Filtro Lowpass para o Dterm. Pode afetar a afinação do D. Use valores mais baixos para filtrar mais.<br><b>Filtro Yaw:</b> Filtra a saída do Yaw. Pode ajudar em configurações com ruído no eixo Yaw."

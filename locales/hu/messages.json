@@ -162,10 +162,10 @@
         "message": "Értesíts a konfigurátor instabil frissítéseiről"
     },
     "configuratorUpdateNotice": {
-        "message": "Elavult verziót használ a <b>EmuFlight Konfigurátorból</b>.<br>$t(configuratorUpdateHelp.message)"
+        "message": "Elavult verziót használ a <b>Betaflight Konfigurátorból</b>.<br>$t(configuratorUpdateHelp.message)"
     },
     "configuratorUpdateHelp": {
-        "message": "Egy újabb firmware verziónak és a konfigurátor elavult verziójának használata esetén lehet, hogy egyes beállítások megváltoztatásakor <strong> megsérül a firmware konfiguráció és nem fog rendesen működni </strong>. Ezenkívül a firmware bizonyos funkciói csak a CLI-ben konfigurálhatók. <br> <strong> A EmuFlight Konfigurátor <b> $1 </b> verziója letölthető online </strong>, látogasson el a <a href = \"$2\" webhelyre. target = \"_ blank\" rel = \"noopener noreferrer\"> ezen az oldalon </a> hogy a legújabb javított és fejlesztett verziót le tudja tölteni és telepíteni. <br> Kérjük, frissítés előtt zárja be a konfigurátor ablakot."
+        "message": "Egy újabb firmware verziónak és a konfigurátor elavult verziójának használata esetén lehet, hogy egyes beállítások megváltoztatásakor <strong> megsérül a firmware konfiguráció és nem fog rendesen működni </strong>. Ezenkívül a firmware bizonyos funkciói csak a CLI-ben konfigurálhatók. <br> <strong> A Betaflight Konfigurátor <b> $1 </b> verziója letölthető online </strong>, látogasson el a <a href = \"$2\" webhelyre. target = \"_ blank\" rel = \"noopener noreferrer\"> ezen az oldalon </a> hogy a legújabb javított és fejlesztett verziót le tudja tölteni és telepíteni. <br> Kérjük, frissítés előtt zárja be a konfigurátor ablakot."
     },
     "configuratorUpdateWebsite": {
         "message": "A Legfrissebb Verzió Weboldalára"
@@ -465,7 +465,7 @@
         "message": "Pillanatnyilag <span class=\"message-negative\">nem</span> végrehajtható, várjon, míg az aktuális művelet befejeződik..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "A  $1 fül használata előtt <strong>frissítenie</strong> kell a EmuFlight legfrissebb verziójára."
+        "message": "A  $1 fül használata előtt <strong>frissítenie</strong> kell a Betaflight legfrissebb verziójára."
     },
     "firmwareVersion": {
         "message": "Firmware verzió: <strong>$1</strong>"
@@ -577,13 +577,13 @@
         "message": "Dokumentáció / Kézikönyv"
     },
     "defaultDocumentation": {
-        "message": "A EmuFlight dokumentáció rendelkezésre áll, a verzióinfirmációk közt és a wiki-n.<br/><br/>"
+        "message": "A Betaflight dokumentáció rendelkezésre áll, a verzióinfirmációk közt és a wiki-n.<br/><br/>"
     },
     "defaultDocumentation1": {
-        "message": "A EmuFlight wiki nagyszerű információforrás, ami elérhető <a href=\"https://github.com/emuflight/emuflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">innen</a>."
+        "message": "A Betaflight wiki nagyszerű információforrás, ami elérhető <a href=\"https://github.com/betaflight/betaflight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">innen</a>."
     },
     "defaultDocumentation2": {
-        "message": "A firmware kiadások megjegyzései a GitHub kiadások oldalán olvashatók, amik <a href=\"https://github.com/EmuFlight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">itt érhetőek el."
+        "message": "A firmware kiadások megjegyzései a GitHub kiadások oldalán olvashatók, amik <a href=\"https://github.com/emuflight/emuflight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">itt érhetőek el."
     },
     "defaultSupportHead": {
         "message": "Támogatás"
@@ -598,7 +598,7 @@
         "message": "Támogatásért keresse a fórumokat és a wiki-t, vagy vegye fel a kapcsolatot a forgalmazójával.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">A biztonsági mentés és a visszaállítás funkció letiltva.</span> Van firmware-je API verzióval <span class=\"message-negative\">$1</span>, A biztonsági másolat készítéséhez és visszaállításához <span class=\"message-positive\">$2</span>.  Kérjük, készítsen biztonsági másolatot a beállításokról a CLI-n keresztül, az eljárás folyamatát lásd a EmuFlight dokumentációjában."
+        "message": "<span class=\"message-negative\">A biztonsági mentés és a visszaállítás funkció letiltva.</span> Van firmware-je API verzióval <span class=\"message-negative\">$1</span>, A biztonsági másolat készítéséhez és visszaállításához <span class=\"message-positive\">$2</span>.  Kérjük, készítsen biztonsági másolatot a beállításokról a CLI-n keresztül, az eljárás folyamatát lásd a Betaflight dokumentációjában."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Gyorsulásmérő kalibrálása"
@@ -789,7 +789,7 @@
         "description": "Message that pops up to describe the BST arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipMSP": {
-        "message": "Az MSP kapcsolat aktív, valószínűleg ezzel a EmuFlight konfigurátorral",
+        "message": "Az MSP kapcsolat aktív, valószínűleg ezzel a Betaflight konfigurátorral",
         "description": "Message that pops up to describe the MSP arming disable flag"
     },
     "initialSetupArmingDisableFlagsTooltipPARALYZE": {
@@ -1129,7 +1129,7 @@
         "message": "Jelző tónus"
     },
     "configurationDshotBeaconHelp": {
-        "message": "A Dshot jelző az ESC-ket és a motorokat használja hang előállítására . Ez azt jelenti, hogy a Dshot jeladó nem használható, amikor a motorok forognak. A EmuFlight 3.4-es és újabb verzióiban, amikor az élesítést megkísérlik, miközben a Dshot jelző aktív, az utolsó Dshot jelzőhangjelzése után 2 másodperc késleltetés van, mielőtt a drón élesedik. Ennek célja, hogy megakadályozzuk a Dshot jelző funkcionalitását az élesítéskor küldött Dshot parancsok beavatkozásában.<br/><strong>Figyelem:</strong> Mivel a Dshot jelző aktív motorjain keresztül áram folyik át, ez túlzott forrósodást okozhat. A motorok és az ESC-k erősen károsodhatnak, ha a jelző erőssége túl magas. A BLHeli Configurator vagy a BLHeli Suite használatával állítsa be és ellenőrizze a jelző erősségét."
+        "message": "A Dshot jelző az ESC-ket és a motorokat használja hang előállítására . Ez azt jelenti, hogy a Dshot jeladó nem használható, amikor a motorok forognak. A Betaflight 3.4-es és újabb verzióiban, amikor az élesítést megkísérlik, miközben a Dshot jelző aktív, az utolsó Dshot jelzőhangjelzése után 2 másodperc késleltetés van, mielőtt a drón élesedik. Ennek célja, hogy megakadályozzuk a Dshot jelző funkcionalitását az élesítéskor küldött Dshot parancsok beavatkozásában.<br/><strong>Figyelem:</strong> Mivel a Dshot jelző aktív motorjain keresztül áram folyik át, ez túlzott forrósodást okozhat. A motorok és az ESC-k erősen károsodhatnak, ha a jelző erőssége túl magas. A BLHeli Configurator vagy a BLHeli Suite használatával állítsa be és ellenőrizze a jelző erősségét."
     },
     "configurationBeeper": {
         "message": "Csipogó konfiguráció"
@@ -2978,7 +2978,7 @@
         "message": "RX Expo erő"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Az az exponens, amelyet az RC Expo kiszámításához használnak. A 3.0 előtti EmuFlight verziókban az érték 3-ra van rögzítve."
+        "message": "Az az exponens, amelyet az RC Expo kiszámításához használnak. A 3.0 előtti Betaflight verziókban az érték 3-ra van rögzítve."
     },
     "pidTuningLevel": {
         "message": "Angle/Horizon"
@@ -3214,13 +3214,13 @@
         "message": "Integrált Yaw"
     },
     "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\"> VIGYÁZAT</span>: Ha engedélyezi ezt a funkciót, ennek megfelelően módosítania kell az YAW PID-et. További információ <a href=\"https://github.com/emuflight/emuflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">itt érhető el</a>"
+        "message": "<span class=\"message-negative\"> VIGYÁZAT</span>: Ha engedélyezi ezt a funkciót, ennek megfelelően módosítania kell az YAW PID-et. További információ <a href=\"https://github.com/betaflight/betaflight/wiki/Integrated-Yaw\" target=\"_blank\" rel=\"noopener noreferrer\">itt érhető el</a>"
     },
     "configHelp2": {
         "message": "A vezérlő önkényes forgása fokokban, annak lehetővé tétele érdekében, hogy oldalra / fejjel lefelé / elforgatva stb. Lehessen felszerelni. Külső érzékelők futtatásakor használja az érzékelő igazítását (Gyro, Acc, Mag) az érzékelő pozíciójának meghatározásához, az alaplap tájolásától függetlenül. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "A Failsafe beállítások jelentősen megváltoztak. Használjon EmuFlight <strong>v1.12.0+</strong> verziót az irányítópanel aktiválásához."
+        "message": "A Failsafe beállítások jelentősen megváltoztak. Használjon Betaflight <strong>v1.12.0+</strong> verziót az irányítópanel aktiválásához."
     },
     "failsafePaneTitleOld": {
         "message": "Vevőegység failsafe"
@@ -3364,7 +3364,7 @@
         "message": "Mentés"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Firmware frissítés <span class=\"message-negative\">szükséges</span> Akkumulátor / amper / feszültség konfigurációkhoz API-val &lt; 1.33.0 (EmuFlight release &lt;= 3.17) nem támogatottak."
+        "message": "Firmware frissítés <span class=\"message-negative\">szükséges</span> Akkumulátor / amper / feszültség konfigurációkhoz API-val &lt; 1.33.0 (Betaflight release &lt;= 3.17) nem támogatottak."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Feszültségmérő Forrása"
@@ -4471,10 +4471,10 @@
         "message": "Ismeretlen statisztika (részleteket hozzá kell adni egy jövőbeli kiadáshoz)"
     },
     "osdDescribeFontVersion1": {
-        "message": "Betűtípus: 1(EmuFlight 4.0 vagy régebbi)"
+        "message": "Betűtípus: 1(Betaflight 4.0 vagy régebbi)"
     },
     "osdDescribeFontVersion2": {
-        "message": "Betűtípus: 2(EmuFlight 4.1 vagy újabb)"
+        "message": "Betűtípus: 2(Betaflight 4.1 vagy újabb)"
     },
     "osdDescribeFontVersionCUSTOM": {
         "message": "Betűtípus: felhasználó által biztosított"
@@ -4693,7 +4693,7 @@
         "message": "Mentve"
     },
     "vtxHelp": {
-        "message": "Itt konfigurálhatja a videó adó (VTX) értékeit. Megtekintheti és módosíthatja az átviteli értékeket, beleértve a VTX táblázatokat is, ha a repülésvezérlő és a VTX támogatják.<br>A VTX beállításához hajtsa végre a következő lépéseket:<br> 1. Menj <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight/wiki/VTX-tables\">a</a>oldalra<br>2. Keresse meg az országának és a VTX modellnek megfelelő VTX konfigurációs fájlt, és töltse le;<br>3. Kattintson a $t(vtxButtonLoadFile.message) gombra majd válassza ki a VTX konfigurációs fájlt majd töltse be<br>4. Ellenőrizze, hogy a beállítások helyesek-e<br>5. Kattintson a $t(vtxButtonSave.message) gombra, hogy a VTX beállításokat elmentse a repülésvezérlőn.<br>6. Opcionálisan kattintson a $t(vtxButtonSaveLua.message) gombra a beaflight lua szkriptekkel használható lua konfigurációs fájl mentéséhez. (További infó: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/emuflight/emuflight-tx-lua-scripts/\">itt elérhető</a>.)",
+        "message": "Itt konfigurálhatja a videó adó (VTX) értékeit. Megtekintheti és módosíthatja az átviteli értékeket, beleértve a VTX táblázatokat is, ha a repülésvezérlő és a VTX támogatják.<br>A VTX beállításához hajtsa végre a következő lépéseket:<br> 1. Menj <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight/wiki/VTX-tables\">a</a>oldalra<br>2. Keresse meg az országának és a VTX modellnek megfelelő VTX konfigurációs fájlt, és töltse le;<br>3. Kattintson a $t(vtxButtonLoadFile.message) gombra majd válassza ki a VTX konfigurációs fájlt majd töltse be<br>4. Ellenőrizze, hogy a beállítások helyesek-e<br>5. Kattintson a $t(vtxButtonSave.message) gombra, hogy a VTX beállításokat elmentse a repülésvezérlőn.<br>6. Opcionálisan kattintson a $t(vtxButtonSaveLua.message) gombra a beaflight lua szkriptekkel használható lua konfigurációs fájl mentéséhez. (További infó: <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/betaflight/betaflight-tx-lua-scripts/\">itt elérhető</a>.)",
         "description": "Introduction message in the VTX tab"
     },
     "vtxMessageNotSupported": {

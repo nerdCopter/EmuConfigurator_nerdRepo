@@ -128,16 +128,16 @@
         "message": "Perangkat - <span class=\"message-positive\">Siap</span>"
     },
     "backupFileIncompatible": {
-        "message": "Backup dibuat untuk versi lama EmuFlight dan tidak sesuai dengan versi EmuFlight ini. Maaf"
+        "message": "Backup dibuat untuk versi lama Betaflight dan tidak sesuai dengan versi Betaflight ini. Maaf"
     },
     "backupFileUnmigratable": {
-        "message": "Backup dibuat oleh versi lama EmuFlight dan tidak dapat di migrasi ke versi EmuFlight yg lebih baru. Maaf."
+        "message": "Backup dibuat oleh versi lama Betaflight dan tidak dapat di migrasi ke versi Betaflight yg lebih baru. Maaf."
     },
     "configMigrationFrom": {
-        "message": "Migrasi berkas konfigurasi yang dihasilkan oleh EmuFlight: $1"
+        "message": "Migrasi berkas konfigurasi yang dihasilkan oleh Betaflight: $1"
     },
     "configMigratedTo": {
-        "message": "Migrasi berkas konfigurasi ke EmuFlight: $1"
+        "message": "Migrasi berkas konfigurasi ke Betaflight: $1"
     },
     "configMigrationSuccessful": {
         "message": "Migrasi berkas konfigurasi selesai, migrasi telah diterapkan: $1"
@@ -359,7 +359,7 @@
         "message": "Anda <span class=\"message-negative\">tidak dapat</span> melakukan ini sekarang, silahkan tunggu operasi saat ini selesai ..."
     },
     "tabSwitchUpgradeRequired": {
-        "message": "Anda perlu untuk <strong>upgrade</strong> firmware anda ke versi EmuFlight terbaru sebelum dapat menggunakan tab $1."
+        "message": "Anda perlu untuk <strong>upgrade</strong> firmware anda ke versi Betaflight terbaru sebelum dapat menggunakan tab $1."
     },
     "firmwareVersion": {
         "message": "Versi Firmware: <strong>$1</strong>"
@@ -462,7 +462,7 @@
         "message": "Dokumentasi / Manual"
     },
     "defaultDocumentation": {
-        "message": "Dokumentasi EmuFlight tersedia dalam catatan rilis dan wiki.<br /><br />"
+        "message": "Dokumentasi Betaflight tersedia dalam catatan rilis dan wiki.<br /><br />"
     },
     "defaultSupportHead": {
         "message": "Dukungan"
@@ -477,7 +477,7 @@
         "message": "Untuk dukungan silahkan cari di forum dan wiki terlebih dahulu atau hubungi vendor anda.<br /><br />"
     },
     "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Fungsi Backup dan Restore nonaktif.</span> Anda memiliki firmware dengan versi API <span class=\"message-negative\">$1</span>, backup dan restore membutuhkan versi <span class=\"message-positive\">$2</span>. Backup pengaturan anda melalui CLI, lihat dokumentasi EmuFlight untuk mengetahui caranya."
+        "message": "<span class=\"message-negative\">Fungsi Backup dan Restore nonaktif.</span> Anda memiliki firmware dengan versi API <span class=\"message-negative\">$1</span>, backup dan restore membutuhkan versi <span class=\"message-positive\">$2</span>. Backup pengaturan anda melalui CLI, lihat dokumentasi Betaflight untuk mengetahui caranya."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrasi Accelerometer"
@@ -849,7 +849,7 @@
         "message": "Nada Beacon"
     },
     "configurationDshotBeaconHelp": {
-        "message": "Dshot beacon menggunakan ESC dan motor untuk menghasilkan suara. Oleh karena itu Dshot beacon tidak dapat digunakan ketika motor berputar. Pada EmuFlight 3.4 dan yang lebih baru, ketika terjadi percobaan arming saat Dshot beacon aktif, akan ada jeda 2 detik setelah nada Dshot beacon terakhir sebelum model di arm. Hal ini berguna untuk mencegah fungsi Dshot beacon mengganggu perintah Dshot ke ESC ketika arming.<br/><strong>Peringatan:</strong> Karena Dshot beacon mengalirkan arus ke motor Anda ketika aktif, hal ini dapat menyebabkan panas berlebih yang dapat merusak motor / atau ESC jika kekuatannnya di set terlalu tinggi. Gunakan BLHeli Configurator atau BLHeli Suite untuk menyesuaikan dan mengetahui kekuatan Dshot beacon."
+        "message": "Dshot beacon menggunakan ESC dan motor untuk menghasilkan suara. Oleh karena itu Dshot beacon tidak dapat digunakan ketika motor berputar. Pada Betaflight 3.4 dan yang lebih baru, ketika terjadi percobaan arming saat Dshot beacon aktif, akan ada jeda 2 detik setelah nada Dshot beacon terakhir sebelum model di arm. Hal ini berguna untuk mencegah fungsi Dshot beacon mengganggu perintah Dshot ke ESC ketika arming.<br/><strong>Peringatan:</strong> Karena Dshot beacon mengalirkan arus ke motor Anda ketika aktif, hal ini dapat menyebabkan panas berlebih yang dapat merusak motor / atau ESC jika kekuatannnya di set terlalu tinggi. Gunakan BLHeli Configurator atau BLHeli Suite untuk menyesuaikan dan mengetahui kekuatan Dshot beacon."
     },
     "configurationBeeper": {
         "message": "Pengaturan Bunyi"
@@ -2422,7 +2422,7 @@
         "message": "Kekuatan Expo RC"
     },
     "pidTuningRcExpoPowerHelp": {
-        "message": "Eksponen yang digunakan saat mengkalkulasi expo RC. Dalam versi EmuFlight sebelum 3.0, nilainya tetap pada 3."
+        "message": "Eksponen yang digunakan saat mengkalkulasi expo RC. Dalam versi Betaflight sebelum 3.0, nilainya tetap pada 3."
     },
     "pidTuningLevel": {
         "message": "Angle/Horizon"
@@ -2521,7 +2521,7 @@
         "message": "Rotasi FC dalam derajat, untuk memungkinkan pemasangannya miring / terbalik / diputar dll. Saat menjalankan sensor eksternal, atur kelurusan sensor (Gyro, Acc, Mag) untuk menentukan posisi sensor tanpa pengaruh orientasi FC. "
     },
     "failsafeFeaturesHelpOld": {
-        "message": "Konfigurasi Failsafe sudah jauh berbeda. Gunakan EmuFlight <strong>v1.12.0+</strong> untuk mengaktifkan panel konfigurasi yang lebih bagus."
+        "message": "Konfigurasi Failsafe sudah jauh berbeda. Gunakan Betaflight <strong>v1.12.0+</strong> untuk mengaktifkan panel konfigurasi yang lebih bagus."
     },
     "failsafePaneTitleOld": {
         "message": "Failsafe Receiver"
@@ -2644,7 +2644,7 @@
         "message": "Simpan"
     },
     "powerFirmwareUpgradeRequired": {
-        "message": "Upgrade firmware <span class =\"message-negative\">wajib</span>. Konfigurasi Battery/Amperage/Voltage menggunakan API &lt; 1.33.0 (rilis EmuFlight &lt; = 3.17) tidak didukung."
+        "message": "Upgrade firmware <span class =\"message-negative\">wajib</span>. Konfigurasi Battery/Amperage/Voltage menggunakan API &lt; 1.33.0 (rilis Betaflight &lt; = 3.17) tidak didukung."
     },
     "powerBatteryVoltageMeterSource": {
         "message": "Sumber Meteran Tegangan"
@@ -2863,7 +2863,7 @@
         "message": "OSD"
     },
     "osdSetupUnsupportedNote1": {
-        "message": "Flight controller anda tidak menanggapi ke perintah OSD. Mungkin FC anda tidak memiliki OSD EmuFlight."
+        "message": "Flight controller anda tidak menanggapi ke perintah OSD. Mungkin FC anda tidak memiliki OSD Betaflight."
     },
     "osdSetupElementsTitle": {
         "message": "Elemen"
@@ -3349,7 +3349,7 @@
         "message": "Pengukuran"
     },
     "pidTuningPidControllerTip": {
-        "message": "<b>Legacy vs EmuFlight (float):</b> PID scaling dan logika PID sama persis. Belum tentu butuh retune. Legacy adalah versi lama emuflight yg telah ditulis ulang, yg merupakan kontroler PID sederhana menggunakan perhitungan dalam bilangan bulat. Kontroler PID EmuFlight menggunakan perhitungan desimal yg lebih presisi dan memiliki banyak fitur baru yg dirancang khusus untuk aplikasi multirotor <br><b>Koma vs Tanpa Koma:</b> scaling PID dan logika PID sama persis. Tidak butuh retune. FC F1 tidak memiliki FPU onboard dan perhitungan dengan tingkat presisi dalam koma meningkatkan beban CPU, bilangan tanpa koma akan memperbaiki kinerjanya, tapi perhitungan dalam koma mungkin akan sedikit lebih presisi."
+        "message": "<b>Legacy vs Betaflight (float):</b> PID scaling dan logika PID sama persis. Belum tentu butuh retune. Legacy adalah versi lama emuflight yg telah ditulis ulang, yg merupakan kontroler PID sederhana menggunakan perhitungan dalam bilangan bulat. Kontroler PID Betaflight menggunakan perhitungan desimal yg lebih presisi dan memiliki banyak fitur baru yg dirancang khusus untuk aplikasi multirotor <br><b>Koma vs Tanpa Koma:</b> scaling PID dan logika PID sama persis. Tidak butuh retune. FC F1 tidak memiliki FPU onboard dan perhitungan dengan tingkat presisi dalam koma meningkatkan beban CPU, bilangan tanpa koma akan memperbaiki kinerjanya, tapi perhitungan dalam koma mungkin akan sedikit lebih presisi."
     },
     "pidTuningFilterTip": {
         "message": "<b>Gyro Soft Filter:</b> Filter lowpass untuk gyro. Gunakan nilai yang lebih rendah untuk penyaringan yang lebih banyak.<br><b>Filter Istilah D:</b> Filter lowpass untuk Dterm. Dapat mempengaruhi D tuning. Gunakan nilai yang lebih rendah untuk penyaringan yang lebih banyak.<br><b>Filter Yaw:</b> Filter menguap output. Ini bisa membantu dalam setup dengan sumbu yaw yang berisik."
