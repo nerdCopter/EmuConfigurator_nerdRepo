@@ -2,8 +2,8 @@ import { i18n } from '../localization';
 
 const firmware_flasher = {
     releases: null,
-    releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/betaflight/betaflight/releases'),
-    jenkinsLoader: new JenkinsLoader('https://ci.betaflight.tech'),
+    releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/EmuFlight/releases'),
+    jenkinsLoader: new JenkinsLoader(''),
     gitHubApi: new GitHubApi(),
     localFirmwareLoaded: false,
     selectedBoard: undefined,
@@ -82,7 +82,7 @@ firmware_flasher.initialize = function (callback) {
                 $('div.release_info #unifiedTargetInfo').hide();
             }
 
-            let formattedNotes = summary.notes.replace(/#(\d+)/g, '[#$1](https://github.com/betaflight/betaflight/pull/$1)');
+            let formattedNotes = summary.notes.replace(/#(\d+)/g, '[#$1](https://github.com/emuflight/emuflight/pull/$1)');
             formattedNotes = marked.parse(formattedNotes);
             formattedNotes = DOMPurify.sanitize(formattedNotes);
             $('div.release_info .notes').html(formattedNotes);
@@ -171,7 +171,8 @@ firmware_flasher.initialize = function (callback) {
             const unsortedTargets = [];
             releaseData.forEach(function(release) {
                 release.assets.forEach(function(asset) {
-                    const targetFromFilenameExpression = /betaflight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //EmuFlight
+                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
                     const match = targetFromFilenameExpression.exec(asset.name);
                     if ((!showDevReleases && release.prerelease) || !match) {
                         return;
@@ -191,7 +192,8 @@ firmware_flasher.initialize = function (callback) {
                 const matchVersionFromTag = versionFromTagExpression.exec(release.tag_name);
                 const version = matchVersionFromTag[1];
                 release.assets.forEach(function(asset) {
-                    const targetFromFilenameExpression = /betaflight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //EmuFlight
+                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
                     const match = targetFromFilenameExpression.exec(asset.name);
                     if ((!showDevReleases && release.prerelease) || !match) {
                         return;
@@ -218,6 +220,14 @@ firmware_flasher.initialize = function (callback) {
                         "date"      : formattedDate,
                         "notes"     : release.body,
                     };
+
+                    // DO NOT LIST EMUFLIGHT FIRMWARE < 1.0.0
+                    if (version < '1.0.0') {
+                        console.log(`Firmware release is < 1.0.0: [ ${version} ]. Do not list it.`);
+                        return; //exit loop
+                    }
+                    // END DO NOT LIST EMUFLIGHT FIRMWARE < 1.0.0
+
                     releases[target].push(descriptor);
                 });
             });
@@ -225,7 +235,7 @@ firmware_flasher.initialize = function (callback) {
         }
 
         function supportsUnifiedTargets(version) {
-            return semver.gte(version.split(' ')[0], '4.1.0-RC1');
+            try { return semver.gte(version.split(' ')[0], '4.1.0-RC1'); } catch {} //Fix for old off-syntax EmuFlight version(s)
         }
 
         function hasUnifiedTargetBuild(builds) {

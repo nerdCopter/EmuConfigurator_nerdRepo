@@ -99,7 +99,8 @@ function setupAnalytics(result) {
 
     const debugMode = typeof process === "object" && process.versions['nw-flavor'] === 'sdk';
 
-    window.analytics = new Analytics('UA-123002063-1', userId, CONFIGURATOR.productName, CONFIGURATOR.version, CONFIGURATOR.gitRevision, GUI.operating_system,
+    //EmuFlight - purge BF's google analytics value ('UA-123002063-1')
+    window.analytics = new Analytics('', userId, CONFIGURATOR.productName, CONFIGURATOR.version, CONFIGURATOR.gitRevision, GUI.operating_system,
         checkForDebugVersions, optOut, debugMode, getBuildType());
 
     function logException(exception) {
@@ -587,7 +588,7 @@ function setDarkTheme(enabled) {
 
 
 function checkForConfiguratorUpdates() {
-    const releaseChecker = new ReleaseChecker('configurator', 'https://api.github.com/repos/betaflight/betaflight-configurator/releases');
+    const releaseChecker = new ReleaseChecker('configurator', 'https://api.github.com/repos/emuflight/EmuConfigurator/releases');
 
     releaseChecker.loadReleaseData(notifyOutdatedVersion);
 }
