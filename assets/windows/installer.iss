@@ -9,18 +9,18 @@
 ; sourceFolder
 ; targetFolder
 
-#define ApplicationName "EmuFlight Configurator"
+#define ApplicationName "Emu Configurator"
 #define CompanyName "The EmuFlight open source project"
 #define CompanyUrl "https://github.com/EmuFlight/"
-#define ExecutableFileName "emuflight-configurator-x.exe"
+#define ExecutableFileName "emu-configurator.exe"
 #define GroupName "EmuFlight"
-#define InstallerFileName "emuflight-configurator-x_" + version + "_" + archName + "-installer"
-#define SourcePath "..\..\" + sourceFolder + "\emuflight-configurator-x\" + archName
-#define TargetFolderName "EmuFlight-Configurator-x"
-#define UpdatesUrl "https://github.com/EmuFlight/emuflight-configurator-x/releases"
+#define InstallerFileName "emu-configurator_" + version + "_" + archName + "-installer"
+#define SourcePath "..\..\" + sourceFolder + "\emu-configurator\" + archName
+#define TargetFolderName "Emu-Configurator"
+#define UpdatesUrl "https://github.com/EmuFlight/EmuConfigurator/releases"
 
 [CustomMessages]
-AppName=EmuFlight-configurator-x
+AppName=Emu-configurator
 LaunchProgram=Start {#ApplicationName}
 
 [Files]

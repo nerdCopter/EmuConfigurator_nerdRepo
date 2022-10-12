@@ -51,7 +51,7 @@ const nwBuilderOptions = {
     version: '0.62.0',
     files: `${DIST_DIR}**/*`,
     macIcns: './src/images/ef_icon.icns',
-    macPlist: { 'CFBundleDisplayName': 'EmuFlight Configurator'},
+    macPlist: { 'CFBundleDisplayName': 'Emu Configurator'},
     winIco: './src/images/ef_icon.ico',
     zip: false,
 };
@@ -691,7 +691,7 @@ function release_zip(arch, appDirectory) {
     const output = getReleaseFilename(arch, 'zip', true);
     const base = path.join(appDirectory, metadata.name, arch);
 
-    return compressFiles(src, base, output, 'Betaflight Configurator');
+    return compressFiles(src, base, output, 'Emu Configurator');
 }
 
 // Compress files from srcPath, using basePath, to outputFile in the RELEASE_DIR
@@ -816,10 +816,10 @@ function release_osx64(appDirectory) {
             target: path.join(RELEASE_DIR, getReleaseFilename('macOS', 'dmg')),
             basepath: path.join(appDirectory, metadata.name, 'osx64'),
             specification: {
-                title: 'Betaflight Configurator',
+                title: 'Emu Configurator',
                 contents: [
                     { 'x': 448, 'y': 342, 'type': 'link', 'path': '/Applications' },
-                    { 'x': 192, 'y': 344, 'type': 'file', 'path': `${metadata.name}.app`, 'name': 'Betaflight Configurator.app' },
+                    { 'x': 192, 'y': 344, 'type': 'file', 'path': `${metadata.name}.app`, 'name': 'Emu Configurator.app' },
                 ],
                 background: path.join(__dirname, 'assets/osx/dmg-background.png'),
                 format: 'UDZO',
