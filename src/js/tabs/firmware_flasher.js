@@ -222,10 +222,13 @@ firmware_flasher.initialize = function (callback) {
                     };
 
                     // DO NOT LIST EMUFLIGHT FIRMWARE < 1.0.0
-                    if (version < '1.0.0') {
-                        console.log(`Firmware release is < 1.0.0: [ ${version} ]. Do not list it.`);
+                    if (semver.lt(version.split('-')[0], '1.0.0')) {
+                        console.log(`Firmware release is < 1.0.0: [ ${version} ]. Skip from listing.`);
                         return; //exit loop
+                    } else {
+                        console.log(`Firmware release is >= 1.0.0: [ ${version} ]. Populate to list.`);
                     }
+
                     // END DO NOT LIST EMUFLIGHT FIRMWARE < 1.0.0
 
                     releases[target].push(descriptor);
