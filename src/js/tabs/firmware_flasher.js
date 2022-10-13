@@ -2,7 +2,7 @@ import { i18n } from '../localization';
 
 const firmware_flasher = {
     releases: null,
-    releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/EmuFlight/releases'),
+    releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/development/releases'),
     jenkinsLoader: new JenkinsLoader(''),
     gitHubApi: new GitHubApi(),
     localFirmwareLoaded: false,
@@ -235,7 +235,7 @@ firmware_flasher.initialize = function (callback) {
         }
 
         function supportsUnifiedTargets(version) {
-            try { return semver.gte(version.split(' ')[0], '4.1.0-RC1'); } catch {} //Fix for old off-syntax EmuFlight version(s)
+            try { return semver.gte(version.split('-')[0], '1.0.0'); } catch { return false; } //Fix for old off-syntax EmuFlight tag(s) // Fix split on space, which tags cannot include space.
         }
 
         function hasUnifiedTargetBuild(builds) {
