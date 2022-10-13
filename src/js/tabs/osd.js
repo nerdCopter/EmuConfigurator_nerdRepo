@@ -1551,12 +1551,12 @@ OSD.constants = {
         { file: "bold", name: "Bold" },
         { file: "large", name: "Large" },
         { file: "extra_large", name: "Extra Large" },
-        { file: "betaflight", name: "Betaflight" },
         { file: "digital", name: "Digital" },
         { file: "clarity", name: "Clarity" },
         { file: "vision", name: "Vision" },
         { file: "impact", name: "Impact" },
         { file: "impact_mini", name: "Impact Mini" },
+        { file: "kaio", name: "Kaio" },
     ],
 };
 

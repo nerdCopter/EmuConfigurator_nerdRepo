@@ -12,7 +12,7 @@ const CliAutoComplete = {
 };
 
 CliAutoComplete.isEnabled = function() {
-    return this.isBuilding() || (this.configEnabled && FC.CONFIG.flightControllerIdentifier === "BTFL" && this.builder.state !== 'fail');
+    return this.isBuilding() || (this.configEnabled && (FC.CONFIG.flightControllerIdentifier === "BTFL" || FC.CONFIG.flightControllerIdentifier === "EMUF") && this.builder.state !== 'fail');
 };
 
 CliAutoComplete.isBuilding = function() {

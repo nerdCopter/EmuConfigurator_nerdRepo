@@ -723,6 +723,7 @@ const FC = {
         }
 
         if ((flightControllerIdentifier === 'BTFL' && semver.gte(flightControllerVersion, "2.6.0")) ||
+            (flightControllerIdentifier === 'EMUF' && semver.gte(flightControllerVersion, "1.0.0")) ||
             (flightControllerIdentifier === 'CLFL' && semver.gte(apiVersion, API_VERSION_1_31))) {
                 serialRxTypes.push('JETIEXBUS');
         }

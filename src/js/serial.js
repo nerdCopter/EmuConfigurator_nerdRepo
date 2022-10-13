@@ -159,7 +159,7 @@ const serial = {
 
         chrome.sockets.tcp.create({
             persistent: false,
-            name: 'Betaflight',
+            name: 'EmuFlight',
             bufferSize: 65535,
         }, function(createInfo) {
             if (createInfo && !self.openCanceled || !checkChromeRuntimeError()) {
