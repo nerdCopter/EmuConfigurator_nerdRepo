@@ -172,12 +172,17 @@ firmware_flasher.initialize = function (callback) {
             releaseData.forEach(function(release) {
                 release.assets.forEach(function(asset) {
                     //EmuFlight
-                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)\.(.*)/; //simplified
+                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+.*)(\-.*)?\.(.*)/; //complexified
                     const match = targetFromFilenameExpression.exec(asset.name);
                     if ((!showDevReleases && release.prerelease) || !match) {
                         return;
                     }
-                    const target = match[2];
+                    //const target = match[2];
+                    const matchsplit=match[2].split('_Build_');  //split the SHA & targetname for populating list
+                    const target = matchsplit[0];
+
                     if ($.inArray(target, unsortedTargets) === -1) {
                         unsortedTargets.push(target);
                     }
@@ -193,13 +198,19 @@ firmware_flasher.initialize = function (callback) {
                 const version = matchVersionFromTag[1];
                 release.assets.forEach(function(asset) {
                     //EmuFlight
-                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+                    //const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(.*)_?(.*)\.(.*)/; //simplified
+                    const targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+.*)(\-.*)?\.(.*)/; //complexified
                     const match = targetFromFilenameExpression.exec(asset.name);
+
                     if ((!showDevReleases && release.prerelease) || !match) {
                         return;
                     }
-                    const target = match[2];
+                    //const target = match[2];
+                    const matchsplit=match[2].split('_Build_');  //split the SHA & targetname for populating list
+                    const target = matchsplit[0];
                     const format = match[4];
+
                     if (format !== 'hex') {
                         return;
                     }
