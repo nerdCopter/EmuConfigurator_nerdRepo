@@ -924,7 +924,7 @@ firmware_flasher.initialize = function (callback) {
         if (result.erase_chip) {
             $('input.erase_chip').prop('checked', true);
         } else {
-            $('input.erase_chip').prop('checked', false);
+            $('input.erase_chip').prop('checked', true);   //force true irregardless.  pilot may disable during session.
         }
 
         $('input.erase_chip').change(function () {
