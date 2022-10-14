@@ -12,7 +12,8 @@ const CliAutoComplete = {
 };
 
 CliAutoComplete.isEnabled = function() {
-    return this.isBuilding() || (this.configEnabled && (FC.CONFIG.flightControllerIdentifier === "BTFL" || FC.CONFIG.flightControllerIdentifier === "EMUF") && this.builder.state !== 'fail');
+    // mix-case `EmuF` is important here. distinguishes between legacy 0.X EMUF and 1.0 EmuF
+    return this.isBuilding() || (this.configEnabled && (FC.CONFIG.flightControllerIdentifier === "BTFL" || FC.CONFIG.flightControllerIdentifier === "EmuF") && this.builder.state !== 'fail');
 };
 
 CliAutoComplete.isBuilding = function() {

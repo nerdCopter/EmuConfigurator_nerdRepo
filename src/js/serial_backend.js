@@ -255,9 +255,15 @@ function onOpen(openInfo) {
 
                 MSP.send_message(MSPCodes.MSP_FC_VARIANT, false, false, function () {
                     analytics.setFlightControllerData(analytics.DATA.FIRMWARE_TYPE, FC.CONFIG.flightControllerIdentifier);
-                    if (FC.CONFIG.flightControllerIdentifier === 'EMUF' || FC.CONFIG.flightControllerIdentifier === 'BTFL') {
+
+                    console.log(`flightControllerIdentifier: ${FC.CONFIG.flightControllerIdentifier}`);
+
+                    // mix-case `EmuF` is important here. distinguishes between legacy 0.X EMUF and 1.0 EmuF
+                    if (FC.CONFIG.flightControllerIdentifier === 'EmuF' || FC.CONFIG.flightControllerIdentifier === 'BTFL') {
                         MSP.send_message(MSPCodes.MSP_FC_VERSION, false, false, function () {
                             analytics.setFlightControllerData(analytics.DATA.FIRMWARE_VERSION, FC.CONFIG.flightControllerVersion);
+
+                            console.log(`  flightControllerVersion: ${FC.CONFIG.flightControllerVersion}`);
 
                             GUI.log(i18n.getMessage('fcInfoReceived', [FC.CONFIG.flightControllerIdentifier, FC.CONFIG.flightControllerVersion]));
 

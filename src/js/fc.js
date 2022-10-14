@@ -722,8 +722,9 @@ const FC = {
             serialRxTypes.push('IBUS');
         }
 
+        // mix-case `EmuF` is important here. distinguishes between legacy 0.X EMUF and 1.0 EmuF
         if ((flightControllerIdentifier === 'BTFL' && semver.gte(flightControllerVersion, "2.6.0")) ||
-            (flightControllerIdentifier === 'EMUF' && semver.gte(flightControllerVersion, "1.0.0")) ||
+            (flightControllerIdentifier === 'EmuF' && semver.gte(flightControllerVersion, "1.0.0")) ||
             (flightControllerIdentifier === 'CLFL' && semver.gte(apiVersion, API_VERSION_1_31))) {
                 serialRxTypes.push('JETIEXBUS');
         }
