@@ -84,13 +84,13 @@ MinVersion=6.2
 OutputBaseFilename={#InstallerFileName}
 OutputDir=..\..\{#targetFolder}\
 PrivilegesRequiredOverridesAllowed=commandline dialog
-SetupIconFile=bf_installer_icon.ico
+SetupIconFile=ef_installer_icon.ico
 ShowLanguageDialog=yes
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#ExecutableFileName}
 UninstallDisplayName={#ApplicationName}
-WizardImageFile=bf_installer.bmp
-WizardSmallImageFile=bf_installer_small.bmp
+WizardImageFile=ef_installer.bmp
+WizardSmallImageFile=ef_installer_small.bmp
 WizardStyle=modern
 
 [Code]
