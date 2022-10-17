@@ -45,10 +45,11 @@ jobs:
           echo "::set-output name=shortsha::${{ env.SHORT_SHA }}"
         continue-on-error: true
 
-      - name: setup node
-        uses: actions/setup-node@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: '.nvmrc'
+          cache: yarn
         continue-on-error: false
 
       # for debugging
@@ -67,7 +68,7 @@ jobs:
 
       # build stuff
       - name: yarn install
-        run: yarn install
+        run: yarn install --immutable --immutable-cache --check-cache
 
       - name: yarn gulp clean-release
         run: yarn gulp clean-release
