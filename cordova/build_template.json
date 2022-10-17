@@ -10,7 +10,7 @@
         "release": {
             "keystore": "bundle.keystore",
             "storePassword": "[INJECTED_BY_GULPFILE]",
-            "alias": "emuflight",
+            "alias": "betaflight",
             "password": "password",
             "packageType": "bundle"
         }
