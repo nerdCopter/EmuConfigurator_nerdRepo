@@ -44,9 +44,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Android
-            os: ubuntu-22.04
-            releaseArgs: --android
+#          - name: Android
+#            os: ubuntu-22.04
+#            releaseArgs: --android
 
           - name: Linux
             os: ubuntu-22.04
