@@ -669,8 +669,6 @@ function getLinuxPackageArch(type, arch) {
 // Create distribution package for macOS platform
 function release_osx64() {
 
-    var alias = require("macos-alias");
-
     if (process.env.TRAVIS_OS_NAME == 'osx') {
         const { execSync } = require('child_process');
         let stdout = execSync('./codesign_osxapp.sh');
@@ -678,7 +676,7 @@ function release_osx64() {
         console.log('running locally - skipping signing of app');
     }
 
-    var appdmg = require('gulp-appdmg');
+    var appdmg = require('./libraries/npm/gulp-appdmg');
 
     // The appdmg does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
