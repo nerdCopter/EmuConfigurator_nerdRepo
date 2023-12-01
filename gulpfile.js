@@ -669,6 +669,8 @@ function getLinuxPackageArch(type, arch) {
 // Create distribution package for macOS platform
 function release_osx64() {
 
+    var alias = require("macos-alias");
+
     if (process.env.TRAVIS_OS_NAME == 'osx') {
         const { execSync } = require('child_process');
         let stdout = execSync('./codesign_osxapp.sh');
@@ -704,7 +706,6 @@ function release_osx64() {
                         height: 755
                     }
                 },
-                'code-sign': { 'signing-identity': process.env.APP_IDENTITY }
             },
         })
     );
