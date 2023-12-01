@@ -83,7 +83,7 @@ jobs:
       - name: yarn gulp release --osx64
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-          yarn add macos-alias appdmg
+          yarn add macos-alias appdmg fs-xattr
           yarn gulp release --osx64
         continue-on-error: false
 
