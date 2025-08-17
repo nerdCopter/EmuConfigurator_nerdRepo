@@ -9,6 +9,7 @@
   "bg-script": "js/eventPage.js",
   "default_locale": "en",
   "scripts": {
+    "gulp": "gulp",
     "start": "gulp debug",
     "gulp": "gulp",
     "test": "karma start test/karma.conf.js"
