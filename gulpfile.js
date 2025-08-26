@@ -7,17 +7,13 @@ delete pkg.optionalDependencies['gulp-appdmg'];
 const child_process = require('child_process');
 const fs = require('fs');
 const fse = require('fs-extra');
-const https = require('follow-redirects').https;
 const path = require('path');
 
 const zip = require('gulp-zip');
-const del = require('del');
-const NwBuilder = require('nw-builder');
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
 const commandExistsSync = require('command-exists').sync;
-const targz = require('targz');
 
 const gulp = require('gulp');
 const concat = require('gulp-concat');
@@ -37,29 +33,6 @@ const LINUX_INSTALL_DIR = '/opt/emuflight';
 
 // Global variable to hold the change hash from when we get it, to when we use it.
 var gitChangeSetId;
-
-// FIXME: hardcoded version number
-// 0.45.6 Win7 connects; 0.42.3 fixed OSX Flashing; 0.46.X broke Win7 connect. maybe serial/usb needs updating
-// reverted to 0.42.6 due to Windows increased CLI-tab buffer/autocomplete issues.
-// 0.50.3 is last version to open Links properly. also works on Win11.
-var NWversion;
-if (os.platform() === 'win32') {
-    NWversion ='0.42.6'
-} else {
-    NWversion ='0.50.3'
-}
-
-var nwBuilderOptions = {
-    version: NWversion,
-    files: './dist/**/*',
-    macIcns: './assets/osx/app-icon.icns',
-    macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
-    winIco: './src/images/emu_icon.ico',
-    zip: false
-};
-
-// FIXME: hardcoded version number
-var nwArmVersion = '0.28.4';
 
 //-----------------
 //Pre tasks operations
@@ -91,10 +64,10 @@ var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, di
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 
-var appsBuild = gulp.series(gulp.parallel(clean_apps, distRebuild), apps, gulp.parallel(listPostBuildTasks(APPS_DIR)));
+var appsBuild = gulp.series(gulp.parallel(clean_apps, distRebuild), apps);
 gulp.task('apps', appsBuild);
 
-var debugBuild = gulp.series(distBuild, debug, gulp.parallel(listPostBuildTasks(DEBUG_DIR)), start_debug)
+var debugBuild = gulp.series(distBuild, debug, start_debug)
 gulp.task('debug', debugBuild);
 
 var releaseBuild = gulp.series(gulp.parallel(clean_release, appsBuild), gulp.parallel(listReleaseTasks()));
@@ -111,10 +84,10 @@ gulp.task('default', debugBuild);
 
 // Get platform from commandline args
 // #
-// # gulp <task> [<platform>]+        Run only for platform(s) (with <platform> one of --linux64, --linux32, --armv7, --osx64, --win32, --win64, or --chromeos)
+// # gulp <task> [<platform>]+        Run only for platform(s) (with <platform> one of --linux64, --linux32, --osx64, --win32, --win64, or --chromeos)
 // #
 function getInputPlatforms() {
-    var supportedPlatforms = ['linux64', 'linux32', 'armv7', 'osx64', 'win32', 'win64', 'chromeos'];
+    var supportedPlatforms = ['linux64', 'linux32', 'osx64', 'win32', 'win64', 'chromeos'];
     var platforms = [];
     var regEx = /--(\w+)/;
     console.log(process.argv);
@@ -210,24 +183,29 @@ function getReleaseFilename(platform, ext) {
     return `${pkg.name}_${pkg.version}_${platform}.${ext}`;
 }
 
-function clean_dist() {
-    return del([DIST_DIR + '**'], { force: true });
+async function clean_dist() {
+    const {deleteAsync} = await import('del');
+    return deleteAsync([DIST_DIR + '**'], { force: true });
 }
 
-function clean_apps() {
-    return del([APPS_DIR + '**'], { force: true });
+async function clean_apps() {
+    const {deleteAsync} = await import('del');
+    return deleteAsync([APPS_DIR + '**'], { force: true });
 }
 
-function clean_debug() {
-    return del([DEBUG_DIR + '**'], { force: true });
+async function clean_debug() {
+    const {deleteAsync} = await import('del');
+    return deleteAsync([DEBUG_DIR + '**'], { force: true });
 }
 
-function clean_release() {
-    return del([RELEASE_DIR + '**'], { force: true });
+async function clean_release() {
+    const {deleteAsync} = await import('del');
+    return deleteAsync([RELEASE_DIR + '**'], { force: true });
 }
 
-function clean_cache() {
-    return del(['./cache/**'], { force: true });
+async function clean_cache() {
+    const {deleteAsync} = await import('del');
+    return deleteAsync(['./cache/**'], { force: true });
 }
 
 // Real work for dist task. Done in another task to call it via
@@ -287,58 +265,7 @@ function apps(done) {
     removeItem(platforms, 'chromeos');
     removeItem(platforms, 'android');
 
-    buildNWAppsWrapper(platforms, 'normal', APPS_DIR, done);
-}
-
-function listPostBuildTasks(folder, done) {
-
-    var platforms = getPlatforms();
-
-    var postBuildTasks = [];
-
-    if (platforms.indexOf('linux32') != -1) {
-        postBuildTasks.push(function post_build_linux32(done) {
-            return post_build('linux32', folder, done);
-        });
-    }
-
-    if (platforms.indexOf('linux64') != -1) {
-        postBuildTasks.push(function post_build_linux64(done) {
-            return post_build('linux64', folder, done);
-        });
-    }
-
-    if (platforms.indexOf('armv7') != -1) {
-        postBuildTasks.push(function post_build_armv7(done) {
-            return post_build('armv7', folder, done);
-        });
-    }
-
-    // We need to return at least one task, if not gulp will throw an error
-    if (postBuildTasks.length == 0) {
-        postBuildTasks.push(function post_build_none(done) {
-            done();
-        });
-    }
-    return postBuildTasks;
-}
-
-function post_build(arch, folder, done) {
-
-    if ((arch === 'linux32') || (arch === 'linux64')) {
-        // Copy Ubuntu launcher scripts to destination dir
-        var launcherDir = path.join(folder, pkg.name, arch);
-        console.log('Copy Ubuntu launcher scripts to ' + launcherDir);
-        return gulp.src('assets/linux/**')
-                   .pipe(gulp.dest(launcherDir));
-    }
-
-    if (arch === 'armv7') {
-        console.log('Moving ARMv7 build from "linux32" to "armv7" directory...');
-        fse.moveSync(path.join(folder, pkg.name, 'linux32'), path.join(folder, pkg.name, 'armv7'));
-    }
-
-    return done();
+    buildNWApps(platforms, 'normal', APPS_DIR, done);
 }
 
 // Create debug app directories in ./debug
@@ -346,127 +273,52 @@ function debug(done) {
     var platforms = getPlatforms();
     removeItem(platforms, 'chromeos');
 
-    buildNWAppsWrapper(platforms, 'sdk', DEBUG_DIR, done);
+    buildNWApps(platforms, 'sdk', DEBUG_DIR, done);
 }
 
-function injectARMCache(flavor, callback) {
-    var flavorPostfix = `-${flavor}`;
-    var flavorDownloadPostfix = flavor !== 'normal' ? `-${flavor}` : '';
-    clean_cache().then(function() {
-        if (!fs.existsSync('./cache')) {
-            fs.mkdirSync('./cache');
-        }
-        fs.closeSync(fs.openSync('./cache/_ARMv7_IS_CACHED', 'w'));
-        var versionFolder = `./cache/${nwBuilderOptions.version}${flavorPostfix}`;
-        if (!fs.existsSync(versionFolder)) {
-            fs.mkdirSync(versionFolder);
-        }
-        if (!fs.existsSync(versionFolder + '/linux32')) {
-            fs.mkdirSync(`${versionFolder}/linux32`);
-        }
-        var downloadedArchivePath = `${versionFolder}/nwjs${flavorPostfix}-v${nwArmVersion}-linux-arm.tar.gz`;
-        var downloadUrl = `https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/v${nwArmVersion}/nwjs${flavorDownloadPostfix}-v${nwArmVersion}-linux-arm.tar.gz`;
-        if (fs.existsSync(downloadedArchivePath)) {
-            console.log('Prebuilt ARMv7 binaries found in /tmp');
-            downloadDone(flavorDownloadPostfix, downloadedArchivePath, versionFolder);
-        } else {
-            console.log(`Downloading prebuilt ARMv7 binaries from "${downloadUrl}"...`);
-            process.stdout.write('> Starting download...\r');
-            var armBuildBinary = fs.createWriteStream(downloadedArchivePath);
-            var request = https.get(downloadUrl, function(res) {
-                var totalBytes = res.headers['content-length'];
-                var downloadedBytes = 0;
-                res.pipe(armBuildBinary);
-                res.on('data', function (chunk) {
-                    downloadedBytes += chunk.length;
-                    process.stdout.write(`> ${parseInt((downloadedBytes * 100) / totalBytes)}% done             \r`);
-                });
-                armBuildBinary.on('finish', function() {
-                    process.stdout.write('> 100% done             \n');
-                    armBuildBinary.close(function() {
-                        downloadDone(flavorDownloadPostfix, downloadedArchivePath, versionFolder);
-                    });
-                });
-            });
-        }
-    });
-
-    function downloadDone(flavorDownloadPostfix, downloadedArchivePath, versionFolder) {
-        console.log('Injecting prebuilt ARMv7 binaries into Linux32 cache...');
-        targz.decompress({
-            src: downloadedArchivePath,
-            dest: versionFolder,
-        }, function(err) {
-            if (err) {
-                console.log(err);
-                clean_debug();
-                process.exit(1);
-            } else {
-                fs.rename(
-                    `${versionFolder}/nwjs${flavorDownloadPostfix}-v${nwArmVersion}-linux-arm`,
-                    `${versionFolder}/linux32`,
-                    (err) => {
-                        if (err) {
-                            console.log(err);
-                            clean_debug();
-                            process.exit(1);
-                        }
-                        callback();
-                    }
-                );
-            }
-        });
+function parsePlatform(platform) {
+    switch (platform) {
+        case 'osx64':
+            return { platform: 'osx', arch: 'x64' };
+        case 'win32':
+            return { platform: 'win', arch: 'ia32' };
+        case 'win64':
+            return { platform: 'win', arch: 'x64' };
+        case 'linux32':
+            return { platform: 'linux', arch: 'ia32' };
+        case 'linux64':
+            return { platform: 'linux', arch: 'x64' };
+        default:
+            throw new Error(`Unsupported platform: ${platform}`);
     }
 }
 
-function buildNWAppsWrapper(platforms, flavor, dir, done) {
-    function buildNWAppsCallback() {
-        buildNWApps(platforms, flavor, dir, done);
-    }
-
-    if (platforms.indexOf('armv7') !== -1) {
-        if (platforms.indexOf('linux32') !== -1) {
-            console.log('Cannot build ARMv7 and Linux32 versions at the same time!');
-            clean_debug();
-            process.exit(1);
-        }
-        removeItem(platforms, 'armv7');
-        platforms.push('linux32');
-
-        if (!fs.existsSync('./cache/_ARMv7_IS_CACHED', 'w')) {
-            console.log('Purging cache because it needs to be overwritten...');
-            clean_cache().then(() => {
-                injectARMCache(flavor, buildNWAppsCallback);
-            })
-        } else {
-            buildNWAppsCallback();
-        }
-    } else {
-        if (platforms.indexOf('linux32') !== -1 && fs.existsSync('./cache/_ARMv7_IS_CACHED')) {
-            console.log('Purging cache because it was previously overwritten...');
-            clean_cache().then(buildNWAppsCallback);
-        } else {
-            buildNWAppsCallback();
-        }
-    }
-}
-
-function buildNWApps(platforms, flavor, dir, done) {
+async function buildNWApps(platforms, flavor, dir, done) {
+    const nwbuild = await import('nw-builder');
     if (platforms.length > 0) {
-        var builder = new NwBuilder(Object.assign({
-            buildDir: dir,
-            platforms: platforms,
-            flavor: flavor
-        }, nwBuilderOptions));
-        builder.on('log', console.log);
-        builder.build(function (err) {
-            if (err) {
-                console.log('Error building NW apps: ' + err);
+        for (const p of platforms) {
+            const { platform, arch } = parsePlatform(p);
+            try {
+                await nwbuild.default({
+                    files: './dist/**/*',
+                    mode: 'build',
+                    version: '0.88.0',
+                    flavor: flavor,
+                    platform: platform,
+                    arch: arch,
+                    outDir: dir,
+                    // macIcns: './assets/osx/app-icon.icns', //TODO
+                    // macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'}, //TODO
+                    // winIco: './src/images/emu_icon.ico', //TODO
+                    zip: false,
+                });
+            } catch (error) {
+                console.log('Error building NW apps: ' + error);
                 clean_debug();
                 process.exit(1);
             }
-            done();
-        });
+        }
+        done();
     } else {
         console.log('No platform suitable for NW Build')
         done();

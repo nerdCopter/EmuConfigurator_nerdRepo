@@ -51,7 +51,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: '12'
+          node-version: '22'
         continue-on-error: false
 
       # for debugging
@@ -68,24 +68,11 @@ jobs:
           echo "ShortSha: ${{ steps.ids.outputs.shortsha }}"
         continue-on-error: true
 
-      - name: which python
-        run: |
-          echo "python version:"
-          python --version
-          which python
-
       # build stuff
       - name: yarn install
         run: |
           npm config set fetch-retry-maxtimeout 600000 -g
-          yarn install --immutable --immutable-cache --check-cache
-
-      # this forces appdmg install even though package.json optionalDependencies has/needs it.
-      - name: setup macos
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        run: |
-          npm install appdmg@0.6.6 --python=python2.7
-        continue-on-error: true
+          yarn install
 
       - name: yarn gulp clean-release
         run: yarn gulp clean-release
