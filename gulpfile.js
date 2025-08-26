@@ -86,8 +86,26 @@ function dist_src_package_json() {
 
 const dist_src = gulp.parallel(dist_src_files, dist_src_root_files, dist_src_package_json);
 
+function dist_npm_libraries() {
+    return gulp.src([
+        './node_modules/lru_map/lru.js',
+        './node_modules/inflection/inflection.min.js',
+        './node_modules/i18next/i18next.min.js',
+        './node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
+        './node_modules/marked/marked.min.js',
+        './node_modules/short-unique-id/dist/short-unique-id.min.js',
+        './node_modules/object-hash/dist/object_hash.js',
+        './node_modules/jquery/dist/jquery.min.js',
+        './node_modules/jbox/dist/jBox.min.js',
+        './node_modules/jquery-ui-npm/jquery-ui.min.js',
+        './node_modules/bluebird/js/browser/bluebird.min.js',
+        './node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js'
+    ])
+    .pipe(gulp.dest(DIST_DIR + 'js/libraries'));
+}
+
 // dist_yarn MUST be done after dist_src
-var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_resources, getChangesetId);
+var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_npm_libraries, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 
