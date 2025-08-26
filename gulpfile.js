@@ -305,6 +305,7 @@ async function buildNWApps(platforms, flavor, dir, done) {
             try {
                 await nwbuild.default({
                     srcDir: './dist',
+                    glob: false,
                     mode: 'build',
                     version: '0.88.0',
                     flavor: flavor,
