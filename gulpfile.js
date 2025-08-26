@@ -298,7 +298,7 @@ async function buildNWApps(platforms, flavor, dir, done) {
             const { platform, arch } = parsePlatform(p);
             try {
                 await nwbuild.default({
-                    files: './dist/**/*',
+                    srcDir: './dist',
                     mode: 'build',
                     version: '0.88.0',
                     flavor: flavor,
