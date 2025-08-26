@@ -206,9 +206,7 @@ async function clean_cache() {
     return deleteAsync(['./cache/**'], { force: true });
 }
 
-// Real work for dist task. Done in another task to call it via
-// run-sequence.
-function dist_src() {
+function dist_src_files() {
     var distSources = [
         './src/**/*',
         '!./src/css/dropdown-lists/LICENSE',
@@ -216,17 +214,25 @@ function dist_src() {
         '!./src/css/opensans_webfontkit/*.{txt,html}',
         '!./src/support/**'
     ];
+    return gulp.src(distSources, { base: 'src' })
+        .pipe(gulp.dest(DIST_DIR));
+}
+
+function dist_src_root_files() {
+    return gulp.src(['manifest.json', 'yarn.lock'])
+        .pipe(gulp.dest(DIST_DIR));
+}
+
+function dist_src_package_json() {
     var packageJson = new stream.Readable;
     packageJson.push(JSON.stringify(pkg,undefined,2));
     packageJson.push(null);
-
     return packageJson
         .pipe(source('package.json'))
-        .pipe(gulp.src(distSources, { base: 'src' }))
-        .pipe(gulp.src('manifest.json', { passthrougth: true }))
-        .pipe(gulp.src('yarn.lock', { passthrougth: true }))
         .pipe(gulp.dest(DIST_DIR));
 }
+
+const dist_src = gulp.parallel(dist_src_files, dist_src_root_files, dist_src_package_json);
 
 function dist_changelog() {
     return gulp.src('changelog.html')
