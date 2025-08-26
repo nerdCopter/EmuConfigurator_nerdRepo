@@ -5,7 +5,6 @@
   "max_msp": "1.54.0",
   "COMMENT": "MAX_MSP required!!!!",
   "main": "main.html",
-  "chromium-args": "--disable-features=nw2",
   "bg-script": "js/eventPage.js",
   "default_locale": "en",
   "scripts": {

@@ -9,7 +9,6 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
-const zip = require('gulp-zip');
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
@@ -162,16 +161,15 @@ function removeItem(platforms, item) {
 function getRunDebugAppCommand(arch) {
     switch (arch) {
     case 'osx64':
-        return 'open ' + path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.app');
+        return 'open ' + path.join(DEBUG_DIR, pkg.name + '.app');
         break;
     case 'linux64':
     case 'linux32':
-    case 'armv7':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name);
+        return path.join(DEBUG_DIR, pkg.name);
         break;
     case 'win32':
     case 'win64':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.exe');
+        return path.join(DEBUG_DIR, pkg.name + '.exe');
         break;
     default:
         return '';
@@ -357,7 +355,14 @@ function start_debug(done) {
     if (platforms.length === 1) {
         var run = getRunDebugAppCommand(platforms[0]);
         console.log('Starting debug app (' + run + ')...');
-        exec(run);
+        exec(run, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+            console.error(`stderr: ${stderr}`);
+        });
     } else {
         console.log('More than one platform specified, not starting debug app');
     }
@@ -398,30 +403,31 @@ function release_win(arch, done) {
 }
 
 // Create distribution package (zip) for windows and linux platforms
-function release_zip(arch) {
-    var src = path.join(APPS_DIR, pkg.name, arch, '**');
+async function release_zip(arch) {
+    var src = path.join(APPS_DIR, '**');
     var output = getReleaseFilename(arch, 'zip');
-    var base = path.join(APPS_DIR, pkg.name, arch);
+    var base = APPS_DIR;
 
-    return compressFiles(src, base, output, 'Emuflight Configurator');
+    return await compressFiles(src, base, output, 'Emuflight Configurator');
 }
 
 // Create distribution package for chromeos platform
-function release_chromeos() {
+async function release_chromeos() {
     var src = path.join(DIST_DIR, '**');
     var output = getReleaseFilename('chromeos', 'zip');
     var base = DIST_DIR;
 
-    return compressFiles(src, base, output, '.');
+    return await compressFiles(src, base, output, '.');
 }
 
 // Compress files from srcPath, using basePath, to outputFile in the RELEASE_DIR
-function compressFiles(srcPath, basePath, outputFile, zipFolder) {
+async function compressFiles(srcPath, basePath, outputFile, zipFolder) {
+    const zip = await import('gulp-zip');
     return gulp.src(srcPath, { base: basePath })
                .pipe(rename(function(actualPath) {
                    actualPath.dirname = path.join(zipFolder, actualPath.dirname);
                }))
-               .pipe(zip(outputFile))
+               .pipe(zip.default(outputFile))
                .pipe(gulp.dest(RELEASE_DIR));
 }
 
@@ -433,7 +439,7 @@ function release_deb(arch, done) {
         return done();
     }
 
-    return gulp.src([path.join(APPS_DIR, pkg.name, arch, '*')])
+    return gulp.src([path.join(APPS_DIR, '*')])
         .pipe(deb({
              package: pkg.name,
              version: pkg.version,
@@ -475,7 +481,7 @@ function release_rpm(arch, done) {
              requires: 'libgconf-2-4',
              prefix: '/opt',
              files:
-                 [ { cwd: path.join(APPS_DIR, pkg.name, arch),
+                 [ { cwd: APPS_DIR,
                      src: '*',
                      dest: `${LINUX_INSTALL_DIR}/${pkg.name}` } ],
              postInstallScript: [`xdg-desktop-menu install ${LINUX_INSTALL_DIR}/${pkg.name}/${pkg.name}.desktop`],
@@ -540,7 +546,7 @@ function release_osx64() {
     return gulp.src(['.'])
         .pipe(appdmg({
             target: path.join(RELEASE_DIR, getReleaseFilename('macOS', 'dmg')),
-            basepath: path.join(APPS_DIR, pkg.name, 'osx64'),
+            basepath: APPS_DIR,
             specification: {
                 'title': 'Emuflight Configurator',
                 //'icon': 'assets/osx/app-icon.icns', // FIXME
@@ -608,12 +614,6 @@ function listReleaseTasks(done) {
         });
         releaseTasks.push(function release_linux32_rpm(done) {
             return release_rpm('linux32', done);
-        });
-    }
-
-    if (platforms.indexOf('armv7') !== -1) {
-        releaseTasks.push(function release_armv7_zip() {
-            return release_zip('armv7');
         });
     }
 
