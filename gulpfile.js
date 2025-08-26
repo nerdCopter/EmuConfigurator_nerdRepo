@@ -58,6 +58,34 @@ gulp.task('clean-cache', clean_cache);
 const getChangesetId = gulp.series(getHash, writeChangesetId);
 gulp.task('get-changeset-id', getChangesetId);
 
+function dist_src_files() {
+    var distSources = [
+        './src/**/*',
+        '!./src/css/dropdown-lists/LICENSE',
+        '!./src/css/font-awesome/css/font-awesome.css',
+        '!./src/css/opensans_webfontkit/*.{txt,html}',
+        '!./src/support/**'
+    ];
+    return gulp.src(distSources, { base: 'src' })
+        .pipe(gulp.dest(DIST_DIR));
+}
+
+function dist_src_root_files() {
+    return gulp.src(['manifest.json', 'yarn.lock'])
+        .pipe(gulp.dest(DIST_DIR));
+}
+
+function dist_src_package_json() {
+    var packageJson = new stream.Readable;
+    packageJson.push(JSON.stringify(pkg,undefined,2));
+    packageJson.push(null);
+    return packageJson
+        .pipe(source('package.json'))
+        .pipe(gulp.dest(DIST_DIR));
+}
+
+const dist_src = gulp.parallel(dist_src_files, dist_src_root_files, dist_src_package_json);
+
 // dist_yarn MUST be done after dist_src
 var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
@@ -205,34 +233,6 @@ async function clean_cache() {
     const {deleteAsync} = await import('del');
     return deleteAsync(['./cache/**'], { force: true });
 }
-
-function dist_src_files() {
-    var distSources = [
-        './src/**/*',
-        '!./src/css/dropdown-lists/LICENSE',
-        '!./src/css/font-awesome/css/font-awesome.css',
-        '!./src/css/opensans_webfontkit/*.{txt,html}',
-        '!./src/support/**'
-    ];
-    return gulp.src(distSources, { base: 'src' })
-        .pipe(gulp.dest(DIST_DIR));
-}
-
-function dist_src_root_files() {
-    return gulp.src(['manifest.json', 'yarn.lock'])
-        .pipe(gulp.dest(DIST_DIR));
-}
-
-function dist_src_package_json() {
-    var packageJson = new stream.Readable;
-    packageJson.push(JSON.stringify(pkg,undefined,2));
-    packageJson.push(null);
-    return packageJson
-        .pipe(source('package.json'))
-        .pipe(gulp.dest(DIST_DIR));
-}
-
-const dist_src = gulp.parallel(dist_src_files, dist_src_root_files, dist_src_package_json);
 
 function dist_changelog() {
     return gulp.src('changelog.html')
