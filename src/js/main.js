@@ -2,9 +2,6 @@
 
 window.$ = window.jQuery = require('jquery');
 
-/*global presetsFolders */
-/*eslint no-undef: "error"*/
-
 window.PRESETS = {};
 
 var HttpClient = function() {
@@ -24,20 +21,36 @@ var HttpClient = function() {
 var client = new HttpClient();
 
 var presetUrls = [
-    { key: 'nonHELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-nonHELIO.json' },
-    { key: 'HELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-HELIO.json' },
-    { key: 'nonHELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-nonHELIO.json' },
-    { key: 'HELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-HELIO.json' },
-    { key: 'nonHELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-nonHELIO.json' },
-    { key: 'HELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-HELIO.json' }
+    { key: 'presets-nonHELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-nonHELIO.json' },
+    { key: 'presets-HELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-HELIO.json' },
+    { key: 'presets-nonHELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-nonHELIO.json' },
+    { key: 'presets-HELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-HELIO.json' },
+    { key: 'presets-nonHELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-nonHELIO.json' },
+    { key: 'presets-HELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-HELIO.json' }
 ];
 
-presetUrls.forEach(function(preset) {
-    client.get(preset.url, function(response) {
-        try {
-            PRESETS[preset.key] = JSON.parse(response);
-        } catch (e) {
-            console.error('Failed to parse preset:', preset.key, e);
+// Load presets from cache or fetch from network
+chrome.storage.local.get(presetUrls.map(p => p.key), function(cachedPresets) {
+    presetUrls.forEach(function(preset) {
+        if (cachedPresets[preset.key]) {
+            try {
+                PRESETS[preset.key] = JSON.parse(cachedPresets[preset.key]);
+                console.log('Loaded preset from cache:', preset.key);
+            } catch (e) {
+                console.error('Failed to parse cached preset:', preset.key, e);
+            }
+        } else {
+            client.get(preset.url, function(response) {
+                try {
+                    PRESETS[preset.key] = JSON.parse(response);
+                    var obj = {};
+                    obj[preset.key] = response;
+                    chrome.storage.local.set(obj);
+                    console.log('Fetched and cached preset:', preset.key);
+                } catch (e) {
+                    console.error('Failed to parse preset:', preset.key, e);
+                }
+            });
         }
     });
 });
@@ -101,7 +114,7 @@ function startProcess() {
         console.log("closing...");
         this.hide();
         MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
-        this.close(true);
+        GUI.nwGui.App.quit();
     }
 
     // translate to user-selected language

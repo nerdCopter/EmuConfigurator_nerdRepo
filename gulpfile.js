@@ -64,7 +64,6 @@ function dist_src_files() {
         './src/**/*',
         '!./src/css/dropdown-lists/LICENSE',
         '!./src/css/font-awesome/css/font-awesome.css',
-        '!./src/css/opensans_webfontkit/*.{txt,html}',
         '!./src/support/**'
     ];
     return gulp.src(distSources, { base: 'src' })
