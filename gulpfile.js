@@ -104,8 +104,15 @@ function dist_npm_libraries() {
     .pipe(gulp.dest(DIST_DIR + 'js/libraries'));
 }
 
+function dist_fontawesome() {
+    gulp.src('./node_modules/@fortawesome/fontawesome-free/css/all.min.css')
+        .pipe(gulp.dest(DIST_DIR + 'css/font-awesome/css'));
+    return gulp.src('./node_modules/@fortawesome/fontawesome-free/webfonts/*')
+        .pipe(gulp.dest(DIST_DIR + 'css/font-awesome/webfonts'));
+}
+
 // dist_yarn MUST be done after dist_src
-var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_npm_libraries, dist_resources, getChangesetId);
+var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_npm_libraries, dist_fontawesome, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 

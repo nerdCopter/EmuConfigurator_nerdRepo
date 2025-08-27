@@ -2910,7 +2910,10 @@ TABS.osd.initialize = function (callback) {
         FONT.initData();
 
         fontPresetsElement.change(function (e) {
+            console.log('fontPresetsElement:', this);
             var $font = $(this).find('option:selected');
+            console.log('$font:', $font);
+            console.log('$font.data("font-file"):', $font.data('font-file'));
             //moved font versioning to TABS.osd.initialize
             $('.font-manager-version-info').text(i18n.getMessage('osdDescribeFontVersion' + fontver));
             $.get('./resources/osd/' + fontver + '/' + $font.data('font-file') + '.mcm', function (data) {

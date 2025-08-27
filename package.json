@@ -57,7 +57,8 @@
     "request": "^2.88.2",
     "short-unique-id": "~5.2.0",
     "tslib": "~2.6.3",
-    "universal-ga": "~1.2.0"
+    "universal-ga": "~1.2.0",
+    "@fortawesome/fontawesome-free": "^6.5.2"
   },
   "devDependencies": {
     "chai": "^4.0.0",
