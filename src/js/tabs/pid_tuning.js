@@ -85,27 +85,27 @@ TABS.pid_tuning.initialize = function(callback) {
 
     if (CONFIG.boardIdentifier !== "HESP" && CONFIG.boardIdentifier !== "SX10" && CONFIG.boardIdentifier !== "FLUX") {
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
-            presetJson = require(presetsFolders + "/presets-nonHELIO-v0.4.0.json");
+            presetJson = PRESETS['nonHELIO-v0.4.0'];
             console.log("Using 0.4.0 nonHelio presets");
         } else {
             if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
-                presetJson = require(presetsFolders + "/presets-nonHELIO-v0.3.0.json");
+                presetJson = PRESETS['nonHELIO-v0.3.0'];
                 console.log("Using 0.3.0 nonHelio presets");
             } else {
-                presetJson = require(presetsFolders + "/presets-nonHELIO-v0.2.0.json");
+                presetJson = PRESETS['nonHELIO-v0.2.0'];
                 console.log("Using 0.2.0 nonHelio presets");
             }
         }
     } else {
         if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
-            presetJson = require(presetsFolders + "/presets-HELIO-v0.4.0.json");
+            presetJson = PRESETS['HELIO-v0.4.0'];
             console.log("Using 0.4.0 Helio presets");
         } else {
             if (semver.gte(CONFIG.apiVersion, "1.46.0")) {
-                presetJson = require(presetsFolders + "/presets-HELIO-v0.3.0.json");
+                presetJson = PRESETS['HELIO-v0.3.0'];
                 console.log("Using 0.3.0 Helio presets");
             } else {
-                presetJson = require(presetsFolders + "/presets-HELIO-v0.2.0.json");
+                presetJson = PRESETS['HELIO-v0.2.0'];
                 console.log("Using 0.2.0 Helio presets");
             }
         }

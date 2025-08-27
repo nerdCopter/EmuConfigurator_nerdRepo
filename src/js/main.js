@@ -1,15 +1,11 @@
 'use strict';
 
+window.$ = window.jQuery = require('jquery');
+
 /*global presetsFolders */
 /*eslint no-undef: "error"*/
 
-const fs = require('fs');
-const os = require('os');
-
-// folder to store the downloaded preset files in
-// TODO: migrate to non-global
-
-const presetsFolders = os.tmpdir();
+window.PRESETS = {};
 
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
@@ -24,85 +20,27 @@ var HttpClient = function() {
     }
 }
 
-console.log('Presets file location: ' + presetsFolders);
-
 // TODO: move all of this to a class instead of being global
 var client = new HttpClient();
 
-// TODO: why seperate files?
-var nonHelioUrlv020 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-nonHELIO.json";
-var helioUrlv020 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-HELIO.json";
+var presetUrls = [
+    { key: 'nonHELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-nonHELIO.json' },
+    { key: 'HELIO-v0.2.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.2.0/presets-HELIO.json' },
+    { key: 'nonHELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-nonHELIO.json' },
+    { key: 'HELIO-v0.3.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-HELIO.json' },
+    { key: 'nonHELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-nonHELIO.json' },
+    { key: 'HELIO-v0.4.0', url: 'https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-HELIO.json' }
+];
 
-var nonHelioUrlv030 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-nonHELIO.json";
-var helioUrlv030 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.3.0/presets-HELIO.json";
-
-var nonHelioUrlv040 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-nonHELIO.json";
-var helioUrlv040 = "https://raw.githubusercontent.com/emuflight/emuflight-presets/master/presets-0.4.0/presets-HELIO.json";
-
-// TODO: migrate to a function to get rid of code duplication
-
-client.get(nonHelioUrlv020, function(response) {
-  fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response, (err) => {
-    if (err) {
-      // FIXME: add error handling
-      console.error(err);
-      return;
-    }
-    //file written successfully
-  })
-});
-
-client.get(helioUrlv020, function(response) {
-    fs.writeFile(presetsFolders + "/presets-HELIO-v0.2.0.json", response, (err) => {
-        if (err) {
-        console.error(err);
-        return;
+presetUrls.forEach(function(preset) {
+    client.get(preset.url, function(response) {
+        try {
+            PRESETS[preset.key] = JSON.parse(response);
+        } catch (e) {
+            console.error('Failed to parse preset:', preset.key, e);
         }
-        //file written successfully
-    })
+    });
 });
-
-client.get(nonHelioUrlv030, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
-  });
-
-  client.get(helioUrlv030, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.3.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
-  });
-
-client.get(nonHelioUrlv040, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
-  });
-
-  client.get(helioUrlv040, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.4.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
-  });
 
 
 $(document).ready(function () {
