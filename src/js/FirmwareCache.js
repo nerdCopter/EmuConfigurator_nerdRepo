@@ -1,5 +1,7 @@
 'use strict';
 
+const LRUMap = require('lru_map');
+
 /**
  * Caching of previously downloaded firmwares and release descriptions
  * 
@@ -250,3 +252,5 @@ let FirmwareCache = (function () {
         invalidate: invalidate,
     };
 })();
+
+module.exports = FirmwareCache;

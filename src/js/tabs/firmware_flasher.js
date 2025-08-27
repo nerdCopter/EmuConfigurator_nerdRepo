@@ -1,5 +1,7 @@
 'use strict';
 
+const FirmwareCache = require('../FirmwareCache.js');
+
 TABS.firmware_flasher = {
     releases: null,
     releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/EmuFlight/releases'),

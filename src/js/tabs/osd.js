@@ -1,5 +1,7 @@
 'use strict';
 
+const inflection = require('inflection');
+
 var fontCount;
 
 var SYM = SYM || {};
