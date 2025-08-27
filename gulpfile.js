@@ -88,8 +88,8 @@ const dist_src = gulp.parallel(dist_src_files, dist_src_root_files, dist_src_pac
 
 function dist_npm_libraries() {
     return gulp.src([
-        './node_modules/lru_map/lru.js',
-        './node_modules/inflection/inflection.min.js',
+        './node_modules/lru_map/dist/lru.js',
+        './node_modules/inflection/lib/inflection.js',
         './node_modules/i18next/i18next.min.js',
         './node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
         './node_modules/marked/marked.min.js',
