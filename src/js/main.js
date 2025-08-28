@@ -1,8 +1,99 @@
 'use strict';
 
+// aplication's global objects
+window.CONFIGURATOR = {};
+window.TABS = {};
+window.GUI = {};
+window.FC = {};
+
+// expose jquery as a global
 window.$ = window.jQuery = require('jquery');
 
-window.PRESETS = {};
+// load all the libraries
+require('jquery-ui-npm');
+require('jquery-textcomplete');
+require('./libraries/jquery.ba-throttle-debounce.min.js');
+require('./libraries/jquery.flightindicators.js');
+require('./libraries/jquery.nouislider.all.min.js');
+require('./libraries/d3.min.js');
+require('./libraries/three/three.min.js');
+require('./libraries/three/Projector.js');
+require('./libraries/three/CanvasRenderer.js');
+require('./libraries/semver.js');
+require('./libraries/switchery/switchery.js');
+require('bluebird');
+require('inflection');
+require('marked');
+require('short-unique-id');
+require('object-hash');
+require('i18next');
+require('i18next-xhr-backend');
+require('./libraries/q.js');
+
+
+// load all the application files
+require('./injected_methods.js');
+require('./ConfigStorage.js');
+require('./data_storage.js');
+require('./fc.js');
+require('./port_handler.js');
+require('./port_usage.js');
+require('./serial.js');
+require('./gui.js');
+require('./huffman.js');
+require('./default_huffman_tree.js');
+require('./model.js');
+require('./serial_backend.js');
+require('./msp/MSPCodes.js');
+require('./msp.js');
+require('./msp/MSPHelper.js');
+require('./backup_restore.js');
+require('./peripherals.js');
+require('./protocols/stm32.js');
+require('./protocols/stm32usbdfu.js');
+require('./localization.js');
+require('./boards.js');
+require('./RateCurve.js');
+require('./Features.js');
+require('./Beepers.js');
+require('./release_checker.js');
+require('./jenkins_loader.js');
+require('./tabs/static_tab.js');
+require('./tabs/landing.js');
+require('./tabs/setup.js');
+require('./tabs/setup_osd.js');
+require('./tabs/help.js');
+require('./tabs/ports.js');
+require('./tabs/configuration.js');
+require('./tabs/pid_tuning.js');
+require('./tabs/receiver.js');
+require('./tabs/auxiliary.js');
+require('./tabs/adjustments.js');
+require('./tabs/servos.js');
+require('./tabs/gps.js');
+require('./tabs/motors.js');
+require('./tabs/led_strip.js');
+require('./tabs/sensors.js');
+require('./tabs/cli.js');
+require('./tabs/logging.js');
+require('./tabs/onboard_logging.js');
+require('./FirmwareCache.js');
+require('./tabs/firmware_flasher.js');
+require('./tabs/failsafe.js');
+require('./LogoManager.js');
+require('./tabs/osd.js');
+require('./tabs/power.js');
+require('./tabs/transponder.js');
+require('./CliAutoComplete.js');
+require('./DarkTheme.js');
+require('./tabs/vtx.js');
+require('./utils/VtxDeviceStatus/VtxDeviceStatusFactory.js');
+require('./utils/VtxDeviceStatus/VtxDeviceStatus.js');
+require('./utils/VtxDeviceStatus/TrampDeviceStatus.js');
+require('./utils/VtxDeviceStatus/SmartAudioDeviceStatus.js');
+require('./utils/VtxDeviceStatus/Rtc6705DeviceStatus.js');
+
+// Presets are loaded async, so they are not required here
 
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
@@ -17,7 +108,6 @@ var HttpClient = function() {
     }
 }
 
-// TODO: move all of this to a class instead of being global
 var client = new HttpClient();
 
 var presetUrls = [
