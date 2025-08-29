@@ -12,15 +12,6 @@ window.$ = window.jQuery = require('jquery');
 // load all the libraries
 require('jquery-ui-npm');
 require('jquery-textcomplete');
-require('./libraries/jquery.ba-throttle-debounce.min.js');
-require('./libraries/jquery.flightindicators.js');
-require('./libraries/jquery.nouislider.all.min.js');
-require('./libraries/d3.min.js');
-require('./libraries/three/three.min.js');
-require('./libraries/three/Projector.js');
-require('./libraries/three/CanvasRenderer.js');
-require('./libraries/semver.js');
-require('./libraries/switchery/switchery.js');
 require('bluebird');
 require('inflection');
 require('marked');
@@ -28,7 +19,6 @@ require('short-unique-id');
 require('object-hash');
 require('i18next');
 require('i18next-xhr-backend');
-require('./libraries/q.js');
 
 
 // load all the application files
