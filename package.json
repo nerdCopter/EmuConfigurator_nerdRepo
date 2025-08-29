@@ -52,7 +52,7 @@
     "jquery-textcomplete": "~1.8.5",
     "jquery-ui-npm": "1.12.0",
     "lru_map": "~0.4.1",
-    "marked": "~12.0.2",
+    "marked": "^4.1.1",
     "object-hash": "~3.0.0",
     "request": "^2.88.2",
     "short-unique-id": "~5.2.0",
