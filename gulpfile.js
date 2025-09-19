@@ -103,8 +103,13 @@ function dist_fontawesome() {
         .pipe(gulp.dest(DIST_DIR + 'css/font-awesome/webfonts'));
 }
 
+function dist_libraries() {
+    return gulp.src('./libraries/**/*', { base: '.'})
+        .pipe(gulp.dest(DIST_DIR + 'js'));
+}
+
 // dist_yarn MUST be done after dist_src
-var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, bundle, dist_fontawesome, dist_resources, getChangesetId);
+var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, bundle, dist_fontawesome, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 
