@@ -21,8 +21,6 @@ window.ShortUniqueId = require('short-unique-id');
 window.objectHash = require('object-hash');
 window.i18n = require('i18next');
 window.i18nextXHRBackend = require('i18next-xhr-backend');
-
-
 // load all the application files
 require('./injected_methods.js');
 require('./ConfigStorage.js');

@@ -91,6 +91,7 @@ function bundle() {
         entries: 'src/js/main.js',
         debug: true
     })
+    .exclude('jquery')
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest(DIST_DIR));
@@ -108,8 +109,25 @@ function dist_libraries() {
         .pipe(gulp.dest(DIST_DIR + 'js'));
 }
 
+function dist_npm_libraries() {
+    return gulp.src([
+        './node_modules/jquery/dist/jquery.min.js',
+        './node_modules/lru_map/dist/lru.js',
+        './node_modules/inflection/inflection.min.js',
+        './node_modules/i18next/i18next.min.js',
+        './node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
+        './node_modules/marked/lib/marked.cjs',
+        './node_modules/short-unique-id/dist/short-unique-id.min.js',
+        './node_modules/object-hash/dist/object_hash.js',
+        './node_modules/jquery-ui-npm/jquery-ui.min.js',
+        './node_modules/bluebird/js/browser/bluebird.min.js',
+        './node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js'
+    ])
+    .pipe(gulp.dest(DIST_DIR + 'js/libraries'));
+}
+
 // dist_yarn MUST be done after dist_src
-var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, bundle, dist_fontawesome, dist_resources, getChangesetId);
+var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, dist_npm_libraries, bundle, dist_fontawesome, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 
