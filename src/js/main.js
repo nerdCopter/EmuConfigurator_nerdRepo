@@ -10,7 +10,7 @@ window.FC = {};
 window.$ = window.jQuery = require('jquery');
 
 // load all the libraries
-require('jquery-ui-npm');
+require('jquery-ui-npm/jquery-ui.min.js');
 require('jquery-textcomplete');
 require('bluebird');
 require('inflection');
