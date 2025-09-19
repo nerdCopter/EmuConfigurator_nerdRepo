@@ -104,7 +104,7 @@ function dist_fontawesome() {
 }
 
 // dist_yarn MUST be done after dist_src
-var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, dist_libraries, bundle, dist_fontawesome, dist_resources, getChangesetId);
+var distBuild = gulp.series(dist_src, dist_changelog, dist_yarn, dist_locale, bundle, dist_fontawesome, dist_resources, getChangesetId);
 var distRebuild = gulp.series(clean_dist, distBuild);
 gulp.task('dist', distRebuild);
 
@@ -268,11 +268,6 @@ function dist_yarn() {
 function dist_locale() {
     return gulp.src('./locales/**/*', { base: 'locales'})
         .pipe(gulp.dest(DIST_DIR + '_locales'));
-}
-
-function dist_libraries() {
-    return gulp.src('./libraries/**/*', { base: '.'})
-        .pipe(gulp.dest(DIST_DIR + 'js'));
 }
 
 function dist_resources() {

@@ -5,6 +5,8 @@ window.CONFIGURATOR = {};
 window.TABS = {};
 window.GUI = {};
 window.FC = {};
+window.SYM = {};
+window.FONT = {};
 
 // expose jquery as a global
 window.$ = window.jQuery = require('jquery');
@@ -12,13 +14,23 @@ window.$ = window.jQuery = require('jquery');
 // load all the libraries
 require('jquery-ui-npm/jquery-ui.min.js');
 require('jquery-textcomplete');
-require('bluebird');
-require('inflection');
-require('marked/lib/marked.cjs');
-require('short-unique-id');
-require('object-hash');
-require('i18next');
-require('i18next-xhr-backend');
+require('../../libraries/jquery.ba-throttle-debounce.min.js');
+require('../../libraries/jquery.flightindicators.js');
+require('../../libraries/jquery.nouislider.all.min.js');
+require('../../libraries/d3.min.js');
+require('../../libraries/three/three.min.js');
+require('../../libraries/three/Projector.js');
+require('../../libraries/three/CanvasRenderer.js');
+require('../../libraries/semver.js');
+require('../../libraries/switchery/switchery.js');
+window.Promise = require('bluebird');
+window.inflection = require('inflection');
+window.marked = require('marked/lib/marked.cjs');
+window.ShortUniqueId = require('short-unique-id');
+window.objectHash = require('object-hash');
+window.i18n = require('i18next');
+window.i18nextXHRBackend = require('i18next-xhr-backend');
+window.Q = require('../../libraries/q.js');
 
 
 // load all the application files
