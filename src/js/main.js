@@ -14,7 +14,7 @@ require('jquery-ui-npm');
 require('jquery-textcomplete');
 require('bluebird');
 require('inflection');
-require('marked');
+require('marked/lib/marked.cjs');
 require('short-unique-id');
 require('object-hash');
 require('i18next');
