@@ -18,15 +18,6 @@ window.$ = window.jQuery = require('jquery');
 // Browserify will wrap them, but they will attach themselves to `window`.
 require('jquery-ui-npm');
 require('jquery-textcomplete');
-require('./libraries/jquery.ba-throttle-debounce.min.js');
-require('./libraries/jquery.flightindicators.js');
-require('./libraries/jquery.nouislider.all.min.js');
-require('./libraries/d3.min.js');
-window.THREE = require('three'); // three.js needs to be explicitly attached
-require('./libraries/three/Projector.js');
-require('./libraries/three/CanvasRenderer.js');
-window.semver = require('semver-min');
-window.Switchery = require('switchery-latest');
 window.Promise = require('bluebird');
 window.inflection = require('inflection');
 window.marked = require('marked');
