@@ -113,7 +113,7 @@ function dist_npm_libraries() {
     return gulp.src([
         './node_modules/jquery/dist/jquery.min.js',
         './node_modules/lru_map/dist/lru.js',
-        './node_modules/inflection/inflection.min.js',
+        './node_modules/inflection/lib/inflection.js',
         './node_modules/i18next/i18next.min.js',
         './node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
         './node_modules/marked/lib/marked.cjs',
