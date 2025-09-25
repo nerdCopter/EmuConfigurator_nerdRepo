@@ -12,7 +12,7 @@ const path = require('path');
 
 const zip = require('gulp-zip');
 const del = require('del');
-const NwBuilder = require('nw-builder');
+const nwbuild = require('nw-builder');
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
@@ -94,7 +94,7 @@ gulp.task('dist', distRebuild);
 var appsBuild = gulp.series(gulp.parallel(clean_apps, distRebuild), apps, gulp.parallel(listPostBuildTasks(APPS_DIR)));
 gulp.task('apps', appsBuild);
 
-var debugBuild = gulp.series(distBuild, debug, gulp.parallel(listPostBuildTasks(DEBUG_DIR)), start_debug)
+var debugBuild = gulp.series(clean_debug, distBuild, debug, gulp.parallel(listPostBuildTasks(DEBUG_DIR)), start_debug)
 gulp.task('debug', debugBuild);
 
 var releaseBuild = gulp.series(gulp.parallel(clean_release, appsBuild), gulp.parallel(listReleaseTasks()));
@@ -451,24 +451,55 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
     }
 }
 
-function buildNWApps(platforms, flavor, dir, done) {
+async function buildNWApps(platforms, flavor, dir, done) {
     if (platforms.length > 0) {
-        var builder = new NwBuilder(Object.assign({
-            buildDir: dir,
-            platforms: platforms,
-            flavor: flavor
-        }, nwBuilderOptions));
-        builder.on('log', console.log);
-        builder.build(function (err) {
-            if (err) {
-                console.log('Error building NW apps: ' + err);
-                clean_debug();
-                process.exit(1);
+        try {
+            for (const platformStr of platforms) {
+                let platform, arch;
+                if (platformStr === 'linux64') {
+                    platform = 'linux';
+                    arch = 'x64';
+                } else if (platformStr === 'linux32') {
+                    platform = 'linux';
+                    arch = 'ia32';
+                } else if (platformStr === 'win64') {
+                    platform = 'win';
+                    arch = 'x64';
+                } else if (platformStr === 'win32') {
+                    platform = 'win';
+                    arch = 'ia32';
+                } else if (platformStr === 'osx64') {
+                    platform = 'osx';
+                    arch = 'x64';
+                } else {
+                    throw new Error(`Unsupported platform: ${platformStr}`);
+                }
+
+                const outDirForPlatform = path.join(dir, pkg.name, platformStr);
+
+                const options = {
+                    version: nwBuilderOptions.version,
+                    srcDir: './dist/**/*',
+                    outDir: outDirForPlatform,
+                    flavour: flavor,
+                    platform,
+                    arch,
+                    macIcns: nwBuilderOptions.macIcns,
+                    macPlist: nwBuilderOptions.macPlist,
+                    winIco: nwBuilderOptions.winIco,
+                    zip: nwBuilderOptions.zip,
+                };
+
+                await nwbuild.default(options);
             }
             done();
-        });
+        } catch (err) {
+            console.log('Error building NW apps: ' + err);
+            clean_debug();
+            process.exit(1);
+        }
     } else {
-        console.log('No platform suitable for NW Build')
+        console.log('No platform suitable for NW Build');
         done();
     }
 }

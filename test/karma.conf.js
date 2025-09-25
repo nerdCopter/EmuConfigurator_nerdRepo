@@ -1,8 +1,12 @@
 module.exports = function(config) {
     config.set({
         basePath: '../',
-        frameworks: ['mocha', 'chai', 'sinon-chai'],
+        frameworks: ['mocha'],
         files: [
+            './node_modules/chai/chai.js',
+            './test/test-setup.js',
+            './node_modules/sinon/pkg/sinon.js',
+            './node_modules/sinon-chai/lib/sinon-chai.js',
             './node_modules/jquery/dist/jquery.min.js',
             './node_modules/bluebird/js/browser/bluebird.min.js',
             './src/js/serial.js',
