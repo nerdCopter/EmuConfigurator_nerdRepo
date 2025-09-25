@@ -25,7 +25,6 @@ window.ShortUniqueId = require('short-unique-id');
 window.objectHash = require('object-hash');
 window.i18n = require('i18next');
 require('i18next-xhr-backend');
-window.Q = require('./libraries/q.js');
 
 // --- Application Modules ---
 // Load all application modules in the correct order.
