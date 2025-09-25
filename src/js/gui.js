@@ -393,3 +393,5 @@ GUI_control.prototype.isOther = function () {
 
 // initialize object into GUI variable
 var GUI = new GUI_control();
+
+module.exports = GUI;

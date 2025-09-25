@@ -1,5 +1,7 @@
 'use strict';
 
+const huffman = require('./huffman.js');
+
 var defaultHuffmanTree = [
     { value: 0x00, codeLen: 2, code: 0x0003 },  //  11
     { value: 0x01, codeLen: 3, code: 0x0005 },  //  101
@@ -222,7 +224,7 @@ var defaultHuffmanTree = [
     { value: 0xD7, codeLen: 10, code: 0x0018 },  //  0000011000
     { value: 0xD8, codeLen: 10, code: 0x0017 },  //  0000010111
     { value: 0xD9, codeLen: 10, code: 0x0016 },  //  0000010110
-    { value: 0xDA, codeLen: 10, code: 0x0015 },  //  0000010101
+    { value: 0xDA, codeLen: 10, code: 0x0015 },  //  00010101
     { value: 0xDB, codeLen: 10, code: 0x0014 },  //  0000010100
     { value: 0xDC, codeLen: 10, code: 0x0013 },  //  0000010011
     { value: 0xDE, codeLen: 10, code: 0x0012 },  //  0000010010
@@ -272,3 +274,6 @@ var defaultHuffmanLenIndex = function()
 
     return result;
 }();
+
+exports.defaultHuffmanTree = defaultHuffmanTree;
+exports.defaultHuffmanLenIndex = defaultHuffmanLenIndex;

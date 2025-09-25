@@ -13,3 +13,5 @@ var CONFIGURATOR = {
     'cliValid': false,
     'gitChangesetId': 'unknown'
 };
+
+module.exports = CONFIGURATOR;

@@ -623,3 +623,5 @@ var FC = {
         return versionFilterDefaults;
     },
 };
+
+module.exports = FC;

@@ -1,8 +1,8 @@
 'use strict';
 
-var HUFFMAN_EOF = -1;
+exports.HUFFMAN_EOF = -1;
 
-function huffmanDecodeBuf(inBuf, inBufCharacterCount, huffmanTree, huffmanLenIndex)
+exports.huffmanDecodeBuf = function(inBuf, inBufCharacterCount, huffmanTree, huffmanLenIndex)
 {
     var code = 0;
     var codeLen = 0;
