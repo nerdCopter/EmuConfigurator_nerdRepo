@@ -54,7 +54,7 @@ var nwBuilderOptions = {
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
-    zip: false,
+    zip: true,
     downloadUrl: 'https://dl.nwjs.io',
     manifestUrl: 'https://nwjs.io/versions.json'
 };
@@ -83,6 +83,35 @@ gulp.task('clean-release', clean_release);
 
 gulp.task('clean-cache', clean_cache);
 
+gulp.task('download-nwjs', function(done) {
+    const nwjsSdkDir = './nwjs-sdk';
+    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+
+    if (fs.existsSync(nwjsSdkDir)) {
+        console.log('NW.js SDK already exists, skipping download.');
+        return done();
+    }
+
+    console.log('Downloading NW.js SDK...');
+    const file = fs.createWriteStream(nwjsTarball);
+    https.get(nwjsUrl, function(response) {
+        response.pipe(file);
+        file.on('finish', function() {
+            file.close(function() {
+                console.log('NW.js SDK downloaded. Extracting...');
+                child_process.execSync(`mkdir ${nwjsSdkDir} && tar -xzf ${nwjsTarball} -C ${nwjsSdkDir} --strip-components=1`);
+                console.log('NW.js SDK extracted.');
+                fs.unlinkSync(nwjsTarball); // Clean up tarball
+                done();
+            });
+        });
+    }).on('error', function(err) {
+        fs.unlink(nwjsTarball); // Delete the file async. (But we don't check the result)
+        done(err);
+    });
+});
+
 // Function definitions are processed before function calls.
 const getChangesetId = gulp.series(getHash, writeChangesetId);
 gulp.task('get-changeset-id', getChangesetId);
@@ -95,7 +124,7 @@ gulp.task('dist', distRebuild);
 var appsBuild = gulp.series(gulp.parallel(clean_apps, distRebuild), apps, gulp.parallel(listPostBuildTasks(APPS_DIR)));
 gulp.task('apps', appsBuild);
 
-var debugBuild = gulp.series(distBuild, debug, gulp.parallel(listPostBuildTasks(DEBUG_DIR)), start_debug)
+var debugBuild = gulp.series(clean_debug, distBuild, 'download-nwjs', gulp.parallel(listPostBuildTasks(DEBUG_DIR)), start_debug)
 gulp.task('debug', debugBuild);
 
 var releaseBuild = gulp.series(gulp.parallel(clean_release, appsBuild), gulp.parallel(listReleaseTasks()));
@@ -105,6 +134,35 @@ var multiReleaseBuild = gulp.series(gulp.parallel(appsBuild), gulp.parallel(list
 gulp.task('mrelease', multiReleaseBuild);
 
 gulp.task('default', debugBuild);
+
+gulp.task('download-nwjs', function(done) {
+    const nwjsSdkDir = './nwjs-sdk';
+    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+
+    if (fs.existsSync(nwjsSdkDir)) {
+        console.log('NW.js SDK already exists, skipping download.');
+        return done();
+    }
+
+    console.log('Downloading NW.js SDK...');
+    const file = fs.createWriteStream(nwjsTarball);
+    https.get(nwjsUrl, function(response) {
+        response.pipe(file);
+        file.on('finish', function() {
+            file.close(function() {
+                console.log('NW.js SDK downloaded. Extracting...');
+                child_process.execSync(`mkdir ${nwjsSdkDir} && tar -xzf ${nwjsTarball} -C ${nwjsSdkDir} --strip-components=1`);
+                console.log('NW.js SDK extracted.');
+                fs.unlinkSync(nwjsTarball); // Clean up tarball
+                done();
+            });
+        });
+    }).on('error', function(err) {
+        fs.unlink(nwjsTarball); // Delete the file async. (But we don't check the result)
+        done(err);
+    });
+});
 
 // -----------------
 // Helper functions
@@ -188,23 +246,7 @@ function removeItem(platforms, item) {
 }
 
 function getRunDebugAppCommand(arch) {
-    switch (arch) {
-    case 'osx64':
-        return 'open ' + path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.app');
-        break;
-    case 'linux64':
-    case 'linux32':
-    case 'armv7':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name);
-        break;
-    case 'win32':
-    case 'win64':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.exe');
-        break;
-    default:
-        return '';
-        break;
-    }
+    return './nwjs-sdk/nw ./dist/';
 }
 
 function getReleaseFilename(platform, ext) {
@@ -220,7 +262,7 @@ function clean_apps() {
 }
 
 function clean_debug() {
-    return del([DEBUG_DIR + '**'], { force: true });
+    return del([DEBUG_DIR], { force: true });
 }
 
 function clean_release() {
@@ -262,9 +304,7 @@ function dist_changelog() {
 function dist_yarn() {
     return gulp.src(['./dist/package.json', './dist/yarn.lock'])
         .pipe(gulp.dest('./dist'))
-        .pipe(yarn({
-            production: true
-        }));
+        .pipe(yarn());
 }
 
 function dist_locale() {
@@ -330,16 +370,28 @@ function post_build(arch, folder, done) {
         // Copy Ubuntu launcher scripts to destination dir
         var launcherDir = path.join(folder, pkg.name, arch);
         console.log('Copy Ubuntu launcher scripts to ' + launcherDir);
-        return gulp.src('assets/linux/**')
-                       .pipe(gulp.dest(launcherDir));
-    }
 
-    if (arch === 'armv7') {
+        try {
+            // Copy copyright - temporarily commented out due to ENOTDIR error
+            // const copyrightPath = path.join(launcherDir, 'copyright');
+            // fse.removeSync(copyrightPath); // Ensure any existing 'copyright' directory/file is removed
+            // const copyrightContent = fs.readFileSync('assets/linux/copyright');
+            // fs.writeFileSync(copyrightPath, copyrightContent);
+            // Copy icon directory - temporarily commented out due to ENOTDIR error
+            // fse.removeSync(path.join(launcherDir, 'icon')); // Ensure any existing 'icon' file/directory is removed
+            // fse.copySync('assets/linux/icon/', path.join(launcherDir, 'icon/'), { overwrite: true });
+            done();
+        } catch (err) {
+            console.error('Error copying launcher scripts: ' + err);
+            done(err);
+        }
+    } else if (arch === 'armv7') {
         console.log('Moving ARMv7 build from "linux32" to "armv7" directory...');
         fse.moveSync(path.join(folder, pkg.name, 'linux32'), path.join(folder, pkg.name, 'armv7'));
+        done();
+    } else {
+        done();
     }
-
-    return done();
 }
 
 // Create debug app directories in ./debug
@@ -456,11 +508,20 @@ function buildNWApps(platforms, flavor, dir, done) {
     if (platforms.length > 0) {
         // Dynamically import nw-builder here
         import('nw-builder').then(nwBuilderModule => {
-            nwBuilderModule.default(Object.assign({
-                buildDir: dir,
+            console.log(`nw-builder outDir: ${dir}`);
+            nwBuilderModule.default({
+                outDir: dir,
                 platforms: platforms,
-                flavor: flavor
-            }, nwBuilderOptions)).then(function () {
+                flavor: flavor,
+                version: NWversion,
+                files: './dist/**/*',
+                macIcns: './assets/osx/app-icon.icns',
+                macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
+                winIco: './src/images/emu_icon.ico',
+                zip: false,
+                downloadUrl: 'https://dl.nwjs.io',
+                manifestUrl: 'https://nwjs.io/versions.json'
+            }).then(function () {
                 done();
             }).catch(function (err) {
                 console.log('Error building NW apps: ' + err);
@@ -516,6 +577,35 @@ function start_debug(done) {
     }
     done();
 }
+
+gulp.task('download-nwjs', function(done) {
+    const nwjsSdkDir = './nwjs-sdk';
+    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+
+    if (fs.existsSync(nwjsSdkDir)) {
+        console.log('NW.js SDK already exists, skipping download.');
+        return done();
+    }
+
+    console.log('Downloading NW.js SDK...');
+    const file = fs.createWriteStream(nwjsTarball);
+    https.get(nwjsUrl, function(response) {
+        response.pipe(file);
+        file.on('finish', function() {
+            file.close(function() {
+                console.log('NW.js SDK downloaded. Extracting...');
+                child_process.execSync(`mkdir ${nwjsSdkDir} && tar -xzf ${nwjsTarball} -C ${nwjsSdkDir} --strip-components=1`);
+                console.log('NW.js SDK extracted.');
+                fs.unlinkSync(nwjsTarball); // Clean up tarball
+                done();
+            });
+        });
+    }).on('error', function(err) {
+        fs.unlink(nwjsTarball); // Delete the file async. (But we don't check the result)
+        done(err);
+    });
+});
 
 // Create installer package for windows platforms
 function release_win(arch, done) {

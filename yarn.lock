@@ -722,7 +722,7 @@ axios@1.8.4:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.11.0:
+axios@^1.12.2:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
   integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
@@ -1262,7 +1262,7 @@ command-exists@^1.2.9:
   resolved "https://registry.yarnpkg.com/command-exists/-/command-exists-1.2.9.tgz#c50725af3808c8ab0260fd60b01fbfa25b954f69"
   integrity sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==
 
-commander@12.0.0, commander@^14.0.0:
+commander@12.0.0, commander@^14.0.1:
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-12.0.0.tgz#b929db6df8546080adfd004ab215ed48cf6f2592"
   integrity sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==
@@ -4276,7 +4276,7 @@ no-case@^2.2.0:
   dependencies:
     lower-case "^1.1.1"
 
-node-gyp@^11.3.0:
+node-gyp@^11.4.2:
   version "11.5.0"
   resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-11.5.0.tgz#82661b5f40647a7361efe918e3cea76d297fcc56"
   integrity sha512-ra7Kvlhxn5V9Slyus0ygMa2h+UqExPqUIkfk7Pc8QTLT956JLSy51uWFwHtIYy0vI8cB4BDhc/S03+880My/LQ==
@@ -4340,20 +4340,20 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nw-builder@4.15.0:
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.15.0.tgz#e87a058e80e1d210a5a28f784ecb7630be7660e2"
-  integrity sha512-iC6zs3XfQmxeoOiEwmAvVtPOSNB4zuj90J9nI5eaPyc5tjCGd5Vuv12yCCcCggzgDwqCNBN6LN2NZiF2TanJrg==
+nw-builder@4.16.0:
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/nw-builder/-/nw-builder-4.16.0.tgz#245d96bbbac853460674ed5e3d9a564e12e0258b"
+  integrity sha512-UaXHuG0oPTEpqVjD0wXivOzEV348OcAWNKoKQHaXyBFtmNW3Yk/1da9lFyHQBjH+eEjDFIdYDR8ETtsjNnDgRQ==
   dependencies:
     archiver "^7.0.1"
-    axios "^1.11.0"
-    commander "^14.0.0"
+    axios "^1.12.2"
+    commander "^14.0.1"
     glob "^11.0.3"
-    node-gyp "^11.3.0"
+    node-gyp "^11.4.2"
     plist "^3.1.0"
     resedit "^2.0.3"
     semver "^7.7.2"
-    tar "^7.4.3"
+    tar "^7.5.1"
     yauzl-promise "^4.0.0"
 
 oauth-sign@~0.9.0:
@@ -5777,7 +5777,7 @@ tar-stream@^3.0.0:
     fast-fifo "^1.2.0"
     streamx "^2.15.0"
 
-tar@^7.4.3:
+tar@^7.4.3, tar@^7.5.1:
   version "7.5.1"
   resolved "https://registry.yarnpkg.com/tar/-/tar-7.5.1.tgz#750a8bd63b7c44c1848e7bf982260a083cf747c9"
   integrity sha512-nlGpxf+hv0v7GkWBK2V9spgactGOp0qvfWRxUMjqHyzrt3SgwE48DIv/FhqPHJYLHpgW1opq3nERbz5Anq7n1g==
