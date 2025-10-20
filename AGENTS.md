@@ -16,7 +16,7 @@ This document outlines the remaining tasks and known issues for getting the EmuC
 
 -   **Release Build:**
     -   **Task:** Test `npx gulp release` on a Windows environment.
-    -   **Known Issue:** The `release_win` task now passes `APP_BUNDLE_PATH` to `assets/windows/installer.nsi`. The `installer.nsi` script needs to be modified to correctly utilize this variable to package the application from the new bundle location.
+    -   **Status:** The `release_win` task now passes `APP_BUNDLE_PATH` to `assets/windows/installer.nsi`, and `installer.nsi` has been modified to correctly utilize this variable to package the application from the new bundle location.
 
 ## macOS
 

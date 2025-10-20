@@ -9,7 +9,7 @@
 # ${DEST_FOLDER} - Destination folder for the installer files
 
 # Some definitions
-!define SOURCE_FILES          "..\..\apps\emuflight-configurator\${PLATFORM}\*"
+!define SOURCE_FILES          "${APP_BUNDLE_PATH}\*"
 !define APP_NAME              "Emuflight Configurator"
 !define COMPANY_NAME          "The Emuflight open source project."
 !define GROUP_NAME            "Emuflight"
