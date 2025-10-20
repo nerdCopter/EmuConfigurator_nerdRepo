@@ -12,7 +12,6 @@ const path = require('path');
 
 const zip = require('gulp-zip');
 const del = require('del');
-const NwBuilder = require('nw-builder');
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
@@ -55,7 +54,9 @@ var nwBuilderOptions = {
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
-    zip: false
+    zip: false,
+    downloadUrl: 'https://dl.nwjs.io',
+    manifestUrl: 'https://nwjs.io/versions.json'
 };
 
 // FIXME: hardcoded version number
@@ -330,7 +331,7 @@ function post_build(arch, folder, done) {
         var launcherDir = path.join(folder, pkg.name, arch);
         console.log('Copy Ubuntu launcher scripts to ' + launcherDir);
         return gulp.src('assets/linux/**')
-                   .pipe(gulp.dest(launcherDir));
+                       .pipe(gulp.dest(launcherDir));
     }
 
     if (arch === 'armv7') {
@@ -364,7 +365,7 @@ function injectARMCache(flavor, callback) {
         if (!fs.existsSync(versionFolder + '/linux32')) {
             fs.mkdirSync(`${versionFolder}/linux32`);
         }
-        var downloadedArchivePath = `${versionFolder}/nwjs${flavorPostfix}-v${nwArmVersion}-linux-arm.tar.gz`;
+        var downloadedArchivePath = `${versionFolder}/nwjs${flavorDownloadPostfix}-v${nwArmVersion}-linux-arm.tar.gz`;
         var downloadUrl = `https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/v${nwArmVersion}/nwjs${flavorDownloadPostfix}-v${nwArmVersion}-linux-arm.tar.gz`;
         if (fs.existsSync(downloadedArchivePath)) {
             console.log('Prebuilt ARMv7 binaries found in /tmp');
@@ -378,8 +379,8 @@ function injectARMCache(flavor, callback) {
                 var downloadedBytes = 0;
                 res.pipe(armBuildBinary);
                 res.on('data', function (chunk) {
-                    downloadedBytes += chunk.length;
-                    process.stdout.write(`> ${parseInt((downloadedBytes * 100) / totalBytes)}% done             \r`);
+                        downloadedBytes += chunk.length;
+                        process.stdout.write(`> ${parseInt((downloadedBytes * 100) / totalBytes)}% done             \r`);
                 });
                 armBuildBinary.on('finish', function() {
                     process.stdout.write('> 100% done             \n');
@@ -453,19 +454,23 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
 
 function buildNWApps(platforms, flavor, dir, done) {
     if (platforms.length > 0) {
-        var builder = new NwBuilder(Object.assign({
-            buildDir: dir,
-            platforms: platforms,
-            flavor: flavor
-        }, nwBuilderOptions));
-        builder.on('log', console.log);
-        builder.build(function (err) {
-            if (err) {
+        // Dynamically import nw-builder here
+        import('nw-builder').then(nwBuilderModule => {
+            nwBuilderModule.default(Object.assign({
+                buildDir: dir,
+                platforms: platforms,
+                flavor: flavor
+            }, nwBuilderOptions)).then(function () {
+                done();
+            }).catch(function (err) {
                 console.log('Error building NW apps: ' + err);
                 clean_debug();
                 process.exit(1);
-            }
-            done();
+            });
+        }).catch(err => {
+            console.log('Error importing nw-builder: ' + err);
+            clean_debug();
+            process.exit(1);
         });
     } else {
         console.log('No platform suitable for NW Build')
@@ -582,29 +587,29 @@ function release_deb(arch, done) {
     }
 
     return gulp.src([path.join(APPS_DIR, pkg.name, arch, '*')])
-        .pipe(deb({
-             package: pkg.name,
-             version: pkg.version,
-             section: 'base',
-             priority: 'optional',
-             architecture: getLinuxPackageArch('deb', arch),
-             maintainer: pkg.author,
-             description: pkg.description,
-             preinst: [`rm -rf ${LINUX_INSTALL_DIR}/${pkg.name}`],
-             postinst: [`chown root:root ${LINUX_INSTALL_DIR}`, `chown -R root:root ${LINUX_INSTALL_DIR}/${pkg.name}`, `xdg-desktop-menu install ${LINUX_INSTALL_DIR}/${pkg.name}/${pkg.name}.desktop`],
-             prerm: [`xdg-desktop-menu uninstall ${pkg.name}.desktop`],
-             depends: 'libgconf-2-4',
-             changelog: [],
-             _target: `${LINUX_INSTALL_DIR}/${pkg.name}`,
-             _out: RELEASE_DIR,
-             _copyright: 'assets/linux/copyright',
-             _clean: true
-    }));
+            .pipe(deb({
+                 package: pkg.name,
+                 version: pkg.version,
+                 section: 'base',
+                 priority: 'optional',
+                 architecture: getLinuxPackageArch('deb', arch),
+                 maintainer: pkg.author,
+                 description: pkg.description,
+                 preinst: [`rm -rf ${LINUX_INSTALL_DIR}/${pkg.name}`],
+                 postinst: [`chown root:root ${LINUX_INSTALL_DIR}`, `chown -R root:root ${LINUX_INSTALL_DIR}/${pkg.name}`, `xdg-desktop-menu install ${LINUX_INSTALL_DIR}/${pkg.name}/${pkg.name}.desktop`],
+                 prerm: [`xdg-desktop-menu uninstall ${pkg.name}.desktop`],
+                 depends: 'libgconf-2-4',
+                 changelog: [],
+                 _target: `${LINUX_INSTALL_DIR}/${pkg.name}`,
+                 _out: RELEASE_DIR,
+                 _copyright: 'assets/linux/copyright',
+                 _clean: true
+        }));
 }
 
 function release_rpm(arch, done) {
 
-    // Check if dpkg-deb exists
+    // Check if rpmbuild exists
     if (!commandExistsSync('rpmbuild')) {
         console.warn('rpmbuild command not found, not generating rpm package for ' + arch);
         return done();
@@ -703,8 +708,8 @@ function release_osx64() {
                 format: 'UDZO',
                 window: {
                     size: {
-                        width: 755,
-                        height: 755
+                    width: 755,
+                    height: 755
                     }
                 },
                 //'code-sign': { 'signing-identity': process.env.APP_IDENTITY }
@@ -789,3 +794,4 @@ function listReleaseTasks(done) {
 
     return releaseTasks;
 }
+
