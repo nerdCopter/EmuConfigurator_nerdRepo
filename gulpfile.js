@@ -54,9 +54,9 @@ var nwBuilderOptions = {
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
-    zip: true,
+    zip: false,
     downloadUrl: 'https://dl.nwjs.io',
-    manifestUrl: 'https://nwjs.io/versions.json'
+    manifestUrl: 'https://dl.nwjs.io/versions.json'
 };
 
 // FIXME: hardcoded version number
@@ -328,7 +328,7 @@ function apps(done) {
     removeItem(platforms, 'chromeos');
     removeItem(platforms, 'android');
 
-    buildNWAppsWrapper(platforms, 'normal', APPS_DIR, done);
+    buildAppBundle(platforms, 'normal', APPS_DIR, done);
 }
 
 function listPostBuildTasks(folder, done) {
@@ -470,6 +470,26 @@ function injectARMCache(flavor, callback) {
             }
         });
     }
+}
+
+function buildAppBundle(platforms, flavor, dir, done) {
+    const nwjsSdkDir = './nwjs-sdk';
+    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+
+    const appBundleDir = path.join(dir, pkg.name, platforms[0]);
+
+    // Ensure SDK is downloaded and extracted
+    gulp.series('download-nwjs', function(cb) {
+        // Copy dist contents into the extracted NW.js SDK
+        fse.copySync(DIST_DIR, nwjsSdkDir, { overwrite: true });
+
+        // Move the prepared SDK to the target app bundle directory
+        fse.ensureDirSync(path.join(dir, pkg.name));
+        fse.moveSync(nwjsSdkDir, appBundleDir, { overwrite: true });
+
+        cb();
+    })(done);
 }
 
 function buildNWAppsWrapper(platforms, flavor, dir, done) {
