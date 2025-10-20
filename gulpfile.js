@@ -81,34 +81,85 @@ gulp.task('clean-debug', clean_debug);
 
 gulp.task('clean-release', clean_release);
 
-gulp.task('clean-cache', clean_cache);
-
 gulp.task('download-nwjs', function(done) {
     const nwjsSdkDir = './nwjs-sdk';
-    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
-    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const currentPlatform = os.platform();
+    const currentArch = os.arch();
+
+    let platformString;
+    let archString;
+    let fileExtension;
+    let stripComponents = 1; // Default for tar.gz
+
+    // Determine platform string for NW.js download
+    if (currentPlatform === 'darwin') {
+        platformString = 'osx';
+        fileExtension = 'zip';
+    } else if (currentPlatform === 'win32') {
+        platformString = 'win';
+        fileExtension = 'zip';
+    } else if (currentPlatform === 'linux') {
+        platformString = 'linux';
+        fileExtension = 'tar.gz';
+    } else {
+        console.error(`Unsupported platform: ${currentPlatform}`);
+        return done(new Error('Unsupported platform'));
+    }
+
+    // Determine architecture string for NW.js download
+    if (currentArch === 'x64') {
+        archString = 'x64';
+    } else if (currentArch === 'ia32') {
+        archString = 'ia32';
+    } else if (currentArch === 'arm64') { // For macOS M1
+        archString = 'arm64';
+    } else {
+        console.error(`Unsupported architecture: ${currentArch}`);
+        return done(new Error('Unsupported architecture'));
+    }
+
+    const nwjsFileName = `nwjs-sdk-v${NWversion}-${platformString}-${archString}.${fileExtension}`;
+    const nwjsUrl = `https://dl.nwjs.io/v${NWversion}/${nwjsFileName}`;
+    const nwjsTarballPath = `./${nwjsFileName}`;
 
     if (fs.existsSync(nwjsSdkDir)) {
         console.log('NW.js SDK already exists, skipping download.');
         return done();
     }
 
-    console.log('Downloading NW.js SDK...');
-    const file = fs.createWriteStream(nwjsTarball);
+    console.log(`Downloading NW.js SDK for ${platformString}-${archString} from ${nwjsUrl}...`);
+    const file = fs.createWriteStream(nwjsTarballPath);
     https.get(nwjsUrl, function(response) {
         response.pipe(file);
         file.on('finish', function() {
             file.close(function() {
                 console.log('NW.js SDK downloaded. Extracting...');
-                child_process.execSync(`mkdir ${nwjsSdkDir} && tar -xzf ${nwjsTarball} -C ${nwjsSdkDir} --strip-components=1`);
-                console.log('NW.js SDK extracted.');
-                fs.unlinkSync(nwjsTarball); // Clean up tarball
-                done();
+                try {
+                    fse.ensureDirSync(nwjsSdkDir); // Ensure the directory exists before extraction
+                    if (fileExtension === 'zip') {
+                        // For zip files, use a different extraction method (e.g., 'unzip' command)
+                        // This assumes 'unzip' is available on the system.
+                        // For Windows, this would need a different approach or a node module.
+                        child_process.execSync(`unzip -o ${nwjsTarballPath} -d ${nwjsSdkDir}`);
+                        // NW.js zip files often extract into a folder named like nwjs-sdk-vX.Y.Z-platform-arch
+                        // We need to move its content to nwjsSdkDir
+                        const extractedFolderName = `nwjs-sdk-v${NWversion}-${platformString}-${archString}`;
+                        fse.moveSync(path.join(nwjsSdkDir, extractedFolderName), nwjsSdkDir, { overwrite: true });
+                    } else { // tar.gz
+                        child_process.execSync(`tar -xzf ${nwjsTarballPath} -C ${nwjsSdkDir} --strip-components=${stripComponents}`);
+                    }
+                    console.log('NW.js SDK extracted.');
+                    fs.unlinkSync(nwjsTarballPath); // Clean up tarball
+                    done();
+                } catch (err) {
+                    console.error('Error during extraction:', err.message);
+                    done(err);
+                }
             });
         });
     }).on('error', function(err) {
-        fs.unlink(nwjsTarball); // Delete the file async. (But we don't check the result)
-        done(err);
+        console.error('Error during download:', err.message);
+        fs.unlink(nwjsTarballPath, () => done(err)); // Delete the file async.
     });
 });
 
@@ -246,7 +297,18 @@ function removeItem(platforms, item) {
 }
 
 function getRunDebugAppCommand(arch) {
-    return './nwjs-sdk/nw ./dist/';
+    const currentPlatform = os.platform();
+
+    let executablePath;
+    if (currentPlatform === 'darwin') {
+        executablePath = path.join('./nwjs-sdk', 'nwjs.app', 'Contents', 'MacOS', 'nwjs');
+    } else if (currentPlatform === 'win32') {
+        executablePath = path.join('./nwjs-sdk', 'nw.exe');
+    } else { // Linux
+        executablePath = path.join('./nwjs-sdk', 'nw');
+    }
+
+    return `${executablePath} ./dist/`;
 }
 
 function getReleaseFilename(platform, ext) {
@@ -328,7 +390,12 @@ function apps(done) {
     removeItem(platforms, 'chromeos');
     removeItem(platforms, 'android');
 
-    buildAppBundle(platforms, 'normal', APPS_DIR, done);
+    // Use gulp.series to run buildAppBundle for each platform sequentially
+    const buildTasks = platforms.map(platform => function(cb) {
+        buildAppBundle([platform], 'normal', APPS_DIR, cb);
+    });
+
+    gulp.series(...buildTasks)(done);
 }
 
 function listPostBuildTasks(folder, done) {
@@ -474,20 +541,57 @@ function injectARMCache(flavor, callback) {
 
 function buildAppBundle(platforms, flavor, dir, done) {
     const nwjsSdkDir = './nwjs-sdk';
-    const nwjsTarball = 'nwjs-sdk-v0.50.3-linux-x64.tar.gz';
-    const nwjsUrl = 'https://dl.nwjs.io/v0.50.3/nwjs-sdk-v0.50.3-linux-x64.tar.gz';
+    const currentPlatform = os.platform();
+    const currentArch = os.arch();
 
-    const appBundleDir = path.join(dir, pkg.name, platforms[0]);
+    let platformString;
+    let archString;
+
+    // Determine platform string for NW.js download
+    if (currentPlatform === 'darwin') {
+        platformString = 'osx';
+    } else if (currentPlatform === 'win32') {
+        platformString = 'win';
+    } else if (currentPlatform === 'linux') {
+        platformString = 'linux';
+    } else {
+        console.error(`Unsupported platform: ${currentPlatform}`);
+        return done(new Error('Unsupported platform'));
+    }
+
+    // Determine architecture string for NW.js download
+    if (currentArch === 'x64') {
+        archString = 'x64';
+    } else if (currentArch === 'ia32') {
+        archString = 'ia32';
+    } else if (currentArch === 'arm64') { // For macOS M1
+        archString = 'arm64';
+    } else {
+        console.error(`Unsupported architecture: ${currentArch}`);
+        return done(new Error('Unsupported architecture'));
+    }
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    const appBundleDir = path.join(dir, appBundleBaseName);
 
     // Ensure SDK is downloaded and extracted
     gulp.series('download-nwjs', function(cb) {
         // Copy dist contents into the extracted NW.js SDK
-        fse.copySync(DIST_DIR, nwjsSdkDir, { overwrite: true });
+        // On macOS, the app content goes into nwjs.app/Contents/Resources/app.nw
+        // On Windows/Linux, it goes directly into the SDK root
+        let appContentTargetDir = nwjsSdkDir;
+        if (currentPlatform === 'darwin') {
+            appContentTargetDir = path.join(nwjsSdkDir, 'nwjs.app', 'Contents', 'Resources', 'app.nw');
+            fse.ensureDirSync(appContentTargetDir);
+        }
+
+        fse.copySync(DIST_DIR, appContentTargetDir, { overwrite: true });
 
         // Move the prepared SDK to the target app bundle directory
-        fse.ensureDirSync(path.join(dir, pkg.name));
+        fse.ensureDirSync(dir); // Ensure the parent directory exists
         fse.moveSync(nwjsSdkDir, appBundleDir, { overwrite: true });
 
+        console.log(`Application bundle created at ${appBundleDir}`);
         cb();
     })(done);
 }
@@ -639,13 +743,20 @@ function release_win(arch, done) {
     // The makensis does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
 
+    let platformString = 'win';
+    let archString = arch.substring(3); // win32 -> 32, win64 -> 64
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    const appBundlePath = path.join(APPS_DIR, appBundleBaseName);
+
     // Parameters passed to the installer script
     const options = {
             verbose: 3,
             define: {
                 'VERSION': pkg.version,
                 'PLATFORM': arch,
-                'DEST_FOLDER': RELEASE_DIR
+                'DEST_FOLDER': RELEASE_DIR,
+                'APP_BUNDLE_PATH': appBundlePath // Pass the app bundle path to NSIS
             }
         }
 
@@ -662,9 +773,27 @@ function release_win(arch, done) {
 
 // Create distribution package (zip) for windows and linux platforms
 function release_zip(arch) {
-    var src = path.join(APPS_DIR, pkg.name, arch, '**');
+    let platformString;
+    let archString;
+
+    if (arch.startsWith('linux')) {
+        platformString = 'linux';
+        archString = arch.substring(5);
+    } else if (arch.startsWith('win')) {
+        platformString = 'win';
+        archString = arch.substring(3);
+    } else if (arch.startsWith('osx')) {
+        platformString = 'osx';
+        archString = arch.substring(3);
+    } else {
+        platformString = arch; // Fallback for armv7
+        archString = '';
+    }
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    var src = path.join(APPS_DIR, appBundleBaseName, '**');
     var output = getReleaseFilename(arch, 'zip');
-    var base = path.join(APPS_DIR, pkg.name, arch);
+    var base = path.join(APPS_DIR, appBundleBaseName);
 
     return compressFiles(src, base, output, 'Emuflight Configurator');
 }
@@ -696,7 +825,21 @@ function release_deb(arch, done) {
         return done();
     }
 
-    return gulp.src([path.join(APPS_DIR, pkg.name, arch, '*')])
+    let platformString;
+    let archString;
+
+    if (arch.startsWith('linux')) {
+        platformString = 'linux';
+        archString = arch.substring(5);
+    } else {
+        platformString = arch; // Fallback for armv7
+        archString = '';
+    }
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    const appBundlePath = path.join(APPS_DIR, appBundleBaseName);
+
+    return gulp.src([path.join(appBundlePath, '**/*')]) // Use the new bundle path
             .pipe(deb({
                  package: pkg.name,
                  version: pkg.version,
@@ -728,6 +871,20 @@ function release_rpm(arch, done) {
     // The buildRpm does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
 
+    let platformString;
+    let archString;
+
+    if (arch.startsWith('linux')) {
+        platformString = 'linux';
+        archString = arch.substring(5);
+    } else {
+        platformString = arch; // Fallback for armv7
+        archString = '';
+    }
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    const appBundlePath = path.join(APPS_DIR, appBundleBaseName);
+
     var options = {
              name: pkg.name,
              version: pkg.version,
@@ -738,7 +895,7 @@ function release_rpm(arch, done) {
              requires: 'libgconf-2-4',
              prefix: '/opt',
              files:
-                 [ { cwd: path.join(APPS_DIR, pkg.name, arch),
+                 [ { cwd: appBundlePath, // Use the new bundle path
                      src: '*',
                      dest: `${LINUX_INSTALL_DIR}/${pkg.name}` } ],
              postInstallScript: [`xdg-desktop-menu install ${LINUX_INSTALL_DIR}/${pkg.name}/${pkg.name}.desktop`],
@@ -792,25 +949,30 @@ function release_osx64() {
         console.log('running locally - skipping signing of app');
     }
 
-    //var appdmg = require('gulp-appdmg');
     const appdmg = require('./gulp-macdmg');
 
 
     // The appdmg does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
 
+    let platformString = 'osx';
+    let archString = 'x64'; // osx64
+
+    const appBundleBaseName = `${pkg.name}-${platformString}-${archString}`;
+    const appBundlePath = path.join(APPS_DIR, appBundleBaseName);
+
     // The src pipe is not used
     return gulp.src(['.'])
         .pipe(appdmg({
             target: path.join(RELEASE_DIR, getReleaseFilename('macOS', 'dmg')),
-            basepath: path.join(APPS_DIR, pkg.name, 'osx64'),
+            basepath: appBundlePath, // Use the new bundle path
             specification: {
                 'title': 'Emuflight Configurator',
                 //'icon': 'assets/osx/app-icon.icns', // FIXME
                 'icon-size': 128,
                 'background': path.join(__dirname, 'assets/osx/dmg-background.png'),
                 'contents': [
-                    { 'x': 180, 'y': 590, 'type': 'file', 'path': pkg.name + '.app', 'name': 'Emuflight Configurator.app' },
+                    { 'x': 180, 'y': 590, 'type': 'file', 'path': `${pkg.name}.app`, 'name': 'Emuflight Configurator.app' },
                     { 'x': 570, 'y': 590, 'type': 'link', 'path': '/Applications' }
 
                 ],
