@@ -26,6 +26,7 @@ const os = require('os');
 const git = require('gulp-git');
 const source = require('vinyl-source-stream');
 const stream = require('stream');
+const yauzl = require('yauzl');
 
 const DIST_DIR = './dist/';
 const APPS_DIR = './apps/';
@@ -134,27 +135,7 @@ gulp.task('download-nwjs', function(done) {
         file.on('finish', function() {
             file.close(function() {
                 console.log('NW.js SDK downloaded. Extracting...');
-                try {
-                    fse.ensureDirSync(nwjsSdkDir); // Ensure the directory exists before extraction
-                    if (fileExtension === 'zip') {
-                        // For zip files, use a different extraction method (e.g., 'unzip' command)
-                        // This assumes 'unzip' is available on the system.
-                        // For Windows, this would need a different approach or a node module.
-                        child_process.execSync(`unzip -o ${nwjsTarballPath} -d ${nwjsSdkDir}`);
-                        // NW.js zip files often extract into a folder named like nwjs-sdk-vX.Y.Z-platform-arch
-                        // We need to move its content to nwjsSdkDir
-                        const extractedFolderName = `nwjs-sdk-v${NWversion}-${platformString}-${archString}`;
-                        fse.moveSync(path.join(nwjsSdkDir, extractedFolderName), nwjsSdkDir, { overwrite: true });
-                    } else { // tar.gz
-                        child_process.execSync(`tar -xzf ${nwjsTarballPath} -C ${nwjsSdkDir} --strip-components=${stripComponents}`);
-                    }
-                    console.log('NW.js SDK extracted.');
-                    fs.unlinkSync(nwjsTarballPath); // Clean up tarball
-                    done();
-                } catch (err) {
-                    console.error('Error during extraction:', err.message);
-                    done(err);
-                }
+                try {\n                    fse.ensureDirSync(nwjsSdkDir); // Ensure the directory exists before extraction\n                    if (fileExtension === \'zip\') {\n                        yauzl.open(nwjsTarballPath, { lazyEntries: true }, function(err, zipfile) {\n                            if (err) return done(err);\n\n                            zipfile.on(\'entry\', function(entry) {\n                                if (/\/$/.test(entry.fileName)) {\n                                    // Directory file names end with \'/\'.\n                                    fse.ensureDirSync(path.join(nwjsSdkDir, entry.fileName));\n                                    zipfile.readEntry();\n                                } else {\n                                    // File entry\n                                    zipfile.openReadStream(entry, function(err, readStream) {\n                                        if (err) return done(err);\n                                        const writeStream = fs.createWriteStream(path.join(nwjsSdkDir, entry.fileName));\n                                        readStream.pipe(writeStream);\n                                        writeStream.on(\'finish\', function() {\n                                            zipfile.readEntry();\n                                        });\n                                    });\n                                }\n                            });\n\n                            zipfile.on(\'end\', function() {\n                                console.log(\'NW.js SDK extracted.\');\n                                fs.unlinkSync(nwjsTarballPath); // Clean up tarball\n                                done();\n                            });\n\n                            zipfile.readEntry(); // Start reading entries\n                        });\n                    } else { // tar.gz\n                        child_process.execSync(`tar -xzf ${nwjsTarballPath} -C ${nwjsSdkDir} --strip-components=${stripComponents}`);\n                        console.log(\'NW.js SDK extracted.\');\n                        fs.unlinkSync(nwjsTarballPath); // Clean up tarball\n                        done();\n                    }\n                } catch (err) {\n                    console.error(\'Error during extraction:\', err.message);\n                    done(err);\n                }
             });
         });
     }).on('error', function(err) {

@@ -11,7 +11,7 @@ This document outlines the remaining tasks and known issues for getting the EmuC
 
 -   **Debug Build:**
     -   **Task:** Test `yarn run start` on a Windows environment.
-    -   **Known Issue:** The `download-nwjs` task currently uses the `unzip` shell command, which is not natively available on Windows. This needs to be replaced with a Node.js-based zip extraction library (e.g., `yauzl`, `adm-zip`) or a Windows-native command (e.g., PowerShell `Expand-Archive`).
+    -   **Status:** The `download-nwjs` task now uses `yauzl` for zip extraction, which is cross-platform.
     -   **Task:** Verify `getRunDebugAppCommand` correctly returns the path to `nw.exe` for Windows.
 
 -   **Release Build:**
@@ -22,7 +22,7 @@ This document outlines the remaining tasks and known issues for getting the EmuC
 
 -   **Debug Build:**
     -   **Task:** Test `yarn run start` on a macOS environment.
-    -   **Known Issue:** The `download-nwjs` task uses the `unzip` shell command, which should work on macOS, but needs verification.
+    -   **Status:** The `download-nwjs` task now uses `yauzl` for zip extraction, which is cross-platform.
     -   **Task:** Verify `getRunDebugAppCommand` correctly returns the path to `nwjs.app/Contents/MacOS/nwjs` for macOS.
 
 -   **Release Build:**
