@@ -10,24 +10,26 @@ This document outlines the remaining tasks and known issues for getting the EmuC
 ## Windows
 
 -   **Debug Build:**
+    -   **Task:** Implement cross-platform zip extraction for NW.js SDK download (currently uses `tar` for Linux, `unzip` for macOS, and `yauzl` was attempted for Windows but reverted).
     -   **Task:** Test `yarn run start` on a Windows environment.
-    -   **Status:** The `download-nwjs` task now uses `yauzl` for zip extraction, which is cross-platform.
     -   **Task:** Verify `getRunDebugAppCommand` correctly returns the path to `nw.exe` for Windows.
 
 -   **Release Build:**
+    -   **Task:** Implement cross-platform zip extraction for NW.js SDK download.
     -   **Task:** Test `npx gulp release` on a Windows environment.
-    -   **Status:** The `release_win` task now passes `APP_BUNDLE_PATH` to `assets/windows/installer.nsi`, and `installer.nsi` has been modified to correctly utilize this variable to package the application from the new bundle location.
+    -   **Known Issue:** The `release_win` task passes `APP_BUNDLE_PATH` to `assets/windows/installer.nsi`. The `installer.nsi` script needs to be modified to correctly utilize this variable to package the application from the new bundle location.
 
 ## macOS
 
 -   **Debug Build:**
+    -   **Task:** Implement cross-platform zip extraction for NW.js SDK download.
     -   **Task:** Test `yarn run start` on a macOS environment.
-    -   **Status:** The `download-nwjs` task now uses `yauzl` for zip extraction, which is cross-platform.
     -   **Task:** Verify `getRunDebugAppCommand` correctly returns the path to `nwjs.app/Contents/MacOS/nwjs` for macOS.
 
 -   **Release Build:**
+    -   **Task:** Implement cross-platform zip extraction for NW.js SDK download.
     -   **Task:** Test `npx gulp release` on a macOS environment.
-    -   **Known Issue:** The `release_osx64` task now uses the correct `basepath` for `appdmg`. Need to verify that `appdmg` works as expected with the new bundle structure and that code signing (if enabled) functions correctly.
+    -   **Known Issue:** The `release_osx64` task uses the correct `basepath` for `appdmg`. Need to verify that `appdmg` works as expected with the new bundle structure and that code signing (if enabled) functions correctly.
 
 ## General
 
