@@ -42,7 +42,11 @@ The following changes were implemented in `gulpfile.js` and `package.json`:
         -   Ensures the NW.js SDK is downloaded and extracted (by calling `download-nwjs`).
         -   Copies the contents of the `DIST_DIR` into the extracted NW.js SDK directory.
         -   Moves the prepared SDK (now containing the application files) to the target application bundle directory within `APPS_DIR` (e.g., `apps/emuflight-configurator/linux64/`).
-    -   The `apps` gulp task was modified to call `buildAppBundle` instead of `buildNWAppsWrapper` (which previously relied on `nw-builder`). This ensures that the application bundle for release is created without using `nw-builder`.
+        -   **Renamed the `nw` executable to `emuflight-configurator`** within the built application bundle to ensure the correct application name.
+    -   The `apps` gulp task was modified to call `buildAppBundle` instead of `buildNWAppsWrapper` (which previously relied on `nw-builder`). This ensures that the application bundle for release is created without using `nw-builder`).
+
+7.  **`gulpfile.js` - Modification of `getRunDebugAppCommand` function:**
+    -   The `getRunDebugAppCommand` function was updated to use the new executable name `emuflight-configurator` instead of `nw` when launching the debug application.
 
 ## Resolution
 

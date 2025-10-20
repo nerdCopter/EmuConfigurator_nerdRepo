@@ -97,6 +97,6 @@
     "appdmg": "^0.6.6"
   },
   "resolutions": {
-    "commander": "12.0.0"
+    "commander": "14.0.1"
   }
 }

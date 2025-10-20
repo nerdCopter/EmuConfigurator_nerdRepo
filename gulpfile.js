@@ -243,7 +243,7 @@ function removeItem(platforms, item) {
 }
 
 function getRunDebugAppCommand(arch) {
-    return './nwjs-sdk/nw ./dist/';
+    return './nwjs-sdk/emuflight-configurator ./dist/';
 }
 
 function getReleaseFilename(platform, ext) {
@@ -489,6 +489,16 @@ function buildAppBundle(platforms, flavor, dir, done) {
         // Move the prepared SDK to the target app bundle directory
         fse.ensureDirSync(path.join(dir, pkg.name));
         fse.moveSync(nwjsSdkDir, appBundleDir, { overwrite: true });
+
+        // Rename the 'nw' executable to 'emuflight-configurator'
+        const nwExecutablePath = path.join(appBundleDir, 'nw');
+        const newExecutablePath = path.join(appBundleDir, 'emuflight-configurator');
+        if (fs.existsSync(nwExecutablePath)) {
+            fs.renameSync(nwExecutablePath, newExecutablePath);
+            console.log(`Renamed '${nwExecutablePath}' to '${newExecutablePath}'`);
+        } else {
+            console.warn(`'nw' executable not found at '${nwExecutablePath}'. Skipping rename.`);
+        }
 
         cb();
     })(done);
