@@ -21,9 +21,6 @@ git:
   depth: 12 # quick clone, but less shallow for clicking rebuild a few merges later
   quiet: true # save on logfiles
 
-node_js:
-  - 10 # version
-
 before_install:
   # install 'rpm' on linux
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get -y install rpm; fi
