@@ -27,3 +27,6 @@ nbproject/
 # Eclipse
 .project
 .settings/
+
+tmp/
+AGENTS.md

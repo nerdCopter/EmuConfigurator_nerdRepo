@@ -12,7 +12,7 @@ const path = require('path');
 
 const zip = require('gulp-zip');
 const del = require('del');
-const NwBuilder = require('nw-builder');
+const nwbuildModule = require('nw-builder');
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
@@ -27,6 +27,8 @@ const os = require('os');
 const git = require('gulp-git');
 const source = require('vinyl-source-stream');
 const stream = require('stream');
+const Vinyl = require('vinyl');
+const mergeStream = require('merge-stream');
 
 const DIST_DIR = './dist/';
 const APPS_DIR = './apps/';
@@ -42,12 +44,7 @@ var gitChangeSetId;
 // 0.45.6 Win7 connects; 0.42.3 fixed OSX Flashing; 0.46.X broke Win7 connect. maybe serial/usb needs updating
 // reverted to 0.42.6 due to Windows increased CLI-tab buffer/autocomplete issues.
 // 0.50.3 is last version to open Links properly. also works on Win11.
-var NWversion;
-if (os.platform() === 'win32') {
-    NWversion ='0.42.6'
-} else {
-    NWversion ='0.50.3'
-}
+var NWversion = '0.92.0';
 
 var nwBuilderOptions = {
     version: NWversion,
@@ -189,16 +186,16 @@ function removeItem(platforms, item) {
 function getRunDebugAppCommand(arch) {
     switch (arch) {
     case 'osx64':
-        return 'open ' + path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.app');
+        return 'open ' + path.join(DEBUG_DIR, pkg.name, pkg.name + '.app');
         break;
     case 'linux64':
     case 'linux32':
     case 'armv7':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name);
+        return path.join(DEBUG_DIR, pkg.name);
         break;
     case 'win32':
     case 'win64':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name + '.exe');
+        return path.join(DEBUG_DIR, pkg.name + '.exe');
         break;
     default:
         return '';
@@ -240,16 +237,20 @@ function dist_src() {
         '!./src/css/opensans_webfontkit/*.{txt,html}',
         '!./src/support/**'
     ];
-    var packageJson = new stream.Readable;
-    packageJson.push(JSON.stringify(pkg,undefined,2));
-    packageJson.push(null);
+    var modifiedPkg = JSON.parse(JSON.stringify(pkg));
+    modifiedPkg.main = 'main.html';
 
-    return packageJson
-        .pipe(source('package.json'))
-        .pipe(gulp.src(distSources, { base: 'src' }))
-        .pipe(gulp.src('manifest.json', { passthrougth: true }))
-        .pipe(gulp.src('yarn.lock', { passthrougth: true }))
-        .pipe(gulp.dest(DIST_DIR));
+    var packageJsonStream = new stream.Readable({ objectMode: true });
+    packageJsonStream._read = function () {}; // _read is required but can be noop
+    packageJsonStream.push(new Vinyl({ path: 'package.json', contents: Buffer.from(JSON.stringify(modifiedPkg, undefined, 2)) }));
+    packageJsonStream.push(null);
+
+    return mergeStream(
+        gulp.src(distSources, { base: 'src' }),
+        gulp.src('manifest.json', { passthrougth: true }),
+        gulp.src('yarn.lock', { passthrougth: true }),
+        packageJsonStream
+    ).pipe(gulp.dest(DIST_DIR));
 }
 
 function dist_changelog() {
@@ -327,10 +328,15 @@ function post_build(arch, folder, done) {
 
     if ((arch === 'linux32') || (arch === 'linux64')) {
         // Copy Ubuntu launcher scripts to destination dir
-        var launcherDir = path.join(folder, pkg.name, arch);
+        var launcherDir = path.join(folder, arch);
         console.log('Copy Ubuntu launcher scripts to ' + launcherDir);
-        return gulp.src('assets/linux/**')
-                   .pipe(gulp.dest(launcherDir));
+        fse.copy('assets/linux', launcherDir, { overwrite: true }, function (err) {
+            if (err) {
+                console.error('Error copying launcher scripts: ' + err);
+                process.exit(1);
+            }
+            done();
+        });
     }
 
     if (arch === 'armv7') {
@@ -451,22 +457,44 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
     }
 }
 
-function buildNWApps(platforms, flavor, dir, done) {
+async function buildNWApps(platforms, flavor, dir, done) {
+    del([DEBUG_DIR + '**'], { force: true });
     if (platforms.length > 0) {
-        var builder = new NwBuilder(Object.assign({
-            buildDir: dir,
-            platforms: platforms,
-            flavor: flavor
-        }, nwBuilderOptions));
-        builder.on('log', console.log);
-        builder.build(function (err) {
-            if (err) {
-                console.log('Error building NW apps: ' + err);
+        for (const arch of platforms) {
+            try {
+                await nwbuildModule.default({
+                    outDir: dir,
+                    srcDir: './dist',
+                    glob: false,
+                    platforms: [arch],
+                    flavor: flavor,
+                    macIcns: nwBuilderOptions.macIcns,
+                    macPlist: nwBuilderOptions.macPlist,
+                    winIco: nwBuilderOptions.winIco,
+                    zip: nwBuilderOptions.zip,
+                    version: nwBuilderOptions.version,
+                    managedManifest: true,
+                    managedManifest: true
+                });
+
+                // Move contents of package.nw to the root of the output directory
+                const packageNwPath = path.join(dir, pkg.name, arch, 'package.nw');
+                const destPath = path.join(dir, pkg.name, arch);
+                if (fs.existsSync(packageNwPath)) {
+                    fse.copySync(packageNwPath, destPath, { overwrite: true });
+                    fse.removeSync(packageNwPath);
+                }
+            } catch (err) {
+                console.log('Error building NW apps for ' + arch + ': ' + err);
                 clean_debug();
                 process.exit(1);
             }
-            done();
+        }
+        console.log('Contents of DEBUG_DIR after nwbuild:');
+        fs.readdirSync(dir).forEach(file => {
+            console.log(file);
         });
+        done();
     } else {
         console.log('No platform suitable for NW Build')
         done();
