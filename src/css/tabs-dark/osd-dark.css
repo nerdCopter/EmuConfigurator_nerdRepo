@@ -13,6 +13,8 @@
 .tab-osd .preview {
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(../../images/osd-bg-1.jpg);
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .tab-osd .preview .gui_box_titlebar select {

@@ -11,6 +11,7 @@ apps/
 dist/
 debug/
 release/
+nwjs-sdk/
 
 # OSX
 .DS_store

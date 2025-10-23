@@ -7,6 +7,7 @@
 # ${VERSION} - Version to generate (x.y.z)
 # ${PLATFORM} - Platform to generate (win32 or win64)
 # ${DEST_FOLDER} - Destination folder for the installer files
+# ${APP_BUNDLE_PATH} - Path to the application bundle to be packaged
 
 # Some definitions
 !define SOURCE_FILES          "${APP_BUNDLE_PATH}\*"

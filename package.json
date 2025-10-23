@@ -61,16 +61,18 @@
     "universal-ga": "^1.2.0"
   },
   "devDependencies": {
-    "axios": "1.8.4",
+    "axios": "^1.12.2",
     "chai": "^4.3.4",
     "command-exists": "^1.2.9",
+    "decompress": "^4.2.1",
+    "decompress-targz": "^4.1.1",
+    "decompress-unzip": "^4.0.1",
     "del": "^6.0.0",
     "electron-installer-dmg": "^3.0.0",
     "follow-redirects": "^1.15.6",
     "fs-extra": "^9.1.0",
-    "gulp": "^4.0.2",
-    "gulp-concat": "~2.6.1",
-    "gulp-debian": "~0.1.9",
+    "gulp": "^5.0.1",
+    "gulp-debian": "^0.3.2",
     "gulp-git": "^2.10.1",
     "gulp-rename": "^2.0.0",
     "gulp-yarn": "^3.0.0",
@@ -91,12 +93,14 @@
     "targz": "^1.0.1",
     "temp": "^0.9.4",
     "vinyl-source-stream": "^2.0.0",
-    "yarn": "1.22"
+    "yarn": "1.22",
+    "yauzl": "^2.10.0"
   },
   "optionalDependencies": {
     "appdmg": "^0.6.6"
   },
   "resolutions": {
     "commander": "14.0.1"
-  }
+  },
+  "packageManager": "yarn@4.10.3"
 }
