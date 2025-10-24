@@ -478,11 +478,23 @@ async function buildNWApps(platforms, flavor, dir, done) {
                 });
 
                 // Move contents of package.nw to the root of the output directory
+                // nwbuild creates: debug/emuflight-configurator/linux64/package.nw
                 const packageNwPath = path.join(dir, pkg.name, arch, 'package.nw');
-                const destPath = path.join(dir, pkg.name, arch);
+                const appOutDir = path.join(dir, pkg.name, arch);
+                const destDir = path.join(dir, arch);
+                
+                // First, unpack package.nw to the app output directory
                 if (fs.existsSync(packageNwPath)) {
-                    fse.copySync(packageNwPath, destPath, { overwrite: true });
+                    fse.copySync(packageNwPath, appOutDir, { overwrite: true });
                     fse.removeSync(packageNwPath);
+                }
+                
+                // Then move everything from app output directory to debug root
+                if (fs.existsSync(appOutDir)) {
+                    if (!fs.existsSync(destDir)) {
+                        fs.mkdirSync(destDir, { recursive: true });
+                    }
+                    fse.copySync(appOutDir, destDir, { overwrite: true });
                 }
             } catch (err) {
                 console.log('Error building NW apps for ' + arch + ': ' + err);

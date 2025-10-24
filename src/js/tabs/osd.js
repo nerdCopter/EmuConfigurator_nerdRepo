@@ -2910,10 +2910,19 @@ TABS.osd.initialize = function (callback) {
         FONT.initData();
 
         fontPresetsElement.change(function (e) {
-            var $font = $('.fontpresets option:selected');
+            console.log('fontPresetsElement.change called');
+            var selectedFontFile = fontPresetsElement.val();
+            console.log('Selected font file:', selectedFontFile);
+            
+            // Skip if no font is selected (undefined or empty)
+            if (!selectedFontFile) {
+                console.log('No font file selected, skipping font load');
+                return;
+            }
+            
             //moved font versioning to TABS.osd.initialize
             $('.font-manager-version-info').text(i18n.getMessage('osdDescribeFontVersion' + fontver));
-            $.get('./resources/osd/' + fontver + '/' + $font.data('font-file') + '.mcm', function (data) {
+            $.get('./resources/osd/' + fontver + '/' + selectedFontFile + '.mcm', function (data) {
                 FONT.parseMCMFontFile(data);
                 FONT.preview(fontPreviewElement);
                 LogoManager.drawPreview();
@@ -2921,8 +2930,11 @@ TABS.osd.initialize = function (callback) {
                 $('.fontpresets option[value=-1]').hide();
             });
         });
-        // load the first font when we change tabs
-        fontPresetsElement.change();
+        
+        // Set the first font option as selected and load it
+        if (fontPresetsElement.find('option').length > 0) {
+            fontPresetsElement.prop('selectedIndex', 0).change();
+        }
 
 
         $('button.load_font_file').click(function () {
