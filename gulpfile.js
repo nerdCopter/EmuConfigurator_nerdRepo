@@ -477,24 +477,21 @@ async function buildNWApps(platforms, flavor, dir, done) {
                     managedManifest: true
                 });
 
-                // Move contents of package.nw to the root of the output directory
-                // nwbuild creates: debug/emuflight-configurator/linux64/package.nw
-                const packageNwPath = path.join(dir, pkg.name, arch, 'package.nw');
-                const appOutDir = path.join(dir, pkg.name, arch);
-                const destDir = path.join(dir, arch);
+                // For NWjs to find the app, all app files need to be in the same
+                // directory as the executable. nwbuild creates them in a subdirectory,
+                // so we need to move everything to the root.
+                const appBuiltPath = path.join(dir, pkg.name, arch);
                 
-                // First, unpack package.nw to the app output directory
-                if (fs.existsSync(packageNwPath)) {
-                    fse.copySync(packageNwPath, appOutDir, { overwrite: true });
-                    fse.removeSync(packageNwPath);
-                }
-                
-                // Then move everything from app output directory to debug root
-                if (fs.existsSync(appOutDir)) {
-                    if (!fs.existsSync(destDir)) {
-                        fs.mkdirSync(destDir, { recursive: true });
-                    }
-                    fse.copySync(appOutDir, destDir, { overwrite: true });
+                if (fs.existsSync(appBuiltPath)) {
+                    // Get all files and directories from the arch subdirectory
+                    const files = fs.readdirSync(appBuiltPath);
+                    files.forEach(file => {
+                        const srcPath = path.join(appBuiltPath, file);
+                        const destPath = path.join(dir, file);
+                        // Move everything (including package.nw if it's a directory or zip)
+                        fse.removeSync(destPath); // Remove if exists
+                        fse.moveSync(srcPath, destPath);
+                    });
                 }
             } catch (err) {
                 console.log('Error building NW apps for ' + arch + ': ' + err);
