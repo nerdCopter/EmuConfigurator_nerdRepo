@@ -65,30 +65,12 @@ let FirmwareCache = (function () {
         };
     })();
 
-    let journal = new LRUMap(100),
+    let journal = new Map(),
         journalLoaded = false;
 
     journal.shift = function () {
-        // remove cached data for oldest release
-        let oldest = LRUMap.prototype.shift.call(this);
-        if (oldest === undefined) {
-            return undefined;
-        }
-        let key = oldest[0];
-        let cacheKey = withCachePrefix(key);
-        chrome.storage.local.get(cacheKey, obj => {
-            /** @type {CacheItem} */
-            let cached = typeof obj === "object" && obj.hasOwnProperty(cacheKey)
-                ? obj[cacheKey]
-                : null;
-            if (cached === null) {
-                return;
-            }
-            chrome.storage.local.remove(cacheKey, () => {
-                onRemoveFromCache(cached.release);
-            });
-        });
-        return oldest;
+        // Simple Map doesn't have LRU, so no removal
+        return undefined;
     };
 
     /**
@@ -137,7 +119,7 @@ let FirmwareCache = (function () {
             return;
         }
         journal.set(key, true);
-        JournalStorage.persist(journal.toJSON());
+        JournalStorage.persist(Array.from(journal.entries()));
         let obj = {};
         obj[withCachePrefix(key)] = {
             release: release,
@@ -198,7 +180,7 @@ let FirmwareCache = (function () {
             chrome.storage.local.remove(cacheKeys);
         });
         journal.clear();
-        JournalStorage.persist(journal.toJSON());    
+        JournalStorage.persist(Array.from(journal.entries()));    
     }
 
     /**
@@ -221,15 +203,12 @@ let FirmwareCache = (function () {
         console.debug("Cache data removed: " + keyOf(release));
     }
 
-    /**
-     * @param {Array} entries 
-     */
     function onEntriesLoaded(entries) {
         let pairs = [];
         for (let entry of entries) {
             pairs.push([entry.key, entry.value]);
         }
-        journal.assign(pairs);
+        pairs.forEach(([k, v]) => journal.set(k, v));
         journalLoaded = true;
         console.info("Firmware cache journal loaded; number of entries: " + entries.length);
     }
@@ -244,7 +223,7 @@ let FirmwareCache = (function () {
             JournalStorage.load(onEntriesLoaded);
         },
         unload: () => {
-            JournalStorage.persist(journal.toJSON());
+            JournalStorage.persist(Array.from(journal.entries()));
             journal.clear();
         },
         invalidate: invalidate,

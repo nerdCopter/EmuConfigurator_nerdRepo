@@ -1,5 +1,7 @@
 'use strict';
 
+console.log('=== main.js LOADED ===');
+
 /*global presetsFolders */
 /*eslint no-undef: "error"*/
 
@@ -10,6 +12,153 @@ const os = require('os');
 // TODO: migrate to non-global
 
 const presetsFolders = os.tmpdir();
+
+var HttpClient = function() {
+    this.get = function(aUrl, aCallback) {
+        var anHttpRequest = new XMLHttpRequest();
+        anHttpRequest.onreadystatechange = function() {
+            if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                aCallback(anHttpRequest.responseText);
+        }
+
+        anHttpRequest.open('GET', aUrl, true);
+        anHttpRequest.send(null);
+    }
+}
+
+ConfigStorage.get('rememberLastTab', function (result) {
+    if (result.rememberLastTab) {
+        ConfigStorage.get('lastTab', function (result) {
+            $('#tabs > ul > li.' + result.lastTab).find('a').trigger('click');
+        });
+    } else {
+        $('#tabs ul.mode-disconnected li a:first').click();
+    }
+});
+
+// Initialize app immediately with a small delay to ensure DOM is ready
+setTimeout(function() {
+    console.log('=== DOCUMENT READY (via setTimeout) ===');
+    appReady();
+}, 100);
+
+function appReady() {
+    console.log('=== APP READY ===');
+    
+    $.getJSON('version.json', function(data) {
+        console.log('=== VERSION.JSON LOADED ===');
+        CONFIGURATOR.version = data.version;
+        CONFIGURATOR.gitChangesetId = data.gitChangesetId;
+        CONFIGURATOR.max_msp = data.max_msp;
+
+        // Version in the ChromeApp's manifest takes precedence.
+        if(chrome.runtime && chrome.runtime.getManifest) {
+            var manifest = chrome.runtime.getManifest();
+            CONFIGURATOR.version = manifest.version;
+            CONFIGURATOR.max_msp = manifest.max_msp;
+            if (manifest.version_name) {
+                CONFIGURATOR.version = manifest.version_name;
+            }
+        }
+        
+        console.log('CONFIGURATOR.version: ' + CONFIGURATOR.version);
+        console.log('CONFIGURATOR.max_msp: ' + CONFIGURATOR.max_msp);
+        
+        i18n.init(function() {
+            console.log('=== i18n INITIALIZED ===');
+            startProcess();
+            initializeSerialBackend();
+        });
+    }).fail(function(error) {
+        console.error('Failed to load version.json:', error);
+        // Continue anyway
+        i18n.init(function() {
+            console.log('=== i18n INITIALIZED (without version) ===');
+            
+            // Setup Ctrl+Q handler (NW.js only)
+            if (GUI.isNWJS()) {
+                console.log('Setting up Ctrl+Q handler for NW.js (from fail path)');
+                $(document).on('keydown', function (e) {
+                    if (e.ctrlKey && e.keyCode === 81) { // Ctrl+Q
+                        console.log('Ctrl+Q pressed - closing application');
+                        e.preventDefault();
+                        try {
+                            let nwWindow = GUI.nwGui.Window.get();
+                            nwWindow.close(true);
+                        } catch (error) {
+                            console.error('Error closing window:', error);
+                        }
+                        return false;
+                    }
+                });
+            }
+            
+            startProcess();
+            initializeSerialBackend();
+        });
+    });
+}
+
+function closeSerial() {
+    // automatically close the port when application closes
+    const connectionId = serial.connectionId;
+
+    if (connectionId && CONFIGURATOR.connectionValid && !CONFIGURATOR.virtualMode) {
+        // code below is handmade MSP message (without pretty JS wrapper), it behaves exactly like MSP.send_message
+        // sending exit command just in case the cli tab was open.
+        // reset motors to default (mincommand)
+
+        let bufferOut = new ArrayBuffer(5),
+        bufView = new Uint8Array(bufferOut);
+
+        bufView[0] = 0x65; // e
+        bufView[1] = 0x78; // x
+        bufView[2] = 0x69; // i
+        bufView[3] = 0x74; // t
+        bufView[4] = 0x0D; // enter
+
+        const sendFn = (serial.connectionType === 'serial' ? chrome.serial.send : chrome.sockets.tcp.send);
+        sendFn(connectionId, bufferOut, function () {
+            console.log('Send exit');
+        });
+
+        setTimeout(function() {
+            bufferOut = new ArrayBuffer(22);
+            bufView = new Uint8Array(bufferOut);
+            let checksum = 0;
+
+            bufView[0] = 36; // $
+            bufView[1] = 77; // M
+            bufView[2] = 60; // <
+            bufView[3] = 16; // data length
+            bufView[4] = 214; // MSP_SET_MOTOR
+
+            checksum = bufView[3] ^ bufView[4];
+
+            for (let i = 0; i < 16; i += 2) {
+                bufView[5 + i] = 0;
+                bufView[6 + i] = 0;
+
+                checksum ^= bufView[5 + i];
+                checksum ^= bufView[6 + i];
+            }
+
+            bufView[21] = checksum;
+
+            sendFn(connectionId, bufferOut, function () {
+                console.log('Send MOTOR command');
+            });
+        }, 100);
+    }
+
+    // close and cleanup
+    if (GUI.isNWJS()) {
+        let nwWindow = GUI.nwGui.Window.get();
+        nwWindow.close(true);
+    }
+}
+
+window.addEventListener('beforeunload', closeSerial);
 
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
@@ -105,8 +254,10 @@ client.get(nonHelioUrlv040, function(response) {
   });
 
 
-$(document).ready(function () {
+function initializeApp() {
+    console.log('=== INITIALIZING APP ===');
     $.getJSON('version.json', function(data) {
+        console.log('=== VERSION.JSON LOADED ===');
         CONFIGURATOR.version = data.version;
         CONFIGURATOR.gitChangesetId = data.gitChangesetId;
         console.log("doc ready CONFIGURATOR.version "+CONFIGURATOR.version);
@@ -128,11 +279,12 @@ $(document).ready(function () {
             }
         }
         i18n.init(function() {
+            console.log('=== i18n INITIALIZED ===');
             startProcess();
             initializeSerialBackend();
         });
     });
-});
+}
 
 function getBuildType() {
     return GUI.Mode;
@@ -140,6 +292,7 @@ function getBuildType() {
 
 //Process to execute to real start the app
 function startProcess() {
+    console.log('=== START PROCESS ===');
     var debugMode = typeof process === "object" && process.versions['nw-flavor'] === 'sdk';
 
     if (GUI.isNWJS()) {

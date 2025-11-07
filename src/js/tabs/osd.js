@@ -2346,10 +2346,10 @@ TABS.osd.initialize = function (callback) {
                     OSD.msp.decode(info);
 
                     if (OSD.data.state.haveSomeOsd == 0) {
-                        $('.unsupported').fadeIn();
+                        $('.unsupported').show();
                         return;
                     }
-                    $('.supported').fadeIn();
+                    $('.supported').show();
 
                     // video mode
                     var $videoTypes = $('.video-types').empty();
@@ -2880,6 +2880,10 @@ TABS.osd.initialize = function (callback) {
                             outside: 'x'
                         }));
                     });
+                })
+                .catch(function(error) {
+                    console.error('MSP_OSD_CONFIG failed:', error);
+                    // Don't show unsupported - let the view handle it
                 });
         };
 
@@ -2910,19 +2914,43 @@ TABS.osd.initialize = function (callback) {
         FONT.initData();
 
         fontPresetsElement.change(function (e) {
-            var $font = $('.fontpresets option:selected');
+            var $font = $(this).find('option:selected');
+            console.log('Change event - selected option:', $font.val(), 'Index:', $font.prop('selectedIndex'));
+            var fontFile = $font.attr('data-font-file') || $font.data('font-file');
+            console.log('Font file attr:', $font.attr('data-font-file'), 'Font file data:', $font.data('font-file'), 'Result:', fontFile);
+            if (!fontFile) {
+                console.log('No font file selected. Option value:', $font.val(), 'Attributes:', $font.prop('outerHTML'));
+                updateOsdView();
+                return;
+            }
             //moved font versioning to TABS.osd.initialize
             $('.font-manager-version-info').text(i18n.getMessage('osdDescribeFontVersion' + fontver));
-            $.get('./resources/osd/' + fontver + '/' + $font.data('font-file') + '.mcm', function (data) {
+            $.get('./resources/osd/' + fontver + '/' + fontFile + '.mcm', function (data) {
                 FONT.parseMCMFontFile(data);
                 FONT.preview(fontPreviewElement);
                 LogoManager.drawPreview();
                 updateOsdView();
                 $('.fontpresets option[value=-1]').hide();
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error('Failed to load font file:', textStatus, errorThrown);
+                updateOsdView();
             });
         });
-        // load the first font when we change tabs
-        fontPresetsElement.change();
+        // load the first font when we change tabs - select first font option with data-font-file
+        console.log('Looking for fonts in .fontpresets, total options:', fontPresetsElement.find('option').length);
+        var firstFont = fontPresetsElement.find('option[data-font-file]').first();
+        console.log('Found first font with data-font-file:', firstFont.length, firstFont.val(), firstFont.text());
+        if (firstFont.length > 0) {
+            console.log('Setting first font to:', firstFont.val());
+            fontPresetsElement.val(firstFont.val());
+            fontPresetsElement.change();
+        } else {
+            console.log('No font options found with data-font-file attribute');
+            console.log('Available options:', fontPresetsElement.find('option').length);
+            fontPresetsElement.find('option').each(function(i, el) {
+                console.log('Option', i, ':', $(el).val(), $(el).data('font-file'), $(el).attr('data-font-file'), $(el).text());
+            });
+        }
 
 
         $('button.load_font_file').click(function () {

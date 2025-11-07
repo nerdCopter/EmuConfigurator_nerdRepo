@@ -88,14 +88,15 @@
         @import url(./css/tabs-dark/transponder-dark.css) (prefers-color-scheme: dark);
     </style>
 
-    <script type="text/javascript" src="./node_modules/lru_map/lru.js"></script>
+    <!-- LRU Map no longer needed - FirmwareCache uses standard Map -->
+    <!-- <script type="text/javascript" src="./node_modules/lru_map/dist/lru.js"></script> -->
     <script type="text/javascript" src="./node_modules/i18next/i18next.min.js"></script>
     <script type="text/javascript" src="./node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js"></script>
     <script type="text/javascript" src="./node_modules/marked/marked.min.js"></script>
     <script type="text/javascript" src="./node_modules/short-unique-id/dist/short-unique-id.min.js"></script>
-    <script type="text/javascript" src="./node_modules/object-hash/dist/object_hash.js"></script>
     <script type="text/javascript" src="./js/libraries/q.js"></script>
     <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script>console.log('=== jQuery LOADED ===', typeof jQuery, typeof $);</script>
     <script type="text/javascript" src="./node_modules/jbox/dist/jBox.min.js"></script>
     <script type="text/javascript" src="./node_modules/jquery-ui-npm/jquery-ui.min.js"></script>
     <script type="text/javascript" src="./js/libraries/d3.min.js"></script>
@@ -108,7 +109,11 @@
     <script type="text/javascript" src="./js/libraries/switchery/switchery.js"></script>
     <script type="text/javascript" src="./node_modules/bluebird/js/browser/bluebird.min.js"></script>
     <script type="text/javascript" src="./js/libraries/jquery.ba-throttle-debounce.min.js"></script>
-    <script type="text/javascript" src="./node_modules/inflection/inflection.min.js"></script>
+    <script type="text/javascript">
+        // Load inflection module using Node's require since we're in NW.js
+        const inflection = require('inflection');
+        window.inflection = inflection;
+    </script>
     <script type="text/javascript" src="./js/injected_methods.js"></script>
     <script type="text/javascript" src="./js/ConfigStorage.js"></script>
     <script type="text/javascript" src="./js/data_storage.js"></script>
@@ -177,6 +182,37 @@
     <title i18n="windowTitle"></title>
 </head>
 <body>
+<script>
+    console.log('=== BODY LOADED ===');
+    // Setup Ctrl+Q handler for NW.js - quit application
+    // We defer getting the window until it's needed because nw.Window might not be available immediately
+    document.addEventListener('keydown', function(e) {
+        // Check both keyCode and key property for compatibility
+        var isQKey = (e.keyCode === 81) || (e.key && (e.key.toLowerCase() === 'q'));
+        if (e.ctrlKey && isQKey) { 
+            console.log('Ctrl+Q pressed - attempting to close application');
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+                // Try multiple ways to get the window
+                if (typeof nw !== 'undefined' && nw.Window && typeof nw.Window.get === 'function') {
+                    console.log('Closing via nw.Window.get()');
+                    nw.Window.get().close(true);
+                } else if (typeof gui !== 'undefined' && gui.Window && typeof gui.Window.get === 'function') {
+                    console.log('Closing via gui.Window.get()');
+                    gui.Window.get().close(true);
+                } else {
+                    console.log('nw.Window not available, trying window.close()');
+                    window.close();
+                }
+            } catch (err) {
+                console.error('Error closing window:', err);
+            }
+            return false;
+        }
+    }, true); // Capture phase
+    console.log('=== NW.js Ctrl+Q handler registered ===');
+</script>
 <div id="main-wrapper">
     <div class="headerbar">
         <div id="logo">
