@@ -9,6 +9,7 @@
   "bg-script": "js/eventPage.js",
   "default_locale": "en",
   "scripts": {
+    "postinstall": "test -f scripts/patch-nw-builder.js && node scripts/patch-nw-builder.js || true",
     "start": "gulp debug",
     "gulp": "gulp",
     "test": "karma start test/karma.conf.js"
