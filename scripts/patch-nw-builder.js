@@ -32,7 +32,8 @@ content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
 // Patch NW.js download URLs for GitHub releases (Linux, Windows, OSX)
 // Match Linux, Windows, and OSX (osx-x64, osx-ia32, etc.)
 const githubRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-(linux|win|osx)-(x64|ia32|x86|arm64|arm)\.(zip|tar\.gz))/g;
-const githubOsxDashRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-osx-(x64|ia32|x86|arm64|arm)\.zip)/g;
+// OSX: match both nwjs-v{version}-osx-x64.zip and nwjs-sdk-v{version}-osx-x64.zip
+const githubOsxUniversalRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(-sdk)?-v\1-osx-(x64|ia32|x86|arm64|arm)\.zip)/g;
 
 // Replace Linux/Windows URLs
 content = content.replace(githubRe, (match, version, filename, platform, arch, ext) => {
@@ -48,9 +49,9 @@ content = content.replace(githubRe, (match, version, filename, platform, arch, e
 });
 
 // Replace OSX URLs (osx-x64, osx-ia32, etc.)
-content = content.replace(githubOsxDashRe, (match, version, flavorPart, arch) => {
-    // flavorPart is either undefined or '-sdk'
-    let flavor = flavorPart || '';
+content = content.replace(githubOsxUniversalRe, (match, version, base, sdk, arch) => {
+    // sdk is either undefined or '-sdk'
+    let flavor = sdk || '';
     let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
     let newName = `nwjs${flavor}-v${version}-osx-${archStr}.zip`;
     return `https://github.com/nwjs/nw.js/releases/download/v${version}/${newName}`;
