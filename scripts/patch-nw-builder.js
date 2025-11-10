@@ -1,67 +1,46 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 /**
- * Post-install patch for nw-builder to disable proxy auto-detection
+ * Post-install patch for nw-builder to:
+ * 1. Disable proxy auto-detection in downloader
+ * 2. Replace default downloadUrl to use GitHub releases
  */
 
 const fs = require("fs");
 const path = require("path");
 
-const downloaderPath = path.join(__dirname, "..", "node_modules", "nw-builder", "lib", "downloader.cjs");
+// Patch the SOURCE file where the default downloadUrl is defined
+const optionsPath = path.join(__dirname, "..", "node_modules", "nw-builder", "src", "constants", "Options.js");
 
-// Exit silently if nw-builder is not installed (e.g., in dist/ folder)
-if (!fs.existsSync(downloaderPath)) {
+// Exit silently if nw-builder source is not available
+if (!fs.existsSync(optionsPath)) {
     process.exit(0);
 }
 
 let content;
 try {
-    content = fs.readFileSync(downloaderPath, "utf8");
+    content = fs.readFileSync(optionsPath, "utf8");
 } catch (error) {
-    console.error("[patch-nw-builder] Error reading file:", error.message);
+    console.error("[patch-nw-builder] Error reading Options.js:", error.message);
     process.exit(1);
 }
 
 const originalContent = content;
 
-
-// Disable proxy auto-detection
-content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
-
-
-// Patch NW.js download URLs for GitHub releases (Linux and Windows only - OSX handled separately)
-const githubRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-(linux|win)-(x64|ia32|x86|arm64|arm)\.(zip|tar\.gz))/g;
-// OSX: match both nwjs-v{version}-osx-x64.zip and nwjs-sdk-v{version}-osx-x64.zip
-const githubOsxUniversalRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(-sdk)?-v\1-osx-(x64|ia32|x86|arm64|arm)\.zip)/g;
-
-// Replace Linux/Windows URLs
-content = content.replace(githubRe, (match, version, filename, platform, arch, ext) => {
-    let githubPlatform = platform;
-    if (platform === 'win') githubPlatform = 'win';
-    if (platform === 'linux') githubPlatform = 'linux';
-    // Use .zip for win, .tar.gz for linux
-    let realExt = (platform === 'linux') ? 'tar.gz' : 'zip';
-    let flavor = filename.includes('-sdk-') ? '-sdk' : '';
-    let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
-    let newName = `nwjs${flavor}-v${version}-${githubPlatform}-${archStr}.${realExt}`;
-    return `https://github.com/nwjs/nw.js/releases/download/v${version}/${newName}`;
-});
-
-// Replace OSX URLs (osx-x64, osx-ia32, etc.)
-content = content.replace(githubOsxUniversalRe, (match, version, sdk, arch) => {
-    // sdk is either undefined or '-sdk'
-    let flavor = sdk || '';
-    let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
-    let newName = `nwjs${flavor}-v${version}-osx-${archStr}.zip`;
-    return `https://github.com/nwjs/nw.js/releases/download/v${version}/${newName}`;
-});
+// Replace the default downloadUrl to point to GitHub releases instead of dl.nwjs.io
+// This changes: downloadUrl: "https://dl.nwjs.io/",
+// To:         downloadUrl: "https://github.com/nwjs/nw.js/releases/download/",
+content = content.replace(
+    /downloadUrl:\s*"https:\/\/dl\.nwjs\.io\/"/,
+    'downloadUrl: "https://github.com/nwjs/nw.js/releases/download/"'
+);
 
 if (content !== originalContent) {
     try {
-        fs.writeFileSync(downloaderPath, content, "utf8");
-        console.log("[patch-nw-builder] Disabled proxy auto-detection");
+        fs.writeFileSync(optionsPath, content, "utf8");
+        console.log("[patch-nw-builder] Redirected NW.js downloads to GitHub releases");
     } catch (error) {
-        console.error("[patch-nw-builder] Error writing file:", error.message);
+        console.error("[patch-nw-builder] Error writing Options.js:", error.message);
         process.exit(1);
     }
 }
