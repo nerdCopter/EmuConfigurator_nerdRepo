@@ -92,6 +92,12 @@ jobs:
           yarn gulp release --linux64
         continue-on-error: false
 
+      - name: symlink node_modules into dist (macOS)
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        run: |
+          ln -sfn "$PWD/node_modules" "$PWD/dist/node_modules"
+        continue-on-error: true
+
       - name: yarn gulp release --osx64
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
