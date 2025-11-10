@@ -49,7 +49,7 @@ content = content.replace(githubRe, (match, version, filename, platform, arch, e
 });
 
 // Replace OSX URLs (osx-x64, osx-ia32, etc.)
-content = content.replace(githubOsxUniversalRe, (match, version, base, sdk, arch) => {
+content = content.replace(githubOsxUniversalRe, (match, version, sdk, arch) => {
     // sdk is either undefined or '-sdk'
     let flavor = sdk || '';
     let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
