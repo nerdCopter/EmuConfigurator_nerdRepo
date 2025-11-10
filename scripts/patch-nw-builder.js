@@ -13,13 +13,25 @@ if (!fs.existsSync(downloaderPath)) {
     process.exit(0);
 }
 
-let content = fs.readFileSync(downloaderPath, "utf8");
+let content;
+try {
+    content = fs.readFileSync(downloaderPath, "utf8");
+} catch (error) {
+    console.error("[patch-nw-builder] Error reading file:", error.message);
+    process.exit(1);
+}
+
 const originalContent = content;
 
 // Disable proxy auto-detection
-content = content.replace(/rq\.proxy = true;/, "rq.proxy = false;");
+content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
 
 if (content !== originalContent) {
-    fs.writeFileSync(downloaderPath, content, "utf8");
-    console.log("[patch-nw-builder] Disabled proxy auto-detection");
+    try {
+        fs.writeFileSync(downloaderPath, content, "utf8");
+        console.log("[patch-nw-builder] Disabled proxy auto-detection");
+    } catch (error) {
+        console.error("[patch-nw-builder] Error writing file:", error.message);
+        process.exit(1);
+    }
 }
