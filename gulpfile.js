@@ -669,7 +669,6 @@ function getLinuxPackageArch(type, arch) {
 // TODO: add code-signing https://github.com/LinusU/node-appdmg
 // Create distribution package for macOS platform
 function release_osx64() {
-
     if (process.env.TRAVIS_OS_NAME == 'osx') {
         const { execSync } = require('child_process');
         let stdout = execSync('./codesign_osxapp.sh');
@@ -677,9 +676,14 @@ function release_osx64() {
         console.log('running locally - skipping signing of app');
     }
 
-    //var appdmg = require('gulp-appdmg');
-    const appdmg = require('./gulp-macdmg');
-
+    let appdmg;
+    try {
+        appdmg = require('./gulp-macdmg');
+    } catch (err) {
+        console.error('ERROR: The "appdmg" module is required to build macOS DMG packages but was not found.');
+        console.error('Please ensure "appdmg" is listed in optionalDependencies and installed, then re-run yarn install.');
+        process.exit(1);
+    }
 
     // The appdmg does not generate the folder correctly, manually
     createDirIfNotExists(RELEASE_DIR);
