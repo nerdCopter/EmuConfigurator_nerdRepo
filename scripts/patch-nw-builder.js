@@ -6,7 +6,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const downloaderPath = path.join(__dirname, "..", 'node_modules', 'nw-builder', 'lib', 'downloader.cjs');
+const downloaderPath = path.join(__dirname, "..", "node_modules", "nw-builder", "lib", "downloader.cjs");
 
 // Exit silently if nw-builder is not installed (e.g., in dist/ folder)
 if (!fs.existsSync(downloaderPath)) {
