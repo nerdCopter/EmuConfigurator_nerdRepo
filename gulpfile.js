@@ -55,7 +55,8 @@ var nwBuilderOptions = {
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
-    zip: false
+    zip: false,
+    downloadUrl: 'https://github.com/nwjs/nw.js/releases/download/'
 };
 
 // FIXME: hardcoded version number
