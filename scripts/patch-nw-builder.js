@@ -11,9 +11,10 @@ const path = require("path");
 
 const downloaderPath = path.join(__dirname, "..", "node_modules", "nw-builder", "lib", "downloader.cjs");
 const optionsPath = path.join(__dirname, "..", "node_modules", "nw-builder", "src", "constants", "Options.js");
+const distPath = path.join(__dirname, "..", "node_modules", "nw-builder", "dist", "index.cjs");
 
 // Exit silently if nw-builder is not installed
-if (!fs.existsSync(downloaderPath) && !fs.existsSync(optionsPath)) {
+if (!fs.existsSync(downloaderPath) && !fs.existsSync(optionsPath) && !fs.existsSync(distPath)) {
     process.exit(0);
 }
 
@@ -35,15 +36,13 @@ if (fs.existsSync(downloaderPath)) {
     }
 }
 
-// Patch 2: Change downloadUrl from dl.nwjs.io to GitHub releases in Options.js
+// Patch 2: Change downloadUrl in SOURCE Options.js (for future builds)
 if (fs.existsSync(optionsPath)) {
     try {
         let content = fs.readFileSync(optionsPath, "utf8");
         const originalContent = content;
         
         // Replace the default downloadUrl to point to GitHub releases
-        // From: downloadUrl: "https://dl.nwjs.io/"
-        // To:   downloadUrl: "https://github.com/nwjs/nw.js/releases/download/"
         content = content.replace(
             /downloadUrl:\s*"https:\/\/dl\.nwjs\.io\/"/,
             'downloadUrl: "https://github.com/nwjs/nw.js/releases/download/"'
@@ -51,9 +50,31 @@ if (fs.existsSync(optionsPath)) {
         
         if (content !== originalContent) {
             fs.writeFileSync(optionsPath, content, "utf8");
-            console.log("[patch-nw-builder] Redirected downloads to GitHub releases");
+            console.log("[patch-nw-builder] Patched Options.js source");
         }
     } catch (error) {
         console.error("[patch-nw-builder] Error patching Options.js:", error.message);
+    }
+}
+
+// Patch 3: Change downloadUrl in COMPILED dist/index.cjs (for immediate effect)
+if (fs.existsSync(distPath)) {
+    try {
+        let content = fs.readFileSync(distPath, "utf8");
+        const originalContent = content;
+        
+        // Replace ALL occurrences of the old downloadUrl in the minified compiled code
+        // Pattern can be: downloadUrl:"https://dl.nwjs.io/" or downloadUrl: "https://dl.nwjs.io/"
+        content = content.replace(
+            /downloadUrl:\s*"https:\/\/dl\.nwjs\.io\/"/g,
+            'downloadUrl:"https://github.com/nwjs/nw.js/releases/download/"'
+        );
+        
+        if (content !== originalContent) {
+            fs.writeFileSync(distPath, content, "utf8");
+            console.log("[patch-nw-builder] Patched dist/index.cjs compiled file");
+        }
+    } catch (error) {
+        console.error("[patch-nw-builder] Error patching dist/index.cjs:", error.message);
     }
 }
