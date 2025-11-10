@@ -3,18 +3,18 @@ function injectOSXCache(flavor, callback) {
     var flavorPostfix = `-${flavor}`;
     var flavorDownloadPostfix = flavor !== 'normal' ? `-${flavor}` : '';
     var version = nwBuilderOptions.version;
-    var versionFolder = `./cache/${version}${flavorPostfix}`;
-    if (!fs.existsSync('./cache')) {
-        fs.mkdirSync('./cache');
+    var versionFolder = path.resolve(`./cache/${version}${flavorPostfix}`);
+    if (!fs.existsSync(path.resolve('./cache'))) {
+        fs.mkdirSync(path.resolve('./cache'));
     }
     if (!fs.existsSync(versionFolder)) {
         fs.mkdirSync(versionFolder);
     }
-    if (!fs.existsSync(versionFolder + '/osx64')) {
-        fs.mkdirSync(`${versionFolder}/osx64`);
+    if (!fs.existsSync(path.join(versionFolder, 'osx64'))) {
+        fs.mkdirSync(path.join(versionFolder, 'osx64'));
     }
-    var downloadedArchivePath = `${versionFolder}/nwjs${flavorDownloadPostfix}-v${version}-osx-x64.zip`;
-    var downloadUrl = `https://github.com/nwjs/nw.js/releases/download/v${version}/nwjs-v${version}-osx-x64.zip`;
+    var downloadedArchivePath = path.join(versionFolder, `nwjs${flavorDownloadPostfix}-v${version}-osx-x64.tar.gz`);
+    var downloadUrl = `https://github.com/nwjs/nw.js/releases/download/v${version}/nwjs-v${version}-osx-x64.tar.gz`;
     if (fs.existsSync(downloadedArchivePath)) {
         console.log('Prebuilt osx64 NW.js found in cache');
         downloadDone(downloadedArchivePath, versionFolder);
@@ -40,16 +40,18 @@ function injectOSXCache(flavor, callback) {
     }
     function downloadDone(downloadedArchivePath, versionFolder) {
         console.log('Extracting NW.js for osx64...');
-        extract = require('extract-zip');
-        extract(downloadedArchivePath, { dir: versionFolder }, function(err) {
+        targz.decompress({
+            src: downloadedArchivePath,
+            dest: versionFolder,
+        }, function(err) {
             if (err) {
                 console.log(err);
                 clean_debug();
                 process.exit(1);
             } else {
                 // Move extracted folder to osx64
-                var extractedDir = `${versionFolder}/nwjs-${nwBuilderOptions.version}-osx-x64`;
-                var targetDir = `${versionFolder}/osx64`;
+                var extractedDir = path.join(versionFolder, `nwjs-${nwBuilderOptions.version}-osx-x64`);
+                var targetDir = path.join(versionFolder, 'osx64');
                 if (fs.existsSync(extractedDir)) {
                     fse.moveSync(extractedDir, targetDir, { overwrite: true });
                 }
@@ -479,6 +481,87 @@ function injectARMCache(flavor, callback) {
     }
 }
 
+    // Unified NW.js cache injection for ARMv7, OSX64, and future platforms
+    function injectPlatformCache(platform, flavor, callback) {
+        var flavorPostfix = `-${flavor}`;
+        var flavorDownloadPostfix = flavor !== 'normal' ? `-${flavor}` : '';
+        var version = (platform === 'armv7') ? nwArmVersion : nwBuilderOptions.version;
+        var versionFolder = path.resolve(`./cache/${version}${flavorPostfix}`);
+        if (!fs.existsSync(path.resolve('./cache'))) {
+            fs.mkdirSync(path.resolve('./cache'));
+        }
+        if (!fs.existsSync(versionFolder)) {
+            fs.mkdirSync(versionFolder);
+        }
+        // Platform-specifics
+        var archiveName, downloadUrl, extractedDir, targetDir;
+        if (platform === 'armv7') {
+            if (!fs.existsSync(path.join(versionFolder, 'linux32'))) {
+                fs.mkdirSync(path.join(versionFolder, 'linux32'));
+            }
+            archiveName = `nwjs${flavorDownloadPostfix}-v${version}-linux-arm.tar.gz`;
+            downloadUrl = `https://github.com/LeonardLaszlo/nw.js-armv7-binaries/releases/download/v${version}/nwjs${flavorDownloadPostfix}-v${version}-linux-arm.tar.gz`;
+            extractedDir = path.join(versionFolder, `nwjs${flavorDownloadPostfix}-v${version}-linux-arm`);
+            targetDir = path.join(versionFolder, 'linux32');
+        } else if (platform === 'osx64') {
+            if (!fs.existsSync(path.join(versionFolder, 'osx64'))) {
+                fs.mkdirSync(path.join(versionFolder, 'osx64'));
+            }
+            archiveName = `nwjs${flavorDownloadPostfix}-v${version}-osx-x64.tar.gz`;
+            downloadUrl = `https://github.com/nwjs/nw.js/releases/download/v${version}/nwjs-v${version}-osx-x64.tar.gz`;
+            extractedDir = path.join(versionFolder, `nwjs-${version}-osx-x64`);
+            targetDir = path.join(versionFolder, 'osx64');
+        } else {
+            throw new Error('Unsupported platform for NW.js cache injection: ' + platform);
+        }
+        var downloadedArchivePath = path.join(versionFolder, archiveName);
+        if (fs.existsSync(downloadedArchivePath)) {
+            console.log(`Prebuilt ${platform} NW.js found in cache`);
+            downloadDone();
+        } else {
+            console.log(`Downloading NW.js for ${platform} from "${downloadUrl}"...`);
+            process.stdout.write('> Starting download...\r');
+            var file = fs.createWriteStream(downloadedArchivePath);
+            https.get(downloadUrl, function(res) {
+                var totalBytes = res.headers['content-length'];
+                var downloadedBytes = 0;
+                res.pipe(file);
+                res.on('data', function(chunk) {
+                    downloadedBytes += chunk.length;
+                    process.stdout.write(`> ${parseInt((downloadedBytes * 100) / totalBytes)}% done             \r`);
+                });
+                file.on('finish', function() {
+                    process.stdout.write('> 100% done             \n');
+                    file.close(function() {
+                        downloadDone();
+                    });
+                });
+            });
+        }
+        function downloadDone() {
+            console.log(`Extracting NW.js for ${platform}...`);
+            targz.decompress({
+                src: downloadedArchivePath,
+                dest: versionFolder,
+            }, function(err) {
+                if (err) {
+                    console.log(err);
+                    clean_debug();
+                    process.exit(1);
+                } else {
+                    if (fs.existsSync(extractedDir)) {
+                        fse.moveSync(extractedDir, targetDir, { overwrite: true });
+                    }
+                    // ARMv7 sets a cache marker
+                    if (platform === 'armv7') {
+                        fs.closeSync(fs.openSync(path.resolve('./cache/_ARMv7_IS_CACHED'), 'w'));
+                    }
+                    callback();
+                }
+            });
+        }
+    }
+
 function buildNWAppsWrapper(platforms, flavor, dir, done) {
     function buildNWAppsCallback() {
         buildNWApps(platforms, flavor, dir, done);
@@ -511,6 +594,32 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
             buildNWAppsCallback();
         }
     }
+        if (platforms.indexOf('armv7') !== -1) {
+            if (platforms.indexOf('linux32') !== -1) {
+                console.log('Cannot build ARMv7 and Linux32 versions at the same time!');
+                clean_debug();
+                process.exit(1);
+            }
+            removeItem(platforms, 'armv7');
+            platforms.push('linux32');
+            if (!fs.existsSync('./cache/_ARMv7_IS_CACHED')) {
+                console.log('Purging cache because it needs to be overwritten...');
+                clean_cache().then(() => {
+                    injectPlatformCache('armv7', flavor, buildNWAppsCallback);
+                })
+            } else {
+                buildNWAppsCallback();
+            }
+        } else if (platforms.indexOf('osx64') !== -1) {
+            injectPlatformCache('osx64', flavor, buildNWAppsCallback);
+        } else {
+            if (platforms.indexOf('linux32') !== -1 && fs.existsSync('./cache/_ARMv7_IS_CACHED')) {
+                console.log('Purging cache because it was previously overwritten...');
+                clean_cache().then(buildNWAppsCallback);
+            } else {
+                buildNWAppsCallback();
+            }
+        }
 }
 
 function buildNWApps(platforms, flavor, dir, done) {
