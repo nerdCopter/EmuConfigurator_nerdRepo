@@ -6,58 +6,38 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 
-// Patch the SOURCE file where the default downloadUrl is defined
-const optionsPath = path.join(__dirname, "..", "node_modules", "nw-builder", "src", "constants", "Options.js");
-const nwBuilderDir = path.join(__dirname, "..", "node_modules", "nw-builder");
+// Patch the compiled dist file where the default downloadUrl is baked in
+const distPath = path.join(__dirname, "..", "node_modules", "nw-builder", "dist", "index.cjs");
 
-// Exit silently if nw-builder source is not available
-if (!fs.existsSync(optionsPath)) {
+// Exit silently if nw-builder dist is not available
+if (!fs.existsSync(distPath)) {
     process.exit(0);
 }
 
 let content;
 try {
-    content = fs.readFileSync(optionsPath, "utf8");
+    content = fs.readFileSync(distPath, "utf8");
 } catch (error) {
-    console.error("[patch-nw-builder] Error reading Options.js:", error.message);
+    console.error("[patch-nw-builder] Error reading dist/index.cjs:", error.message);
     process.exit(1);
 }
 
 const originalContent = content;
 
-// Replace the default downloadUrl to point to GitHub releases instead of dl.nwjs.io
-// This changes: downloadUrl: "https://dl.nwjs.io/",
-// To:         downloadUrl: "https://github.com/nwjs/nw.js/releases/download/",
+// Replace all occurrences of the default downloadUrl in the minified code
+// Pattern: downloadUrl:"https://dl.nwjs.io/" or downloadUrl: "https://dl.nwjs.io/"
 content = content.replace(
-    /downloadUrl:\s*"https:\/\/dl\.nwjs\.io\/"/,
-    'downloadUrl: "https://github.com/nwjs/nw.js/releases/download/"'
+    /downloadUrl:\s*"https:\/\/dl\.nwjs\.io\/"/g,
+    'downloadUrl:"https://github.com/nwjs/nw.js/releases/download/"'
 );
 
 if (content !== originalContent) {
     try {
-        fs.writeFileSync(optionsPath, content, "utf8");
-        console.log("[patch-nw-builder] Patched Options.js to use GitHub releases");
-        
-        // Rebuild nw-builder's dist files to apply the patch
-        try {
-            console.log("[patch-nw-builder] Rebuilding nw-builder...");
-            execSync("npm run build", { cwd: nwBuilderDir, stdio: "inherit" });
-            console.log("[patch-nw-builder] Successfully rebuilt nw-builder");
-        } catch (buildError) {
-            console.error("[patch-nw-builder] Warning: Could not rebuild nw-builder, trying with npx esbuild...");
-            try {
-                const esbuildPath = path.join(nwBuilderDir, "node_modules", ".bin", "esbuild");
-                execSync(`${esbuildPath} src/index.js --bundle --minify --platform=node --outfile=./dist/index.cjs`, 
-                    { cwd: nwBuilderDir, stdio: "inherit" });
-                console.log("[patch-nw-builder] Successfully rebuilt with esbuild");
-            } catch (esbuildError) {
-                console.warn("[patch-nw-builder] Warning: Could not rebuild nw-builder, patch applied to source only");
-            }
-        }
+        fs.writeFileSync(distPath, content, "utf8");
+        console.log("[patch-nw-builder] Redirected NW.js downloads to GitHub releases");
     } catch (error) {
-        console.error("[patch-nw-builder] Error writing Options.js:", error.message);
+        console.error("[patch-nw-builder] Error writing dist/index.cjs:", error.message);
         process.exit(1);
     }
 }
