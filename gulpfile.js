@@ -1,3 +1,63 @@
+// Custom cache injection for macOS (osx64) to use GitHub releases
+function injectOSXCache(flavor, callback) {
+    var flavorPostfix = `-${flavor}`;
+    var flavorDownloadPostfix = flavor !== 'normal' ? `-${flavor}` : '';
+    var version = nwBuilderOptions.version;
+    var versionFolder = `./cache/${version}${flavorPostfix}`;
+    if (!fs.existsSync('./cache')) {
+        fs.mkdirSync('./cache');
+    }
+    if (!fs.existsSync(versionFolder)) {
+        fs.mkdirSync(versionFolder);
+    }
+    if (!fs.existsSync(versionFolder + '/osx64')) {
+        fs.mkdirSync(`${versionFolder}/osx64`);
+    }
+    var downloadedArchivePath = `${versionFolder}/nwjs${flavorDownloadPostfix}-v${version}-osx-x64.zip`;
+    var downloadUrl = `https://github.com/nwjs/nw.js/releases/download/v${version}/nwjs-v${version}-osx-x64.zip`;
+    if (fs.existsSync(downloadedArchivePath)) {
+        console.log('Prebuilt osx64 NW.js found in cache');
+        downloadDone(downloadedArchivePath, versionFolder);
+    } else {
+        console.log(`Downloading NW.js for osx64 from "${downloadUrl}"...`);
+        process.stdout.write('> Starting download...\r');
+        var file = fs.createWriteStream(downloadedArchivePath);
+        https.get(downloadUrl, function(res) {
+            var totalBytes = res.headers['content-length'];
+            var downloadedBytes = 0;
+            res.pipe(file);
+            res.on('data', function(chunk) {
+                downloadedBytes += chunk.length;
+                process.stdout.write(`> ${parseInt((downloadedBytes * 100) / totalBytes)}% done             \r`);
+            });
+            file.on('finish', function() {
+                process.stdout.write('> 100% done             \n');
+                file.close(function() {
+                    downloadDone(downloadedArchivePath, versionFolder);
+                });
+            });
+        });
+    }
+    function downloadDone(downloadedArchivePath, versionFolder) {
+        console.log('Extracting NW.js for osx64...');
+        extract = require('extract-zip');
+        extract(downloadedArchivePath, { dir: versionFolder }, function(err) {
+            if (err) {
+                console.log(err);
+                clean_debug();
+                process.exit(1);
+            } else {
+                // Move extracted folder to osx64
+                var extractedDir = `${versionFolder}/nwjs-${nwBuilderOptions.version}-osx-x64`;
+                var targetDir = `${versionFolder}/osx64`;
+                if (fs.existsSync(extractedDir)) {
+                    fse.moveSync(extractedDir, targetDir, { overwrite: true });
+                }
+                callback();
+            }
+        });
+    }
+}
 'use strict';
 
 var pkg = require('./package.json');
@@ -55,9 +115,7 @@ var nwBuilderOptions = {
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
-    zip: false,
-    // GitHub mirror for NW.js downloads (dl.nwjs.io is no longer available)
-    downloadUrl: 'https://github.com/nwjs/nw.js/releases/download/'
+    zip: false
 };
 
 // FIXME: hardcoded version number
@@ -434,7 +492,6 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
         }
         removeItem(platforms, 'armv7');
         platforms.push('linux32');
-
         if (!fs.existsSync('./cache/_ARMv7_IS_CACHED', 'w')) {
             console.log('Purging cache because it needs to be overwritten...');
             clean_cache().then(() => {
@@ -443,6 +500,9 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
         } else {
             buildNWAppsCallback();
         }
+    } else if (platforms.indexOf('osx64') !== -1) {
+        // Custom cache for osx64
+        injectOSXCache(flavor, buildNWAppsCallback);
     } else {
         if (platforms.indexOf('linux32') !== -1 && fs.existsSync('./cache/_ARMv7_IS_CACHED')) {
             console.log('Purging cache because it was previously overwritten...');
