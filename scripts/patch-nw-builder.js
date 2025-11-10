@@ -29,9 +29,8 @@ const originalContent = content;
 content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
 
 
-// Patch NW.js download URLs for GitHub releases (Linux, Windows, OSX)
-// Match Linux, Windows, and OSX (osx-x64, osx-ia32, etc.)
-const githubRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-(linux|win|osx)-(x64|ia32|x86|arm64|arm)\.(zip|tar\.gz))/g;
+// Patch NW.js download URLs for GitHub releases (Linux and Windows only - OSX handled separately)
+const githubRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-(linux|win)-(x64|ia32|x86|arm64|arm)\.(zip|tar\.gz))/g;
 // OSX: match both nwjs-v{version}-osx-x64.zip and nwjs-sdk-v{version}-osx-x64.zip
 const githubOsxUniversalRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(-sdk)?-v\1-osx-(x64|ia32|x86|arm64|arm)\.zip)/g;
 
