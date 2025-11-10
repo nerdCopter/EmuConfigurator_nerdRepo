@@ -24,8 +24,36 @@ try {
 
 const originalContent = content;
 
+
 // Disable proxy auto-detection
 content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
+
+// Patch NW.js download URLs for GitHub releases (Linux, Windows, OSX)
+// Only patch if not already patched
+const githubRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-(linux|win|osx)-(x64|ia32|x86|arm64|arm)\.zip)/g;
+const githubOsxRe = /https:\/\/dl\.nwjs\.io\/v([\d.]+)\/(nwjs(?:-sdk)?-v\1-osx-(x64|ia32|x86|arm64|arm)\.zip)/g;
+
+// Replace Linux/Windows URLs
+content = content.replace(githubRe, (match, version, filename, platform, arch) => {
+    let githubPlatform = platform;
+    if (platform === 'win') githubPlatform = 'win';
+    if (platform === 'linux') githubPlatform = 'linux';
+    // Use .zip for win, .tar.gz for linux
+    let ext = (platform === 'linux') ? 'tar.gz' : 'zip';
+    let flavor = filename.includes('-sdk-') ? '-sdk' : '';
+    let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
+    let newName = `nwjs${flavor}-v${version}-${githubPlatform}-${archStr}.${ext}`;
+    return `https://github.com/nwjs/nw.js/releases/download/v${version}/${newName}`;
+});
+
+// Replace OSX URLs (osx64, osx32, arm)
+content = content.replace(githubOsxRe, (match, version, arch) => {
+    // GitHub uses 'osx' for x64, but asset is .zip
+    let flavor = match.includes('-sdk-') ? '-sdk' : '';
+    let archStr = arch === 'x64' ? 'x64' : (arch === 'ia32' || arch === 'x86') ? 'ia32' : arch;
+    let newName = `nwjs${flavor}-v${version}-osx-${archStr}.zip`;
+    return `https://github.com/nwjs/nw.js/releases/download/v${version}/${newName}`;
+});
 
 if (content !== originalContent) {
     try {
