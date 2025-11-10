@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 /**
  * Post-install patch for nw-builder to disable proxy auto-detection
  */
