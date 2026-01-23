@@ -681,9 +681,14 @@ function release_osx64() {
     try {
         appdmg = require('./gulp-macdmg');
     } catch (err) {
-        console.error('ERROR: The "appdmg" module is required to build macOS DMG packages but was not found.');
-        console.error('Please ensure "appdmg" is listed in optionalDependencies and installed, then re-run yarn install.');
-        process.exit(1);
+        if (err.code === 'MODULE_NOT_FOUND' && (err.message.includes('./gulp-macdmg') || err.message.includes('appdmg'))) {
+            console.error('ERROR: Failed to load "./gulp-macdmg" module, which is required to build macOS DMG packages.');
+            console.error('This module depends on the external "appdmg" package. Please ensure "appdmg" is listed in optionalDependencies and installed, then re-run yarn install.');
+            process.exit(1);
+        } else {
+            console.error('ERROR: Unexpected error while loading "./gulp-macdmg":', err);
+            throw err;
+        }
     }
 
     // The appdmg does not generate the folder correctly, manually

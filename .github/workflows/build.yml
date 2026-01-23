@@ -94,7 +94,7 @@ jobs:
 
       - name: Force install appdmg (macOS)
         if: ${{ startsWith(matrix.os, 'macos') }}
-        run: yarn add appdmg@0.6.6 --ignore-scripts || true
+        run: yarn add appdmg@0.6.6 --ignore-scripts
         continue-on-error: true
 
       - name: yarn gulp release --osx64
