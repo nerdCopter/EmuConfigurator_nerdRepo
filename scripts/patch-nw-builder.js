@@ -27,14 +27,18 @@ try {
 const originalContent = content;
 
 // Disable proxy auto-detection
-content = content.replace(/\brq\.proxy\s*=\s*true\s*;?/i, "rq.proxy = false;");
-
-if (content !== originalContent) {
-    try {
-        fs.writeFileSync(downloaderPath, content, "utf8");
-        console.log("[patch-nw-builder] Disabled proxy auto-detection");
-    } catch (error) {
-        console.error("[patch-nw-builder] Error writing file:", error.message);
-        process.exit(1);
+const proxyRegex = /\brq\.proxy\s*=\s*true\s*;?/i;
+if (!proxyRegex.test(content)) {
+    console.warn("[patch-nw-builder] Proxy pattern not found; patch not applied.");
+} else {
+    content = content.replace(proxyRegex, "rq.proxy = false;");
+    if (content !== originalContent) {
+        try {
+            fs.writeFileSync(downloaderPath, content, "utf8");
+            console.log("[patch-nw-builder] Disabled proxy auto-detection");
+        } catch (error) {
+            console.error("[patch-nw-builder] Error writing file:", error.message);
+            process.exit(1);
+        }
     }
 }
