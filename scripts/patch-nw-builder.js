@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 /**
  * Post-install patch for nw-builder to disable proxy auto-detection
+ * Compatible with nw-builder 3.8.3
  * 
  * Note: downloadUrl is configured directly in gulpfile.js, so this only needs to disable proxy.
  */
@@ -27,11 +28,12 @@ try {
 const originalContent = content;
 
 // Disable proxy auto-detection
-const proxyRegex = /\brq\.proxy\s*=\s*true\s*;?/i;
+// Use flexible regex to handle variations in formatting
+const proxyRegex = /rq\.proxy\s*=\s*true/;
 if (!proxyRegex.test(content)) {
-    console.warn("[patch-nw-builder] Proxy pattern not found; patch not applied.");
+    console.warn("[patch-nw-builder] Proxy pattern not found; patch not applied. Expected nw-builder 3.8.3. Check if nw-builder version or code structure has changed.");
 } else {
-    content = content.replace(proxyRegex, "rq.proxy = false;");
+    content = content.replace(proxyRegex, "rq.proxy = false");
     if (content !== originalContent) {
         try {
             fs.writeFileSync(downloaderPath, content, "utf8");
