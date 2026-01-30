@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 /**
- * Post-install patch for nw-builder to disable proxy auto-detection
+ * Post-install patch for nw-builder to fix macOS ARM64 download issues
  * Compatible with nw-builder 3.8.3
  * 
- * Note: downloadUrl is configured directly in gulpfile.js, so this only needs to disable proxy.
+ * Issue: request package has ARM64 incompatibility on macOS with Node.js 18+
+ * Fix: Replace request with follow-redirects (already in dependencies)
  */
 
 const fs = require("fs");
@@ -27,20 +28,26 @@ try {
 
 const originalContent = content;
 
-// Disable proxy auto-detection
-// Use flexible regex to handle variations in formatting
-const proxyRegex = /rq\.proxy\s*=\s*true/;
-if (!proxyRegex.test(content)) {
-    console.warn("[patch-nw-builder] Proxy pattern not found; patch not applied. Expected nw-builder 3.8.3. Check if nw-builder version or code structure has changed.");
-} else {
-    content = content.replace(proxyRegex, "rq.proxy = false");
-    if (content !== originalContent) {
-        try {
-            fs.writeFileSync(downloaderPath, content, "utf8");
-            console.log("[patch-nw-builder] Disabled proxy auto-detection");
-        } catch (error) {
-            console.error("[patch-nw-builder] Error writing file:", error.message);
-            process.exit(1);
-        }
+// Replace require("request") with follow-redirects
+content = content.replace(
+    /var request = require\("request"\);/,
+    "var http = require(\"http\");\nvar https = require(\"https\");\nvar { http: httpRedirect, https: httpsRedirect } = require(\"follow-redirects\");\nvar request = function(url) { return url.startsWith(\"https\") ? httpsRedirect.get(url) : httpRedirect.get(url); };"
+);
+
+// Remove proxy setting (not needed with follow-redirects)
+content = content.replace(
+    /rq\.proxy = false;/,
+    "// proxy auto-handling enabled by follow-redirects"
+);
+
+if (content !== originalContent) {
+    try {
+        fs.writeFileSync(downloaderPath, content, "utf8");
+        console.log("[patch-nw-builder] ✓ Patched downloader for ARM64 macOS compatibility (replaced request with follow-redirects)");
+    } catch (error) {
+        console.error("[patch-nw-builder] Error writing file:", error.message);
+        process.exit(1);
     }
+} else {
+    console.warn("[patch-nw-builder] Warning: patterns not found. Expected nw-builder 3.8.3. Check if version or code structure has changed.");
 }
