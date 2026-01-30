@@ -4,8 +4,8 @@
  * Post-install patch for nw-builder to fix download issues
  * Compatible with nw-builder 3.8.3
  * 
- * Issue: request package fails on macOS/Windows in GitHub Actions
- * Fix: Create a wrapper that uses https-proxy-agent to handle redirects properly
+ * Issue: request package fails on macOS/Windows with redirect handling
+ * Fix: Disable proxy and enable explicit redirect following
  */
 
 const fs = require("fs");
@@ -27,19 +27,34 @@ try {
 }
 
 const originalContent = content;
+let patched = false;
 
-// Simple fix: just disable proxy setting entirely since it causes issues
-const proxyRegex = /rq\.proxy\s*=\s*true/;
-content = content.replace(proxyRegex, "rq.proxy = false // disabled to fix download issues");
+// Fix 1: Disable proxy setting which causes issues
+if (/rq\.proxy\s*=\s*true/.test(content)) {
+    content = content.replace(/rq\.proxy\s*=\s*true/, "rq.proxy = false");
+    patched = true;
+}
 
-if (content !== originalContent) {
+// Fix 2: Add explicit redirect following by modifying the request call
+// This ensures redirects are followed on all platforms
+if (/rq = request\(url\)/.test(content)) {
+    content = content.replace(
+        /rq = request\(url\)/,
+        "rq = request(url, { followRedirect: true, followAllRedirects: true })"
+    );
+    patched = true;
+}
+
+if (patched && content !== originalContent) {
     try {
         fs.writeFileSync(downloaderPath, content, "utf8");
-        console.log("[patch-nw-builder] ✓ Patched downloader to bypass request package issues");
+        console.log("[patch-nw-builder] ✓ Patched downloader for cross-platform download reliability");
     } catch (error) {
         console.error("[patch-nw-builder] Error writing file:", error.message);
         process.exit(1);
     }
+} else if (!patched) {
+    console.warn("[patch-nw-builder] Warning: no patches applied. Expected nw-builder 3.8.3. Check if version or code structure has changed.");
 } else {
-    console.warn("[patch-nw-builder] Warning: patterns not found. Expected nw-builder 3.8.3. Check if version or code structure has changed.");
+    console.log("[patch-nw-builder] No changes needed (already patched)");
 }
