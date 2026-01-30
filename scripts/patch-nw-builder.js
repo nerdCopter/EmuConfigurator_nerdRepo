@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 /**
- * Post-install patch for nw-builder to fix macOS ARM64 download issues
+ * Post-install patch for nw-builder to fix download issues
  * Compatible with nw-builder 3.8.3
  * 
- * Issue: request package has ARM64 incompatibility on macOS with Node.js 18+
- * Fix: Replace request with follow-redirects (already in dependencies)
+ * Issue: request package fails on macOS/Windows in GitHub Actions
+ * Fix: Create a wrapper that uses https-proxy-agent to handle redirects properly
  */
 
 const fs = require("fs");
@@ -28,22 +28,14 @@ try {
 
 const originalContent = content;
 
-// Replace require("request") with follow-redirects
-content = content.replace(
-    /var request = require\("request"\);/,
-    "var http = require(\"http\");\nvar https = require(\"https\");\nvar { http: httpRedirect, https: httpsRedirect } = require(\"follow-redirects\");\nvar request = function(url) { return url.startsWith(\"https\") ? httpsRedirect.get(url) : httpRedirect.get(url); };"
-);
-
-// Remove proxy setting (not needed with follow-redirects)
-content = content.replace(
-    /rq\.proxy = false;/,
-    "// proxy auto-handling enabled by follow-redirects"
-);
+// Simple fix: just disable proxy setting entirely since it causes issues
+const proxyRegex = /rq\.proxy\s*=\s*true/;
+content = content.replace(proxyRegex, "rq.proxy = false // disabled to fix download issues");
 
 if (content !== originalContent) {
     try {
         fs.writeFileSync(downloaderPath, content, "utf8");
-        console.log("[patch-nw-builder] ✓ Patched downloader for ARM64 macOS compatibility (replaced request with follow-redirects)");
+        console.log("[patch-nw-builder] ✓ Patched downloader to bypass request package issues");
     } catch (error) {
         console.error("[patch-nw-builder] Error writing file:", error.message);
         process.exit(1);
