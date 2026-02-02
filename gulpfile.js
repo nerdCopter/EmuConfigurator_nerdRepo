@@ -453,7 +453,7 @@ function buildNWApps(platforms, flavor, dir, done) {
         // nw-builder v4: returns Promise, uses outDir not buildDir
         const options = {
             version: nwBuilderOptions.version,
-            files: ['./dist/**/*'],  // Explicit files array for v4 compatibility
+            files: path.join(__dirname, 'dist'),  // Just the directory, no glob
             outDir: dir,  // v4 uses outDir instead of buildDir
             cacheDir: path.join(__dirname, 'cache'),  // Explicit cache directory
             manifestUrl: 'https://nwjs.io/versions.json',  // Explicit manifest URL
