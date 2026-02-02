@@ -12,7 +12,7 @@ const path = require('path');
 
 const zip = require('gulp-zip');
 const del = require('del');
-const NwBuilder = require('nw-builder');
+const { default: nwBuilder } = require('nw-builder');  // v4 exports as default
 const makensis = require('makensis');
 const deb = require('gulp-debian');
 const buildRpm = require('rpm-builder');
@@ -41,8 +41,9 @@ var gitChangeSetId;
 // FIXME: hardcoded version number
 // 0.45.6 Win7 connects; 0.42.3 fixed OSX Flashing; 0.46.X broke Win7 connect. maybe serial/usb needs updating
 // reverted to 0.42.6 due to Windows increased CLI-tab buffer/autocomplete issues.
-// Use 0.50.3 across all platforms - stable version compatible with nw-builder v4
-var NWversion = '0.50.3';
+// NW.js 0.107.0 latest stable - works with nw-builder v4
+// Includes Node.js 25, Chromium 144, full ARM64/modern platform support
+var NWversion = '0.107.0';
 
 var nwBuilderOptions = {
     version: NWversion,
@@ -449,20 +450,31 @@ function buildNWAppsWrapper(platforms, flavor, dir, done) {
 
 function buildNWApps(platforms, flavor, dir, done) {
     if (platforms.length > 0) {
-        var builder = new NwBuilder(Object.assign({
-            buildDir: dir,
+        // nw-builder v4: returns Promise, uses outDir not buildDir
+        const options = {
+            version: nwBuilderOptions.version,
+            files: ['./dist/**/*'],  // Explicit files array for v4 compatibility
+            outDir: dir,  // v4 uses outDir instead of buildDir
+            cacheDir: path.join(__dirname, 'cache'),  // Explicit cache directory
+            manifestUrl: 'https://nwjs.io/versions.json',  // Explicit manifest URL
             platforms: platforms,
             flavor: flavor
-        }, nwBuilderOptions));
-        builder.on('log', console.log);
-        builder.build(function (err) {
-            if (err) {
+        };
+        
+        // Add platform-specific options conditionally
+        if (nwBuilderOptions.macIcns) options.macIcns = nwBuilderOptions.macIcns;
+        if (nwBuilderOptions.macPlist) options.macPlist = nwBuilderOptions.macPlist;
+        if (nwBuilderOptions.winIco) options.winIco = nwBuilderOptions.winIco;
+        
+        nwBuilder(options)
+            .then(() => {
+                done();
+            })
+            .catch((err) => {
                 console.log('Error building NW apps: ' + err);
                 clean_debug();
                 process.exit(1);
-            }
-            done();
-        });
+            });
     } else {
         console.log('No platform suitable for NW Build')
         done();

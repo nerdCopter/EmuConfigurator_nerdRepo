@@ -1,44 +1,59 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 /**
- * Post-install patch for nw-builder to fix download issues
- * Compatible with nw-builder 3.8.3
- * 
- * Issue: request package proxy auto-detection causes download failures
- * Fix: Disable proxy in nw-builder downloader
+ * Post-install patch for nw-builder v4
+ * Downloads and caches NW.js version manifest
  */
 
 const fs = require("fs");
 const path = require("path");
+const https = require("https");
+const http = require("http");
 
-const downloaderPath = path.join(__dirname, "..", "node_modules", "nw-builder", "lib", "downloader.cjs");
+const cacheDir = path.join(__dirname, "..", "cache");
+const manifestPath = path.join(cacheDir, "manifest.json");
 
-// Exit silently if nw-builder is not installed (e.g., in dist/ folder)
-if (!fs.existsSync(downloaderPath)) {
-    process.exit(0);
-}
-
-let content;
-try {
-    content = fs.readFileSync(downloaderPath, "utf8");
-} catch (error) {
-    console.error("[patch-nw-builder] Error reading file:", error.message);
-    process.exit(1);
-}
-
-const originalContent = content;
-
-// Disable proxy setting which causes download issues on all platforms
-if (/rq\.proxy\s*=\s*true/.test(content)) {
-    content = content.replace(/rq\.proxy\s*=\s*true/, "rq.proxy = false");
-}
-
-if (content !== originalContent) {
+// Create cache directory
+if (!fs.existsSync(cacheDir)) {
     try {
-        fs.writeFileSync(downloaderPath, content, "utf8");
-        console.log("[patch-nw-builder] ✓ Disabled proxy auto-detection in nw-builder downloader");
+        fs.mkdirSync(cacheDir, { recursive: true });
     } catch (error) {
-        console.error("[patch-nw-builder] Error writing file:", error.message);
-        process.exit(1);
+        // Silent
     }
+}
+
+// Pre-download manifest with proper redirect following
+if (!fs.existsSync(manifestPath)) {
+    const manifestUrl = "https://nwjs.io/versions.json";
+    
+    const downloadManifest = (url) => {
+        const protocol = url.startsWith("https") ? https : http;
+        
+        protocol.get(url, (res) => {
+            // Follow redirects
+            if (res.statusCode === 301 || res.statusCode === 302) {
+                downloadManifest(res.headers.location);
+                return;
+            }
+            
+            if (res.statusCode === 200) {
+                let data = "";
+                res.on("data", (chunk) => { data += chunk; });
+                res.on("end", () => {
+                    try {
+                        // v4 stores manifest with leading ')]}'' stripped
+                        const cleanData = data.startsWith(")]}'" ) ? data.slice(4) : data;
+                        fs.writeFileSync(manifestPath, cleanData, "utf8");
+                        console.log("[patch-nw-builder] ✓ Cached NW.js version manifest");
+                    } catch (err) {
+                        // Silent
+                    }
+                });
+            }
+        }).on("error", () => {
+            // Silent
+        });
+    };
+    
+    downloadManifest(manifestUrl);
 }
