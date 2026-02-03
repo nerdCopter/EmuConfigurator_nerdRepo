@@ -71,6 +71,13 @@ try {
                 "  const manifestFilePath = path.resolve(options.cacheDir, \"manifest.json\");\n  if (options.manifestUrl.startsWith('file://')) {\n    const filePath = url.fileURLToPath(options.manifestUrl);\n    fs.writeFileSync(manifestFilePath, fs.readFileSync(filePath, 'utf-8'));\n  } else {\n    await request(options.manifestUrl, manifestFilePath);\n  }\n  const manifestData = JSON.parse(await fs.promises.readFile(manifestFilePath, \"utf-8\"));",
                 "  const manifestFilePath = path.resolve(options.cacheDir, \"manifest.json\");\n  const manifestUrl = (typeof options.manifestUrl === 'string') ? options.manifestUrl : 'https://nwjs.io/versions.json';\n  if (manifestUrl.startsWith('file://')) {\n    const filePath = url.fileURLToPath(manifestUrl);\n    fs.writeFileSync(manifestFilePath, fs.readFileSync(filePath, 'utf-8'));\n  } else {\n    await request(manifestUrl, manifestFilePath);\n  }\n  const manifestData = JSON.parse(await fs.promises.readFile(manifestFilePath, \"utf-8\"));"
             );
+            // Also replace strict manifestUrl validation (allow undefined/default)
+            if (g.indexOf("if (typeof options.manifestUrl !== \"string\")") !== -1) {
+                g = g.replace(
+                    "  if (typeof options.manifestUrl !== \"string\") {\n    throw new Error('Expected \"options.manifestUrl\" to be a string. Received: ' + options.manifestUrl);\n  }",
+                    "  // Allow manifestUrl to be omitted; default is used above. If present it must be a string.\n  if (typeof options.manifestUrl !== \"undefined\" && typeof options.manifestUrl !== \"string\") {\n    throw new Error('Expected \"options.manifestUrl\" to be a string when provided. Received: ' + options.manifestUrl);\n  }"
+                );
+            }
             fs.writeFileSync(getterMain, g, 'utf8');
             console.log('[patch-nw-builder] Patched @nwutils/getter to guard manifestUrl usage');
         }
