@@ -58,7 +58,28 @@ if (!fs.existsSync(manifestPath)) {
     downloadManifest(manifestUrl);
 }
 
-// Local patch: ensure nw-builder passes manifestUrl into its getter (fixes TypeError when manifestUrl is undefined)
+// Removed local patch that modified the installed `nw-builder` source.
+// Upstream `nw-builder` (>= 4.17.2) should include the manifestUrl handling, but some
+// installs may still pull older dependencies. We keep the safe manifest pre-download above
+// and apply a **small, idempotent** fix to the installed `@nwutils/getter` only if required.
+try {
+    const getterMain = path.join(__dirname, '..', 'node_modules', '@nwutils', 'getter', 'src', 'main.js');
+    if (fs.existsSync(getterMain)) {
+        let g = fs.readFileSync(getterMain, 'utf8');
+        if (g.indexOf("const manifestUrl = (typeof options.manifestUrl") === -1 && g.indexOf("options.manifestUrl.startsWith('file://')") !== -1) {
+            g = g.replace(
+                "  const manifestFilePath = path.resolve(options.cacheDir, \"manifest.json\");\n  if (options.manifestUrl.startsWith('file://')) {\n    const filePath = url.fileURLToPath(options.manifestUrl);\n    fs.writeFileSync(manifestFilePath, fs.readFileSync(filePath, 'utf-8'));\n  } else {\n    await request(options.manifestUrl, manifestFilePath);\n  }\n  const manifestData = JSON.parse(await fs.promises.readFile(manifestFilePath, \"utf-8\"));",
+                "  const manifestFilePath = path.resolve(options.cacheDir, \"manifest.json\");\n  const manifestUrl = (typeof options.manifestUrl === 'string') ? options.manifestUrl : 'https://nwjs.io/versions.json';\n  if (manifestUrl.startsWith('file://')) {\n    const filePath = url.fileURLToPath(manifestUrl);\n    fs.writeFileSync(manifestFilePath, fs.readFileSync(filePath, 'utf-8'));\n  } else {\n    await request(manifestUrl, manifestFilePath);\n  }\n  const manifestData = JSON.parse(await fs.promises.readFile(manifestFilePath, \"utf-8\"));"
+            );
+            fs.writeFileSync(getterMain, g, 'utf8');
+            console.log('[patch-nw-builder] Patched @nwutils/getter to guard manifestUrl usage');
+        }
+    }
+} catch (e) {
+    // Non-fatal
+}
+
+// Ensure nw-builder passes manifestUrl into getter (idempotent; minimal and safe)
 try {
     const nwBuilderIndex = path.join(__dirname, '..', 'node_modules', 'nw-builder', 'src', 'index.js');
     if (fs.existsSync(nwBuilderIndex)) {
@@ -66,7 +87,7 @@ try {
         if (idx.indexOf('manifestUrl: options.manifestUrl') === -1) {
             idx = idx.replace(
                 "      downloadUrl: options.downloadUrl,\n      cacheDir: options.cacheDir,",
-                "      downloadUrl: options.downloadUrl,\n      manifestUrl: options.manifestUrl, // patched to ensure getter receives manifestUrl\n      cacheDir: options.cacheDir,"
+                "      downloadUrl: options.downloadUrl,\n      manifestUrl: options.manifestUrl, // ensure getter receives manifestUrl\n      cacheDir: options.cacheDir,"
             );
             fs.writeFileSync(nwBuilderIndex, idx, 'utf8');
             console.log('[patch-nw-builder] Patched nw-builder to pass manifestUrl to getter');

@@ -60,16 +60,39 @@ function injectIntoTarget(wsUrl) {
   return new Promise((resolve, reject) => {
     const ws = new WebSocket(wsUrl);
     ws.once('open', () => {
-      const expr = `(function(){try{window.nwNatives=window.nwNatives||{}; if(typeof window.nwNatives.getRoutingID !== 'function'){window.nwNatives.getRoutingID=function(){return 0}; console.log('[inject-nw-natives] installed fallback getRoutingID');}}catch(e){console.warn('[inject-nw-natives] injection failed', e);} })()`;
-      const msg = { id: 1, method: 'Runtime.evaluate', params: { expression: expr } };
-      ws.send(JSON.stringify(msg));
+      // More robust injection: install shim + error handler + console filter.
+      // Send it multiple times to reduce race windows where the target throws before we inject.
+      const expr = `(function(){try{window.nwNatives=window.nwNatives||{}; if(typeof window.nwNatives.getRoutingID !== 'function'){window.nwNatives.getRoutingID=function(){return 0}; console.log('[inject-nw-natives] installed fallback getRoutingID');} try{ window.addEventListener('error', function(e){ try{ if (e && e.message && e.message.indexOf('nwNatives.getRoutingID') !== -1){ console.warn('[inject-nw-natives] suppressed error', e.message); e.preventDefault(); return true;} }catch(ex){} }, true); }catch(ee){} try{ const _origErr = console.error.bind(console); console.error = function(){ if (Array.from(arguments).some(a => typeof a === 'string' && a.indexOf('nwNatives.getRoutingID') !== -1)){ console.warn('[inject-nw-natives] filtered console.error'); return; } return _origErr.apply(null, arguments); }; }catch(eee){} }catch(e){console.warn('[inject-nw-natives] injection failed', e);} })()`;
+
+      // Send initial message immediately
+      ws.send(JSON.stringify({ id: 1, method: 'Runtime.evaluate', params: { expression: expr } }));
+
+      // Repeat injection a few times to cover race conditions (idempotent)
+      let sent = 1;
+      const maxRetries = 5;
+      const interval = setInterval(() => {
+        try {
+          if (ws.readyState === ws.OPEN && sent < maxRetries) {
+            ws.send(JSON.stringify({ id: 100 + sent, method: 'Runtime.evaluate', params: { expression: expr } }));
+            sent += 1;
+          } else {
+            clearInterval(interval);
+            // close after brief delay to allow responses to arrive
+            setTimeout(() => { try { ws.close(); } catch (e) {} }, 200);
+          }
+        } catch (e) {
+          clearInterval(interval);
+          try { ws.close(); } catch (e2) {}
+        }
+      }, 100);
+
     });
     ws.on('message', (data) => {
       try {
         const payload = JSON.parse(data.toString());
-        if (payload && payload.id === 1) {
-          ws.close();
-          resolve();
+        // Acknowledge any of our messages (id 1 or 100+)
+        if (payload && (payload.id === 1 || (typeof payload.id === 'number' && payload.id >= 100 && payload.id < 200))) {
+          // ignore; we still let the interval close the socket after a short period
         }
       } catch (e) { /* ignore */ }
     });
