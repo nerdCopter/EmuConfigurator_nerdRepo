@@ -65,8 +65,26 @@ var GUI_control = function () {
     // Check the method of execution
     this.nwGui = null;
     try {
-      this.nwGui = new nw.gui();
-      this.Mode = GUI_Modes.NWJS;
+        // Prefer the global `nw` if available (modern NW.js)
+        if (typeof nw !== 'undefined' && nw && nw.Window) {
+            this.nwGui = nw;
+            this.Mode = GUI_Modes.NWJS;
+        } else if (typeof require === 'function') {
+            // Fall back to legacy require('nw.gui') if present
+            try {
+                const gui = require('nw.gui');
+                if (gui) {
+                    this.nwGui = gui;
+                    this.Mode = GUI_Modes.NWJS;
+                } else {
+                    throw new Error('nw.gui require returned falsy');
+                }
+            } catch (e) {
+                throw e;
+            }
+        } else {
+            throw new Error('NW.js APIs not found');
+        }
     } catch (ex) {
       if (window.chrome && chrome.storage && chrome.storage.local) {
         this.Mode = GUI_Modes.ChromeApp;

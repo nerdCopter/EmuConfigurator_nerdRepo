@@ -144,14 +144,28 @@ function startProcess() {
 
     if (GUI.isNWJS()) {
         console.log("GUI.isNWJS");
-        let nwWindow = GUI.nwGui.Window.get();
-        nwWindow.on('close', closeHandler);
-        nwWindow.on('new-win-policy', function(frame, url, policy) {
-            // do not open the window
-            policy.ignore();
-            // and open it in external browser
-            GUI.nwGui.Shell.openExternal(url);
-        });
+        try {
+            // Support both old (nw.gui) and new global nw API
+            let nwWindow = (typeof nw !== 'undefined' && nw.Window) ? nw.Window.get() : (GUI.nwGui ? GUI.nwGui.Window.get() : null);
+            if (nwWindow) {
+                // Ensure window is visible and focused in debug builds
+                if (typeof nwWindow.show === 'function') nwWindow.show();
+                if (typeof nwWindow.focus === 'function') nwWindow.focus();
+                nwWindow.on('close', closeHandler);
+                nwWindow.on('new-win-policy', function(frame, url, policy) {
+                    // do not open the window
+                    policy.ignore();
+                    // and open it in external browser
+                    if (GUI.nwGui && GUI.nwGui.Shell && typeof GUI.nwGui.Shell.openExternal === 'function') {
+                        GUI.nwGui.Shell.openExternal(url);
+                    } else if (typeof nw !== 'undefined' && nw.Shell && typeof nw.Shell.openExternal === 'function') {
+                        nw.Shell.openExternal(url);
+                    }
+                });
+            }
+        } catch (e) {
+            console.error('Error initializing NW.js window handlers:', e);
+        }
     } else if (GUI.isChromeApp()) {
         console.log("GUI.isChromeApp");
         chrome.app.window.onClosed.addListener(closeHandler); //does not seem to work with NW2
@@ -164,6 +178,27 @@ function startProcess() {
         this.hide();
         MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
         this.close(true);
+    }
+
+    // Create a debug marker file so headless runs can be detected
+    try {
+        const fs = require('fs');
+        fs.writeFileSync('/tmp/emuflight-debug-started', `started: ${new Date().toISOString()}\n`, { flag: 'w' });
+    } catch (e) {
+        console.error('Failed to write debug marker file:', e);
+    }
+
+    // Catch unhandled exceptions and write to disk for diagnosis
+    if (typeof process !== 'undefined' && process && process.on) {
+        process.on('uncaughtException', function(err) {
+            try {
+                const fs = require('fs');
+                fs.appendFileSync('/tmp/emuflight-debug-errors.log', `${new Date().toISOString()} - ${err.stack || err}\n`);
+            } catch (e) {
+                console.error('Failed to write uncaught exception:', e);
+            }
+            console.error('Uncaught exception:', err);
+        });
     }
 
     // translate to user-selected language

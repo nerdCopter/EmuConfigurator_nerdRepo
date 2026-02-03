@@ -5,6 +5,44 @@
 */
 'use strict';
 
+// Capture-phase error handler and console.filter to suppress nwNatives.getRoutingID errors
+try {
+    window.addEventListener('error', function (e) {
+        try {
+            var msg = e && e.message ? e.message : '';
+            if (typeof msg === 'string' && msg.indexOf('nwNatives.getRoutingID') !== -1) {
+                console.warn('[filtered] suppressed nwNatives.getRoutingID error (eventPage)');
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                return true;
+            }
+        } catch (inner) { /* ignore */ }
+    }, true);
+
+    (function () {
+        var origConsoleError = console.error;
+        console.error = function () {
+            try {
+                for (var i = 0; i < arguments.length; i++) {
+                    var a = arguments[i];
+                    if (typeof a === 'string' && a.indexOf('nwNatives.getRoutingID') !== -1) {
+                        console.warn('[filtered] suppressed nwNatives.getRoutingID console error');
+                        return;
+                    }
+                }
+            } catch (e) { /* ignore */ }
+            return origConsoleError.apply(console, arguments);
+        };
+    })();
+
+    // Shim: ensure internal NW native method exists to avoid extensions::nw.Window errors
+    window.nwNatives = window.nwNatives || {};
+    if (typeof window.nwNatives.getRoutingID !== 'function') {
+        window.nwNatives.getRoutingID = function() { return 0; };
+        console.log('[shim] injected nwNatives.getRoutingID fallback');
+    }
+} catch (e) { console.error('nwNatives shim error:', e); }
+
 function startApplication() {
     var applicationStartTime = new Date().getTime();
 

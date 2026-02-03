@@ -57,3 +57,22 @@ if (!fs.existsSync(manifestPath)) {
     
     downloadManifest(manifestUrl);
 }
+
+// Local patch: ensure nw-builder passes manifestUrl into its getter (fixes TypeError when manifestUrl is undefined)
+try {
+    const nwBuilderIndex = path.join(__dirname, '..', 'node_modules', 'nw-builder', 'src', 'index.js');
+    if (fs.existsSync(nwBuilderIndex)) {
+        let idx = fs.readFileSync(nwBuilderIndex, 'utf8');
+        if (idx.indexOf('manifestUrl: options.manifestUrl') === -1) {
+            idx = idx.replace(
+                "      downloadUrl: options.downloadUrl,\n      cacheDir: options.cacheDir,",
+                "      downloadUrl: options.downloadUrl,\n      manifestUrl: options.manifestUrl, // patched to ensure getter receives manifestUrl\n      cacheDir: options.cacheDir,"
+            );
+            fs.writeFileSync(nwBuilderIndex, idx, 'utf8');
+            console.log('[patch-nw-builder] Patched nw-builder to pass manifestUrl to getter');
+        }
+    }
+} catch (e) {
+    // Non-fatal
+}
+

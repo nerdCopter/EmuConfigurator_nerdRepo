@@ -47,7 +47,7 @@ var NWversion = '0.107.0';
 
 var nwBuilderOptions = {
     version: NWversion,
-    files: './dist/**/*',
+    files: './dist',  // nw-builder v4 requires directory path, not glob
     macIcns: './assets/osx/app-icon.icns',
     macPlist: { 'CFBundleDisplayName': 'Emuflight Configurator'},
     winIco: './src/images/emu_icon.ico',
@@ -191,7 +191,15 @@ function getRunDebugAppCommand(arch) {
     case 'linux64':
     case 'linux32':
     case 'armv7':
-        return path.join(DEBUG_DIR, pkg.name, arch, pkg.name);
+        // Prefer previous layout: debug/<pkg.name>/<arch>/<pkg.name>
+        var path1 = path.join(DEBUG_DIR, pkg.name, arch, pkg.name);
+        if (fs.existsSync(path1)) return path1;
+        // Fallback to flat layout: debug/<pkg.name>
+        var path2 = path.join(DEBUG_DIR, pkg.name);
+        if (fs.existsSync(path2)) return path2;
+        // Last resort: any executable in debug folder matching pkg.name
+        var path3 = path.join(DEBUG_DIR, pkg.name);
+        return path3;
         break;
     case 'win32':
     case 'win64':
@@ -324,8 +332,15 @@ function post_build(arch, folder, done) {
 
     if ((arch === 'linux32') || (arch === 'linux64')) {
         // Copy Ubuntu launcher scripts to destination dir
-        var launcherDir = path.join(folder, pkg.name, arch);
+        var baseDir = path.join(folder, pkg.name);
+        // If a file exists at baseDir (e.g., the runtime binary), avoid name collision
+        if (fs.existsSync(baseDir) && fs.lstatSync(baseDir).isFile()) {
+            baseDir = path.join(folder, pkg.name + '-data');
+        }
+        var launcherDir = path.join(baseDir, arch);
         console.log('Copy Ubuntu launcher scripts to ' + launcherDir);
+        // ensure baseDir exists
+        createDirIfNotExists(baseDir);
         return gulp.src('assets/linux/**')
                    .pipe(gulp.dest(launcherDir));
     }
@@ -453,19 +468,28 @@ function buildNWApps(platforms, flavor, dir, done) {
         // nw-builder v4: returns Promise, uses outDir not buildDir
         const options = {
             version: nwBuilderOptions.version,
-            files: path.join(__dirname, 'dist'),  // Just the directory, no glob
+            srcDir: path.join(__dirname, 'dist'),  // Use srcDir and disable glob to copy the directory
+            glob: false,
             outDir: dir,  // v4 uses outDir instead of buildDir
             cacheDir: path.join(__dirname, 'cache'),  // Explicit cache directory
             manifestUrl: 'https://nwjs.io/versions.json',  // Explicit manifest URL
             platforms: platforms,
             flavor: flavor
         };
+
+        // Defensive fallback: ensure manifestUrl exists for older/newer getter behavior
+        if (!options.manifestUrl) {
+            options.manifestUrl = 'https://nwjs.io/versions.json';
+        }
+
         
         // Add platform-specific options conditionally
         if (nwBuilderOptions.macIcns) options.macIcns = nwBuilderOptions.macIcns;
         if (nwBuilderOptions.macPlist) options.macPlist = nwBuilderOptions.macPlist;
         if (nwBuilderOptions.winIco) options.winIco = nwBuilderOptions.winIco;
         
+        console.log('DEBUG: NW Builder options.manifestUrl =', options.manifestUrl, 'version=', options.version);
+
         nwBuilder(options)
             .then(() => {
                 done();
@@ -512,8 +536,33 @@ function start_debug(done) {
     var exec = require('child_process').exec;
     if (platforms.length === 1) {
         var run = getRunDebugAppCommand(platforms[0]);
-        console.log('Starting debug app (' + run + ')...');
-        exec(run);
+        // append debug flags to suppress extension dialogs, enable remote debugging and verbose logging
+        var extraFlags = ' --remote-debugging-port=9222 --enable-logging=stderr --v=1 --no-first-run --no-default-browser-check';
+        if (process.platform === 'linux' || platforms[0].indexOf('linux') !== -1) {
+            run = run + extraFlags;
+        } else if (process.platform === 'darwin' || platforms[0].indexOf('osx') !== -1) {
+            run = run + extraFlags;
+        }
+        // redirect stdout/stderr to a log file for diagnosis
+        var logCmd = run + ' 2>&1 | tee /tmp/emuflight-chrome.log';
+        console.log('Starting debug app (' + logCmd + ')...');
+
+        // Start injector immediately (before launching app) to maximize chance of installing
+        // fallback before the extension's native code runs. This runs in the background and
+        // will keep trying while the app starts.
+        try {
+            console.log('Starting early injector for nwNatives fallback (background)');
+            require('child_process').exec('node scripts/inject-nw-natives.js', function(err, stdout, stderr) {
+                if (err) console.warn('inject-nw-natives script exited with error', err);
+                if (stdout) console.log(stdout);
+                if (stderr) console.warn(stderr);
+            });
+        } catch (e) {
+            console.warn('Failed to start injector early:', e.message || e);
+        }
+
+        // Launch the app
+        exec(logCmd);
     } else {
         console.log('More than one platform specified, not starting debug app');
     }
