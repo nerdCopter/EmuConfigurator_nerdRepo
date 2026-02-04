@@ -5,6 +5,12 @@ var pkg = require('./package.json');
 delete pkg.optionalDependencies['gulp-appdmg'];
 
 const child_process = require('child_process');
+
+// Suppress Node's url.parse deprecation warnings during the build; prefer updating dependencies upstream.
+// This sets the '--no-deprecation' flag for the current Node process and child processes spawned.
+if (!process.env.NODE_OPTIONS || process.env.NODE_OPTIONS.indexOf('--no-deprecation') === -1) {
+  process.env.NODE_OPTIONS = (process.env.NODE_OPTIONS || '') + ' --no-deprecation';
+}
 const fs = require('fs');
 const fse = require('fs-extra');
 const https = require('follow-redirects').https;
@@ -538,13 +544,28 @@ function start_debug(done) {
         var run = getRunDebugAppCommand(platforms[0]);
         // append debug flags to suppress extension dialogs, enable remote debugging and verbose logging
         var extraFlags = ' --remote-debugging-port=9222 --enable-logging=stderr --v=1 --no-first-run --no-default-browser-check';
+
+        // Optionally disable Chrome extensions when running debug to avoid extension-related races
+        if (process.env.DEBUG_DISABLE_EXT && process.env.DEBUG_DISABLE_EXT !== '0') {
+            extraFlags += ' --disable-extensions';
+            console.log('[debug] DEBUG_DISABLE_EXT enabled: extensions will be disabled for debug run');
+        }
+
         if (process.platform === 'linux' || platforms[0].indexOf('linux') !== -1) {
             run = run + extraFlags;
         } else if (process.platform === 'darwin' || platforms[0].indexOf('osx') !== -1) {
             run = run + extraFlags;
         }
+
+        // Prepare optional env prefix to suppress Node deprecation warnings during debug
+        var envPrefix = '';
+        if (process.env.DEBUG_NO_DEPRECATION && process.env.DEBUG_NO_DEPRECATION !== '0') {
+            envPrefix = 'NODE_OPTIONS=--no-deprecation ';
+            console.log('[debug] DEBUG_NO_DEPRECATION enabled: Node deprecation warnings will be suppressed for debug run');
+        }
+
         // redirect stdout/stderr to a log file for diagnosis
-        var logCmd = run + ' 2>&1 | tee /tmp/emuflight-chrome.log';
+        var logCmd = envPrefix + run + ' 2>&1 | tee /tmp/emuflight-chrome.log';
         console.log('Starting debug app (' + logCmd + ')...');
 
         // Start injector immediately (before launching app) to maximize chance of installing
