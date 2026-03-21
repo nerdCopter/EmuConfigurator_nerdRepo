@@ -101,6 +101,8 @@
             window.ShortUniqueId = require('short-unique-id');
             window.objectHash = require('object-hash');
             window.inflection = require('inflection');
+            // Bluebird extends Promise with .reduce(), .map() etc. used by cli.js and others
+            window.Promise = require('bluebird');
             console.log('✓ npm packages loaded via require()');
         } catch(e) {
             console.error('Warning: Failed to load some npm packages via require():', e.message);
@@ -110,6 +112,7 @@
     
     <script type="text/javascript" src="../libraries/jquery.nouislider.all.min.js"></script>
     <script type="text/javascript" src="../libraries/jquery.flightindicators.js"></script>
+    <script type="text/javascript" src="../libraries/jquery.ba-throttle-debounce.min.js"></script>
     <script type="text/javascript" src="../node_modules/jquery-textcomplete/dist/jquery.textcomplete.min.js"></script>
     
     <!-- Local/custom libraries only (not npm packages) -->
