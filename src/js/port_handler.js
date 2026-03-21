@@ -67,20 +67,25 @@ PortHandler.check = function () {
 
             // auto-select last used port (only during initialization)
             if (!self.initial_ports) {
-                chrome.storage.local.get('last_used_port', function (result) {
-                    // if last_used_port was set, we try to select it
-                    if (result.last_used_port) {
-                        current_ports.forEach(function(port) {
-                            if (port == result.last_used_port) {
-                                console.log('Selecting last used port: ' + result.last_used_port);
+                // Guard for chrome.storage API (not available in Electron)
+                if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+                    chrome.storage.local.get('last_used_port', function (result) {
+                        // if last_used_port was set, we try to select it
+                        if (result.last_used_port) {
+                            current_ports.forEach(function(port) {
+                                if (port == result.last_used_port) {
+                                    console.log('Selecting last used port: ' + result.last_used_port);
 
-                                $('div#port-picker #port').val(result.last_used_port);
-                            }
-                        });
-                    } else {
+                                    $('div#port-picker #port').val(result.last_used_port);
+                                }
+                            });
+                        } else {
                         console.log('Last used port wasn\'t saved "yet", auto-select disabled.');
                     }
-                });
+                    });
+                } else {
+                    console.warn('chrome.storage API not available in Electron. Skipping last port selection.');
+                }
             }
 
             if (!self.initial_ports) {
@@ -155,14 +160,16 @@ PortHandler.check = function () {
 };
 
 PortHandler.check_usb_devices = function (callback) {
-    chrome.usb.getDevices(usbDevices, function (result) {
-        if (result.length) {
-            if (!$("div#port-picker #port [value='DFU']").length) {
-                $('div#port-picker #port').append($('<option/>', {value: "DFU", text: "DFU", data: {isDFU: true}}));
-                $('div#port-picker #port').val('DFU');
-            }
-            self.dfu_available = true;
-        } else {
+    // Guard for chrome.usb API (not available in Electron)
+    if (typeof chrome !== 'undefined' && chrome.usb && chrome.usb.getDevices) {
+        chrome.usb.getDevices(usbDevices, function (result) {
+            if (result.length) {
+                if (!$("div#port-picker #port [value='DFU']").length) {
+                    $('div#port-picker #port').append($('<option/>', {value: "DFU", text: "DFU", data: {isDFU: true}}));
+                    $('div#port-picker #port').val('DFU');
+                }
+                self.dfu_available = true;
+            } else {
             if ($("div#port-picker #port [value='DFU']").length) {
                $("div#port-picker #port [value='DFU']").remove();
             }
@@ -170,7 +177,12 @@ PortHandler.check_usb_devices = function (callback) {
         }
 
         if(callback) callback(self.dfu_available);
-    });
+        });
+    } else {
+        console.warn('chrome.usb API not available in Electron. DFU mode unavailable.');
+        self.dfu_available = false;
+        if(callback) callback(self.dfu_available);
+    }
 };
 
 PortHandler.update_port_select = function (ports) {
