@@ -89,7 +89,7 @@ var Model = function (wrapper, canvas) {
 Model.prototype.loadJSON = function (model_file, callback) {
     var loader = new THREE.JSONLoader();
 
-    loader.load('./resources/models/' + model_file + '.json', function (geometry, materials) {
+    loader.load('../resources/models/' + model_file + '.json', function (geometry, materials) {
         var modelMaterial = new THREE.MeshFaceMaterial(materials),
             model         = new THREE.Mesh(geometry, modelMaterial);
 
