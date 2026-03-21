@@ -17,6 +17,7 @@ var PortHandler = new function () {
     this.usb_api_available = false;
     this.storage_api_checked = false;
     this.storage_api_available = false;
+    this.demo_port_added = false;
 };
 
 PortHandler.initialize = function () {
@@ -29,9 +30,10 @@ PortHandler.check = function () {
 
     serial.getDevices(function(current_ports) {
         // In Electron without native serial support, add a demo port for testing
-        if (!serial.serialApiAvailable && current_ports.length === 0 && typeof chrome === 'undefined') {
+        if (!serial.serialApiAvailable && current_ports.length === 0 && !self.demo_port_added) {
             console.log('PortHandler - No serial ports available, adding demo port for Electron');
             current_ports = ['/dev/ttyUSB0 (Demo)'];
+            self.demo_port_added = true;
         }
         
         // port got removed or initial_ports wasn't initialized yet
