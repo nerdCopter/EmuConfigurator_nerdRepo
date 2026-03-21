@@ -28,6 +28,12 @@ PortHandler.check = function () {
     var self = this;
 
     serial.getDevices(function(current_ports) {
+        // In Electron without native serial support, add a demo port for testing
+        if (!serial.serialApiAvailable && current_ports.length === 0 && typeof chrome === 'undefined') {
+            console.log('PortHandler - No serial ports available, adding demo port for Electron');
+            current_ports = ['/dev/ttyUSB0 (Demo)'];
+        }
+        
         // port got removed or initial_ports wasn't initialized yet
         if (self.array_difference(self.initial_ports, current_ports).length > 0 || !self.initial_ports) {
             var removed_ports = self.array_difference(self.initial_ports, current_ports);
