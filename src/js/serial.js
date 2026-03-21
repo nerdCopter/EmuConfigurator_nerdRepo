@@ -279,14 +279,21 @@ var serial = {
         }
     },
     getDevices: function (callback) {
-        chrome.serial.getDevices(function (devices_array) {
-            var devices = [];
-            devices_array.forEach(function (device) {
-                devices.push(device.path);
-            });
+        // Stub for Electron - chrome.serial is not available
+        // In production, this would be replaced with serialport module or Electron's native serial API
+        if (typeof chrome !== 'undefined' && chrome.serial) {
+            chrome.serial.getDevices(function (devices_array) {
+                var devices = [];
+                devices_array.forEach(function (device) {
+                    devices.push(device.path);
+                });
 
-            callback(devices);
-        });
+                callback(devices);
+            });
+        } else {
+            console.warn('Serial port API not available in Electron. Returning empty device list.');
+            callback([]);
+        }
     },
     getInfo: function (callback) {
         var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
