@@ -2913,7 +2913,7 @@ TABS.osd.initialize = function (callback) {
             var $font = $('.fontpresets option:selected');
             //moved font versioning to TABS.osd.initialize
             $('.font-manager-version-info').text(i18n.getMessage('osdDescribeFontVersion' + fontver));
-            $.get('./resources/osd/' + fontver + '/' + $font.data('font-file') + '.mcm', function (data) {
+            $.get('../resources/osd/' + fontver + '/' + $font.data('font-file') + '.mcm', function (data) {
                 FONT.parseMCMFontFile(data);
                 FONT.preview(fontPreviewElement);
                 LogoManager.drawPreview();
