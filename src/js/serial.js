@@ -16,6 +16,9 @@ var serial = {
     transmitting:   false,
     outputBuffer:  [],
 
+    serialApiChecked: false,
+    serialApiAvailable: false,
+
     logHead: 'SERIAL: ',
 
     connect: function (path, options, callback) {
@@ -282,6 +285,8 @@ var serial = {
         // Stub for Electron - chrome.serial is not available
         // In production, this would be replaced with serialport module or Electron's native serial API
         if (typeof chrome !== 'undefined' && chrome.serial) {
+            this.serialApiAvailable = true;
+            this.serialApiChecked = true;
             chrome.serial.getDevices(function (devices_array) {
                 var devices = [];
                 devices_array.forEach(function (device) {
@@ -291,7 +296,12 @@ var serial = {
                 callback(devices);
             });
         } else {
-            console.warn('Serial port API not available in Electron. Returning empty device list.');
+            // Log warning only once when serial API is first detected as unavailable
+            if (!this.serialApiChecked) {
+                console.warn('Serial port API not available in Electron. Port detection will be unavailable.');
+                this.serialApiChecked = true;
+                this.serialApiAvailable = false;
+            }
             callback([]);
         }
     },
