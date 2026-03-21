@@ -1,5 +1,24 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+
+// IPC: list serial ports from main process (native addon works reliably here)
+ipcMain.handle('serial-list-ports', async () => {
+  try {
+    const { SerialPort } = require('serialport');
+    const ports = await SerialPort.list();
+    return ports.map(p => p.path + (p.manufacturer ? ' (' + p.manufacturer + ')' : ''));
+  } catch (e) {
+    console.error('main.js: serialport list failed, trying fs fallback:', e.message);
+    // Filesystem fallback for Linux
+    try {
+      const fs = require('fs');
+      const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
+      return entries.map(f => '/dev/' + f);
+    } catch (fsErr) {
+      return [];
+    }
+  }
+});
 
 function createWindow() {
   const win = new BrowserWindow({

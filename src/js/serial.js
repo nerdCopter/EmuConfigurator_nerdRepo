@@ -282,28 +282,38 @@ var serial = {
         }
     },
     getDevices: function (callback) {
-        // Stub for Electron - chrome.serial is not available
-        // In production, this would be replaced with serialport module or Electron's native serial API
-        if (typeof chrome !== 'undefined' && chrome.serial) {
+        // Prefer native chrome.serial (legacy/NW.js) when available
+        if (typeof chrome !== 'undefined' && chrome.serial && chrome.serial.getDevices) {
             this.serialApiAvailable = true;
             this.serialApiChecked = true;
             chrome.serial.getDevices(function (devices_array) {
-                var devices = [];
-                devices_array.forEach(function (device) {
-                    devices.push(device.path);
-                });
-
-                callback(devices);
+                callback(devices_array.map(function (d) { return d.path; }));
             });
-        } else {
-            // Log warning only once when serial API is first detected as unavailable
-            if (!this.serialApiChecked) {
-                console.warn('Serial port API not available in Electron. Port detection will be unavailable.');
-                this.serialApiChecked = true;
-                this.serialApiAvailable = false;
-            }
-            callback([]);
+            return;
         }
+
+        // Electron path: use IPC to ask main process (serialport native addon lives there)
+        try {
+            const { ipcRenderer } = require('electron');
+            this.serialApiAvailable = true;
+            this.serialApiChecked = true;
+            ipcRenderer.invoke('serial-list-ports').then(function (ports) {
+                callback(ports);
+            }).catch(function (err) {
+                console.error('serial.js ipc serial-list-ports error:', err);
+                callback([]);
+            });
+            return;
+        } catch (e) {
+            // ipcRenderer not available
+        }
+
+        if (!this.serialApiChecked) {
+            console.warn('Serial port API not available. Please run inside Electron.');
+            this.serialApiChecked = true;
+            this.serialApiAvailable = false;
+        }
+        callback([]);
     },
     getInfo: function (callback) {
         var chromeType = (this.connectionType == 'serial') ? chrome.serial : chrome.sockets.tcp;
