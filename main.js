@@ -99,6 +99,49 @@ ipcMain.handle('usb-list-dfu', async () => {
   }
 });
 
+// --- File system dialog IPC bridge ---
+const { dialog } = require('electron');
+const fs = require('fs');
+
+// IPC: show save file dialog
+ipcMain.handle('dialog:choose-entry', async (event, options) => {
+  const { type, suggestedName, accepts } = options;
+  
+  if (type === 'saveFile') {
+    const filters = accepts ? accepts.map(a => ({ name: a.description, extensions: a.extensions })) : [];
+    return await dialog.showSaveDialog({
+      defaultPath: suggestedName,
+      filters: filters.length > 0 ? filters : undefined,
+    });
+  } else if (type === 'openFile') {
+    return await dialog.showOpenDialog({
+      defaultPath: suggestedName,
+      filters: accepts ? accepts.map(a => ({ name: a.description, extensions: a.extensions })) : [],
+    });
+  }
+  return { canceled: true };
+});
+
+// IPC: truncate file to size
+ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
+  return new Promise((resolve, reject) => {
+    fs.truncate(filePath, size, (err) => {
+      if (err) reject(err);
+      else resolve(size);
+    });
+  });
+});
+
+// IPC: write to file
+ipcMain.handle('dialog:write-file', async (event, filePath, buffer) => {
+  return new Promise((resolve, reject) => {
+    fs.appendFile(filePath, buffer, (err) => {
+      if (err) reject(err);
+      else resolve(buffer.length);
+    });
+  });
+});
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,

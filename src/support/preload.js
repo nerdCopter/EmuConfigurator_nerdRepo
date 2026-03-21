@@ -199,3 +199,59 @@ if (typeof window.chrome === 'undefined' || !window.chrome.serial) {
     });
     console.log('Electron: chrome API polyfills loaded (serial, storage, usb, app)');
 }
+
+// Polyfill for chrome.fileSystem (file save/load dialogs)
+const chromeFileSystem = {
+    chooseEntry: (options, callback) => {
+        ipcRenderer.invoke('dialog:choose-entry', options).then(result => {
+            if (result.canceled) {
+                callback(null);
+                return;
+            }
+            const filePath = result.filePaths[0];
+            if (!filePath) {
+                callback(null);
+                return;
+            }
+            // Return a mock entry object with createWriter
+            const entry = {
+                createWriter: (onWriter, onError) => {
+                    const writer = {
+                        length: 0,
+                        onerror: null,
+                        onwriteend: null,
+                        truncate: (size) => {
+                            ipcRenderer.invoke('dialog:truncate-file', filePath, size).then(() => {
+                                writer.length = size;
+                                if (writer.onwriteend) writer.onwriteend();
+                            }).catch(err => {
+                                if (writer.onerror) writer.onerror(err);
+                            });
+                        },
+                        write: (blob) => {
+                            blob.arrayBuffer().then(buf => {
+                                ipcRenderer.invoke('dialog:write-file', filePath, Buffer.from(buf)).then(written => {
+                                    writer.length += written;
+                                    if (writer.onwriteend) writer.onwriteend();
+                                }).catch(err => {
+                                    if (writer.onerror) writer.onerror(err);
+                                });
+                            });
+                        }
+                    };
+                    onWriter(writer);
+                }
+            };
+            callback(entry);
+        }).catch(err => {
+            console.error('File dialog error:', err);
+            callback(null);
+        });
+    }
+};
+
+if (typeof window.chrome === 'undefined' || !window.chrome.fileSystem) {
+    window.chrome = Object.assign(window.chrome || {}, {
+        fileSystem: chromeFileSystem,
+    });
+}
