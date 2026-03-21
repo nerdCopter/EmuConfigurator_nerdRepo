@@ -4619,10 +4619,20 @@ jiti@^2.4.2:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.6.1.tgz#178ef2fc9a1a594248c20627cd820187a4d78d92"
   integrity sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==
 
+jquery-flight-indicators@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-flight-indicators/-/jquery-flight-indicators-1.0.0.tgz#f7f21945bd3b456a18bdd49efe5e033db3232911"
+  integrity sha512-4jJT7cU2P6rmVezNPBY5NdrRwFXA9CLr2h5dk0ZanCvoRpwaK6JJVcBRvqhrrDkWjtEuMYqkTP1dwka2wGXybw==
+
 jquery-textcomplete@^1.8.5:
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/jquery-textcomplete/-/jquery-textcomplete-1.8.5.tgz#df9724b42c3af9ece272356a7e8b55cd9cf239dd"
   integrity sha512-WctSUxFk7GF5Tx2gHeVKrpkQ9tsV7mibBJ0AYNwEx+Zx3ZoUQgU5grkBXY3SCqpq/owMAMEvksN96DBSWT4PSg==
+
+jquery-throttle-debounce@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/jquery-throttle-debounce/-/jquery-throttle-debounce-1.0.0.tgz#f27daba459b513b36d07d81cf744252e673cdf49"
+  integrity sha512-pnyuJ6T1MX9VUhwCLZ0i21Ya8HSewM+A8xWsftLS6VjRUChXjtdfc/9YJ0qL8yRTWEVuizcI9n0sK8xmJucT9g==
 
 jquery-ui-npm@1.12.0:
   version "1.12.0"
