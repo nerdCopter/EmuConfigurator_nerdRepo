@@ -597,7 +597,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             $('input.flash_manual_baud_rate').change();
         });
 
-        $('input.flash_on_connect').change(function () {
+        $('input.flash_on_connect').prop('checked', false).change(function () {
             var status = $(this).is(':checked');
 
             if (status) {
