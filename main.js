@@ -146,6 +146,11 @@ ipcMain.handle('usb-bulk-transfer', async (event, deviceId, options) => {
   return { bytesTransferred: 0 };
 });
 
+ipcMain.handle('usb-reset-device', async (event, deviceId) => {
+  console.log('USB device reset:', deviceId);
+  return { success: true };
+});
+
 // --- File system dialog IPC bridge ---
 const { dialog } = require('electron');
 const fs = require('fs');

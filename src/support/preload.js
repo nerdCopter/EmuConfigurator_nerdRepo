@@ -248,6 +248,35 @@ const chromeUsb = {
         } else {
             if (callback) callback({ error: 'device_not_open' });
         }
+    },
+
+    resetDevice: function (handle, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-reset-device', device.device).then(function (result) {
+                if (callback) callback(result);
+            }).catch(function (err) {
+                console.error('usb-reset-device error:', err);
+                if (callback) callback({ error: 'reset_error' });
+            });
+        } else {
+            if (callback) callback({ error: 'device_not_open' });
+        }
+    },
+
+    getConfiguration: function (handle, callback) {
+        // Return a stub configuration object
+        // In a real implementation, this would query device descriptors
+        if (callback) {
+            callback({
+                configurationValue: 1,
+                interfaces: [{
+                    interfaceNumber: 0,
+                    alternateSetting: 0,
+                    endpoints: []
+                }]
+            });
+        }
     }
 };
 
