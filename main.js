@@ -1,6 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
+// Window size constraints
+const MIN_WINDOW_WIDTH = 980;
+const MIN_WINDOW_HEIGHT = 600;
+
 // --- Serial port IPC bridge ---
 let _serialPort = null; // active serialport instance
 
@@ -145,6 +149,8 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 700,
+    minWidth: MIN_WINDOW_WIDTH,
+    minHeight: MIN_WINDOW_HEIGHT,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -152,7 +158,37 @@ function createWindow() {
     },
     icon: path.join(__dirname, 'assets/osx/app-icon.icns'),
   });
+  
+  // Enforce minimum window size multiple ways for cross-platform compatibility
+  win.setMinimumSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
+  
+  // Active enforcement: if window size falls below minimum after any resize, restore it
+  win.on('resize', () => {
+    const [width, height] = win.getSize();
+    if (width < MIN_WINDOW_WIDTH || height < MIN_WINDOW_HEIGHT) {
+      win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
+    }
+  });
+  
+  // Also prevent moves that would resize
+  win.on('moved', () => {
+    const [width, height] = win.getSize();
+    if (width < MIN_WINDOW_WIDTH || height < MIN_WINDOW_HEIGHT) {
+      win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
+    }
+  });
+  
   win.loadFile('src/main.html');
+  
+  // Reapply after window is fully loaded (some platforms need this)
+  win.webContents.on('did-finish-load', () => {
+    win.setMinimumSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
+    const [width, height] = win.getSize();
+    if (width < MIN_WINDOW_WIDTH || height < MIN_WINDOW_HEIGHT) {
+      win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
+    }
+  });
+  
   win.webContents.openDevTools();
   // Capture renderer console output and kill app on error
   win.webContents.on('console-message', (event, level, message, line, sourceId) => {
