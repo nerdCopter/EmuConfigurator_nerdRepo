@@ -45,10 +45,10 @@ gulp.task('electron-package', gulp.series(distRebuild, electron_package));
 gulp.task('electron-make', gulp.series(distRebuild, electron_make));
 
 // Default task: build and start in debug mode
-gulp.task('default', electron_start);
+gulp.task('default', gulp.series(distRebuild, electron_start));
 
 // Legacy compat: Keep 'debug' and 'release' tasks for backwards compatibility
-gulp.task('debug', electron_start);
+gulp.task('debug', gulp.series(distRebuild, electron_start));
 gulp.task('release', electron_make);
 
 // -----------------

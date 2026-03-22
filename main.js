@@ -178,7 +178,7 @@ function createWindow() {
     }
   });
   
-  win.loadFile('src/main.html');
+  win.loadFile(path.join(__dirname, 'dist', 'main.html'));
   
   // Reapply after window is fully loaded (some platforms need this)
   win.webContents.on('did-finish-load', () => {
@@ -191,7 +191,8 @@ function createWindow() {
   
   win.webContents.openDevTools();
   // Capture renderer console output and kill app on error
-  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+  win.webContents.on('console-message', (event, params) => {
+    const { level, message, line, sourceId } = params;
     console.log(`[Renderer Console] ${message} (${sourceId}:${line})`);
     if (message && message.includes('is not defined')) {
       console.error('Fatal error detected in renderer, quitting Electron app.');

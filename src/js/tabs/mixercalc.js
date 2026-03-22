@@ -985,5 +985,3 @@ function mixCommandCopyClipboardFunc() {
 function mixCommandCopyClipboardOutFunc() {
     document.getElementById('mixCommandCopyButton').textContent = 'Copy to Clipboard';
 }
-
-mixerCalcMain();
