@@ -140,8 +140,19 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
 });
 
 // IPC: write to file
-ipcMain.handle('dialog:write-file', async (event, filePath, buffer) => {
+ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
   return new Promise((resolve, reject) => {
+    // Convert received data back to Buffer (IPC might serialize it as array or object)
+    let buffer;
+    if (Buffer.isBuffer(data)) {
+      buffer = data;
+    } else if (Array.isArray(data)) {
+      buffer = Buffer.from(data);
+    } else if (data instanceof ArrayBuffer) {
+      buffer = Buffer.from(data);
+    } else {
+      buffer = Buffer.from(Object.values(data || {}));
+    }
     fs.appendFile(filePath, buffer, (err) => {
       if (err) reject(err);
       else resolve(buffer.length);

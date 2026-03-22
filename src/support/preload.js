@@ -231,7 +231,9 @@ const chromeFileSystem = {
                         },
                         write: (blob) => {
                             blob.arrayBuffer().then(buf => {
-                                ipcRenderer.invoke('dialog:write-file', filePath, Buffer.from(buf)).then(written => {
+                                // Convert ArrayBuffer to Uint8Array for IPC serialization
+                                const uint8array = new Uint8Array(buf);
+                                ipcRenderer.invoke('dialog:write-file', filePath, uint8array).then(written => {
                                     writer.length += written;
                                     if (writer.onwriteend) writer.onwriteend();
                                 }).catch(err => {
