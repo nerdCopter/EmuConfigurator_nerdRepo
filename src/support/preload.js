@@ -157,14 +157,98 @@ const chromeStorageLocal = {
 // ─── chrome.usb polyfill (backed by IPC → usb native module) ───────────────
 
 const chromeUsb = {
+    _openHandles: {},
+    _handleCounter: 0,
+
     getDevices: function (filters, callback) {
-        ipcRenderer.invoke('usb-list-dfu').then(function (count) {
-            // Return an array of stubs matching the count; actual device info not needed here
-            const devices = [];
-            for (let i = 0; i < count; i++) devices.push({ deviceId: i });
+        ipcRenderer.invoke('usb-list-dfu').then(function (devices) {
+            // devices is array of {device, vendorId, productId, ...}
             callback(devices);
         }).catch(function () { callback([]); });
     },
+
+    openDevice: function (device, callback) {
+        const handleId = ++chromeUsb._handleCounter;
+        chromeUsb._openHandles[handleId] = device;
+        
+        ipcRenderer.invoke('usb-open-device', device.device).then(function (result) {
+            callback({ handle: handleId, device: device });
+        }).catch(function (err) {
+            console.error('usb-open-device error:', err);
+            callback(undefined);
+        });
+    },
+
+    closeDevice: function (handle, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-close-device', device.device).then(function () {
+                delete chromeUsb._openHandles[handle.handle];
+                if (callback) callback();
+            }).catch(function (err) {
+                console.error('usb-close-device error:', err);
+                if (callback) callback();
+            });
+        } else {
+            if (callback) callback();
+        }
+    },
+
+    claimInterface: function (handle, interfaceNumber, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-claim-interface', device.device, interfaceNumber).then(function () {
+                if (callback) callback();
+            }).catch(function (err) {
+                console.error('usb-claim-interface error:', err);
+                if (callback) callback();
+            });
+        } else {
+            if (callback) callback();
+        }
+    },
+
+    releaseInterface: function (handle, interfaceNumber, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-release-interface', device.device, interfaceNumber).then(function () {
+                if (callback) callback();
+            }).catch(function (err) {
+                console.error('usb-release-interface error:', err);
+                if (callback) callback();
+            });
+        } else {
+            if (callback) callback();
+        }
+    },
+
+    controlTransfer: function (handle, options, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-control-transfer', device.device, options).then(function (result) {
+                if (callback) callback(result);
+            }).catch(function (err) {
+                console.error('usb-control-transfer error:', err);
+                if (callback) callback({ error: 'controlTransfer_error' });
+            });
+        } else {
+            if (callback) callback({ error: 'device_not_open' });
+        }
+    },
+
+    bulkTransfer: function (handle, options, callback) {
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-bulk-transfer', device.device, options).then(function (result) {
+                if (callback) callback(result);
+            }).catch(function (err) {
+                console.error('usb-bulk-transfer error:', err);
+                if (callback) callback({ error: 'bulkTransfer_error' });
+            });
+        } else {
+            if (callback) callback({ error: 'device_not_open' });
+        }
+    }
 };
 
 // ─── chrome.runtime polyfill ────────────────────────────────────────────────

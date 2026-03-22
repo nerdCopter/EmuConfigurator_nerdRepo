@@ -33,4 +33,4 @@ nbproject/
 .project
 .settings/
 
-out/
+out/src/version.json

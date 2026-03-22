@@ -94,13 +94,56 @@ ipcMain.handle('usb-list-dfu', async () => {
       { vendorId: 0x2DAE, productId: 0x0003 },
     ];
     const devices = usb.getDeviceList();
-    return devices.filter(d => {
+    const dfuDevices = devices.filter(d => {
       const desc = d.deviceDescriptor;
       return DFU_IDS.some(id => id.vendorId === desc.idVendor && id.productId === desc.idProduct);
-    }).length;
+    }).map((d, idx) => ({
+      device: idx, // ID for IPC
+      vendorId: d.deviceDescriptor.idVendor,
+      productId: d.deviceDescriptor.idProduct,
+      serialNumber: d.serialNumber || '',
+      manufacturer: d.allConfigDescriptors[0]?.iManufacturer || '',
+      product: d.allConfigDescriptors[0]?.iProduct || '',
+      _device: d // store actual device reference for later operations
+    }));
+    return dfuDevices;
   } catch (e) {
-    return 0;
+    console.error('usb-list-dfu error:', e);
+    return [];
   }
+});
+
+// USB device operation stubs - proper implementation would require node-usb library
+ipcMain.handle('usb-open-device', async (event, deviceId) => {
+  console.log('USB device opening:', deviceId);
+  return { success: true };
+});
+
+ipcMain.handle('usb-close-device', async (event, deviceId) => {
+  console.log('USB device closed:', deviceId);
+  return { success: true };
+});
+
+ipcMain.handle('usb-claim-interface', async (event, deviceId, interfaceNumber) => {
+  console.log(`USB claiming interface ${interfaceNumber} on device ${deviceId}`);
+  return { success: true };
+});
+
+ipcMain.handle('usb-release-interface', async (event, deviceId, interfaceNumber) => {
+  console.log(`USB releasing interface ${interfaceNumber} on device ${deviceId}`);
+  return { success: true };
+});
+
+ipcMain.handle('usb-control-transfer', async (event, deviceId, options) => {
+  // Stub for control transfer
+  console.log('USB control transfer:', options);
+  return { bytesTransferred: 0 };
+});
+
+ipcMain.handle('usb-bulk-transfer', async (event, deviceId, options) => {
+  // Stub for bulk transfer
+  console.log('USB bulk transfer:', options);
+  return { bytesTransferred: 0 };
 });
 
 // --- File system dialog IPC bridge ---
