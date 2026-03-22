@@ -135,15 +135,32 @@ ipcMain.handle('usb-release-interface', async (event, deviceId, interfaceNumber)
 });
 
 ipcMain.handle('usb-control-transfer', async (event, deviceId, options) => {
-  // Stub for control transfer
+  // Stub for control transfer - return empty binary data with headers
   console.log('USB control transfer:', options);
-  return { bytesTransferred: 0 };
+  // Return a buffer that matches the expected format
+  // For descriptor requests, return a minimal valid response
+  const buffer = Buffer.alloc(options.length || 255);
+  // Fill with minimal descriptor structure if it's a GET_DESCRIPTOR request
+  if (options.request === 6) { // GET_DESCRIPTOR
+    buffer[0] = 4; // length
+    buffer[1] = 0x21; // DFU functional descriptor type
+  }
+  return { 
+    data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+    bytesTransferred: buffer.length,
+    resultCode: 0
+  };
 });
 
 ipcMain.handle('usb-bulk-transfer', async (event, deviceId, options) => {
-  // Stub for bulk transfer
+  // Stub for bulk transfer - return empty binary data
   console.log('USB bulk transfer:', options);
-  return { bytesTransferred: 0 };
+  const buffer = Buffer.alloc(options.length || 64);
+  return { 
+    data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+    bytesTransferred: buffer.length,
+    resultCode: 0
+  };
 });
 
 ipcMain.handle('usb-reset-device', async (event, deviceId) => {

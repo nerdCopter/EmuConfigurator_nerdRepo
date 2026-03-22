@@ -226,6 +226,15 @@ const chromeUsb = {
         if (handle && chromeUsb._openHandles[handle.handle]) {
             const device = chromeUsb._openHandles[handle.handle];
             ipcRenderer.invoke('usb-control-transfer', device.device, options).then(function (result) {
+                if (result && result.data) {
+                    // Convert serialized buffer data back to ArrayBuffer
+                    if (Array.isArray(result.data)) {
+                        result.data = new Uint8Array(result.data).buffer;
+                    } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
+                        // Handle Node.js Buffer serialization
+                        result.data = new Uint8Array(result.data.data).buffer;
+                    }
+                }
                 if (callback) callback(result);
             }).catch(function (err) {
                 console.error('usb-control-transfer error:', err);
@@ -240,6 +249,14 @@ const chromeUsb = {
         if (handle && chromeUsb._openHandles[handle.handle]) {
             const device = chromeUsb._openHandles[handle.handle];
             ipcRenderer.invoke('usb-bulk-transfer', device.device, options).then(function (result) {
+                if (result && result.data) {
+                    // Convert serialized buffer data back to ArrayBuffer
+                    if (Array.isArray(result.data)) {
+                        result.data = new Uint8Array(result.data).buffer;
+                    } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
+                        result.data = new Uint8Array(result.data.data).buffer;
+                    }
+                }
                 if (callback) callback(result);
             }).catch(function (err) {
                 console.error('usb-bulk-transfer error:', err);
