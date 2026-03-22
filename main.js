@@ -128,12 +128,18 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
     // Create file if it doesn't exist
     fs.writeFile(filePath, '', (err) => {
       if (err) {
+        console.error(`Failed to create ${filePath}:`, err);
         reject(err);
         return;
       }
       fs.truncate(filePath, size, (err) => {
-        if (err) reject(err);
-        else resolve(size);
+        if (err) {
+          console.error(`Failed to truncate ${filePath}:`, err);
+          reject(err);
+        } else {
+          console.log(`Successfully truncated ${filePath} to ${size} bytes`);
+          resolve(size);
+        }
       });
     });
   });
@@ -142,7 +148,7 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
 // IPC: write to file
 ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
   return new Promise((resolve, reject) => {
-    // Convert received data back to Buffer (IPC might serialize it as array or object)
+    // Convert received data back to Buffer (IPC serializes Uint8Array as object)
     let buffer;
     if (Buffer.isBuffer(data)) {
       buffer = data;
@@ -150,12 +156,23 @@ ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
       buffer = Buffer.from(data);
     } else if (data instanceof ArrayBuffer) {
       buffer = Buffer.from(data);
+    } else if (typeof data === 'object' && data !== null) {
+      // Uint8Array serialized as {0: byte, 1: byte, ...}
+      const values = Object.values(data).map(v => Number(v));
+      buffer = Buffer.from(values);
     } else {
-      buffer = Buffer.from(Object.values(data || {}));
+      reject(new Error(`Unsupported data type: ${typeof data}`));
+      return;
     }
+    
     fs.appendFile(filePath, buffer, (err) => {
-      if (err) reject(err);
-      else resolve(buffer.length);
+      if (err) {
+        console.error(`Failed to write to ${filePath}:`, err);
+        reject(err);
+      } else {
+        console.log(`Successfully wrote ${buffer.length} bytes to ${filePath}`);
+        resolve(buffer.length);
+      }
     });
   });
 });
