@@ -633,6 +633,7 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
 		if (typeof self.chipInfo.option_bytes === "undefined") {
 			console.log('Failed to detect option bytes');
 			self.upload_procedure(99);
+			break; // prevent fall-through into clearStatus which would crash on option_bytes.start_address
 		}
 
 		var unprotect = function() {

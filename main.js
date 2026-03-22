@@ -213,12 +213,20 @@ ipcMain.handle('usb-get-configuration', async (event, deviceKey) => {
   try {
     const device = ensureUsbDeviceOpen(deviceKey);
     const configDescriptor = device.configDescriptor || {};
-    const interfaces = (device.interfaces || []).map((iface) => ({
-      interfaceNumber: iface.interfaceNumber,
-      alternateSetting: iface.altSetting || 0,
-      endpoints: (iface.endpoints || []).map((ep) => ({ address: ep.address })),
-    }));
+    // Flatten ALL interface alternate settings — mirrors Chrome USB API config.interfaces
+    // e.g. STM32 DFU has interface 0 with 4 alt settings (Internal Flash, Option Bytes, OTP, Device Info)
+    const interfaces = [];
+    ((configDescriptor.interfaces) || []).forEach((altSettings) => {
+      altSettings.forEach((altSetting) => {
+        interfaces.push({
+          interfaceNumber: altSetting.bInterfaceNumber,
+          alternateSetting: altSetting.bAlternateSetting,
+          endpoints: (altSetting.endpoints || []).map((ep) => ({ address: ep.bEndpointAddress })),
+        });
+      });
+    });
 
+    console.log('usb-get-configuration: found', interfaces.length, 'interface alt settings');
     return {
       resultCode: 0,
       configurationValue: configDescriptor.bConfigurationValue || 1,
