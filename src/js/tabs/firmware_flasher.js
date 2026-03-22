@@ -410,16 +410,16 @@ TABS.firmware_flasher.initialize = function (callback) {
 
             let release = $("option:selected", evt.target).data("summary");
             let isCached = FirmwareCache.has(release);
-            if (evt.target.value=="0" || isCached) {
-                if (isCached) {
-                    FirmwareCache.get(release, cached => {
-                        console.info("Release found in cache: " + release.file);
-                        onLoadSuccess(cached.hexdata, release);
-                    });
-                }
+            if (evt.target.value == "0") {
                 $("a.load_remote_file").addClass('disabled');
-            }
-            else {
+            } else if (isCached) {
+                FirmwareCache.get(release, cached => {
+                    console.info("Release found in cache: " + release.file);
+                    onLoadSuccess(cached.hexdata, release);
+                });
+                // keep button enabled so user can re-download if desired
+                $("a.load_remote_file").removeClass('disabled');
+            } else {
                 $("a.load_remote_file").removeClass('disabled');
             }
         });
