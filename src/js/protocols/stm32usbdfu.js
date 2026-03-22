@@ -892,7 +892,9 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                                     self.controlTransfer('in', self.request.GETSTATUS, 0, 0, 6, 0, function (data) {
                                         if (data[4] == self.state.dfuDNLOAD_IDLE) {
                                             // update progress bar
-                                            TABS.firmware_flasher.flashProgress(bytes_flashed_total / (self.hex.bytes_total * 2) * 100);
+                                            var pct = Math.round(bytes_flashed_total / (self.hex.bytes_total * 2) * 100);
+                                            TABS.firmware_flasher.flashProgress(pct)
+                                                .flashingMessage(i18n.getMessage('stm32Flashing') + ' ' + pct + '%', TABS.firmware_flasher.FLASH_MESSAGE_TYPES.NEUTRAL);
 
                                             // flash another page
                                             write();
@@ -971,7 +973,9 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                         bytes_verified_total += bytes_to_read;
 
                         // update progress bar
-                        TABS.firmware_flasher.flashProgress((self.hex.bytes_total + bytes_verified_total) / (self.hex.bytes_total * 2) * 100);
+                        var pct = Math.round((self.hex.bytes_total + bytes_verified_total) / (self.hex.bytes_total * 2) * 100);
+                        TABS.firmware_flasher.flashProgress(pct)
+                            .flashingMessage(i18n.getMessage('stm32Verifying') + ' ' + pct + '%', TABS.firmware_flasher.FLASH_MESSAGE_TYPES.NEUTRAL);
 
                         // verify another page
                         read();
