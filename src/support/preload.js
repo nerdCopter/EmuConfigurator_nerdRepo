@@ -217,43 +217,28 @@ const chromeFileSystem = {
             // Return a mock entry object with createWriter
             const entry = {
                 createWriter: (onWriter, onError) => {
+                    let pendingContent = null;
                     const writer = {
                         length: 0,
                         onerror: null,
                         onwriteend: null,
                         truncate: (size) => {
-                            console.log(`[preload] truncate() called with size=${size}, filePath=${filePath}`);
-                            ipcRenderer.invoke('dialog:truncate-file', filePath, size).then(() => {
-                                console.log(`[preload] truncate succeeded`);
-                                writer.length = size;
-                                if (writer.onwriteend) {
-                                    console.log(`[preload] calling onwriteend after truncate`);
-                                    writer.onwriteend();
-                                }
-                            }).catch(err => {
-                                console.error(`[preload] truncate failed:`, err);
-                                if (writer.onerror) writer.onerror(err);
-                            });
+                            // Just reset state; actual write happens in write()
+                            writer.length = size;
+                            if (writer.onwriteend) writer.onwriteend();
                         },
                         write: (blob) => {
-                            console.log(`[preload] write() called with blob, size=${blob.size}`);
-                            blob.arrayBuffer().then(buf => {
-                                // Convert ArrayBuffer to Uint8Array for IPC serialization
-                                const uint8array = new Uint8Array(buf);
-                                console.log(`[preload] invoking dialog:write-file for ${filePath}, ${uint8array.length} bytes`);
-                                ipcRenderer.invoke('dialog:write-file', filePath, uint8array).then(written => {
-                                    console.log(`[preload] write succeeded, ${written} bytes written`);
+                            // Use blob.text() to get string - avoids all binary IPC issues
+                            blob.text().then(text => {
+                                ipcRenderer.invoke('dialog:write-text-file', filePath, text).then(written => {
                                     writer.length += written;
-                                    if (writer.onwriteend) {
-                                        console.log(`[preload] calling onwriteend`);
-                                        writer.onwriteend();
-                                    }
+                                    if (writer.onwriteend) writer.onwriteend();
                                 }).catch(err => {
-                                    console.error(`[preload] write failed:`, err);
+                                    console.error(`[preload] write-text-file failed:`, err);
                                     if (writer.onerror) writer.onerror(err);
                                 });
                             }).catch(err => {
-                                console.error(`[preload] arrayBuffer() failed:`, err);
+                                console.error(`[preload] blob.text() failed:`, err);
                                 if (writer.onerror) writer.onerror(err);
                             });
                         }
