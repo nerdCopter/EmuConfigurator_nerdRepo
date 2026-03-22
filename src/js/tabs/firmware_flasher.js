@@ -272,7 +272,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
             globalExpertMode_e.prop('checked', expertModeChecked);
             if (expertModeChecked) {
-                buildTypesToShow = buildTypes.concat(ciBuildsTypes);
+                buildTypesToShow = buildTypes;
                 buildBuildTypeOptionsList();
             } else {
                 buildTypesToShow = buildTypes;

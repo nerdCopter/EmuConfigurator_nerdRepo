@@ -233,6 +233,8 @@ const chromeUsb = {
                     } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
                         // Handle Node.js Buffer serialization
                         result.data = new Uint8Array(result.data.data).buffer;
+                    } else if (!(result.data instanceof ArrayBuffer)) {
+                        result.data = new Uint8Array(0).buffer;
                     }
                 }
                 if (callback) callback(result);
@@ -255,6 +257,8 @@ const chromeUsb = {
                         result.data = new Uint8Array(result.data).buffer;
                     } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
                         result.data = new Uint8Array(result.data.data).buffer;
+                    } else if (!(result.data instanceof ArrayBuffer)) {
+                        result.data = new Uint8Array(0).buffer;
                     }
                 }
                 if (callback) callback(result);
@@ -282,17 +286,23 @@ const chromeUsb = {
     },
 
     getConfiguration: function (handle, callback) {
-        // Return a stub configuration object
-        // In a real implementation, this would query device descriptors
-        if (callback) {
-            callback({
-                configurationValue: 1,
-                interfaces: [{
-                    interfaceNumber: 0,
-                    alternateSetting: 0,
-                    endpoints: []
-                }]
+        if (handle && chromeUsb._openHandles[handle.handle]) {
+            const device = chromeUsb._openHandles[handle.handle];
+            ipcRenderer.invoke('usb-get-configuration', device.device).then(function (result) {
+                if (callback) {
+                    callback({
+                        configurationValue: result.configurationValue || 1,
+                        interfaces: result.interfaces || []
+                    });
+                }
+            }).catch(function (err) {
+                console.error('usb-get-configuration error:', err);
+                if (callback) {
+                    callback({ configurationValue: 1, interfaces: [] });
+                }
             });
+        } else if (callback) {
+            callback({ configurationValue: 1, interfaces: [] });
         }
     }
 };

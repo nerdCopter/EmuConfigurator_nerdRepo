@@ -86,6 +86,52 @@ ipcMain.handle('serial-disconnect', async () => {
 });
 
 // IPC: detect DFU USB devices
+const _usbOpenDevices = new Map();
+
+function usbKeyFromDevice(device) {
+  return `${device.busNumber}:${device.deviceAddress}`;
+}
+
+function findUsbDeviceByKey(key) {
+  const { usb } = require('usb');
+  return usb.getDeviceList().find((d) => usbKeyFromDevice(d) === key) || null;
+}
+
+function ensureUsbDeviceOpen(key) {
+  let device = _usbOpenDevices.get(key) || findUsbDeviceByKey(key);
+  if (!device) {
+    throw new Error(`USB device not found: ${key}`);
+  }
+  if (!device.interfaces) {
+    device.open();
+  }
+  _usbOpenDevices.set(key, device);
+  return device;
+}
+
+function toBmRequestType(direction, requestType, recipient) {
+  let bm = 0;
+  if (direction === 'in') {
+    bm |= 0x80;
+  }
+
+  if (requestType === 'class') {
+    bm |= 0x20;
+  } else if (requestType === 'vendor') {
+    bm |= 0x40;
+  }
+
+  if (recipient === 'interface') {
+    bm |= 0x01;
+  } else if (recipient === 'endpoint') {
+    bm |= 0x02;
+  } else if (recipient === 'other') {
+    bm |= 0x03;
+  }
+
+  return bm;
+}
+
 ipcMain.handle('usb-list-dfu', async () => {
   try {
     const { usb } = require('usb');
@@ -93,79 +139,191 @@ ipcMain.handle('usb-list-dfu', async () => {
       { vendorId: 0x0483, productId: 0xDF11 },
       { vendorId: 0x2DAE, productId: 0x0003 },
     ];
-    const devices = usb.getDeviceList();
-    const dfuDevices = devices.filter(d => {
-      const desc = d.deviceDescriptor;
-      return DFU_IDS.some(id => id.vendorId === desc.idVendor && id.productId === desc.idProduct);
-    }).map((d, idx) => ({
-      device: idx, // ID for IPC
-      vendorId: d.deviceDescriptor.idVendor,
-      productId: d.deviceDescriptor.idProduct,
-      serialNumber: d.serialNumber || '',
-      manufacturer: d.allConfigDescriptors[0]?.iManufacturer || '',
-      product: d.allConfigDescriptors[0]?.iProduct || '',
-      _device: d // store actual device reference for later operations
-    }));
-    return dfuDevices;
+
+    return usb.getDeviceList()
+      .filter((d) => {
+        const desc = d.deviceDescriptor || {};
+        return DFU_IDS.some((id) => id.vendorId === desc.idVendor && id.productId === desc.idProduct);
+      })
+      .map((d) => ({
+        device: usbKeyFromDevice(d),
+        vendorId: d.deviceDescriptor.idVendor,
+        productId: d.deviceDescriptor.idProduct,
+        serialNumber: '',
+        manufacturer: '',
+        product: '',
+      }));
   } catch (e) {
-    console.error('usb-list-dfu error:', e);
+    console.error('usb-list-dfu error:', e.message);
     return [];
   }
 });
 
-// USB device operation stubs - proper implementation would require node-usb library
-ipcMain.handle('usb-open-device', async (event, deviceId) => {
-  console.log('USB device opening:', deviceId);
-  return { success: true };
-});
-
-ipcMain.handle('usb-close-device', async (event, deviceId) => {
-  console.log('USB device closed:', deviceId);
-  return { success: true };
-});
-
-ipcMain.handle('usb-claim-interface', async (event, deviceId, interfaceNumber) => {
-  console.log(`USB claiming interface ${interfaceNumber} on device ${deviceId}`);
-  return { success: true };
-});
-
-ipcMain.handle('usb-release-interface', async (event, deviceId, interfaceNumber) => {
-  console.log(`USB releasing interface ${interfaceNumber} on device ${deviceId}`);
-  return { success: true };
-});
-
-ipcMain.handle('usb-control-transfer', async (event, deviceId, options) => {
-  // Stub for control transfer - return empty binary data with headers
-  console.log('USB control transfer:', options);
-  // Return a buffer that matches the expected format
-  // For descriptor requests, return a minimal valid response
-  const buffer = Buffer.alloc(options.length || 255);
-  // Fill with minimal descriptor structure if it's a GET_DESCRIPTOR request
-  if (options.request === 6) { // GET_DESCRIPTOR
-    buffer[0] = 4; // length
-    buffer[1] = 0x21; // DFU functional descriptor type
+ipcMain.handle('usb-open-device', async (event, deviceKey) => {
+  try {
+    ensureUsbDeviceOpen(deviceKey);
+    return { success: true };
+  } catch (e) {
+    console.error('usb-open-device error:', e.message);
+    return { success: false, error: e.message };
   }
-  return { 
-    data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
-    bytesTransferred: buffer.length,
-    resultCode: 0
-  };
 });
 
-ipcMain.handle('usb-bulk-transfer', async (event, deviceId, options) => {
-  // Stub for bulk transfer - return empty binary data
-  console.log('USB bulk transfer:', options);
-  const buffer = Buffer.alloc(options.length || 64);
-  return { 
-    data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
-    bytesTransferred: buffer.length,
-    resultCode: 0
-  };
+ipcMain.handle('usb-close-device', async (event, deviceKey) => {
+  try {
+    const device = _usbOpenDevices.get(deviceKey);
+    if (device && device.interfaces) {
+      device.close();
+    }
+    _usbOpenDevices.delete(deviceKey);
+    return { success: true };
+  } catch (e) {
+    console.error('usb-close-device error:', e.message);
+    return { success: false, error: e.message };
+  }
 });
 
-ipcMain.handle('usb-reset-device', async (event, deviceId) => {
-  console.log('USB device reset:', deviceId);
-  return { success: true };
+ipcMain.handle('usb-claim-interface', async (event, deviceKey, interfaceNumber) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    const iface = device.interface(interfaceNumber);
+    iface.claim();
+    return { success: true };
+  } catch (e) {
+    console.error('usb-claim-interface error:', e.message);
+    return { success: false, error: e.message };
+  }
+});
+
+ipcMain.handle('usb-release-interface', async (event, deviceKey, interfaceNumber) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    const iface = device.interface(interfaceNumber);
+    await new Promise((resolve, reject) => {
+      iface.release(true, (err) => (err ? reject(err) : resolve()));
+    });
+    return { success: true };
+  } catch (e) {
+    console.error('usb-release-interface error:', e.message);
+    return { success: false, error: e.message };
+  }
+});
+
+ipcMain.handle('usb-get-configuration', async (event, deviceKey) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    const configDescriptor = device.configDescriptor || {};
+    const interfaces = (device.interfaces || []).map((iface) => ({
+      interfaceNumber: iface.interfaceNumber,
+      alternateSetting: iface.altSetting || 0,
+      endpoints: (iface.endpoints || []).map((ep) => ({ address: ep.address })),
+    }));
+
+    return {
+      resultCode: 0,
+      configurationValue: configDescriptor.bConfigurationValue || 1,
+      interfaces,
+    };
+  } catch (e) {
+    console.error('usb-get-configuration error:', e.message);
+    return { resultCode: 1, interfaces: [] };
+  }
+});
+
+ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    const bmRequestType = toBmRequestType(options.direction, options.requestType, options.recipient);
+    const bRequest = options.request;
+    const wValue = options.value || 0;
+    const wIndex = options.index || 0;
+
+    if (options.direction === 'in') {
+      const length = options.length || 0;
+      const data = await new Promise((resolve, reject) => {
+        device.controlTransfer(bmRequestType, bRequest, wValue, wIndex, length, (err, inData) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(inData || Buffer.alloc(0));
+        });
+      });
+
+      return { resultCode: 0, bytesTransferred: data.length, data: Array.from(data) };
+    }
+
+    const outData = options.data ? Buffer.from(options.data) : Buffer.alloc(0);
+    await new Promise((resolve, reject) => {
+      device.controlTransfer(bmRequestType, bRequest, wValue, wIndex, outData, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+
+    return { resultCode: 0, bytesTransferred: outData.length };
+  } catch (e) {
+    console.error('usb-control-transfer error:', e.message);
+    return { resultCode: 1, bytesTransferred: 0, data: [] };
+  }
+});
+
+ipcMain.handle('usb-bulk-transfer', async (event, deviceKey, options) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    const iface = device.interfaces[0];
+    const endpointNumber = options.endpoint || 1;
+    const endpointAddress = options.direction === 'in' ? (endpointNumber | 0x80) : endpointNumber;
+    const endpoint = (iface.endpoints || []).find((ep) => ep.address === endpointAddress);
+
+    if (!endpoint) {
+      return { resultCode: 1, bytesTransferred: 0, data: [] };
+    }
+
+    if (options.direction === 'in') {
+      const data = await new Promise((resolve, reject) => {
+        endpoint.transfer(options.length || 64, (err, inData) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(inData || Buffer.alloc(0));
+        });
+      });
+      return { resultCode: 0, bytesTransferred: data.length, data: Array.from(data) };
+    }
+
+    const outData = options.data ? Buffer.from(options.data) : Buffer.alloc(0);
+    await new Promise((resolve, reject) => {
+      endpoint.transfer(outData, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+    return { resultCode: 0, bytesTransferred: outData.length };
+  } catch (e) {
+    console.error('usb-bulk-transfer error:', e.message);
+    return { resultCode: 1, bytesTransferred: 0, data: [] };
+  }
+});
+
+ipcMain.handle('usb-reset-device', async (event, deviceKey) => {
+  try {
+    const device = ensureUsbDeviceOpen(deviceKey);
+    await new Promise((resolve, reject) => {
+      device.reset((err) => (err ? reject(err) : resolve()));
+    });
+    return { success: true, resultCode: 0 };
+  } catch (e) {
+    console.error('usb-reset-device error:', e.message);
+    return { success: false, resultCode: 1 };
+  }
 });
 
 // --- File system dialog IPC bridge ---
