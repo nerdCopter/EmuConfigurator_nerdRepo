@@ -208,7 +208,8 @@ const chromeFileSystem = {
                 callback(null);
                 return;
             }
-            const filePath = result.filePaths[0];
+            // showSaveDialog returns .filePath (string), showOpenDialog returns .filePaths (array)
+            const filePath = options.type === 'saveFile' ? result.filePath : result.filePaths?.[0];
             if (!filePath) {
                 callback(null);
                 return;

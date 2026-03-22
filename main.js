@@ -125,9 +125,16 @@ ipcMain.handle('dialog:choose-entry', async (event, options) => {
 // IPC: truncate file to size
 ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   return new Promise((resolve, reject) => {
-    fs.truncate(filePath, size, (err) => {
-      if (err) reject(err);
-      else resolve(size);
+    // Create file if it doesn't exist
+    fs.writeFile(filePath, '', (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      fs.truncate(filePath, size, (err) => {
+        if (err) reject(err);
+        else resolve(size);
+      });
     });
   });
 });
