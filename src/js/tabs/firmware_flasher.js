@@ -3,7 +3,6 @@
 TABS.firmware_flasher = {
     releases: null,
     releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/EmuFlight/releases'),
-    jenkinsLoader: new JenkinsLoader(''),
     localFileLoaded: false,
 };
 
@@ -243,13 +242,8 @@ TABS.firmware_flasher.initialize = function (callback) {
             }
         ];
 
-        var ciBuildsTypes = self.jenkinsLoader._jobs.map(job => {
-            return {
-                title: job.title,
-                loader: () => self.jenkinsLoader.loadBuilds(job.name, buildJenkinsBoardOptions)
-            };
-        })
-        var buildTypesToShow;
+        // No Jenkins CI builds - only released firmware
+        var buildTypesToShow = buildTypes;
 
         var buildType_e = $('select[name="build_type"]');
         function buildBuildTypeOptionsList() {
@@ -667,9 +661,8 @@ TABS.firmware_flasher.initialize = function (callback) {
         GUI.content_ready(callback);
     }
 
-    self.jenkinsLoader.loadJobs('Firmware', () => {
-       $('#content').load("./tabs/firmware_flasher.html", onDocumentLoad);
-    });
+    // Load firmware flasher tab HTML
+    $('#content').load("./tabs/firmware_flasher.html", onDocumentLoad);
 };
 
 TABS.firmware_flasher.cleanup = function (callback) {

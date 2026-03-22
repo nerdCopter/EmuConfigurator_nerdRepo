@@ -135,6 +135,12 @@ ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
   return text.length;
 });
 
+// IPC: read file as binary buffer
+ipcMain.handle('file-read-binary', async (event, filePath) => {
+  const data = await fs.promises.readFile(filePath);
+  return data;
+});
+
 // IPC: truncate file to size (kept for compatibility)
 ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   return size;

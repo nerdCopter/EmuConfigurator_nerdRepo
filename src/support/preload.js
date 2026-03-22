@@ -214,21 +214,30 @@ const chromeFileSystem = {
                 callback(null);
                 return;
             }
-            // Return a mock entry object with createWriter
+            // Return a mock entry object with file() and createWriter methods
             const entry = {
+                _filePath: filePath,
+                file: (success, error) => {
+                    // Request main process to read file as binary
+                    ipcRenderer.invoke('file-read-binary', filePath).then(buffer => {
+                        // Convert buffer to Blob
+                        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+                        success(blob);
+                    }).catch(err => {
+                        console.error('File read error:', err);
+                        if (error) error(err);
+                    });
+                },
                 createWriter: (onWriter, onError) => {
-                    let pendingContent = null;
                     const writer = {
                         length: 0,
                         onerror: null,
                         onwriteend: null,
                         truncate: (size) => {
-                            // Just reset state; actual write happens in write()
                             writer.length = size;
                             if (writer.onwriteend) writer.onwriteend();
                         },
                         write: (blob) => {
-                            // Use blob.text() to get string - avoids all binary IPC issues
                             blob.text().then(text => {
                                 ipcRenderer.invoke('dialog:write-text-file', filePath, text).then(written => {
                                     writer.length += written;
@@ -251,6 +260,14 @@ const chromeFileSystem = {
             console.error('File dialog error:', err);
             callback(null);
         });
+    },
+    getDisplayPath: (fileEntry, callback) => {
+        // Simply return the stored file path
+        if (fileEntry && fileEntry._filePath) {
+            callback(fileEntry._filePath);
+        } else {
+            callback('');
+        }
     }
 };
 
