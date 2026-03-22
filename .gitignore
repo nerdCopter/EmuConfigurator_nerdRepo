@@ -12,6 +12,11 @@ dist/
 debug/
 release/
 
+# Backup files
+*.bak
+*.backup
+*~
+
 # OSX
 .DS_store
 
