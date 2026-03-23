@@ -72,6 +72,8 @@ STM32DFU_protocol.prototype.connect = function (device, hex, options, callback) 
     self.hex = hex;
     self.callback = callback;
 
+    GUI.connect_lock = true;
+
     self.options = {
         erase_chip:     false
     };

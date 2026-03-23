@@ -462,6 +462,21 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                             eraseAll = true
                         }
+
+                        // Disable controls for the duration of the flash operation
+                        self.enableFlashing(false);
+                        $('a.load_remote_file').addClass('disabled');
+                        $('input.erase_chip').prop('disabled', true);
+                        $('select[name="firmware_version"]').prop('disabled', true);
+
+                        // Called by the protocol when flashing finishes (success or error)
+                        var flashComplete = function () {
+                            self.enableFlashing(true);
+                            $('a.load_remote_file').removeClass('disabled');
+                            $('input.erase_chip').prop('disabled', false);
+                            $('select[name="firmware_version"]').prop('disabled', false);
+                        };
+
                         if (String($('div#port-picker #port').val()) != 'DFU') {
                             if (String($('div#port-picker #port').val()) != '0') {
                                 var port = String($('div#port-picker #port').val()), baud;
@@ -477,13 +492,14 @@ TABS.firmware_flasher.initialize = function (callback) {
                                     baud = parseInt($('#flash_manual_baud_rate').val());
                                 }
 
-                                STM32.connect(port, baud, parsed_hex, options);
+                                STM32.connect(port, baud, parsed_hex, options, flashComplete);
                             } else {
+                                flashComplete();
                                 console.log('Please select valid serial port');
                                 GUI.log(i18n.getMessage('firmwareFlasherNoValidPort'));
                             }
                         } else {
-                            STM32DFU.connect(usbDevices, parsed_hex, options);
+                            STM32DFU.connect(usbDevices, parsed_hex, options, flashComplete);
                         }
                     } else {
                         $('span.progressLabel').attr('i18n','firmwareFlasherFirmwareNotLoaded').removeClass('i18n-replaced');
