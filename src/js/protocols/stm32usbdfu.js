@@ -141,7 +141,7 @@ STM32DFU_protocol.prototype.openDevice = function (device) {
     });
 };
 
-STM32DFU_protocol.prototype.closeDevice = function () {
+STM32DFU_protocol.prototype.closeDevice = function (callback) {
     var self = this;
 
     chrome.usb.closeDevice(this.handle, function closed() {
@@ -154,6 +154,8 @@ STM32DFU_protocol.prototype.closeDevice = function () {
         console.log('Device closed with Handle ID: ' + self.handle.handle);
 
         self.handle = null;
+
+        if (callback) callback();
     });
 };
 
@@ -175,13 +177,13 @@ STM32DFU_protocol.prototype.claimInterface = function (interfaceNumber) {
     });
 };
 
-STM32DFU_protocol.prototype.releaseInterface = function (interfaceNumber) {
+STM32DFU_protocol.prototype.releaseInterface = function (interfaceNumber, callback) {
     var self = this;
 
     chrome.usb.releaseInterface(this.handle, interfaceNumber, function released() {
         console.log('Released interface: ' + interfaceNumber);
 
-        self.closeDevice();
+        self.closeDevice(callback);
     });
 };
 
@@ -1047,16 +1049,16 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
 
             break;
         case 99:
-            // cleanup
-            self.releaseInterface(0);
+            // cleanup — pass callback through the async chain
+            self.releaseInterface(0, function () {
+                GUI.connect_lock = false;
 
-            GUI.connect_lock = false;
+                var timeSpent = new Date().getTime() - self.upload_time_start;
 
-            var timeSpent = new Date().getTime() - self.upload_time_start;
+                console.log('Script finished after: ' + (timeSpent / 1000) + ' seconds');
 
-            console.log('Script finished after: ' + (timeSpent / 1000) + ' seconds');
-
-            if (self.callback) self.callback();
+                if (self.callback) self.callback();
+            });
             break;
     }
 };
