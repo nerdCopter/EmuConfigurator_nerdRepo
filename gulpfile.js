@@ -140,7 +140,9 @@ function writeChangesetId() {
 // Electron tasks: These invoke electron-forge commands which use forge.config.js
 function electron_start(done) {
     console.log('Starting Electron in development mode...');
-    const cp = child_process.spawn('npx', ['electron-forge', 'start'], { stdio: 'inherit' });
+    const verbose = process.env.VERBOSE === '1';
+    const spawnEnv = verbose ? process.env : { ...process.env, NPM_CONFIG_LOGLEVEL: 'error' };
+    const cp = child_process.spawn('npx', ['electron-forge', 'start'], { stdio: 'inherit', env: spawnEnv });
     cp.on('exit', (code) => {
         if (code !== 0) {
             console.error('Electron start failed with code:', code);

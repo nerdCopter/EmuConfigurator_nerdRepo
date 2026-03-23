@@ -7,7 +7,8 @@
   "main": "main.js",
   "default_locale": "en",
   "scripts": {
-    "dev": "gulp debug",
+    "dev": "NODE_NO_WARNINGS=1 gulp debug",
+    "dev:verbose": "gulp debug",
     "make": "gulp dist && electron-forge make",
     "make:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge make",
     "package": "gulp dist && electron-forge package",

@@ -502,9 +502,15 @@ function createWindow() {
   }
   // Capture renderer console output and kill app on error
   // Electron passes positional args: (event, level, message, sourceId, line)
+  // Levels: 0=verbose, 1=info, 2=warning, 3=error
+  // Default (dev): show warnings+errors only. Set VERBOSE=1 to show all.
   win.webContents.on('console-message', (event, level, message, line, sourceId) => {
     if (message) {
-      console.log(`[Renderer] ${message} (${sourceId || ''}:${line || ''})`);
+      const verbose = process.env.VERBOSE === '1';
+      if (verbose || level >= 2) {
+        const tag = level >= 3 ? '[Renderer ERROR]' : level >= 2 ? '[Renderer WARN]' : '[Renderer]';
+        console.log(`${tag} ${message} (${sourceId || ''}:${line || ''})`);
+      }
       if (message.includes('is not defined')) {
         console.error('Fatal error detected in renderer, quitting Electron app.');
         app.quit();
