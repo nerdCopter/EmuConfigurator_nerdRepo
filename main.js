@@ -579,7 +579,20 @@ app.on('before-quit', () => {
   _usbOpenDevices.clear();
 
   if (_serialPort && _serialPort.isOpen) {
-    try { _serialPort.close(() => {}); } catch { /* ignore */ }
+    try {
+      // Send exit command to CLI to gracefully close the serial session.
+      // This ensures the FC isn't left in a connected state when the port closes.
+      const exitCmd = 'exit\r';
+      _serialPort.write(Buffer.from(exitCmd), () => {
+        // Give it a moment to process the exit, then close
+        setTimeout(() => {
+          try { _serialPort.close(() => {}); } catch { /* ignore */ }
+        }, 100);
+      });
+    } catch {
+      // If write fails, still attempt to close
+      try { _serialPort.close(() => {}); } catch { /* ignore */ }
+    }
     _serialPort = null;
   }
 });
