@@ -13,7 +13,8 @@
     "package": "gulp dist && electron-forge package",
     "package:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge package",
     "test": "karma start test/karma.conf.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "commands": "node .commands.js"
   },
   "repository": {
     "type": "git",

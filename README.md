@@ -13,6 +13,16 @@
 
 The application allows you to configure the Emuflight software running on any [supported Emuflight target](https://github.com/emuflight/EmuFlight/tree/master/src/main/target).
 
+## Quick Start
+
+After cloning/downloading, run:
+
+```bash
+yarn install
+yarn commands          # See all available build commands
+yarn dev               # Start live development mode
+```
+
 ## Downloads
 
 Please [download our releases](https://github.com/emuflight/EmuConfigurator/releases) at GitHub.

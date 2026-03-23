@@ -43,17 +43,24 @@ function setupMenu(buildMode) {
       label: 'Help',
       submenu: [
         {
+          label: 'EmuFlight Documentation',
+          click: async () => {
+            const { shell } = require('electron');
+            await shell.openExternal('https://github.com/emuflight/EmuFlight/wiki');
+          }
+        },
+        {
           label: 'EmuFlight GitHub',
           click: async () => {
             const { shell } = require('electron');
-            await shell.openExternal('https://github.com/emuflight/EmuConfigurator');
+            await shell.openExternal('https://github.com/emuflight');
           }
         },
         {
           label: 'EmuFlight Discord',
           click: async () => {
             const { shell } = require('electron');
-            await shell.openExternal('https://discord.gg/emuflight');
+            await shell.openExternal('https://discord.gg/BWqgBg3');
           }
         }
       ]
