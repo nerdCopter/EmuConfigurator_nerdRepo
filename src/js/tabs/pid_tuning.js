@@ -1709,8 +1709,9 @@ TABS.pid_tuning.initialize = function(callback) {
 
         function loadProfilesList() {
             var numberOfProfiles = 3;
-            if (semver.gte(CONFIG.apiVersion, "1.20.0") &&
-                CONFIG.numProfiles === 2) {
+            // EmuFlight 1.40.0+ always has profiles 0, 1, 2 (displayed as 1, 2, 3)
+            // Profiles only reduced to 2 for very old versions (< 1.20.0)
+            if (semver.lt(CONFIG.apiVersion, "1.20.0") && CONFIG.numProfiles === 2) {
                 numberOfProfiles = 2;
             }
 
