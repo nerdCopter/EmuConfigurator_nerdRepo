@@ -342,7 +342,13 @@ ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
 
     return { resultCode: 0, bytesTransferred: outData.length };
   } catch (e) {
-    console.error('usb-control-transfer error:', e.message);
+    if (e.message && e.message.includes('LIBUSB_TRANSFER_STALL')) {
+      // STALL is a valid DFU device response (device in dfuERROR, protocol
+      // clears it via DFU_CLRSTATUS). Not a fatal error — demote to warn.
+      console.warn('usb-control-transfer: device stalled (expected during DFU error recovery)');
+    } else {
+      console.error('usb-control-transfer error:', e.message);
+    }
     return { resultCode: 1, bytesTransferred: 0, data: [] };
   }
 });
@@ -523,10 +529,11 @@ function createWindow() {
   });
   
   // Capture renderer console output and kill app on error
-  // Electron passes positional args: (event, level, message, sourceId, line)
   // Levels: 0=verbose, 1=info, 2=warning, 3=error
   // Default (dev): show warnings+errors only. Set VERBOSE=1 to show all.
-  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+  // Uses Event<WebContentsConsoleMessageEventParams> object (Electron v41+)
+  win.webContents.on('console-message', (event) => {
+    const { level, message, line, sourceId } = event;
     if (message) {
       const verbose = process.env.VERBOSE === '1';
       if (verbose || level >= 2) {
