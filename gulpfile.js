@@ -131,18 +131,9 @@ function writeChangesetId() {
         max_msp: pkg.max_msp
         }, undefined, 2);
     
-    // Ensure directories exist
     fse.ensureDirSync(DIST_DIR);
-    fse.ensureDirSync('src');
-    
-    // Write to dist/ for production
     fs.writeFileSync(path.join(DIST_DIR, 'version.json'), versionJson);
     console.log('Wrote version.json to ' + path.join(DIST_DIR, 'version.json'));
-    
-    // Write to src/ for development (Electron loads from src/)
-    fs.writeFileSync(path.join('src', 'version.json'), versionJson);
-    console.log('Wrote version.json to src/version.json');
-    
     return Promise.resolve();
 }
 

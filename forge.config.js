@@ -5,6 +5,10 @@ module.exports = {
   packagerConfig: {
     asar: true,
     icon: require('path').resolve(__dirname, 'assets/osx/app-icon'),
+    // Bake build mode into packaged package.json so main.js can read it at runtime
+    extraMetadata: {
+      buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
+    },
   },
   rebuildConfig: {},
   makers: [

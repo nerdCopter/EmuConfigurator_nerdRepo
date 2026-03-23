@@ -1,5 +1,47 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
+
+// Build modes:
+//   'dev'           - electron-forge start (NODE_ENV=development auto-set): devtools auto-open, full menu
+//   'debug_package' - packaged with EMUCFG_BUILD_MODE=debug_package: devtools menu item, not auto-open
+//   'release'       - packaged without flag: no devtools, no devtools menu item
+function getBuildMode() {
+  if (process.env.NODE_ENV === 'development') return 'dev';
+  try {
+    // electron-forge extraMetadata bakes buildMode into the packaged package.json
+    return require('./package.json').buildMode || 'release';
+  } catch (e) {
+    return 'release';
+  }
+}
+
+function setupMenu(buildMode) {
+  const showDevTools = buildMode !== 'release';
+  const template = [
+    ...(process.platform === 'darwin' ? [{
+      label: app.name,
+      submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
+    }] : []),
+    {
+      label: 'View',
+      submenu: [
+        { role: 'togglefullscreen' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        ...(showDevTools ? [
+          { type: 'separator' },
+          { role: 'toggleDevTools', label: 'Toggle Developer Tools' }
+        ] : [])
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [{ role: 'minimize' }, { role: 'close' }]
+    }
+  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
 
 // Window size constraints
 const MIN_WINDOW_WIDTH = 980;
@@ -383,6 +425,9 @@ ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
 });
 
 function createWindow() {
+  const buildMode = getBuildMode();
+  setupMenu(buildMode);
+
   const win = new BrowserWindow({
     width: 1200,
     height: 700,
@@ -426,7 +471,9 @@ function createWindow() {
     }
   });
   
-  win.webContents.openDevTools();
+  if (buildMode === 'dev') {
+    win.webContents.openDevTools();
+  }
   // Capture renderer console output and kill app on error
   win.webContents.on('console-message', (event, params) => {
     const { level, message, line, sourceId } = params;

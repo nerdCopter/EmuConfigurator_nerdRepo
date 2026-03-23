@@ -7,13 +7,14 @@
   "main": "main.js",
   "default_locale": "en",
   "scripts": {
-    "start": "electron-forge start",
-    "debug": "gulp debug",
+    "dev": "gulp debug",
+    "start": "gulp debug",
     "build": "gulp dist",
-    "gulp": "gulp",
     "test": "karma start test/karma.conf.js",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "gulp dist && electron-forge make",
+    "make:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge make",
+    "package": "gulp dist && electron-forge package",
+    "package:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge package",
     "lint": "eslint ."
   },
   "repository": {
