@@ -461,8 +461,8 @@ function createWindow() {
   setupMenu(buildMode);
 
   const win = new BrowserWindow({
-    width: 1200,
-    height: 700,
+    width: 1024,
+    height: 768,
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,
     webPreferences: {
