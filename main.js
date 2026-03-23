@@ -1,10 +1,10 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
 
-// Build modes:
-//   'dev'           - electron-forge start (NODE_ENV=development auto-set): devtools auto-open, full menu
-//   'debug_package' - packaged with EMUCFG_BUILD_MODE=debug_package: devtools menu item, not auto-open
-//   'release'       - packaged without flag: no devtools, no devtools menu item
+// Build modes (set by npm scripts in package.json):
+//   'dev'           - `yarn dev` sets NODE_ENV=development → devtools auto-open + menu item
+//   'debug_package' - `yarn make:debug` sets EMUCFG_BUILD_MODE=debug_package → menu item only, no auto-open
+//   'release'       - `yarn make` (default) → no devtools, no menu item
 function getBuildMode() {
   if (process.env.NODE_ENV === 'development') return 'dev';
   try {

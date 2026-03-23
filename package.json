@@ -7,15 +7,16 @@
   "main": "main.js",
   "default_locale": "en",
   "scripts": {
-    "dev": "NODE_NO_WARNINGS=1 gulp debug",
-    "dev:verbose": "gulp debug",
-    "make": "gulp dist && electron-forge make",
-    "make:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge make",
-    "package": "gulp dist && electron-forge package",
-    "package:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge package",
-    "test": "karma start test/karma.conf.js",
-    "lint": "eslint .",
-    "commands": "node .commands.js"
+    "dev":           "node scripts/build.js && NODE_ENV=development NODE_NO_WARNINGS=1 electron-forge start",
+    "dev:verbose":   "node scripts/build.js && NODE_ENV=development electron-forge start",
+    "make":          "node scripts/build.js && electron-forge make",
+    "make:debug":    "node scripts/build.js && EMUCFG_BUILD_MODE=debug_package electron-forge make",
+    "package":       "node scripts/build.js && electron-forge package",
+    "package:debug": "node scripts/build.js && EMUCFG_BUILD_MODE=debug_package electron-forge package",
+    "build":         "node scripts/build.js",
+    "test":          "karma start test/karma.conf.js",
+    "lint":          "eslint .",
+    "commands":      "node .commands.js"
   },
   "repository": {
     "type": "git",
