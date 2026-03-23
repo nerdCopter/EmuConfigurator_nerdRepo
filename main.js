@@ -557,8 +557,24 @@ app.whenReady().then(createWindow);
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
 // "device still open" warnings and ensures the device is left in a clean state.
 app.on('before-quit', () => {
+  // Attempt graceful DFU device exit: send DETACH command to return FC to normal mode
+  // (avoids leaving device stuck in bootloader requiring unplug/replug)
   for (const [, device] of _usbOpenDevices) {
-    try { device.close(); } catch { /* ignore errors during shutdown */ }
+    try {
+      // DFU DETACH: tells device to exit bootloader and run application firmware
+      // bmRequestType: 0x21 (OUT, CLASS, INTERFACE)
+      // bRequest: 0x00 (DETACH)
+      // wValue: 0 (timeout, unused)
+      // wIndex: 0 (interface 0)
+      // wLength: 0 (no data)
+      device.controlTransfer(0x21, 0x00, 0, 0, 0, (err) => {
+        // Ignore errors; attempt close regardless
+        try { device.close(); } catch { /* ignore */ }
+      });
+    } catch {
+      // If DETACH fails, still attempt to close the device
+      try { device.close(); } catch { /* ignore */ }
+    }
   }
   _usbOpenDevices.clear();
 
