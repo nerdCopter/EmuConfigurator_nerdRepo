@@ -478,6 +478,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                         // Called by the protocol when flashing finishes (success or error)
                         var flashComplete = function () {
+                            console.log('[flashComplete] called, re-enabling controls...');
                             self.enableFlashing(true);
                             $('a.load_file').removeClass('disabled');
                             $('a.load_remote_file').removeClass('disabled');
@@ -489,6 +490,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                             $('select[name="build_type"]').prop('disabled', false);
                             $('select[name="board"]').prop('disabled', false);
                             $('#flash_manual_baud_rate').prop('disabled', false);
+                            console.log('[flashComplete] controls re-enabled');
                         };
 
                         if (String($('div#port-picker #port').val()) != 'DFU') {
