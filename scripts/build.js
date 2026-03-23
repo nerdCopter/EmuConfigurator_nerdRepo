@@ -32,7 +32,6 @@ const SRC_EXCLUDE_FILES = [
   'css/font-awesome/css/font-awesome.css',
 ];
 const SRC_EXCLUDE_DIRS = [
-  'css/opensans_webfontkit',
   'support',
 ];
 
@@ -79,6 +78,16 @@ function build() {
   // resources/**/* → dist/resources/  (base: ., excluding osd PNGs)
   console.log('[build] Copying resources → dist/resources/');
   fse.copySync(path.join(ROOT, 'resources'), path.join(DIST, 'resources'), { filter: osdFilter });
+
+  // Copy jBox CSS from node_modules to dist/css/ so main.html can find it
+  console.log('[build] Copying jBox CSS → dist/css/');
+  const jboxSrc = path.join(ROOT, 'node_modules', 'jbox', 'dist', 'jBox.min.css');
+  const jboxDst = path.join(DIST, 'css', 'jBox.min.css');
+  if (fs.existsSync(jboxSrc)) {
+    fse.copyFileSync(jboxSrc, jboxDst);
+  } else {
+    console.warn('[build] WARNING: jBox.min.css not found at', jboxSrc);
+  }
 
   // manifest.json → dist/manifest.json
   fse.copyFileSync(path.join(ROOT, 'manifest.json'), path.join(DIST, 'manifest.json'));
