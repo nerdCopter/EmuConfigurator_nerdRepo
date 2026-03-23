@@ -497,9 +497,31 @@ function createWindow() {
     }
   });
   
+  // Intercept new window requests (e.g., target="_blank" links) and open in system browser
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    // Open external links in the system default browser
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      const { shell } = require('electron');
+      shell.openExternal(url);
+      return { action: 'deny' }; // Prevent Electron from opening its own window
+    }
+    return { action: 'allow' };
+  });
+  
   if (buildMode === 'dev') {
     win.webContents.openDevTools();
   }
+  
+  // Intercept navigation to external URLs and open them in system browser
+  win.webContents.on('will-navigate', (event, url) => {
+    const appPath = 'file://' + path.join(__dirname, 'dist');
+    if (!url.startsWith(appPath) && (url.startsWith('http://') || url.startsWith('https://'))) {
+      event.preventDefault();
+      const { shell } = require('electron');
+      shell.openExternal(url);
+    }
+  });
+  
   // Capture renderer console output and kill app on error
   // Electron passes positional args: (event, level, message, sourceId, line)
   // Levels: 0=verbose, 1=info, 2=warning, 3=error
