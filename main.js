@@ -38,6 +38,25 @@ function setupMenu(buildMode) {
     {
       label: 'Window',
       submenu: [{ role: 'minimize' }, { role: 'close' }]
+    },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'EmuFlight GitHub',
+          click: async () => {
+            const { shell } = require('electron');
+            await shell.openExternal('https://github.com/emuflight/EmuConfigurator');
+          }
+        },
+        {
+          label: 'EmuFlight Discord',
+          click: async () => {
+            const { shell } = require('electron');
+            await shell.openExternal('https://discord.gg/emuflight');
+          }
+        }
+      ]
     }
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
@@ -475,12 +494,14 @@ function createWindow() {
     win.webContents.openDevTools();
   }
   // Capture renderer console output and kill app on error
-  win.webContents.on('console-message', (event, params) => {
-    const { level, message, line, sourceId } = params;
-    console.log(`[Renderer Console] ${message} (${sourceId}:${line})`);
-    if (message && message.includes('is not defined')) {
-      console.error('Fatal error detected in renderer, quitting Electron app.');
-      app.quit();
+  // Electron passes positional args: (event, level, message, sourceId, line)
+  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    if (message) {
+      console.log(`[Renderer] ${message} (${sourceId || ''}:${line || ''})`);
+      if (message.includes('is not defined')) {
+        console.error('Fatal error detected in renderer, quitting Electron app.');
+        app.quit();
+      }
     }
   });
   win.webContents.on('crashed', () => {

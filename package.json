@@ -8,13 +8,11 @@
   "default_locale": "en",
   "scripts": {
     "dev": "gulp debug",
-    "start": "gulp debug",
-    "build": "gulp dist",
-    "test": "karma start test/karma.conf.js",
     "make": "gulp dist && electron-forge make",
     "make:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge make",
     "package": "gulp dist && electron-forge package",
     "package:debug": "EMUCFG_BUILD_MODE=debug_package gulp dist && EMUCFG_BUILD_MODE=debug_package electron-forge package",
+    "test": "karma start test/karma.conf.js",
     "lint": "eslint ."
   },
   "repository": {
