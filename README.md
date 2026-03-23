@@ -4,147 +4,94 @@
 
 ![Emuflight](.github/screenshot.png)
 
-**Various types** of aircraft are supported by the tool and by Emuflight
+Supports quadcopters, hexacopters, octocopters, and fixed-wing aircraft. Configure any [supported Emuflight target](https://github.com/emuflight/EmuFlight/tree/master/src/main/target).
 
- * quadcopters
- * hexacopters
- * octocopters
- * fixed-wing aircraft.
-
-The application allows you to configure the Emuflight software running on any [supported Emuflight target](https://github.com/emuflight/EmuFlight/tree/master/src/main/target).
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Downloads](#downloads)
+- [Installation](#installation)
+- [Development](#development)
+- [Notes](#notes)
+- [Support](#support)
 
 ## Quick Start
 
-After cloning/downloading, run:
-
 ```bash
 yarn install
-yarn commands          # See all available build commands
-yarn dev               # Start live development mode
+yarn dev        # build dist/ and start the app in dev mode (devtools enabled)
 ```
 
 ## Downloads
 
 Please [download our releases](https://github.com/emuflight/EmuConfigurator/releases) at GitHub.
 
-[![Build Status](https://travis-ci.org/emuflight/EmuConfigurator.svg?branch=master)](https://travis-ci.org/emuflight/EmuConfigurator)
-
-## Authors
-
-Emuflight Configurator is a [fork](#credits) of the Cleanflight Configurator with support for Emuflight instead of Cleanflight.
-
-This configurator is the only configurator with support for Emuflight specific features!
-
-If you are experiencing any problems please make sure you are running the [latest firmware version](https://github.com/emuflight/EmuFlight/releases).
-
 ## Installation
 
-### Standalone
+Download the installer for your platform from the [Releases](https://github.com/emuflight/EmuConfigurator/releases) page.
 
-This is the default installation method, and at some point in the future this will become the only way available for most platforms. Please use this method whenever possible.
-
-Please download the installer from the [Release](https://github.com/emuflight/EmuConfigurator/releases) page.
-
-### Apple OSX/Mac
-
-The application is signed and built on a secure environment but we are still working on notarization to get accepted on the Apple Store.
-
-In the meantime, please `right-click` the application and select `Open` to be able to override the strict security restrictions.
-
-### Experimental Test Builds
-
-[Automated Builds](https://dl.bintray.com/emuflight/dev_cfg/) available to try on **your own risk**!
+**macOS:** Right-click the app and select **Open** to bypass Gatekeeper on first launch.
 
 ## Development
 
-### Setup
+### Requirements
 
- 1. [Install Node.js](https://nodejs.org/en/download/package-manager/)
- 2. Install yarn: `npm install yarn -g`
- 3. Change to project folder and run: `yarn install`
- 4. Run `yarn start`
+1. [Node.js](https://nodejs.org/en/download/package-manager/) (LTS recommended)
+2. Yarn: `npm install -g yarn`
+3. `yarn install`
 
-### Run Tests
+### Commands
 
-```shell
-yarn test
-```
+| Command | Description |
+|---------|-------------|
+| `yarn dev` | Build `dist/` and start with devtools auto-open (development mode) |
+| `yarn dev:verbose` | Same as `dev` but with full log output |
+| `yarn build` | Build `dist/` only (no app launch) |
+| `yarn make` | Build `dist/` and create release installers in `out/make/` |
+| `yarn make:debug` | Same as `make` but devtools menu enabled in the packaged app |
+| `yarn package` | Build `dist/` and package the app without creating installers |
+| `yarn package:debug` | Same as `package` but with devtools menu enabled |
+| `yarn test` | Run unit tests |
+| `yarn lint` | Run ESLint |
 
-### Build and Release
+### Build modes
 
-The tasks are defined in `gulpfile.js` and can be run with through yarn:
+| Mode | How triggered | Devtools menu | Auto-open devtools |
+|------|--------------|---------------|--------------------|
+| `dev` | `yarn dev` | Yes | Yes |
+| `debug_package` | `yarn make:debug` / `yarn package:debug` | Yes | No |
+| `release` | `yarn make` / `yarn package` | No | No |
 
-```shell
-yarn gulp <taskname> [[platform] [platform] ...]
-```
+### Build output
 
-#### Available Tasks
-
-List of possible values of `<task-name>`:
-
- * **dist** copies all the JS and CSS files in the `./dist` folder
- * **apps** builds the apps in the `./apps` folder [1]
- * **debug** builds debug version of the apps in the `./debug` folder [1]
- * **release** zips up the apps into individual archives in the `./release` folder [1]
-
-#### Build or release app for one specific platform
-
-To build or release only for one specific platform you can append the plaform after the `task-name`.
-If no platform is provided, all the platforms will be done in sequence.
-
- * **MacOS** use `yarn gulp <task-name> --osx64`
- * **Linux** use `yarn gulp <task-name> --linux64`
- * **Windows** use `yarn gulp <task-name> --win32`
- * **ChromeOS** use `yarn gulp <task-name> --chromeos`
-
-You can also use multiple platforms e.g. `yarn gulp <taskname> --osx64 --linux64`.
-
-## Languages
-
-Emuflight Configurator has been translated into [several languages](https://github.com/emuflight/EmuConfigurator/tree/master/locales).
-
-The application will try to detect and use your system language if a translation into this language is available.
-
-If you prefer to have the application in English or any other language, you can select your desired language in the options menu of the application.
+- `dist/` — assembled app sources (built by `scripts/build.js`)
+- `out/` — packaged Electron app and installers
 
 ## Notes
 
-### WebGL
+### Linux: serial port access
 
-Make sure Settings -> System -> `Use hardware acceleration when available` is checked to achieve the best performance
+Add your user to the `dialout` group:
 
-### Linux users
-
-Please add your user into the `dialout` group for serial access:
-
-```shell
+```bash
 sudo usermod -aG dialout $USER
 ```
+Then log out and back in.
 
-### Linux / MacOSX users
+### Linux: USB DFU flashing
 
-If you have 3D model animation problems, enable "Override software rendering list" in Chrome flags at
+USB access without `sudo` requires a udev rule. Create `/etc/udev/rules.d/49-stm32dfu.rules`:
 
-`chrome://flags/#ignore-gpu-blacklist`
+```
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="plugdev"
+```
+
+Then: `sudo udevadm control --reload-rules && sudo udevadm trigger`
 
 ## Support
 
-If you need help __please__ reach out in [Emuflight support chat](https://discordapp.com/channels/547211754845765635/596913667447062547) on Discord before raising issues on Github.
-
-Please register and [join via this link](https://discord.gg/gdP9CwE).
-
-### Issue trackers
-
- * For Emuflight configurator issues raise them at
-   https://github.com/emuflight/EmuConfigurator/issues
- * For Emuflight firmware issues raise them at
-   https://github.com/emuflight/EmuFlight/issues
-
-Thank you!
-
-## Developers
-
-We accept clean and reasonable patches, please [submit them](https://github.com/emuflight/EmuConfigurator/pulls)!
+- [Emuflight Discord](https://discord.gg/gdP9CwE)
+- [Configurator issues](https://github.com/emuflight/EmuConfigurator/issues)
+- [Firmware issues](https://github.com/emuflight/EmuFlight/issues)
 
 ---
 
