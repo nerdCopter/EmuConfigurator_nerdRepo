@@ -278,9 +278,6 @@ function startProcess() {
                     case 'landing':
                         TABS.landing.initialize(content_ready);
                         break;
-                    case 'changelog':
-                        TABS.staticTab.initialize('changelog', content_ready);
-                        break;
                     case 'privacy_policy':
                         TABS.staticTab.initialize('privacy_policy', content_ready);
                         break;

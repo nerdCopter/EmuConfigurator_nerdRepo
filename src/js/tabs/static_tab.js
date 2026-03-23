@@ -7,8 +7,7 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
     if (GUI.active_tab != staticTabName) {
         GUI.active_tab = staticTabName;
     }
-    // changelog is stored at project root, while other static tab pages are under src/tabs
-    var tabFile = (staticTabName === 'changelog') ? '../changelog.html' : './tabs/' + staticTabName + '.html';
+    var tabFile = './tabs/' + staticTabName + '.html';
 
     $('#content').html('<div id="tab-static"><div id="tab-static-contents"></div>');
     

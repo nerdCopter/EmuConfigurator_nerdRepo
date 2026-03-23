@@ -16,7 +16,6 @@ var GUI_control = function () {
 
     this.defaultAllowedTabsWhenDisconnected = [
         'landing',
-        'changelog',
         'firmware_flasher',
         'privacy_policy',
         'help',
