@@ -99,6 +99,8 @@ STM32DFU_protocol.prototype.connect = function (device, hex, options, callback) 
         } else {
             console.log('USB DFU not found');
             GUI.log(i18n.getMessage('stm32UsbDfuNotFound'));
+            GUI.connect_lock = false;
+            if (self.callback) self.callback();
         }
     });
 };
@@ -126,6 +128,8 @@ STM32DFU_protocol.prototype.openDevice = function (device) {
             if(GUI.operating_system === 'Linux') {
                 GUI.log(i18n.getMessage('usbDeviceUdevNotice'));
             }
+            GUI.connect_lock = false;
+            if (self.callback) self.callback();
             return;
         }
 

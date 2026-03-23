@@ -468,7 +468,13 @@ TABS.firmware_flasher.initialize = function (callback) {
                         $('a.load_file').addClass('disabled');
                         $('a.load_remote_file').addClass('disabled');
                         $('input.erase_chip').prop('disabled', true);
+                        $('input.updating').prop('disabled', true);
+                        $('input.flash_manual_baud').prop('disabled', true);
+                        $('input.flash_on_connect').prop('disabled', true);
                         $('select[name="firmware_version"]').prop('disabled', true);
+                        $('select[name="build_type"]').prop('disabled', true);
+                        $('select[name="board"]').prop('disabled', true);
+                        $('#flash_manual_baud_rate').prop('disabled', true);
 
                         // Called by the protocol when flashing finishes (success or error)
                         var flashComplete = function () {
@@ -476,7 +482,13 @@ TABS.firmware_flasher.initialize = function (callback) {
                             $('a.load_file').removeClass('disabled');
                             $('a.load_remote_file').removeClass('disabled');
                             $('input.erase_chip').prop('disabled', false);
+                            $('input.updating').prop('disabled', false);
+                            $('input.flash_manual_baud').prop('disabled', false);
+                            $('input.flash_on_connect').prop('disabled', false);
                             $('select[name="firmware_version"]').prop('disabled', false);
+                            $('select[name="build_type"]').prop('disabled', false);
+                            $('select[name="board"]').prop('disabled', false);
+                            $('#flash_manual_baud_rate').prop('disabled', false);
                         };
 
                         if (String($('div#port-picker #port').val()) != 'DFU') {
