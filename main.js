@@ -546,6 +546,21 @@ function createWindow() {
 
 app.whenReady().then(createWindow);
 
+// Best-effort cleanup of hardware connections before the process exits.
+// The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
+// "device still open" warnings and ensures the device is left in a clean state.
+app.on('before-quit', () => {
+  for (const [, device] of _usbOpenDevices) {
+    try { device.close(); } catch { /* ignore errors during shutdown */ }
+  }
+  _usbOpenDevices.clear();
+
+  if (_serialPort && _serialPort.isOpen) {
+    try { _serialPort.close(() => {}); } catch { /* ignore */ }
+    _serialPort = null;
+  }
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
