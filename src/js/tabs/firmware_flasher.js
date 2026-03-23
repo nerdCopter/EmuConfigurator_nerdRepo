@@ -465,6 +465,7 @@ TABS.firmware_flasher.initialize = function (callback) {
 
                         // Disable controls for the duration of the flash operation
                         self.enableFlashing(false);
+                        $('a.load_file').addClass('disabled');
                         $('a.load_remote_file').addClass('disabled');
                         $('input.erase_chip').prop('disabled', true);
                         $('select[name="firmware_version"]').prop('disabled', true);
@@ -472,6 +473,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         // Called by the protocol when flashing finishes (success or error)
                         var flashComplete = function () {
                             self.enableFlashing(true);
+                            $('a.load_file').removeClass('disabled');
                             $('a.load_remote_file').removeClass('disabled');
                             $('input.erase_chip').prop('disabled', false);
                             $('select[name="firmware_version"]').prop('disabled', false);
