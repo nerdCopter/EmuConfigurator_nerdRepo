@@ -383,7 +383,9 @@ const chromeRuntime = {
     onSuspend: { addListener: function () {} },
     getManifest: function () {
         // Return version info from package.json (single source of truth in Electron)
-        const pkg = require('../package.json');
+        // Use __dirname to resolve relative to this file's location
+        const path = require('path');
+        const pkg = require(path.join(__dirname, '../../package.json'));
         return {
             version: pkg.version || '0.0.0',
             version_name: '',
