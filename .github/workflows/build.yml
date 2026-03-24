@@ -16,8 +16,8 @@ jobs:
   build:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
-    # Opt into Node.js 24 for GitHub Actions (required by June 2nd, 2026)
-    # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+    # Using Node.js 24.x (latest LTS as of March 2026)
+    # https://nodejs.org/en/about/releases/
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     strategy:
@@ -51,7 +51,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '24.x'
           cache: 'yarn'
 
       - name: Setup Linux (rpm, build tools)
