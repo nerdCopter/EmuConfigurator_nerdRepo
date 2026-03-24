@@ -6,21 +6,6 @@
 
 Supports quadcopters, hexacopters, octocopters, and fixed-wing aircraft. Configure any [supported Emuflight target](https://github.com/emuflight/EmuFlight/tree/master/src/main/target).
 
-## Table of Contents
-- [Quick Start](#quick-start)
-- [Downloads](#downloads)
-- [Installation](#installation)
-- [Development](#development)
-- [Notes](#notes)
-- [Support](#support)
-
-## Quick Start
-
-```bash
-yarn install
-yarn dev        # build dist/ and start the app in dev mode (devtools enabled)
-```
-
 ## Downloads
 
 Please [download our releases](https://github.com/emuflight/EmuConfigurator/releases) at GitHub.
@@ -30,6 +15,14 @@ Please [download our releases](https://github.com/emuflight/EmuConfigurator/rele
 Download the installer for your platform from the [Releases](https://github.com/emuflight/EmuConfigurator/releases) page.
 
 **macOS:** Right-click the app and select **Open** to bypass Gatekeeper on first launch.
+
+## Support
+
+- [Emuflight Discord](https://discord.gg/gdP9CwE)
+- [Configurator issues](https://github.com/nerdCopter/EmuConfigurator_nerdRepo/issues)
+- [Firmware issues](https://github.com/emuflight/EmuFlight/issues)
+
+---
 
 ## Development
 
@@ -43,95 +36,36 @@ Download the installer for your platform from the [Releases](https://github.com/
 
 | Command | Description |
 |---------|-------------|
-| `yarn dev` | Build `dist/` and start with devtools auto-open (development mode) |
-| `yarn dev:verbose` | Same as `dev` but with full log output |
-| `yarn build` | Build `dist/` only (no app launch) |
-| `yarn make` | Build `dist/` and create release installers in `out/make/` |
-| `yarn make:debug` | Same as `make` but devtools menu enabled in the packaged app |
-| `yarn package` | Build `dist/` and package the app without creating installers |
-| `yarn package:debug` | Same as `package` but with devtools menu enabled |
-| `yarn lint` | Run ESLint linter |
+| `yarn dev` | Start dev mode with devtools |
+| `yarn build` | Build `dist/` only |
+| `yarn make` | Create release packages (all platforms) |
+| `yarn make:debug` | Release packages with devtools |
+| `yarn lint` | Run ESLint |
 
-### Build modes
+### Build Output
 
-| Mode | How triggered | Devtools menu | Auto-open devtools |
-|------|--------------|---------------|--------------------|
-| `dev` | `yarn dev` | Yes | Yes |
-| `debug_package` | `yarn make:debug` / `yarn package:debug` | Yes | No |
-| `release` | `yarn make` / `yarn package` | No | No |
+- `dist/` — assembled app sources
+- `out/make/` — packaged applications and installers
 
-### Build output
+**Platform packages:**
+- **macOS**: `.zip` + branded `.dmg`
+- **Windows**: `.exe` installer
+- **Linux**: `.deb` + `.rpm`
 
-- `dist/` — assembled app sources (built by `scripts/build.js`)
-- `out/` — packaged Electron app and installers
+### Platform Notes
 
-### Code Quality
-
-The project uses **ESLint** for code quality: `yarn lint`
-
-**Testing:** Unit tests have been removed in favor of manual testing and linting. For a configuration UI tool like EmuConfigurator, manual testing via `yarn dev` is more effective for catching real-world issues.
-
-### Building Packages
-
-**All Platforms:**
-- `yarn make` builds platform-specific release packages
-- Output goes to `out/make/` directory
-- Each platform produces only its native package format (automatic via Forge):
-
-**macOS (Darwin):**
-- **ZIP** (`*.zip`) — Portable app archive
-- **DMG** (`*.dmg`) — Branded disk image installer (macOS-only, gated by platform)
-
-**Windows:**
-- **EXE** (`*.exe`) — Squirrel.Windows installer (Windows-only)
-
-**Linux:**
-- **DEB** — Debian/Ubuntu package (Linux-only)
-- **RPM** — Red Hat/Fedora package (Linux-only)
-
-### Code Signing Configuration
-
-**Local Development (no certificates required):**
-```bash
-yarn make  # Uses ad-hoc signing on macOS, no signing on other platforms
-```
-
-**CI/Distribution with Certificates:**
-
-Set GitHub repository secrets:
-- `WINDOWS_CERT_FILE`: Path or base64-encoded EmuCert.p12
-- `WINDOWS_CERT_PASSWORD`: Certificate password
-- `APPLE_SIGNING_IDENTITY`: Apple Distribution certificate name (optional, for macOS)
-- `APPLE_TEAM_ID`: Apple Team ID (required if code signing)
-- `APPLE_ID`: Apple ID email (optional, for notarization)
-- `APPLE_PASSWORD`: App-specific password (optional, for notarization)
-
-## Notes
-
-### Linux: serial port access
-
-Add your user to the `dialout` group:
-
+**Linux: Serial Port Access**
 ```bash
 sudo usermod -aG dialout $USER
+# Log out and back in
 ```
-Then log out and back in.
 
-### Linux: USB DFU flashing
-
-USB access without `sudo` requires a udev rule. Create `/etc/udev/rules.d/49-stm32dfu.rules`:
-
+**Linux: USB DFU Flashing**
+Create `/etc/udev/rules.d/49-stm32dfu.rules`:
 ```
 SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="plugdev"
 ```
-
 Then: `sudo udevadm control --reload-rules && sudo udevadm trigger`
-
-## Support
-
-- [Emuflight Discord](https://discord.gg/gdP9CwE)
-- [Configurator issues](https://github.com/emuflight/EmuConfigurator/issues)
-- [Firmware issues](https://github.com/emuflight/EmuFlight/issues)
 
 ---
 
