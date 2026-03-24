@@ -104,8 +104,8 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                             // required to detect if a DFU device appears
                             setTimeout(function() {
                                 // refresh device list
-                                PortHandler.check_usb_devices(function(dfu_available) {
-                                    if(dfu_available) {
+                                PortHandler.check_usb_devices(function(usbDevices) {
+                                    if (usbDevices && usbDevices.length) {
                                         STM32DFU.connect(usbDevices, hex, options, self.callback);
                                     } else {
                                         serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {

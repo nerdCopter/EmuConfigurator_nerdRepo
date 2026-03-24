@@ -122,27 +122,51 @@ const chromeSockets = {
         },
 
         connect: function (socketId, host, port, callback) {
-            // Register IPC event listeners for this socket before connecting
-            ipcRenderer.removeAllListeners(`tcp-data`);
-            ipcRenderer.removeAllListeners(`tcp-error`);
-            ipcRenderer.removeAllListeners(`tcp-close`);
-
-            ipcRenderer.on('tcp-data', function (event, id, arrayBuffer) {
+            // Named handler functions for this socket (stored for cleanup)
+            const tcpDataHandler = function (event, id, arrayBuffer) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
-            });
-            ipcRenderer.on('tcp-error', function (event, id, msg) {
+            };
+            const tcpErrorHandler = function (event, id, msg) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
-            });
-            ipcRenderer.on('tcp-close', function (event, id) {
+            };
+            const tcpCloseHandler = function (event, id) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
+            };
+            
+            // Register socket-specific handlers (not global removeAllListeners)
+            ipcRenderer.on('tcp-data', tcpDataHandler);
+            ipcRenderer.on('tcp-error', tcpErrorHandler);
+            ipcRenderer.on('tcp-close', tcpCloseHandler);
+            
+            // Store handlers for cleanup on close
+            if (!chromeSockets._socketHandlers) chromeSockets._socketHandlers = new Map();
+            chromeSockets._socketHandlers.set(socketId, {
+                dataHandler: tcpDataHandler,
+                errorHandler: tcpErrorHandler,
+                closeHandler: tcpCloseHandler
             });
 
             ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
                 callback(result); // 0 = success, negative = failure
             }).catch(function () { callback(-1); });
+        },
+        
+        close: function (socketId, callback) {
+            // Remove socket-specific handlers
+            if (chromeSockets._socketHandlers && chromeSockets._socketHandlers.has(socketId)) {
+                const handlers = chromeSockets._socketHandlers.get(socketId);
+                ipcRenderer.removeListener('tcp-data', handlers.dataHandler);
+                ipcRenderer.removeListener('tcp-error', handlers.errorHandler);
+                ipcRenderer.removeListener('tcp-close', handlers.closeHandler);
+                chromeSockets._socketHandlers.delete(socketId);
+            }
+            
+            ipcRenderer.invoke('tcp-close', socketId).then(function (result) {
+                if (callback) callback(result);
+            });
         },
 
         send: function (socketId, data, callback) {
@@ -196,14 +220,28 @@ const chromeSockets = {
 const chromeStorageLocal = {
     get: function (keys, callback) {
         const result = {};
-        const keyList = Array.isArray(keys) ? keys : (typeof keys === 'string' ? [keys] : Object.keys(keys));
-        keyList.forEach(function (k) {
-            const val = localStorage.getItem(k);
-            if (val !== null) {
-                try { result[k] = JSON.parse(val); }
-                catch (e) { result[k] = val; }
-            }
-        });
+        if (typeof keys === 'object' && !Array.isArray(keys)) {
+            // Object with defaults: { key: defaultValue, ... }
+            Object.keys(keys).forEach(function (k) {
+                const val = localStorage.getItem(k);
+                if (val !== null) {
+                    try { result[k] = JSON.parse(val); }
+                    catch (e) { result[k] = val; }
+                } else {
+                    result[k] = keys[k]; // Use provided default
+                }
+            });
+        } else {
+            // String or array of keys
+            const keyList = Array.isArray(keys) ? keys : [keys];
+            keyList.forEach(function (k) {
+                const val = localStorage.getItem(k);
+                if (val !== null) {
+                    try { result[k] = JSON.parse(val); }
+                    catch (e) { result[k] = val; }
+                }
+            });
+        }
         callback(result);
     },
     set: function (items, callback) {
@@ -458,16 +496,17 @@ const chromeFileSystem = {
                             if (writer.onwriteend) writer.onwriteend();
                         },
                         write: (blob) => {
-                            blob.text().then(text => {
-                                ipcRenderer.invoke('dialog:write-text-file', filePath, text).then(written => {
+                            blob.arrayBuffer().then(arrayBuffer => {
+                                // Send as binary data via separate IPC channel
+                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer))).then(written => {
                                     writer.length += written;
                                     if (writer.onwriteend) writer.onwriteend();
                                 }).catch(err => {
-                                    console.error(`[preload] write-text-file failed:`, err);
+                                    console.error(`[preload] write-binary-file failed:`, err);
                                     if (writer.onerror) writer.onerror(err);
                                 });
                             }).catch(err => {
-                                console.error(`[preload] blob.text() failed:`, err);
+                                console.error(`[preload] blob.arrayBuffer() failed:`, err);
                                 if (writer.onerror) writer.onerror(err);
                             });
                         }

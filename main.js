@@ -163,6 +163,10 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     const socket = new net.Socket();
     _tcpSockets.set(socketId, socket);
     socket.setNoDelay(true);
+    
+    // Named error handler to avoid double resolution
+    const onConnectError = () => resolve(-102); // CONNECTION_REFUSED
+    
     socket.on('data', (data) => {
       event.sender.send('tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     });
@@ -174,8 +178,12 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
       _tcpSockets.delete(socketId);
       event.sender.send('tcp-close', socketId);
     });
-    socket.connect(port, host, () => resolve(0));
-    socket.once('error', () => resolve(-102)); // CONNECTION_REFUSED
+    
+    socket.once('error', onConnectError);
+    socket.connect(port, host, () => {
+      socket.removeListener('error', onConnectError);
+      resolve(0);
+    });
   });
 });
 
@@ -402,7 +410,19 @@ ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
 ipcMain.handle('usb-bulk-transfer', async (event, deviceKey, options) => {
   try {
     const device = ensureUsbDeviceOpen(deviceKey);
-    const iface = device.interfaces[0];
+    
+    // Prefer explicit interface from options, fallback to claimed interface, then device.interfaces[0]
+    let iface = null;
+    if (options.interface !== undefined) {
+      iface = device.interfaces[options.interface];
+    } else {
+      iface = device.interfaces.find(i => i.claimed) || device.interfaces[0];
+    }
+    
+    if (!iface) {
+      return { resultCode: 1, bytesTransferred: 0, data: [] };
+    }
+    
     const endpointNumber = options.endpoint || 1;
     const endpointAddress = options.direction === 'in' ? (endpointNumber | 0x80) : endpointNumber;
     const endpoint = (iface.endpoints || []).find((ep) => ep.address === endpointAddress);
@@ -484,6 +504,16 @@ ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
   await fs.promises.writeFile(filePath, text, 'utf8');
   console.log(`Saved ${text.length} chars to ${filePath}`);
   return text.length;
+});
+
+// IPC: write binary content to file (preserves binary data)
+ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray) => {
+  const dir = path.dirname(filePath);
+  await fs.promises.mkdir(dir, { recursive: true });
+  const buffer = Buffer.from(byteArray);
+  await fs.promises.writeFile(filePath, buffer);
+  console.log(`Saved ${buffer.length} bytes (binary) to ${filePath}`);
+  return buffer.length;
 });
 
 // IPC: read file as binary buffer
@@ -602,45 +632,56 @@ app.whenReady().then(createWindow);
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
 // "device still open" warnings and ensures the device is left in a clean state.
-app.on('before-quit', () => {
+app.on('before-quit', (event) => {
+  event.preventDefault(); // Prevent immediate quit; we'll call app.quit() after cleanup
+  
+  // Wrap async operations
+  const cleanupPromises = [];
+  
   // Attempt graceful DFU device exit: send DETACH command to return FC to normal mode
-  // (avoids leaving device stuck in bootloader requiring unplug/replug)
   for (const [, device] of _usbOpenDevices) {
-    try {
-      // DFU DETACH: tells device to exit bootloader and run application firmware
-      // bmRequestType: 0x21 (OUT, CLASS, INTERFACE)
-      // bRequest: 0x00 (DETACH)
-      // wValue: 0 (timeout, unused)
-      // wIndex: 0 (interface 0)
-      // wLength: 0 (no data)
-      device.controlTransfer(0x21, 0x00, 0, 0, 0, (_err) => {
-        // Ignore errors; attempt close regardless
+    const usbCleanup = new Promise((resolve) => {
+      try {
+        // DFU DETACH: tells device to exit bootloader and run application firmware
+        device.controlTransfer(0x21, 0x00, 0, 0, 0, (_err) => {
+          // Ignore errors; attempt close regardless
+          try { device.close(); } catch { /* ignore */ }
+          resolve();
+        });
+      } catch {
+        // If DETACH fails, still attempt to close the device
         try { device.close(); } catch { /* ignore */ }
-      });
-    } catch {
-      // If DETACH fails, still attempt to close the device
-      try { device.close(); } catch { /* ignore */ }
-    }
+        resolve();
+      }
+    });
+    cleanupPromises.push(usbCleanup);
   }
   _usbOpenDevices.clear();
 
   if (_serialPort && _serialPort.isOpen) {
-    try {
-      // Send exit command to CLI to gracefully close the serial session.
-      // This ensures the FC isn't left in a connected state when the port closes.
-      const exitCmd = 'exit\r';
-      _serialPort.write(Buffer.from(exitCmd), () => {
-        // Give it a moment to process the exit, then close
-        setTimeout(() => {
-          try { _serialPort.close(() => {}); } catch { /* ignore */ }
-        }, 100);
-      });
-    } catch {
-      // If write fails, still attempt to close
-      try { _serialPort.close(() => {}); } catch { /* ignore */ }
-    }
-    _serialPort = null;
+    const serialCleanup = new Promise((resolve) => {
+      try {
+        const exitCmd = 'exit\r';
+        _serialPort.write(Buffer.from(exitCmd), () => {
+          // Give it a moment to process the exit, then close
+          setTimeout(() => {
+            try { _serialPort.close(() => resolve()); } catch { resolve(); }
+          }, 100);
+        });
+      } catch {
+        resolve();
+      }
+    });
+    cleanupPromises.push(serialCleanup);
   }
+  _serialPort = null;
+  
+  // Wait for all cleanup operations to complete before quitting
+  Promise.all(cleanupPromises).then(() => {
+    app.quit();
+  }).catch(() => {
+    app.quit(); // Quit anyway even if cleanup fails
+  });
 });
 
 app.on('window-all-closed', () => {

@@ -82,13 +82,20 @@ jobs:
         # Windows: .exe (Squirrel.Windows)
         # Linux: .deb, .rpm (native package managers)
 
+      - name: Validate Artifacts Exist
+        run: |
+          if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
+            echo "❌ ERROR: No artifacts found in out/make/"
+            exit 1
+          fi
+          echo "✓ Artifacts validated"
+
       - name: Upload Artifacts (build to Actions)
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-${{ matrix.artifact-suffix }}
           path: out/make/
           retention-days: 30
-        continue-on-error: true
 
   release:
     needs: build
@@ -105,29 +112,16 @@ jobs:
           echo "### Release Artifacts ###"
           find ./Artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" \) -exec ls -lh {} \;
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
+      - name: Upload Release Assets (.exe, .dmg, .deb, .rpm)
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: "EmuConfigurator ${{ github.ref }}"
-          draft: true
-          prerelease: false
-          body: |
-            ## EmuConfigurator Release
-            
-            Build artifacts (ZIP files) are available via [Actions](https://github.com/nerdCopter/EmuConfigurator_nerdRepo/actions/runs/${{ github.run_id}}).
-            
-            ### Commit
-            ${{ needs.build.outputs.shortsha }}
-
-      - name: Upload Release Assets (.exe, .dmg, .deb, .rpm)
-        uses: softprops/action-gh-release@v1
-        with:
+          release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
             ./Artifacts/EmuConfigurator-windows-x64/out/make/squirrel.windows/**/*.exe
-            ./Artifacts/EmuConfigurator-macos/out/make/dmg/**/*.dmg
+            ./Artifacts/EmuConfigurator-macos-x64/out/make/dmg/**/*.dmg
             ./Artifacts/EmuConfigurator-linux-x64/out/make/deb/**/*.deb
             ./Artifacts/EmuConfigurator-linux-x64/out/make/rpm/**/*.rpm
           draft: true
