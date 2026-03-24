@@ -48,35 +48,43 @@ Download the installer for your platform from the [Releases](https://github.com/
 - `out/make/` — packaged applications and installers
 
 **Platform packages:**
-- **macOS**: `.zip` (always), `.dmg` (local only, requires `macos-alias`)
-- **Windows**: `.exe` installer
-- **Linux**: `.deb` + `.rpm`
+
+- **macOS**: ZIP always, DMG local only (requires `macos-alias`)
+- **Windows**: EXE installer
+- **Linux**: DEB + RPM
 
 ### macOS DMG Building
 
 **CI (GitHub Actions):** Builds ZIP only (portable, suitable for distribution)
 
 **Local Dev:** To build DMG locally (macOS only):
+
 ```bash
 brew install macos-alias   # One-time install
 yarn make                   # Builds both .zip and .dmg
 ```
 
-DMG is skipped in CI because `macos-alias` (native module) doesn't cross-compile reliably. ZIP is portable and sufficient for most use cases.
+DMG is skipped in CI because `macos-alias` (native module) doesn't 
+cross-compile reliably. ZIP is portable and sufficient for most use cases.
 
 ### Platform Notes
 
-**Linux: Serial Port Access**
+#### Linux: Serial Port Access
+
 ```bash
 sudo usermod -aG dialout $USER
 # Log out and back in
 ```
 
-**Linux: USB DFU Flashing**
+#### Linux: USB DFU Flashing
+
 Create `/etc/udev/rules.d/49-stm32dfu.rules`:
+
 ```
-SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0664", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", \
+MODE="0664", GROUP="plugdev"
 ```
+
 Then: `sudo udevadm control --reload-rules && sudo udevadm trigger`
 
 ---

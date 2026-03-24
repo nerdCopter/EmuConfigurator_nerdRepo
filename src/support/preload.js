@@ -240,7 +240,7 @@ const chromeUsb = {
         const handleId = ++chromeUsb._handleCounter;
         chromeUsb._openHandles[handleId] = device;
         
-        ipcRenderer.invoke('usb-open-device', device.device).then(function (result) {
+        ipcRenderer.invoke('usb-open-device', device.device).then(function (_result) {
             callback({ handle: handleId, device: device });
         }).catch(function (err) {
             console.error('usb-open-device error:', err);
@@ -446,7 +446,7 @@ const chromeFileSystem = {
                         if (error) error(err);
                     });
                 },
-                createWriter: (onWriter, onError) => {
+                createWriter: (onWriter, _onError) => {
                     const writer = {
                         length: 0,
                         onerror: null,

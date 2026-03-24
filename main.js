@@ -498,7 +498,7 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
 });
 
 // IPC: write to file (kept for compatibility)
-ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
+ipcMain.handle('dialog:write-file', async (event, filePath, _data) => {
   return 0;
 });
 
@@ -613,7 +613,7 @@ app.on('before-quit', () => {
       // wValue: 0 (timeout, unused)
       // wIndex: 0 (interface 0)
       // wLength: 0 (no data)
-      device.controlTransfer(0x21, 0x00, 0, 0, 0, (err) => {
+      device.controlTransfer(0x21, 0x00, 0, 0, 0, (_err) => {
         // Ignore errors; attempt close regardless
         try { device.close(); } catch { /* ignore */ }
       });
