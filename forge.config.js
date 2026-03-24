@@ -23,19 +23,16 @@ module.exports = {
   },
   rebuildConfig: {},
   makers: [
+  makers: [
     {
-      name: '@electron-forge/maker-nsis',
+      name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
       config: {
-        // NSIS options for professional Windows installer experience
-        installerIcon: require('path').resolve(__dirname, 'assets/windows/emu_installer.ico'),
-        uninstallerIcon: require('path').resolve(__dirname, 'assets/windows/emu_uninstaller.ico'),
-        // Critical fix: disable runAfterInstall to prevent app launching during setup
-        // (Avoids confusing user experience where app starts, closes, and restarts)
-        // Users must manually launch app from Start Menu or Desktop shortcut after installation
-        runAfterInstall: false,
-        createDesktopShortcut: true,
-        createStartMenuShortcut: true,
+        certificateFile: process.env.WINDOWS_CERT_FILE,
+        certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+        // Note: Squirrel.Windows runs app after setup by design (delta-update framework).
+        // Users: Manual app launch from Start Menu or shortcuts avoids connection state issues.
+        // For true NSIS installer, consider switching to electron-builder separately.
       },
     },
     {
