@@ -61,9 +61,11 @@ jobs:
         run: yarn lint
         continue-on-error: true
 
-      - name: Test
-        run: yarn test -- --run
-        continue-on-error: true
+      # Tests skipped: karma-chai unmaintained, incompatible with chai 4.x
+      # Can run locally with: npm test -- --run
+      # - name: Test
+      #   run: yarn test -- --run
+      #   continue-on-error: true
 
       - name: Build Distribution
         run: yarn build
