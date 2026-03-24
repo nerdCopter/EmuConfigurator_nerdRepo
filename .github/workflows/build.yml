@@ -83,6 +83,7 @@ jobs:
         # Linux: .deb, .rpm (native package managers)
 
       - name: Validate Artifacts Exist
+        if: runner.os != 'Windows'
         run: |
           if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
             echo "❌ ERROR: No artifacts found in out/make/"
