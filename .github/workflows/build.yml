@@ -19,13 +19,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, macos-11, windows-2022]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             artifact-suffix: linux-x64
-          - os: macos-11
-            artifact-suffix: macos
-          - os: windows-2022
+          - os: macos-latest
+            artifact-suffix: macos-x64
+          - os: windows-latest
             artifact-suffix: windows-x64
     outputs:
       buildtag: ${{ steps.build-info.outputs.tag }}
