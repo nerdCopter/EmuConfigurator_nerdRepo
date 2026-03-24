@@ -9,16 +9,15 @@ module.exports = {
     extraMetadata: {
       buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
     },
-    // macOS signing & notarization
-    osxSign: {
-      // Ad-hoc signing: uses entitlements but doesn't require developer cert
-      identity: null,
-      hardenedRuntime: true,
-      entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
-      entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
-      signingFlags: ['--deep', '--force'],
-    },
-    osxNotarize: process.env.CI ? undefined : undefined, // Skip on CI (local-only)
+    // macOS ad-hoc signing (entitlements only, no cert required)
+    ...(process.platform === 'darwin' ? {
+      osxSign: {
+        hardenedRuntime: true,
+        entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+        entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+        signingFlags: ['--deep', '--force'],
+      },
+    } : {}),
   },
   rebuildConfig: {},
   makers: [
