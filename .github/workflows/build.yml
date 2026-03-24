@@ -1,181 +1,126 @@
 on:
   push:
     tags:
-    - '*'
-    #branches:
-    #- '*'
+      - 'v*'
+      - 'test-*'
+    branches:
+      - main
+      - develop
   pull_request:
     branches:
-    - '*'
-  repository_dispatch:
-    types: [build]
+      - '*'
   workflow_dispatch:
 
-name: Build EmuConfigurator
+name: Build EmuConfigurator (Electron)
 jobs:
   build:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 60
-    continue-on-error: false
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      max-parallel: 3
       matrix:
         os: [ubuntu-22.04, macos-11, windows-2022]
+        include:
+          - os: ubuntu-22.04
+            artifact-suffix: linux-x64
+          - os: macos-11
+            artifact-suffix: macos
+          - os: windows-2022
+            artifact-suffix: windows-x64
     outputs:
-      buildtag: ${{ steps.ids.outputs.buildtag }}
-      shortsha: ${{ steps.ids.outputs.shortsha }}
+      buildtag: ${{ steps.build-info.outputs.tag }}
+      shortsha: ${{ steps.build-info.outputs.sha }}
     steps:
-      - name: git checkout
+      - name: Checkout
         uses: actions/checkout@v4
-        continue-on-error: false
 
-      - name: get tag & short-sha
+      - name: Build Info
+        id: build-info
+        shell: bash
         run: |
-          echo "REVISION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        continue-on-error: true
+          TAG=${GITHUB_REF#refs/tags/}
+          if [ "$TAG" = "$GITHUB_REF" ]; then TAG="$GITHUB_RUN_NUMBER"; fi
+          SHA=$(git rev-parse --short HEAD)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
 
-      - id: ids
-        name: set outputs
-        run: |
-          echo "buildtag=${{ env.REVISION_TAG }}" >> $GITHUB_OUTPUT
-          echo "shortsha=${{ env.SHORT_SHA }}" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
-      - name: setup node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'yarn'
-        continue-on-error: false
 
-      - name: show variables (debug)
-        run: |
-          echo "Build: ${{ github.RUN_NUMBER }}"
-          echo "Commit: ${{ github.SHA }}"
-          echo "ShortSHA: ${{ env.SHORT_SHA }}"
-          echo "Ref: ${{ github.REF }}"
-          echo "Rev Tag: ${{ env.REVISION_TAG }}"
-          echo "Actor: ${{ github.ACTOR }}"
-          echo "Repo: ${{ github.REPOSITORY }}"
-          echo "BuildTag: ${{ steps.ids.outputs.buildtag }}"
-          echo "ShortSha: ${{ steps.ids.outputs.shortsha }}"
-        continue-on-error: true
+      - name: Setup Linux (rpm)
+        if: runner.os == 'Linux'
+        run: sudo apt install -y rpm
 
-      - name: show python version
-        run: |
-          echo "python version:"
-          python --version
-          which python
-
-      - name: yarn install
+      - name: Yarn Install
         run: yarn install --frozen-lockfile
 
-      - name: setup macOS (appdmg for DMG creation)
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        run: npm install appdmg@0.6.6
-        continue-on-error: true
-
-      - name: setup Linux (rpm for RPM packages)
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
-        run: sudo apt install -y rpm
-        continue-on-error: true
-
-      - name: run linter
+      - name: Lint
         run: yarn lint
         continue-on-error: true
 
-      - name: run tests
+      - name: Test
         run: yarn test --run
         continue-on-error: true
 
-      - name: build distribution
+      - name: Build Distribution
         run: yarn build
 
-      - name: make packages (Electron Forge)
+      - name: Make Packages
+        env:
+          APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
         run: yarn make
 
-      - name: upload build artifacts
+      - name: Upload Artifacts (build to Actions)
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-${{ matrix.os }}
-          path: |
-            out/make/
+          name: EmuConfigurator-${{ matrix.artifact-suffix }}
+          path: out/make/
           retention-days: 30
         continue-on-error: true
 
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: always()
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: download artifacts
+      - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./Artifacts
-        continue-on-error: false
 
-      - name: list artifacts
+      - name: List Release Artifacts
         run: |
-          echo "######## Artifacts ########"
-          find ./Artifacts -type f -name "*"
-        continue-on-error: true
+          echo "### Release Artifacts ###"
+          find ./Artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" \) -exec ls -lh {} \;
 
-      - name: dev-unstable draft
-        if: contains(github.ref, 'test') || contains(github.ref, 'unstab')
-        uses: ncipollo/release-action@v1
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo: dev-unstable
-          owner: emuflight
-          token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ needs.build.outputs.buildtag }}"
+          tag_name: ${{ github.ref }}
+          release_name: "EmuConfigurator ${{ github.ref }}"
           draft: true
-          prerelease: true
-          allowUpdates: true
-          artifacts: ./Artifacts/EmuConfigurator-*/out/make/**/*
-          artifactContentType: raw
-          name: "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
+          prerelease: false
           body: |
-            ## EmuConfigurator BUILD for TESTING
-            ### Build ${{ github.run_number }}
-            ### Commit SHA: ${{ needs.build.outputs.shortsha }}
-            ### BuildTag: ${{ needs.build.outputs.buildtag }}
-        continue-on-error: true
+            ## EmuConfigurator Release
+            
+            Build artifacts (ZIP files) are available via [Actions](https://github.com/nerdCopter/EmuConfigurator_nerdRepo/actions/runs/${{ github.run_id}}).
+            
+            ### Commit
+            ${{ needs.build.outputs.shortsha }}
 
-      - name: dev-master draft
-        if: contains(github.ref, 'master')
-        uses: ncipollo/release-action@v1
+      - name: Upload Release Assets (.exe, .dmg, .deb, .rpm)
+        uses: softprops/action-gh-release@v1
         with:
-          repo: dev-master
-          owner: emuflight
-          token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ needs.build.outputs.buildtag }}"
+          files: |
+            ./Artifacts/EmuConfigurator-windows-x64/out/make/squirrel.windows/**/*.exe
+            ./Artifacts/EmuConfigurator-macos/out/make/dmg/**/*.dmg
+            ./Artifacts/EmuConfigurator-linux-x64/out/make/deb/**/*.deb
+            ./Artifacts/EmuConfigurator-linux-x64/out/make/rpm/**/*.rpm
           draft: true
-          prerelease: true
-          allowUpdates: true
-          artifacts: ./Artifacts/EmuConfigurator-*/out/make/**/*
-          artifactContentType: raw
-          name: "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
-          body: |
-            ## EmuConfigurator BUILD of MASTER
-            ### Build ${{ github.run_number }}
-            ### Commit SHA: ${{ needs.build.outputs.shortsha }}
-            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+          prerelease: ${{ contains(github.ref, 'test') || contains(github.ref, 'rc') }}
         continue-on-error: true
-
-      - name: main-repo draft release
-        if: contains(github.ref, 'releas')
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          draft: true
-          prerelease: true
-          allowUpdates: true
-          tag: "${{ github.RUN_NUMBER }}"
-          artifacts: ./Artifacts/EmuConfigurator-*/out/make/**/*
-          artifactContentType: raw
-          name: "DRAFT / EmuConfigurator / GitHub Build ${{ github.RUN_NUMBER }}"
-        continue-on-error: false

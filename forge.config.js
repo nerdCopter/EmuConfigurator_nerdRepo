@@ -9,12 +9,25 @@ module.exports = {
     extraMetadata: {
       buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
     },
+    // macOS signing & notarization
+    osxSign: {
+      // Ad-hoc signing: uses entitlements but doesn't require developer cert
+      identity: null,
+      hardenedRuntime: true,
+      entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+      entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+      signingFlags: ['--deep', '--force'],
+    },
+    osxNotarize: process.env.CI ? undefined : undefined, // Skip on CI (local-only)
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        certificateFile: process.env.WINDOWS_CERT_FILE,
+        certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -22,11 +35,27 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          maintainer: 'nerdCopter',
+          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+        },
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        options: {
+          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+        },
+      },
+    },
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        format: 'UDZO',
+        background: require('path').resolve(__dirname, 'assets/osx/dmg-background.png'),
+      },
     },
   ],
   plugins: [
