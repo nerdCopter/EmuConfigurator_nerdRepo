@@ -50,9 +50,9 @@ jobs:
           node-version: '20'
           cache: 'yarn'
 
-      - name: Setup Linux (rpm)
+      - name: Setup Linux (rpm, build tools)
         if: runner.os == 'Linux'
-        run: sudo apt install -y rpm
+        run: sudo apt update && sudo apt install -y rpm build-essential python3 libudev-dev
 
       - name: Yarn Install
         run: yarn install --frozen-lockfile
