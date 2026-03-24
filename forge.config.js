@@ -37,6 +37,7 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
+      platforms: ['win32'],
       config: {
         certificateFile: process.env.WINDOWS_CERT_FILE,
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
@@ -48,6 +49,7 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
+      platforms: ['linux'],
       config: {
         options: {
           maintainer: 'nerdCopter',
@@ -57,6 +59,7 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-rpm',
+      platforms: ['linux'],
       config: {
         options: {
           homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
@@ -65,6 +68,7 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-dmg',
+      platforms: ['darwin'],
       config: {
         format: 'UDZO',
         background: require('path').resolve(__dirname, 'assets/osx/dmg-background.png'),

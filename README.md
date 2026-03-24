@@ -74,24 +74,20 @@ The project uses **ESLint** for code quality: `yarn lint`
 ### Building Packages
 
 **All Platforms:**
-- `yarn make` builds release packages per platform
+- `yarn make` builds platform-specific release packages
 - Output goes to `out/make/` directory
+- Each platform produces only its native package format (automatic via Forge):
 
 **macOS (Darwin):**
 - **ZIP** (`*.zip`) — Portable app archive
-- **DMG** (`*.dmg`) — Branded disk image installer (requires `macos-alias` on macOS)
-- Code signing: Uses ad-hoc signing by default
-- For certificate-based signing: Set `APPLE_SIGNING_IDENTITY` environment variable
-- For notarization: Set `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`
+- **DMG** (`*.dmg`) — Branded disk image installer (macOS-only, gated by platform)
 
 **Windows:**
-- **EXE** (`*.exe`) — Squirrel.Windows installer
-- Code signing: Uses certificate from `sign/EmuCert.p12` if `WINDOWS_CERT_FILE` and `WINDOWS_CERT_PASSWORD` are set
-- For CI: Configure these as GitHub repository secrets
+- **EXE** (`*.exe`) — Squirrel.Windows installer (Windows-only)
 
 **Linux:**
-- **DEB** — Debian/Ubuntu package
-- **RPM** — Red Hat/Fedora package
+- **DEB** — Debian/Ubuntu package (Linux-only)
+- **RPM** — Red Hat/Fedora package (Linux-only)
 
 ### Code Signing Configuration
 
