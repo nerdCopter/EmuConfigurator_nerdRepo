@@ -68,6 +68,9 @@ jobs:
         env:
           APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
         run: yarn make
+        # macOS: Creates .zip (CI) or .zip + .dmg (local with macos-alias)
+        # Windows: Creates .exe installer (Squirrel.Windows)
+        # Linux: Creates .deb, .rpm (native package managers)
 
       - name: Upload Artifacts (build to Actions)
         uses: actions/upload-artifact@v4

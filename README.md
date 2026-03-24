@@ -71,6 +71,19 @@ The project uses **ESLint** for code quality: `yarn lint`
 
 **Testing:** Unit tests have been removed in favor of manual testing and linting. For a configuration UI tool like EmuConfigurator, manual testing via `yarn dev` is more effective for catching real-world issues.
 
+### Building Packages
+
+**macOS Distribution:**
+- **ZIP files** (.zip): Portable app archive
+- **DMG files** (.dmg): Disk image installer with branded background
+- Both are built by `yarn make` on all platforms (CI and local)
+- **Code signing:** Entitlements file configured at `sign/entitlements.plist`
+- **Notarization:** Apple notarization recommended for distribution outside App Store
+
+**Other platforms:**
+- Windows: Creates `.exe` installer via Squirrel.Windows
+- Linux: Creates `.deb` and `.rpm` packages
+
 ## Notes
 
 ### Linux: serial port access
