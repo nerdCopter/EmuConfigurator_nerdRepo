@@ -79,7 +79,7 @@ jobs:
         run: yarn make
         # Packages built (CI only builds what works cross-platform):
         # macOS: .zip (portable, DMG skipped - requires native macos-alias module)
-        # Windows: .exe (Squirrel.Windows)
+        # Windows: .exe (NSIS installer — professional UX, no auto-run during setup)
         # Linux: .deb, .rpm (native package managers)
 
       - name: Validate Artifacts Exist
@@ -120,7 +120,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-x64/out/make/squirrel.windows/**/*.exe
+            ./Artifacts/EmuConfigurator-windows-x64/out/make/nsis/**/*.exe
             ./Artifacts/EmuConfigurator-macos-x64/out/make/dmg/**/*.dmg
             ./Artifacts/EmuConfigurator-linux-x64/out/make/deb/**/*.deb
             ./Artifacts/EmuConfigurator-linux-x64/out/make/rpm/**/*.rpm
