@@ -108,17 +108,86 @@ const chromeSerial = {
     })(),
 };
 
-// ─── chrome.sockets.tcp polyfill (stub — TCP connect available separately) ──
+// ─── chrome.sockets.tcp polyfill (IPC-backed — supports SITL/MSP-over-TCP) ──
 
 const chromeSockets = {
     tcp: {
-        create: function (props, callback) { callback({ socketId: -1 }); },
-        connect: function (socketId, host, port, callback) { callback(-1); },
-        send: function (socketId, data, callback) { callback({ resultCode: -1 }); },
-        close: function (socketId, callback) { if (callback) callback(); },
-        setNoDelay: function (socketId, delay, callback) { if (callback) callback(0); },
-        onReceive: { addListener: function () {}, removeListener: function () {} },
-        onReceiveError: { addListener: function () {}, removeListener: function () {} },
+        _receiveListeners: [],
+        _errorListeners: [],
+
+        create: function (props, callback) {
+            ipcRenderer.invoke('tcp-allocate').then(function (id) {
+                callback({ socketId: id });
+            }).catch(function () { callback({ socketId: -1 }); });
+        },
+
+        connect: function (socketId, host, port, callback) {
+            // Register IPC event listeners for this socket before connecting
+            ipcRenderer.removeAllListeners(`tcp-data`);
+            ipcRenderer.removeAllListeners(`tcp-error`);
+            ipcRenderer.removeAllListeners(`tcp-close`);
+
+            ipcRenderer.on('tcp-data', function (event, id, arrayBuffer) {
+                if (id !== socketId) return;
+                chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
+            });
+            ipcRenderer.on('tcp-error', function (event, id, msg) {
+                if (id !== socketId) return;
+                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
+            });
+            ipcRenderer.on('tcp-close', function (event, id) {
+                if (id !== socketId) return;
+                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
+            });
+
+            ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
+                callback(result); // 0 = success, negative = failure
+            }).catch(function () { callback(-1); });
+        },
+
+        send: function (socketId, data, callback) {
+            ipcRenderer.invoke('tcp-send', socketId, Array.from(new Uint8Array(data))).then(function (info) {
+                callback(info || { resultCode: -1 });
+            }).catch(function () { callback({ resultCode: -1 }); });
+        },
+
+        close: function (socketId, callback) {
+            ipcRenderer.removeAllListeners('tcp-data');
+            ipcRenderer.removeAllListeners('tcp-error');
+            ipcRenderer.removeAllListeners('tcp-close');
+            ipcRenderer.invoke('tcp-disconnect', socketId).then(function () {
+                if (callback) callback();
+            }).catch(function () { if (callback) callback(); });
+        },
+
+        setNoDelay: function (socketId, delay, callback) {
+            // setNoDelay is applied in main.js at socket creation; ack immediately
+            if (callback) callback(0);
+        },
+
+        onReceive: (function () {
+            const listeners = [];
+            return {
+                addListener: function (fn) { listeners.push(fn); },
+                removeListener: function (fn) {
+                    const i = listeners.indexOf(fn);
+                    if (i !== -1) listeners.splice(i, 1);
+                },
+                dispatch: function (info) { listeners.forEach(function (fn) { fn(info); }); },
+            };
+        })(),
+
+        onReceiveError: (function () {
+            const listeners = [];
+            return {
+                addListener: function (fn) { listeners.push(fn); },
+                removeListener: function (fn) {
+                    const i = listeners.indexOf(fn);
+                    if (i !== -1) listeners.splice(i, 1);
+                },
+                dispatch: function (info) { listeners.forEach(function (fn) { fn(info); }); },
+            };
+        })(),
     },
 };
 
@@ -312,6 +381,15 @@ const chromeUsb = {
 const chromeRuntime = {
     lastError: null,
     onSuspend: { addListener: function () {} },
+    getManifest: function () {
+        // Return version info from package.json (single source of truth in Electron)
+        const pkg = require('../package.json');
+        return {
+            version: pkg.version || '0.0.0',
+            version_name: '',
+            max_msp: pkg.max_msp || '',
+        };
+    },
 };
 
 // ─── chrome.app polyfill ────────────────────────────────────────────────────
