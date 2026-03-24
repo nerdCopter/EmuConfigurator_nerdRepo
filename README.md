@@ -73,16 +73,42 @@ The project uses **ESLint** for code quality: `yarn lint`
 
 ### Building Packages
 
-**macOS Distribution:**
-- **ZIP files** (.zip): Portable app archive
-- **DMG files** (.dmg): Disk image installer with branded background
-- Both are built by `yarn make` on all platforms (CI and local)
-- **Code signing:** Entitlements file configured at `sign/entitlements.plist`
-- **Notarization:** Apple notarization recommended for distribution outside App Store
+**All Platforms:**
+- `yarn make` builds release packages per platform
+- Output goes to `out/make/` directory
 
-**Other platforms:**
-- Windows: Creates `.exe` installer via Squirrel.Windows
-- Linux: Creates `.deb` and `.rpm` packages
+**macOS (Darwin):**
+- **ZIP** (`*.zip`) — Portable app archive
+- **DMG** (`*.dmg`) — Branded disk image installer (requires `macos-alias` on macOS)
+- Code signing: Uses ad-hoc signing by default
+- For certificate-based signing: Set `APPLE_SIGNING_IDENTITY` environment variable
+- For notarization: Set `APPLE_ID`, `APPLE_PASSWORD`, `APPLE_TEAM_ID`
+
+**Windows:**
+- **EXE** (`*.exe`) — Squirrel.Windows installer
+- Code signing: Uses certificate from `sign/EmuCert.p12` if `WINDOWS_CERT_FILE` and `WINDOWS_CERT_PASSWORD` are set
+- For CI: Configure these as GitHub repository secrets
+
+**Linux:**
+- **DEB** — Debian/Ubuntu package
+- **RPM** — Red Hat/Fedora package
+
+### Code Signing Configuration
+
+**Local Development (no certificates required):**
+```bash
+yarn make  # Uses ad-hoc signing on macOS, no signing on other platforms
+```
+
+**CI/Distribution with Certificates:**
+
+Set GitHub repository secrets:
+- `WINDOWS_CERT_FILE`: Path or base64-encoded EmuCert.p12
+- `WINDOWS_CERT_PASSWORD`: Certificate password
+- `APPLE_SIGNING_IDENTITY`: Apple Distribution certificate name (optional, for macOS)
+- `APPLE_TEAM_ID`: Apple Team ID (required if code signing)
+- `APPLE_ID`: Apple ID email (optional, for notarization)
+- `APPLE_PASSWORD`: App-specific password (optional, for notarization)
 
 ## Notes
 

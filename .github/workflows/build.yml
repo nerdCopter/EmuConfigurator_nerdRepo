@@ -67,10 +67,16 @@ jobs:
       - name: Make Packages
         env:
           APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
+          # For certificate-based signing, set these as GitHub secrets:
+          # APPLE_SIGNING_IDENTITY: "Apple Distribution: [Team Name]"
+          # APPLE_TEAM_ID: "XXXXXXXXXX"
+          # WINDOWS_CERT_FILE: path to EmuCert.p12
+          # WINDOWS_CERT_PASSWORD: certificate password
         run: yarn make
-        # macOS: Creates .zip (CI) or .zip + .dmg (local with macos-alias)
-        # Windows: Creates .exe installer (Squirrel.Windows)
-        # Linux: Creates .deb, .rpm (native package managers)
+        # Outputs by platform:
+        # macOS: .zip + .dmg (branded installer with background)
+        # Windows: .exe (Squirrel.Windows installer)
+        # Linux: .deb, .rpm (native package managers)
 
       - name: Upload Artifacts (build to Actions)
         uses: actions/upload-artifact@v4
