@@ -707,8 +707,8 @@ function mixerCalcMain() {
         doReparse();
     }
 
-    function onMouseMove(canvas, evt) {
-        const rect = canvas.getBoundingClientRect();
+    function onMouseMove(_canvas, _evt) {
+        const rect = _canvas.getBoundingClientRect();
         mousePos = {
             'x': evt.clientX - rect.left,
             'y': canvas.height - (evt.clientY - rect.top)
@@ -749,12 +749,12 @@ function mixerCalcMain() {
     //    highlightedMotor = null;
     //}
 
-    function onMouseDown(canvas, evt) {
+    function onMouseDown(_canvas, _evt) {
         if (!highlightedMotor || draggingMotor) { return; }
         draggingMotor = true;
     }
 
-    function onMouseUp(canvas, evt) {
+    function onMouseUp(_canvas, _evt) {
         draggingMotor = false;
         mousePos = null;
     }

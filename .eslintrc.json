@@ -37,8 +37,8 @@
   },
   "rules": {
     "no-debugger": "warn",
-    "no-unused-vars": "off",
-    "complexity": "off"
+    "no-unused-vars": "warn",
+    "complexity": "warn"
   },
   "ignorePatterns": [
     "dist/",
