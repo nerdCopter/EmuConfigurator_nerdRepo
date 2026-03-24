@@ -48,9 +48,21 @@ Download the installer for your platform from the [Releases](https://github.com/
 - `out/make/` — packaged applications and installers
 
 **Platform packages:**
-- **macOS**: `.zip` + branded `.dmg`
+- **macOS**: `.zip` (always), `.dmg` (local only, requires `macos-alias`)
 - **Windows**: `.exe` installer
 - **Linux**: `.deb` + `.rpm`
+
+### macOS DMG Building
+
+**CI (GitHub Actions):** Builds ZIP only (portable, suitable for distribution)
+
+**Local Dev:** To build DMG locally (macOS only):
+```bash
+brew install macos-alias   # One-time install
+yarn make                   # Builds both .zip and .dmg
+```
+
+DMG is skipped in CI because `macos-alias` (native module) doesn't cross-compile reliably. ZIP is portable and sufficient for most use cases.
 
 ### Platform Notes
 

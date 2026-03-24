@@ -73,9 +73,9 @@ jobs:
           # WINDOWS_CERT_FILE: path to EmuCert.p12
           # WINDOWS_CERT_PASSWORD: certificate password
         run: yarn make
-        # Outputs by platform:
-        # macOS: .zip + .dmg (branded installer with background)
-        # Windows: .exe (Squirrel.Windows installer)
+        # Packages built (CI only builds what works cross-platform):
+        # macOS: .zip (portable, DMG skipped - requires native macos-alias module)
+        # Windows: .exe (Squirrel.Windows)
         # Linux: .deb, .rpm (native package managers)
 
       - name: Upload Artifacts (build to Actions)

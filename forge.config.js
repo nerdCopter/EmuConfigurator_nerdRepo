@@ -54,14 +54,17 @@ module.exports = {
         },
       },
     },
-    {
+    // DMG maker: Skip in CI (macos-alias native module doesn't build reliably in CI)
+    // Users can build DMG locally with: yarn make (macOS only)
+    // ZIP is sufficient for distribution on macOS
+    ...(!process.env.CI && process.platform === 'darwin' ? [{
       name: '@electron-forge/maker-dmg',
       platforms: ['darwin'],
       config: {
         format: 'UDZO',
         background: require('path').resolve(__dirname, 'assets/osx/dmg-background.png'),
       },
-    },
+    }] : []),
   ],
   plugins: [
     {
