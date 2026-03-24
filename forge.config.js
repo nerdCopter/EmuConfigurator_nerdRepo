@@ -9,27 +9,15 @@ module.exports = {
     extraMetadata: {
       buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
     },
-    // macOS signing: uses certificate if available, falls back to ad-hoc
-    // For CI: set APPLE_TEAM_ID, APPLE_SIGNING_IDENTITY
-    // For local: uses ad-hoc signing (no certs needed)
+    // macOS signing: ad-hoc by default (works without certs)
+    // To use certificate: set APPLE_SIGNING_IDENTITY environment variable
     ...(process.platform === 'darwin' ? {
       osxSign: {
-        identity: process.env.APPLE_SIGNING_IDENTITY || null,
+        ...(process.env.APPLE_SIGNING_IDENTITY ? { identity: process.env.APPLE_SIGNING_IDENTITY } : {}),
         hardenedRuntime: true,
         entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
         entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
         signingFlags: ['--deep', '--force'],
-      },
-    } : {}),
-    // macOS notarization (optional, for app distribution outside App Store)
-    // Requires: APPLE_ID, APPLE_PASSWORD, APPLE_TEAM_ID
-    // When enabled, will notarize the DMG during build
-    ...(process.platform === 'darwin' && process.env.APPLE_ID ? {
-      osxNotarize: {
-        tool: 'notarytool',
-        appleId: process.env.APPLE_ID,
-        appleIdPassword: process.env.APPLE_PASSWORD,
-        teamId: process.env.APPLE_TEAM_ID,
       },
     } : {}),
   },
