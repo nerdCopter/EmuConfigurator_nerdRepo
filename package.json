@@ -4,6 +4,10 @@
   "version": "0.4.3",
   "max_msp": "1.54.0",
   "COMMENT": "MAX_MSP required!!!!",
+  "engines": {
+    "node": ">=20.0.0",
+    "yarn": "1.22.x"
+  },
   "main": "main.js",
   "default_locale": "en",
   "scripts": {
