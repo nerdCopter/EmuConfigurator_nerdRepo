@@ -50,8 +50,7 @@ Download the installer for your platform from the [Releases](https://github.com/
 | `yarn make:debug` | Same as `make` but devtools menu enabled in the packaged app |
 | `yarn package` | Build `dist/` and package the app without creating installers |
 | `yarn package:debug` | Same as `package` but with devtools menu enabled |
-| `yarn test` | Run unit tests |
-| `yarn lint` | Run ESLint |
+| `yarn lint` | Run ESLint linter |
 
 ### Build modes
 
@@ -65,6 +64,12 @@ Download the installer for your platform from the [Releases](https://github.com/
 
 - `dist/` — assembled app sources (built by `scripts/build.js`)
 - `out/` — packaged Electron app and installers
+
+### Code Quality
+
+The project uses **ESLint** for code quality: `yarn lint`
+
+**Testing:** Unit tests have been removed in favor of manual testing and linting. For a configuration UI tool like EmuConfigurator, manual testing via `yarn dev` is more effective for catching real-world issues.
 
 ## Notes
 
