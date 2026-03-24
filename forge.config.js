@@ -23,7 +23,6 @@ module.exports = {
   },
   rebuildConfig: {},
   makers: [
-  makers: [
     {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
