@@ -122,12 +122,7 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
     });
     return { connectionId: 1, bitrate: options.bitrate || 115200 };
   } catch (e) {
-    console.error(`main.js: serial-connect to ${portPath} failed: ${e.message}`);
-    // Provide actionable error message: likely causes and remedies
-    if (e.message.includes('No such file') || e.message.includes('cannot open')) {
-      console.error(`  Possible causes: Device not plugged in, permissions issue, or device disconnected.`);
-      console.error(`  Check: (1) USB is connected, (2) user has /dev/tty* read permission, (3) brltty service not active`);
-    }
+    console.error('main.js: serial-connect failed:', e.message);
     return null;
   }
 });
