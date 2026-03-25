@@ -87,17 +87,16 @@ ipcMain.handle('serial-list-ports', async () => {
     try {
       const fs = require('fs');
       const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
-      // Filter to only devices that can actually be opened (accessible)
+      // Check device accessibility using stat (not open, which fails on device files)
       const accessible = [];
       for (const f of entries) {
         const path = '/dev/' + f;
         try {
-          // Try to open with noOpen mode to verify accessibility without blocking
-          const fd = fs.openSync(path, 'r');
-          fs.closeSync(fd);
+          // Use stat to verify file exists without trying to open it
+          fs.statSync(path);
           accessible.push(path);
         } catch (err) {
-          // Device exists but cannot be opened (inaccessible, unplugged, etc.)
+          // Device enumeration may fail if permissions or device issues
           console.debug(`Skipping inaccessible device: ${path} (${err.code})`);
         }
       }
