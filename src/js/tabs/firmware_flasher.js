@@ -479,6 +479,16 @@ TABS.firmware_flasher.initialize = function (callback) {
                         // Called by the protocol when flashing finishes (success or error)
                         var flashComplete = function () {
                             console.log('[flashComplete] called, re-enabling controls...');
+                            
+                            // Play audio notification (feedback that operation is complete)
+                            // Use electron IPC to play sound asynchronously
+                            const soundFile = process.env.HOME + '/sounds/Drip-02.wav';
+                            const { ipcRenderer } = require('electron');
+                            ipcRenderer.invoke('play-sound', soundFile).catch(err => {
+                                // Sound file may not exist, continue anyway
+                                console.log('Could not play sound at ' + soundFile + ':', err.message);
+                            });
+                            
                             self.enableFlashing(true);
                             $('a.load_file').removeClass('disabled');
                             $('a.load_remote_file').removeClass('disabled');

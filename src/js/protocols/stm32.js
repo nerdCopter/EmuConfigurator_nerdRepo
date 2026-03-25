@@ -100,12 +100,12 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                 serial.send(bufferOut, function () {
                     serial.disconnect(function (result) {
                         if (result) {
-                            // Poll for DFU device until it appears or timeout (3s)
-                            // HELIOSPRING and slower controllers take 2-2.5s to enumerate
+                            // Poll for DFU device until it appears or timeout (4.5s)
+                            // HELIOSPRING and slower controllers take 2.5-3s to enumerate into DFU mode
                             var dfuCheckStartTime = Date.now();
-                            var dfuCheckMaxDuration = 3000; // 3 second timeout
+                            var dfuCheckMaxDuration = 4500; // 4.5 second timeout for DFU enumeration
                             var dfuCheckInterval = 250; // Check every 250ms
-                            var initialDelay = 500; // Initial delay before first check
+                            var initialDelay = 1500; // Initial delay before first check (allow full reboot)
                             
                             var checkForDFU = function() {
                                 var elapsed = Date.now() - dfuCheckStartTime;

@@ -535,6 +535,32 @@ ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray) =>
   return buffer.length;
 });
 
+// IPC: play audio file (for notifications)
+ipcMain.handle('play-sound', async (event, soundFilePath) => {
+  try {
+    const { spawn } = require('child_process');
+    const child = spawn('aplay', ['--quiet', soundFilePath]);
+    return new Promise((resolve, reject) => {
+      child.on('error', (err) => reject(err));
+      child.on('exit', (code) => {
+        if (code === 0) {
+          resolve(true);
+        } else {
+          reject(new Error(`aplay exited with code ${code}`));
+        }
+      });
+      // Set a timeout to avoid waiting forever
+      setTimeout(() => {
+        child.kill();
+        reject(new Error('aplay timeout'));
+      }, 5000);
+    });
+  } catch (err) {
+    console.error('Failed to play sound:', err.message);
+    throw err;
+  }
+});
+
 // IPC: read file as binary buffer
 ipcMain.handle('file-read-binary', async (event, filePath) => {
   const data = await fs.promises.readFile(filePath);
