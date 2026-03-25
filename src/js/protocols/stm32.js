@@ -100,15 +100,26 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                 serial.send(bufferOut, function () {
                     serial.disconnect(function (result) {
                         if (result) {
-                            // delay to allow board to boot in bootloader mode
-                            // required to detect if a DFU device appears
-                            // HELIOSPRING and other slower controllers need longer to enumerate (~2.5s)
-                            setTimeout(function() {
-                                // refresh device list
+                            // Poll for DFU device until it appears or timeout (3s)
+                            // HELIOSPRING and slower controllers take 2-2.5s to enumerate
+                            var dfuCheckStartTime = Date.now();
+                            var dfuCheckMaxDuration = 3000; // 3 second timeout
+                            var dfuCheckInterval = 250; // Check every 250ms
+                            var initialDelay = 500; // Initial delay before first check
+                            
+                            var checkForDFU = function() {
+                                var elapsed = Date.now() - dfuCheckStartTime;
+                                
                                 PortHandler.check_usb_devices(function(usbDevices) {
                                     if (usbDevices && usbDevices.length) {
+                                        console.log('DFU device detected after ' + elapsed + 'ms, connecting...');
                                         STM32DFU.connect(usbDevices, hex, options, self.callback);
+                                    } else if (elapsed < dfuCheckMaxDuration) {
+                                        // Device not found yet, keep polling
+                                        setTimeout(checkForDFU, dfuCheckInterval);
                                     } else {
+                                        // DFU device never appeared, timeout reached
+                                        console.log('DFU device not found after ' + dfuCheckMaxDuration + 'ms, falling back to serial');
                                         serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
                                             if (openInfo) {
                                                 self.initialize();
@@ -119,7 +130,10 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                         });
                                     }
                                 });
-                            }, 2500);
+                            };
+                            
+                            // Start polling after initial delay
+                            setTimeout(checkForDFU, initialDelay);
                         } else {
                             GUI.connect_lock = false;
                         }
