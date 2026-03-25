@@ -102,6 +102,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                         if (result) {
                             // delay to allow board to boot in bootloader mode
                             // required to detect if a DFU device appears
+                            // HELIOSPRING and other slower controllers need longer to enumerate (~2.5s)
                             setTimeout(function() {
                                 // refresh device list
                                 PortHandler.check_usb_devices(function(usbDevices) {
@@ -118,7 +119,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                         });
                                     }
                                 });
-                            }, 1000);
+                            }, 2500);
                         } else {
                             GUI.connect_lock = false;
                         }
