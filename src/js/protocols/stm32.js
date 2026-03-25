@@ -120,14 +120,31 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                     } else {
                                         // DFU device never appeared, timeout reached
                                         console.log('DFU device not found after ' + dfuCheckMaxDuration + 'ms, falling back to serial');
-                                        serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
-                                            if (openInfo) {
-                                                self.initialize();
-                                            } else {
-                                                GUI.connect_lock = false;
-                                                GUI.log(i18n.getMessage('serialPortOpenFail'));
-                                            }
-                                        });
+                                        
+                                        // HELIOSPRING and other slow controllers may need time to enumerate as serial
+                                        // Try to reconnect with retries in case device is still initializing
+                                        var serialConnectRetryCount = 0;
+                                        var maxSerialRetries = 3;
+                                        var serialRetryDelay = 1000; // 1 second between retries
+                                        
+                                        var attemptSerialConnect = function() {
+                                            serial.connect(port, {bitrate: self.baud, parityBit: 'even', stopBits: 'one'}, function (openInfo) {
+                                                if (openInfo) {
+                                                    console.log('Serial fallback connected on attempt ' + (serialConnectRetryCount + 1));
+                                                    self.initialize();
+                                                } else if (serialConnectRetryCount < maxSerialRetries) {
+                                                    serialConnectRetryCount++;
+                                                    console.log('Serial fallback retry ' + serialConnectRetryCount + '/' + maxSerialRetries + ' after ' + serialRetryDelay + 'ms...');
+                                                    setTimeout(attemptSerialConnect, serialRetryDelay);
+                                                } else {
+                                                    console.error('Serial fallback failed after ' + maxSerialRetries + ' retries');
+                                                    GUI.connect_lock = false;
+                                                    GUI.log(i18n.getMessage('serialPortOpenFail'));
+                                                }
+                                            });
+                                        };
+                                        
+                                        attemptSerialConnect();
                                     }
                                 });
                             };
