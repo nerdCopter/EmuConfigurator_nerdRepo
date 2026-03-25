@@ -87,7 +87,21 @@ ipcMain.handle('serial-list-ports', async () => {
     try {
       const fs = require('fs');
       const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
-      return entries.map(f => '/dev/' + f);
+      // Filter to only devices that can actually be opened (accessible)
+      const accessible = [];
+      for (const f of entries) {
+        const path = '/dev/' + f;
+        try {
+          // Try to open with noOpen mode to verify accessibility without blocking
+          const fd = fs.openSync(path, 'r');
+          fs.closeSync(fd);
+          accessible.push(path);
+        } catch (err) {
+          // Device exists but cannot be opened (inaccessible, unplugged, etc.)
+          console.debug(`Skipping inaccessible device: ${path} (${err.code})`);
+        }
+      }
+      return accessible;
     } catch (fsErr) {
       return [];
     }
@@ -122,7 +136,12 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
     });
     return { connectionId: 1, bitrate: options.bitrate || 115200 };
   } catch (e) {
-    console.error('main.js: serial-connect failed:', e.message);
+    console.error(`main.js: serial-connect to ${portPath} failed: ${e.message}`);
+    // Provide actionable error message: likely causes and remedies
+    if (e.message.includes('No such file') || e.message.includes('cannot open')) {
+      console.error(`  Possible causes: Device not plugged in, permissions issue, or device disconnected.`);
+      console.error(`  Check: (1) USB is connected, (2) user has /dev/tty* read permission, (3) brltty service not active`);
+    }
     return null;
   }
 });
