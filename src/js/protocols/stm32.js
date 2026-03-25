@@ -124,7 +124,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                         // HELIOSPRING and other slow controllers may need time to enumerate as serial
                                         // Try to reconnect with retries in case device is still initializing
                                         var serialConnectRetryCount = 0;
-                                        var maxSerialRetries = 3;
+                                        var maxSerialRetries = 10;  // HELIOSPRING needs ~7-10 seconds to re-enumerate (total 14-15s with DFU timeout)
                                         var serialRetryDelay = 1000; // 1 second between retries
                                         
                                         var attemptSerialConnect = function() {
