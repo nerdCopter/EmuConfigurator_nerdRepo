@@ -154,6 +154,51 @@ ipcMain.handle('serial-disconnect', async () => {
 });
 
 // IPC: detect DFU USB devices
+// IPC: TCP socket (for SITL / MSP-over-TCP connections)
+const net = require('net');
+const _tcpSockets = new Map();
+let _tcpSocketCounter = 0;
+
+ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    _tcpSockets.set(socketId, socket);
+    socket.setNoDelay(true);
+    socket.on('data', (data) => {
+      event.sender.send('tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+    });
+    socket.on('error', (err) => {
+      console.error(`main.js: tcp socket ${socketId} error:`, err.message);
+      event.sender.send('tcp-error', socketId, err.message);
+    });
+    socket.on('close', () => {
+      _tcpSockets.delete(socketId);
+      event.sender.send('tcp-close', socketId);
+    });
+    socket.connect(port, host, () => resolve(0));
+    socket.once('error', () => resolve(-102)); // CONNECTION_REFUSED
+  });
+});
+
+ipcMain.handle('tcp-send', async (event, socketId, data) => {
+  const socket = _tcpSockets.get(socketId);
+  if (!socket || socket.destroyed) return { resultCode: -100 };
+  return new Promise((resolve) => {
+    socket.write(Buffer.from(data), (err) => {
+      resolve(err ? { resultCode: -1 } : { resultCode: 0, bytesSent: data.length });
+    });
+  });
+});
+
+ipcMain.handle('tcp-disconnect', async (event, socketId) => {
+  const socket = _tcpSockets.get(socketId);
+  if (socket) { socket.destroy(); _tcpSockets.delete(socketId); }
+  return true;
+});
+
+ipcMain.handle('tcp-allocate', async () => {
+  return ++_tcpSocketCounter;
+});
 const _usbOpenDevices = new Map();
 
 function usbKeyFromDevice(device) {
