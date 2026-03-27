@@ -1,5 +1,21 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
+const fs = require('fs');
+
+// IPC: Provide package.json manifest data to renderer (for getManifest shim)
+ipcMain.on('get-manifest', (event) => {
+  try {
+    const pkgPath = path.join(app.getAppPath(), 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    event.returnValue = {
+      version: pkg.version || '0.0.0',
+      version_name: '',
+      max_msp: pkg.max_msp || '',
+    };
+  } catch (e) {
+    event.returnValue = { version: '0.0.0', version_name: '', max_msp: '' };
+  }
+});
 
 // Build modes (set by npm scripts in package.json):
 //   'dev'           - `yarn dev` sets NODE_ENV=development → devtools auto-open + menu item
@@ -85,7 +101,6 @@ ipcMain.handle('serial-list-ports', async () => {
   } catch (e) {
     console.error('main.js: serialport list failed, trying fs fallback:', e.message);
     try {
-      const fs = require('fs');
       const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
       return entries.map(f => '/dev/' + f);
     } catch (fsErr) {
@@ -455,7 +470,6 @@ ipcMain.handle('usb-reset-device', async (event, deviceKey) => {
 
 // --- File system dialog IPC bridge ---
 const { dialog } = require('electron');
-const fs = require('fs');
 
 // IPC: show save file dialog
 ipcMain.handle('dialog:choose-entry', async (event, options) => {
