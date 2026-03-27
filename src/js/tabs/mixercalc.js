@@ -749,12 +749,12 @@ function mixerCalcMain() {
     //    highlightedMotor = null;
     //}
 
-    function onMouseDown(canvas, evt) {
+    function onMouseDown(_canvas, _evt) {
         if (!highlightedMotor || draggingMotor) { return; }
         draggingMotor = true;
     }
 
-    function onMouseUp(canvas, evt) {
+    function onMouseUp(_canvas, _evt) {
         draggingMotor = false;
         mousePos = null;
     }

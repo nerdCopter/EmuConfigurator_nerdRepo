@@ -269,9 +269,6 @@ LRUMap.prototype[Symbol.iterator] = function() {
 };
 
 LRUMap.prototype.forEach = function(fun, thisObj) {
-  if (typeof thisObj !== 'object') {
-    thisObj = this;
-  }
   let entry = this.oldest;
   while (entry) {
     fun.call(thisObj, entry.value, entry.key, this);

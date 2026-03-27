@@ -9,12 +9,30 @@ module.exports = {
     extraMetadata: {
       buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
     },
+    // macOS signing: ad-hoc by default (works without certs)
+    // To use certificate: set APPLE_SIGNING_IDENTITY environment variable
+    ...(process.platform === 'darwin' ? {
+      osxSign: {
+        ...(process.env.APPLE_SIGNING_IDENTITY ? { identity: process.env.APPLE_SIGNING_IDENTITY } : {}),
+        hardenedRuntime: true,
+        entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+        entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+        signingFlags: ['--deep', '--force'],
+      },
+    } : {}),
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      platforms: ['win32'],
+      config: {
+        certificateFile: process.env.WINDOWS_CERT_FILE,
+        certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+        // Note: Squirrel.Windows runs app after setup by design (delta-update framework).
+        // Users: Manual app launch from Start Menu or shortcuts avoids connection state issues.
+        // For true NSIS installer, consider switching to electron-builder separately.
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -22,12 +40,34 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      platforms: ['linux'],
+      config: {
+        options: {
+          maintainer: 'nerdCopter',
+          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+        },
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      platforms: ['linux'],
+      config: {
+        options: {
+          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+        },
+      },
     },
+    // DMG maker: Skip in CI (macos-alias native module doesn't build reliably in CI)
+    // Users can build DMG locally with: yarn make (macOS only)
+    // ZIP is sufficient for distribution on macOS
+    ...(!process.env.CI && process.platform === 'darwin' ? [{
+      name: '@electron-forge/maker-dmg',
+      platforms: ['darwin'],
+      config: {
+        format: 'UDZO',
+        background: require('path').resolve(__dirname, 'assets/osx/dmg-background.png'),
+      },
+    }] : []),
   ],
   plugins: [
     {

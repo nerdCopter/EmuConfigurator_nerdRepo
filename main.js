@@ -499,6 +499,16 @@ ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
   return text.length;
 });
 
+// IPC: write binary content to file (preserves binary data)
+ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray) => {
+  const dir = path.dirname(filePath);
+  await fs.promises.mkdir(dir, { recursive: true });
+  const buffer = Buffer.from(byteArray);
+  await fs.promises.writeFile(filePath, buffer);
+  console.log(`Saved ${buffer.length} bytes (binary) to ${filePath}`);
+  return buffer.length;
+});
+
 // IPC: read file as binary buffer
 ipcMain.handle('file-read-binary', async (event, filePath) => {
   const data = await fs.promises.readFile(filePath);
@@ -511,7 +521,7 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
 });
 
 // IPC: write to file (kept for compatibility)
-ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
+ipcMain.handle('dialog:write-file', async (event, filePath, _data) => {
   return 0;
 });
 

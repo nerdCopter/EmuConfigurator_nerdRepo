@@ -34,7 +34,15 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
         }
         // Load JS and then proceed
         if (typeof mixerCalcMain === 'undefined') {
-            $.getScript('./js/tabs/mixercalc.js', loadAndInitialize);
+            $.getScript('./js/tabs/mixercalc.js', loadAndInitialize)
+                .fail(function(jqxhr, settings, exception) {
+                    console.error('Failed to load mixercalc.js:', exception);
+                    const errorMsg = `Error loading Mixer Calculator: ${exception}`;
+                    if (processLogger) processLogger.log(errorMsg, 'style_danger');
+                    // Show error in UI
+                    const $content = $("#content");
+                    $content.html(`<div style="color: red; padding: 20px;">${errorMsg}</div>`);
+                });
         } else {
             loadAndInitialize();
         }

@@ -65,9 +65,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
 
     var data = dataHandler.dataView; // DataView (allowing us to view arrayBuffer as struct/union)
     var code = dataHandler.code;
-    if (code === 0) {
-        debugger;
-    }
+    // if (code === 0) debugger; // Removed: use browser devtools instead
     var crcError = dataHandler.crcError;
     if (!crcError) {
         if (!dataHandler.unsupported) switch (code) {

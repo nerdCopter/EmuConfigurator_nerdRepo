@@ -196,14 +196,28 @@ const chromeSockets = {
 const chromeStorageLocal = {
     get: function (keys, callback) {
         const result = {};
-        const keyList = Array.isArray(keys) ? keys : (typeof keys === 'string' ? [keys] : Object.keys(keys));
-        keyList.forEach(function (k) {
-            const val = localStorage.getItem(k);
-            if (val !== null) {
-                try { result[k] = JSON.parse(val); }
-                catch (e) { result[k] = val; }
-            }
-        });
+        if (typeof keys === 'object' && !Array.isArray(keys)) {
+            // Object with defaults: { key: defaultValue, ... }
+            Object.keys(keys).forEach(function (k) {
+                const val = localStorage.getItem(k);
+                if (val !== null) {
+                    try { result[k] = JSON.parse(val); }
+                    catch (e) { result[k] = val; }
+                } else {
+                    result[k] = keys[k]; // Use provided default
+                }
+            });
+        } else {
+            // String or array of keys
+            const keyList = Array.isArray(keys) ? keys : [keys];
+            keyList.forEach(function (k) {
+                const val = localStorage.getItem(k);
+                if (val !== null) {
+                    try { result[k] = JSON.parse(val); }
+                    catch (e) { result[k] = val; }
+                }
+            });
+        }
         callback(result);
     },
     set: function (items, callback) {
@@ -240,7 +254,7 @@ const chromeUsb = {
         const handleId = ++chromeUsb._handleCounter;
         chromeUsb._openHandles[handleId] = device;
         
-        ipcRenderer.invoke('usb-open-device', device.device).then(function (result) {
+        ipcRenderer.invoke('usb-open-device', device.device).then(function (_result) {
             callback({ handle: handleId, device: device });
         }).catch(function (err) {
             console.error('usb-open-device error:', err);
@@ -446,7 +460,7 @@ const chromeFileSystem = {
                         if (error) error(err);
                     });
                 },
-                createWriter: (onWriter, onError) => {
+                createWriter: (onWriter, _onError) => {
                     const writer = {
                         length: 0,
                         onerror: null,
@@ -456,16 +470,17 @@ const chromeFileSystem = {
                             if (writer.onwriteend) writer.onwriteend();
                         },
                         write: (blob) => {
-                            blob.text().then(text => {
-                                ipcRenderer.invoke('dialog:write-text-file', filePath, text).then(written => {
+                            blob.arrayBuffer().then(arrayBuffer => {
+                                // Send as binary data via separate IPC channel
+                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer))).then(written => {
                                     writer.length += written;
                                     if (writer.onwriteend) writer.onwriteend();
                                 }).catch(err => {
-                                    console.error(`[preload] write-text-file failed:`, err);
+                                    console.error(`[preload] write-binary-file failed:`, err);
                                     if (writer.onerror) writer.onerror(err);
                                 });
                             }).catch(err => {
-                                console.error(`[preload] blob.text() failed:`, err);
+                                console.error(`[preload] blob.arrayBuffer() failed:`, err);
                                 if (writer.onerror) writer.onerror(err);
                             });
                         }
