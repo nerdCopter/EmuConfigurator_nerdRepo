@@ -108,110 +108,10 @@ const chromeSerial = {
     })(),
 };
 
-// ─── chrome.sockets.tcp polyfill (IPC-backed — supports SITL/MSP-over-TCP) ──
+// ─── chrome.sockets.tcp polyfill (stub — TCP connect available separately) ──
 
 const chromeSockets = {
     tcp: {
-        _receiveListeners: [],
-        _errorListeners: [],
-
-        create: function (props, callback) {
-            ipcRenderer.invoke('tcp-allocate').then(function (id) {
-                callback({ socketId: id });
-            }).catch(function () { callback({ socketId: -1 }); });
-        },
-
-        connect: function (socketId, host, port, callback) {
-            // Named handler functions for this socket (stored for cleanup)
-            const tcpDataHandler = function (event, id, arrayBuffer) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
-            };
-            const tcpErrorHandler = function (event, id, msg) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
-            };
-            const tcpCloseHandler = function (event, id) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
-            };
-            
-            // Register socket-specific handlers (not global removeAllListeners)
-            ipcRenderer.on('tcp-data', tcpDataHandler);
-            ipcRenderer.on('tcp-error', tcpErrorHandler);
-            ipcRenderer.on('tcp-close', tcpCloseHandler);
-            
-            // Store handlers for cleanup on close
-            if (!chromeSockets._socketHandlers) chromeSockets._socketHandlers = new Map();
-            chromeSockets._socketHandlers.set(socketId, {
-                dataHandler: tcpDataHandler,
-                errorHandler: tcpErrorHandler,
-                closeHandler: tcpCloseHandler
-            });
-
-            ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
-                callback(result); // 0 = success, negative = failure
-            }).catch(function () { callback(-1); });
-        },
-        
-        close: function (socketId, callback) {
-            // Remove socket-specific handlers
-            if (chromeSockets._socketHandlers && chromeSockets._socketHandlers.has(socketId)) {
-                const handlers = chromeSockets._socketHandlers.get(socketId);
-                ipcRenderer.removeListener('tcp-data', handlers.dataHandler);
-                ipcRenderer.removeListener('tcp-error', handlers.errorHandler);
-                ipcRenderer.removeListener('tcp-close', handlers.closeHandler);
-                chromeSockets._socketHandlers.delete(socketId);
-            }
-            
-            ipcRenderer.invoke('tcp-close', socketId).then(function (result) {
-                if (callback) callback(result);
-            });
-        },
-
-        send: function (socketId, data, callback) {
-            ipcRenderer.invoke('tcp-send', socketId, Array.from(new Uint8Array(data))).then(function (info) {
-                callback(info || { resultCode: -1 });
-            }).catch(function () { callback({ resultCode: -1 }); });
-        },
-
-        close: function (socketId, callback) {
-            ipcRenderer.removeAllListeners('tcp-data');
-            ipcRenderer.removeAllListeners('tcp-error');
-            ipcRenderer.removeAllListeners('tcp-close');
-            ipcRenderer.invoke('tcp-disconnect', socketId).then(function () {
-                if (callback) callback();
-            }).catch(function () { if (callback) callback(); });
-        },
-
-        setNoDelay: function (socketId, delay, callback) {
-            // setNoDelay is applied in main.js at socket creation; ack immediately
-            if (callback) callback(0);
-        },
-
-        onReceive: (function () {
-            const listeners = [];
-            return {
-                addListener: function (fn) { listeners.push(fn); },
-                removeListener: function (fn) {
-                    const i = listeners.indexOf(fn);
-                    if (i !== -1) listeners.splice(i, 1);
-                },
-                dispatch: function (info) { listeners.forEach(function (fn) { fn(info); }); },
-            };
-        })(),
-
-        onReceiveError: (function () {
-            const listeners = [];
-            return {
-                addListener: function (fn) { listeners.push(fn); },
-                removeListener: function (fn) {
-                    const i = listeners.indexOf(fn);
-                    if (i !== -1) listeners.splice(i, 1);
-                },
-                dispatch: function (info) { listeners.forEach(function (fn) { fn(info); }); },
-            };
-        })(),
     },
 };
 
@@ -419,6 +319,7 @@ const chromeUsb = {
 const chromeRuntime = {
     lastError: null,
     onSuspend: { addListener: function () {} },
+<<<<<<< HEAD
     getManifest: function () {
         // Return version info from package.json (single source of truth in Electron)
         // Use __dirname to resolve relative to this file's location
@@ -430,6 +331,8 @@ const chromeRuntime = {
             max_msp: pkg.max_msp || '',
         };
     },
+=======
+>>>>>>> parent of 35039dcd2 (feat: implement TCP/SITL support and chrome.runtime.getManifest shim)
 };
 
 // ─── chrome.app polyfill ────────────────────────────────────────────────────
