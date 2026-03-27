@@ -121,39 +121,36 @@ const chromeSockets = {
             }).catch(function () { callback({ socketId: -1 }); });
         },
 
-        connect: function (socketId, host, port, callback) {
-            // Named handler functions for this socket (stored for cleanup)
-            const tcpDataHandler = function (event, id, arrayBuffer) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
-            };
-            const tcpErrorHandler = function (event, id, msg) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
-            };
-            const tcpCloseHandler = function (event, id) {
-                if (id !== socketId) return;
-                chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
-            };
-            
-            // Register socket-specific handlers (not global removeAllListeners)
-            ipcRenderer.on('tcp-data', tcpDataHandler);
-            ipcRenderer.on('tcp-error', tcpErrorHandler);
-            ipcRenderer.on('tcp-close', tcpCloseHandler);
-            
-            // Store handlers for cleanup on close
-            if (!chromeSockets._socketHandlers) chromeSockets._socketHandlers = new Map();
-            chromeSockets._socketHandlers.set(socketId, {
-                dataHandler: tcpDataHandler,
-                errorHandler: tcpErrorHandler,
-                closeHandler: tcpCloseHandler
-            });
+    connect: function (socketId, host, port, callback) {
+        // Named handler functions for this socket (stored for cleanup)
+        const tcpDataHandler = function (event, id, arrayBuffer) {
+            if (id !== socketId) return;
+            chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
+        };
+        const tcpErrorHandler = function (event, id, msg) {
+            if (id !== socketId) return;
+            chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
+        };
+        const tcpCloseHandler = function (event, id) {
+            if (id !== socketId) return;
+            chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
+        };
+        // Register socket-specific handlers (not global removeAllListeners)
+        ipcRenderer.on('tcp-data', tcpDataHandler);
+        ipcRenderer.on('tcp-error', tcpErrorHandler);
+        ipcRenderer.on('tcp-close', tcpCloseHandler);
+        // Store handlers for cleanup on close
+        if (!chromeSockets._socketHandlers) chromeSockets._socketHandlers = new Map();
+        chromeSockets._socketHandlers.set(socketId, {
+            dataHandler: tcpDataHandler,
+            errorHandler: tcpErrorHandler,
+            closeHandler: tcpCloseHandler
+        });
+        ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
+            callback(result); // 0 = success, negative = failure
+        }).catch(function () { callback(-1); });
+    },
 
-            ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
-                callback(result); // 0 = success, negative = failure
-            }).catch(function () { callback(-1); });
-        },
-        
         close: function (socketId, callback) {
             // Remove socket-specific handlers
             if (chromeSockets._socketHandlers && chromeSockets._socketHandlers.has(socketId)) {
@@ -163,7 +160,6 @@ const chromeSockets = {
                 ipcRenderer.removeListener('tcp-close', handlers.closeHandler);
                 chromeSockets._socketHandlers.delete(socketId);
             }
-            
             ipcRenderer.invoke('tcp-close', socketId).then(function (result) {
                 if (callback) callback(result);
             });
@@ -419,16 +415,15 @@ const chromeUsb = {
 const chromeRuntime = {
     lastError: null,
     onSuspend: { addListener: function () {} },
+    
     getManifest: function () {
-        // Return version info from package.json (single source of truth in Electron)
-        // Use __dirname to resolve relative to this file's location
-        const path = require('path');
-        const pkg = require(path.join(__dirname, '../../package.json'));
-        return {
-            version: pkg.version || '0.0.0',
-            version_name: '',
-            max_msp: pkg.max_msp || '',
-        };
+        // Use IPC to main process to get package.json data (renderer cannot require files outside dist)
+        if (window._manifestCache) return window._manifestCache;
+        const { ipcRenderer } = require('electron');
+        // Synchronous IPC for simplicity; can be made async if needed
+        const manifest = ipcRenderer.sendSync('get-manifest');
+        window._manifestCache = manifest;
+        return manifest;
     },
 };
 

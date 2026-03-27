@@ -1,5 +1,21 @@
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
+const fs = require('fs');
+
+// IPC: Provide package.json manifest data to renderer (for getManifest shim)
+ipcMain.on('get-manifest', (event) => {
+  try {
+    const pkgPath = path.join(app.getAppPath(), 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    event.returnValue = {
+      version: pkg.version || '0.0.0',
+      version_name: '',
+      max_msp: pkg.max_msp || '',
+    };
+  } catch (e) {
+    event.returnValue = { version: '0.0.0', version_name: '', max_msp: '' };
+  }
+});
 
 // Build modes (set by npm scripts in package.json):
 //   'dev'           - `yarn dev` sets NODE_ENV=development → devtools auto-open + menu item
@@ -85,8 +101,7 @@ ipcMain.handle('serial-list-ports', async () => {
   } catch (e) {
     console.error('main.js: serialport list failed, trying fs fallback:', e.message);
     try {
-      const fs = require('fs');
-      const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
+        const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
       return entries.map(f => '/dev/' + f);
     } catch (fsErr) {
       return [];
@@ -154,9 +169,6 @@ ipcMain.handle('serial-disconnect', async () => {
 });
 
 // IPC: TCP socket (for SITL / MSP-over-TCP connections)
-const net = require('net');
-const _tcpSockets = new Map();
-let _tcpSocketCounter = 0;
 
 ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
   return new Promise((resolve) => {
@@ -165,7 +177,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     socket.setNoDelay(true);
     
     // Named error handler to avoid double resolution
-    const onConnectError = () => resolve(-102); // CONNECTION_REFUSED
+      const onConnectError = () => resolve(-102); // CONNECTION_REFUSED
     
     socket.on('data', (data) => {
       event.sender.send('tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
@@ -180,7 +192,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     });
     
     socket.once('error', onConnectError);
-    socket.connect(port, host, () => {
+      socket.connect(port, host, () => {
       socket.removeListener('error', onConnectError);
       resolve(0);
     });
@@ -207,8 +219,8 @@ ipcMain.handle('tcp-allocate', async () => {
   return ++_tcpSocketCounter;
 });
 
-// IPC: detect DFU USB devices
-const _usbOpenDevices = new Map();
+
+// (All TCP/USB handler and variable declarations are already present above. No need to redeclare.)
 
 function usbKeyFromDevice(device) {
   return `${device.busNumber}:${device.deviceAddress}`;
@@ -476,7 +488,6 @@ ipcMain.handle('usb-reset-device', async (event, deviceKey) => {
 
 // --- File system dialog IPC bridge ---
 const { dialog } = require('electron');
-const fs = require('fs');
 
 // IPC: show save file dialog
 ipcMain.handle('dialog:choose-entry', async (event, options) => {
