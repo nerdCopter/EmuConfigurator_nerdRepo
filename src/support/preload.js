@@ -381,6 +381,15 @@ const chromeUsb = {
 const chromeRuntime = {
     lastError: null,
     onSuspend: { addListener: function () {} },
+    getManifest: function () {
+        // Use IPC to main process to get package.json data (renderer cannot require files outside dist)
+        if (window._manifestCache) return window._manifestCache;
+        const { ipcRenderer } = require('electron');
+        // Synchronous IPC for simplicity; can be made async if needed
+        const manifest = ipcRenderer.sendSync('get-manifest');
+        window._manifestCache = manifest;
+        return manifest;
+    },
 };
 
 // ─── chrome.app polyfill ────────────────────────────────────────────────────
