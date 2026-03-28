@@ -92,11 +92,58 @@ jobs:
           fi
           echo "✓ Artifacts validated"
 
-      - name: Upload Artifacts (build to Actions)
+      # Upload Linux .deb
+      - name: Upload Artifact (linux .deb)
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-${{ matrix.artifact-suffix }}
-          path: out/make/
+          name: EmuConfigurator-linux-deb
+          path: out/make/deb/**/*.deb
+          retention-days: 30
+
+      # Upload Linux .rpm
+      - name: Upload Artifact (linux .rpm)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-rpm
+          path: out/make/rpm/**/*.rpm
+          retention-days: 30
+
+      # Upload macOS .dmg
+      - name: Upload Artifact (macos .dmg)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-dmg
+          path: out/make/dmg/**/*.dmg
+          retention-days: 30
+
+      # Upload macOS .zip
+      - name: Upload Artifact (macos .zip)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 30
+
+      # Upload Windows .exe
+      - name: Upload Artifact (windows .exe)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-exe
+          path: out/make/squirrel.windows/**/*.exe
+          retention-days: 30
+
+      # Upload Windows .zip
+      - name: Upload Artifact (windows .zip)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-zip
+          path: out/make/zip/**/*.zip
           retention-days: 30
 
   release:
