@@ -2945,19 +2945,49 @@ TABS.pid_tuning.getReceiverData = function() {
 };
 
 TABS.pid_tuning.initRatesPreview = function() {
+    if (this.ratesClickResizeHandler) {
+        $('.tab-pid_tuning .tab_container .rates').off('click', this.ratesClickResizeHandler);
+    }
+
+    if (this.ratesClickLabelHandler) {
+        $('.tab-pid_tuning .tab_container .rates').off('click', this.ratesClickLabelHandler);
+    }
+
+    if (this.windowResizeHandler) {
+        $(window).off('resize', this.windowResizeHandler);
+    }
+
+    if (this.windowLabelResizeHandler) {
+        $(window).off('resize', this.windowLabelResizeHandler);
+    }
+
+    if (this.renderFrameId) {
+        cancelAnimationFrame(this.renderFrameId);
+        this.renderFrameId = null;
+    }
+
+    if (this.model) {
+        this.model.dispose();
+    }
+
     this.keepRendering = true;
     this.model = new Model($('.rates_preview'), $('.rates_preview canvas'));
+    this.renderModelBound = this.renderModel.bind(this);
+    this.ratesClickResizeHandler = $.proxy(this.model.resize, this.model);
+    this.ratesClickLabelHandler = $.proxy(this.updateRatesLabels, this);
+    this.windowResizeHandler = $.proxy(this.model.resize, this.model);
+    this.windowLabelResizeHandler = $.proxy(this.updateRatesLabels, this);
 
-    $('.tab-pid_tuning .tab_container .rates').on('click', $.proxy(this.model.resize, this.model));
-    $('.tab-pid_tuning .tab_container .rates').on('click', $.proxy(this.updateRatesLabels, this));
+    $('.tab-pid_tuning .tab_container .rates').on('click', this.ratesClickResizeHandler);
+    $('.tab-pid_tuning .tab_container .rates').on('click', this.ratesClickLabelHandler);
 
-    $(window).on('resize', $.proxy(this.model.resize, this.model));
-    $(window).on('resize', $.proxy(this.updateRatesLabels, this));
+    $(window).on('resize', this.windowResizeHandler);
+    $(window).on('resize', this.windowLabelResizeHandler);
 };
 
 TABS.pid_tuning.renderModel = function() {
     if (this.keepRendering) {
-        requestAnimationFrame(this.renderModel.bind(this));
+        this.renderFrameId = requestAnimationFrame(this.renderModelBound);
     }
 
     if (!this.clock) {
@@ -2979,11 +3009,40 @@ TABS.pid_tuning.renderModel = function() {
 
 TABS.pid_tuning.cleanup = function(callback) {
     var self = this;
-    if (self.model) {
-        $(window).off('resize', $.proxy(self.model.resize, self.model));
+    if (self.ratesClickResizeHandler) {
+        $('.tab-pid_tuning .tab_container .rates').off('click', self.ratesClickResizeHandler);
+        self.ratesClickResizeHandler = null;
     }
-    $(window).off('resize', $.proxy(this.updateRatesLabels, this));
+
+    if (self.ratesClickLabelHandler) {
+        $('.tab-pid_tuning .tab_container .rates').off('click', self.ratesClickLabelHandler);
+        self.ratesClickLabelHandler = null;
+    }
+
+    if (self.windowResizeHandler) {
+        $(window).off('resize', self.windowResizeHandler);
+        self.windowResizeHandler = null;
+    }
+
+    if (self.windowLabelResizeHandler) {
+        $(window).off('resize', self.windowLabelResizeHandler);
+        self.windowLabelResizeHandler = null;
+    }
+
     self.keepRendering = false;
+
+    if (self.renderFrameId) {
+        cancelAnimationFrame(self.renderFrameId);
+        self.renderFrameId = null;
+    }
+
+    self.renderModelBound = null;
+
+    if (self.model) {
+        self.model.dispose();
+        self.model = null;
+    }
+
     if (callback) callback();
 };
 
