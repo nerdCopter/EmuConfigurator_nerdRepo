@@ -606,7 +606,20 @@ ipcMain.handle('file-read-binary', async (event, filePath) => {
 // IPC: truncate file to size
 ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   try {
-    await fs.promises.truncate(filePath, size);
+    // Ensure the directory exists before truncating
+    const dir = path.dirname(filePath);
+    await fs.promises.mkdir(dir, { recursive: true });
+    // Create file if it doesn't exist, then truncate
+    try {
+      await fs.promises.truncate(filePath, size);
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        // File doesn't exist, create it as empty
+        await fs.promises.writeFile(filePath, Buffer.alloc(size));
+      } else {
+        throw err;
+      }
+    }
     console.log(`Truncated ${filePath} to ${size} bytes`);
     return size;
   } catch (e) {
