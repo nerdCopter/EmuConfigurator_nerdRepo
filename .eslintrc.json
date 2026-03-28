@@ -54,8 +54,7 @@
         "test/**/*.ts"
       ],
       "env": {
-        "mocha": true,
-        "jest": true
+        "mocha": true
       },
       "rules": {
         "no-unused-expressions": "off"

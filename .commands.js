@@ -6,7 +6,7 @@ Available Commands:
   yarn debug            Alias for yarn dev
   yarn dev:verbose      Live dev with full verbose output
   yarn make             Production binaries (no devtools)
-  yarn make:dev         Alias for yarn make:debug
+  yarn make:dev         Alias of yarn make:debug
   yarn make:debug       Debug binaries (devtools in menu, manual toggle)
   yarn package          Package without installer
   yarn package:debug    Debug package without installer
