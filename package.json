@@ -12,6 +12,7 @@
   "default_locale": "en",
   "scripts": {
     "dev":           "node scripts/build.js && cross-env NODE_ENV=development NODE_NO_WARNINGS=1 electron-forge start",
+    "debug":         "yarn dev",
     "dev:verbose":   "node scripts/build.js && cross-env NODE_ENV=development electron-forge start",
     "make":          "node scripts/build.js && electron-forge make",
     "make:dev":      "yarn make:debug",
