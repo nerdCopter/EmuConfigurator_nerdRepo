@@ -121,21 +121,30 @@ jobs:
           path: out/make/zip/**/*.zip
           retention-days: 30
 
-      # Upload macOS .dmg
-      - name: Upload Artifact (macos .dmg)
+      # Upload macOS ARM64 .dmg
+      - name: Upload Artifact (macos arm64 .dmg)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-macos-dmg
+          name: EmuConfigurator-macos-arm64-dmg
           path: out/make/dmg/**/*.dmg
           retention-days: 30
 
-      # Upload macOS .zip
-      - name: Upload Artifact (macos .zip)
+      # Upload macOS ARM64 .zip
+      - name: Upload Artifact (macos arm64 .zip)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-macos-zip
+          name: EmuConfigurator-macos-arm64-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 30
+
+      # Upload macOS x86_64 .zip
+      - name: Upload Artifact (macos x86_64 .zip)
+        if: matrix.os == 'macos-26-intel'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-x86_64-zip
           path: out/make/zip/**/*.zip
           retention-days: 30
 
@@ -170,9 +179,9 @@ jobs:
       - name: List Release Artifacts
         run: |
           echo "### Release Artifacts ###"
-          find ./Artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" \) -exec ls -lh {} \;
+          find ./Artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
 
-      - name: Upload Release Assets (.exe, .dmg, .deb, .rpm)
+      - name: Upload Release Assets
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -180,10 +189,14 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-x64/out/make/squirrel.windows/**/*.exe
-            ./Artifacts/EmuConfigurator-macos-x64/out/make/dmg/**/*.dmg
-            ./Artifacts/EmuConfigurator-linux-x64/out/make/deb/**/*.deb
-            ./Artifacts/EmuConfigurator-linux-x64/out/make/rpm/**/*.rpm
+            ./Artifacts/EmuConfigurator-windows-exe/out/make/squirrel.windows/**/*.exe
+            ./Artifacts/EmuConfigurator-windows-zip/out/make/zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-arm64-dmg/out/make/dmg/**/*.dmg
+            ./Artifacts/EmuConfigurator-macos-arm64-zip/out/make/zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-x86_64-zip/out/make/zip/**/*.zip
+            ./Artifacts/EmuConfigurator-linux-deb/out/make/deb/**/*.deb
+            ./Artifacts/EmuConfigurator-linux-rpm/out/make/rpm/**/*.rpm
+            ./Artifacts/EmuConfigurator-linux-zip/out/make/zip/**/*.zip
           draft: true
           prerelease: ${{ contains(github.ref, 'test') || contains(github.ref, 'rc') }}
         continue-on-error: true
