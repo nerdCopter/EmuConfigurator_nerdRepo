@@ -21,6 +21,12 @@ var serial = {
 
     logHead: 'SERIAL: ',
 
+    checkSerialApi: function () {
+        this.serialApiChecked = true;
+        this.serialApiAvailable = typeof navigator !== 'undefined' && !!navigator.serial;
+        return this.serialApiAvailable;
+    },
+
     connect: function (path, options, callback) {
         var self = this;
         var testUrl = path.match(/^tcp:\/\/([A-Za-z0-9\.-]+)(?:\:(\d+))?$/)
@@ -429,3 +435,5 @@ var serial = {
         this.transmitting = false;
     }
 };
+
+serial.checkSerialApi();

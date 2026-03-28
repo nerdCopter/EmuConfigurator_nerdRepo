@@ -11,6 +11,8 @@
 
 const { ipcRenderer } = require('electron');
 
+let serialConnectInProgress = false;
+
 // ─── chrome.serial polyfill ────────────────────────────────────────────────
 
 const chromeSerial = {
@@ -24,6 +26,13 @@ const chromeSerial = {
     },
 
     connect: function (path, options, callback) {
+        if (serialConnectInProgress) {
+            callback(undefined);
+            return;
+        }
+
+        serialConnectInProgress = true;
+
         // Clean up any previous IPC listeners
         ipcRenderer.removeAllListeners('serial-data');
         ipcRenderer.removeAllListeners('serial-error');
@@ -47,7 +56,9 @@ const chromeSerial = {
             });
 
             callback(info);
-        }).catch(function () { callback(undefined); });
+        }).catch(function () { callback(undefined); }).finally(function () {
+            serialConnectInProgress = false;
+        });
     },
 
     disconnect: function (connectionId, callback) {
@@ -206,6 +217,20 @@ const chromeSockets = {
 const chromeStorageLocal = {
     get: function (keys, callback) {
         const result = {};
+
+        if (keys === null || keys === undefined) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const val = localStorage.getItem(key);
+                if (val !== null) {
+                    try { result[key] = JSON.parse(val); }
+                    catch (e) { result[key] = val; }
+                }
+            }
+            callback(result);
+            return;
+        }
+
         if (typeof keys === 'object' && !Array.isArray(keys)) {
             // Object with defaults: { key: defaultValue, ... }
             Object.keys(keys).forEach(function (k) {
@@ -268,7 +293,6 @@ const chromeUsb = {
             callback({ handle: handleId, device: device });
         }).catch(function (err) {
             console.error('usb-open-device error:', err);
-            chromeUsb._handleCounter = Math.max(0, chromeUsb._handleCounter - 1);
             callback(undefined);
         });
     },

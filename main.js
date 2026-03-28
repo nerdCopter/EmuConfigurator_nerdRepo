@@ -761,9 +761,34 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   }
 });
 
-// IPC: write to file (kept for compatibility)
-ipcMain.handle('dialog:write-file', async (event, filePath, _data) => {
-  return 0;
+// IPC: write to file (compatibility handler)
+ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
+  try {
+    if (typeof filePath !== 'string' || filePath.length === 0) {
+      throw new Error('Invalid filePath');
+    }
+
+    if (data === undefined || data === null) {
+      throw new Error('No data provided');
+    }
+
+    const dir = path.dirname(filePath);
+    await fs.promises.mkdir(dir, { recursive: true });
+
+    const buffer = Array.isArray(data)
+      ? Buffer.from(data)
+      : Buffer.isBuffer(data)
+        ? data
+        : typeof data === 'string'
+          ? Buffer.from(data, 'utf8')
+          : Buffer.from(JSON.stringify(data), 'utf8');
+
+    await fs.promises.writeFile(filePath, buffer);
+    return buffer.length;
+  } catch (e) {
+    console.error(`dialog:write-file failed for ${filePath}:`, e.message);
+    throw e;
+  }
 });
 
 function createWindow() {

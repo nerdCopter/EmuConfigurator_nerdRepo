@@ -122,6 +122,14 @@ LRUMap.prototype.set = function(key, value) {
     return this;
   }
 
+  // Ensure capacity constraints are handled before mutating map/list state.
+  if (this.limit === 0) {
+    throw new Error('overflow');
+  }
+  if (this.limit > 0 && this.size >= this.limit) {
+    this.shift();
+  }
+
   // new entry
   this._keymap.set(key, (entry = new Entry(key, value)));
 
@@ -137,10 +145,6 @@ LRUMap.prototype.set = function(key, value) {
   // add new entry to the end of the linked list -- it's now the freshest entry.
   this.newest = entry;
   ++this.size;
-  if (this.size > this.limit) {
-    // we hit the limit -- remove the head
-    this.shift();
-  }
 
   return this;
 };

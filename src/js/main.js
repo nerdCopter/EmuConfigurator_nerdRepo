@@ -12,10 +12,20 @@ const os = require('os');
 const presetsFolders = os.tmpdir();
 
 function writePresetFile(filePath, response) {
-    fs.writeFile(filePath, response, (err) => {
-        if (err) {
-        console.error(err);
-        }
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, response, (err) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
+function writePresetFileWithLogging(filePath, response) {
+    writePresetFile(filePath, response).catch((err) => {
+        console.error(`Failed to write preset file ${filePath}:`, err);
     });
 }
 
@@ -50,27 +60,27 @@ var helioUrlv040 = "https://raw.githubusercontent.com/emuflight/emuflight-preset
 // TODO: migrate to a function to get rid of code duplication
 
 client.get(nonHelioUrlv020, function(response) {
-        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response);
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response);
 });
 
 client.get(helioUrlv020, function(response) {
-        writePresetFile(presetsFolders + "/presets-HELIO-v0.2.0.json", response);
+        writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.2.0.json", response);
 });
 
 client.get(nonHelioUrlv030, function(response) {
-        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response);
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response);
   });
 
   client.get(helioUrlv030, function(response) {
-            writePresetFile(presetsFolders + "/presets-HELIO-v0.3.0.json", response);
+            writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.3.0.json", response);
   });
 
 client.get(nonHelioUrlv040, function(response) {
-        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response);
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response);
   });
 
   client.get(helioUrlv040, function(response) {
-            writePresetFile(presetsFolders + "/presets-HELIO-v0.4.0.json", response);
+            writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.4.0.json", response);
   });
 
 
