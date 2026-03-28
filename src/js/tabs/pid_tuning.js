@@ -2778,16 +2778,24 @@ TABS.pid_tuning.initialize = function(callback) {
             var selectProfile = $('.selectProfile');
             var selectRateProfile = $('.selectRateProfile');
 
-            $.each(selectProfileValues, function(key, value) {
-                if (key != CONFIG.profile)
-                    selectProfile.append(new Option(value, key));
-            });
-            $.each(selectRateProfileValues, function(key, value) {
-                if (key != CONFIG.rateProfile)
-                    selectRateProfile.append(new Option(value, key));
-            });
+            function refreshCopyProfileSelectors() {
+                selectProfile.empty();
+                $.each(selectProfileValues, function(key, value) {
+                    if (key !== self.currentProfile) {
+                        selectProfile.append(new Option(value, key));
+                    }
+                });
+
+                selectRateProfile.empty();
+                $.each(selectRateProfileValues, function(key, value) {
+                    if (key !== self.currentRateProfile) {
+                        selectRateProfile.append(new Option(value, key));
+                    }
+                });
+            }
 
             $('.copyprofilebtn').click(function() {
+                refreshCopyProfileSelectors();
                 $('.dialogCopyProfile').find('.contentProfile').show();
                 $('.dialogCopyProfile').find('.contentRateProfile').hide();
                 dialogCopyProfileMode = DIALOG_MODE_PROFILE;
@@ -2795,6 +2803,7 @@ TABS.pid_tuning.initialize = function(callback) {
             });
 
             $('.copyrateprofilebtn').click(function() {
+                refreshCopyProfileSelectors();
                 $('.dialogCopyProfile').find('.contentProfile').hide();
                 $('.dialogCopyProfile').find('.contentRateProfile').show();
                 dialogCopyProfileMode = DIALOG_MODE_RATEPROFILE;
@@ -2810,7 +2819,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     case DIALOG_MODE_PROFILE:
                         COPY_PROFILE.type = DIALOG_MODE_PROFILE; // 0 = pid profile
                         COPY_PROFILE.dstProfile = parseInt(selectProfile.val());
-                        COPY_PROFILE.srcProfile = CONFIG.profile;
+                        COPY_PROFILE.srcProfile = self.currentProfile;
 
                         MSP.send_message(MSPCodes.MSP_COPY_PROFILE, mspHelper.crunch(MSPCodes.MSP_COPY_PROFILE), false, close_dialog);
 
@@ -2819,7 +2828,7 @@ TABS.pid_tuning.initialize = function(callback) {
                     case DIALOG_MODE_RATEPROFILE:
                         COPY_PROFILE.type = DIALOG_MODE_RATEPROFILE; // 1 = rate profile
                         COPY_PROFILE.dstProfile = parseInt(selectRateProfile.val());
-                        COPY_PROFILE.srcProfile = CONFIG.rateProfile;
+                        COPY_PROFILE.srcProfile = self.currentRateProfile;
 
                         MSP.send_message(MSPCodes.MSP_COPY_PROFILE, mspHelper.crunch(MSPCodes.MSP_COPY_PROFILE), false, close_dialog);
 
