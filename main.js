@@ -20,6 +20,32 @@ function safeSendToRenderer(sender, channel, ...args) {
   }
 }
 
+function getWindowIconPath() {
+  const iconCandidatesByPlatform = {
+    linux: [
+      path.join(__dirname, 'assets', 'linux', 'icon', 'emu_icon_128.png'),
+      path.join(__dirname, 'src', 'images', 'emu_icon_128.png'),
+      path.join(__dirname, 'dist', 'images', 'emu_icon_128.png'),
+    ],
+    win32: [
+      path.join(__dirname, 'src', 'images', 'emu_icon.ico'),
+      path.join(__dirname, 'dist', 'images', 'emu_icon.ico'),
+    ],
+    darwin: [
+      path.join(__dirname, 'assets', 'osx', 'app-icon.icns'),
+    ],
+  };
+
+  const candidates = iconCandidatesByPlatform[process.platform] || [];
+  for (const iconPath of candidates) {
+    if (fs.existsSync(iconPath)) {
+      return iconPath;
+    }
+  }
+
+  return undefined;
+}
+
 // IPC: Provide package.json manifest data to renderer (for getManifest shim)
 ipcMain.on('get-manifest', (event) => {
   try {
@@ -700,6 +726,8 @@ function createWindow() {
   setupMenu(buildMode);
   const initialBounds = getInitialWindowBounds();
 
+  const windowIconPath = getWindowIconPath();
+
   const win = new BrowserWindow({
     width: initialBounds.width,
     height: initialBounds.height,
@@ -712,7 +740,7 @@ function createWindow() {
       contextIsolation: false,
       preload: path.join(__dirname, 'dist', 'support', 'preload.js'),
     },
-    icon: path.join(__dirname, 'assets/osx/app-icon.icns'),
+    icon: windowIconPath,
   });
   
   // Enforce minimum window size multiple ways for cross-platform compatibility
