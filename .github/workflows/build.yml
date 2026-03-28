@@ -24,12 +24,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, macos-13, windows-latest]
         include:
           - os: ubuntu-latest
             artifact-suffix: linux-x64
           - os: macos-latest
-            artifact-suffix: macos-x64
+            artifact-suffix: macos-arm64
+          - os: macos-13
+            artifact-suffix: macos-x86_64
           - os: windows-latest
             artifact-suffix: windows-x64
     outputs:
@@ -108,6 +110,15 @@ jobs:
         with:
           name: EmuConfigurator-linux-rpm
           path: out/make/rpm/**/*.rpm
+          retention-days: 30
+
+      # Upload Linux .zip
+      - name: Upload Artifact (linux .zip)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-zip
+          path: out/make/zip/**/*.zip
           retention-days: 30
 
       # Upload macOS .dmg
