@@ -1,13 +1,17 @@
+const fs = require('fs');
+const path = require('path');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+
+const buildMode = process.env.EMUCFG_BUILD_MODE || 'release';
 
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: require('path').resolve(__dirname, 'assets/osx/app-icon'),
+    icon: path.resolve(__dirname, 'assets/osx/app-icon'),
     // Bake build mode into packaged package.json so main.js can read it at runtime
     extraMetadata: {
-      buildMode: process.env.EMUCFG_BUILD_MODE || 'release'
+      buildMode: buildMode
     },
     // macOS signing: ad-hoc by default (works without certs)
     // To use certificate: set APPLE_SIGNING_IDENTITY environment variable
@@ -15,11 +19,19 @@ module.exports = {
       osxSign: {
         ...(process.env.APPLE_SIGNING_IDENTITY ? { identity: process.env.APPLE_SIGNING_IDENTITY } : {}),
         hardenedRuntime: true,
-        entitlements: require('path').resolve(__dirname, 'sign/entitlements.plist'),
-        entitlementsInherit: require('path').resolve(__dirname, 'sign/entitlements.plist'),
+        entitlements: path.resolve(__dirname, 'sign/entitlements.plist'),
+        entitlementsInherit: path.resolve(__dirname, 'sign/entitlements.plist'),
         signingFlags: ['--deep', '--force'],
       },
     } : {}),
+  },
+  hooks: {
+    packageAfterCopy: async (_forgeConfig, buildPath) => {
+      const packageJsonPath = path.join(buildPath, 'package.json');
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      packageJson.buildMode = buildMode;
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+    },
   },
   rebuildConfig: {},
   makers: [
@@ -65,7 +77,7 @@ module.exports = {
       platforms: ['darwin'],
       config: {
         format: 'UDZO',
-        background: require('path').resolve(__dirname, 'assets/osx/dmg-background.png'),
+        background: path.resolve(__dirname, 'assets/osx/dmg-background.png'),
       },
     }] : []),
   ],
