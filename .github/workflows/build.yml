@@ -85,6 +85,48 @@ jobs:
         # Windows: .exe (Squirrel.Windows - delta-update framework, app launches after setup by design)
         # Linux: .deb, .rpm (native package managers)
 
+      - name: Restructure .zip Artifacts (flatten OS folders)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          cd out/make/zip
+          for zipfile in */*.zip; do
+            dirname=$(dirname "$zipfile")
+            basename=$(basename "$zipfile")
+            tmpdir=$(mktemp -d)
+            unzip -q "$zipfile" -d "$tmpdir"
+            # Move app folder up one level (remove OS folder wrapper)
+            cd "$tmpdir"
+            app_folder=$(ls -d */ | head -1)
+            cd "$app_folder"
+            # Re-zip from app contents
+            zip -r -q "../../${basename}" .
+            cd /home/ndronet/SYNC/nerdCopter-GIT/EmuConfigurator_nerdRepo-rethink-WM/out/make/zip
+            rm -rf "$tmpdir"
+          done
+          echo "✓ .zip files restructured (OS folders removed)"
+
+      - name: Restructure Windows .zip Artifacts
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $zipPath = "out\make\zip"
+          if (Test-Path $zipPath) {
+            Get-ChildItem "$zipPath\*\*.zip" | ForEach-Object {
+              $zipFile = $_.FullName
+              $parentDir = Split-Path $zipFile -Parent
+              $zipName = Split-Path $zipFile -Leaf
+              $tmpDir = New-TemporaryDirectory
+              Expand-Archive -Path $zipFile -DestinationPath $tmpDir
+              $appFolder = Get-ChildItem -Directory $tmpDir | Select-Object -First 1
+              $newZipPath = Join-Path $parentDir $zipName
+              Remove-Item $zipFile -Force
+              Compress-Archive -Path (Join-Path $appFolder.FullName "*") -DestinationPath $newZipPath -Force
+              Remove-Item $tmpDir -Recurse -Force
+            }
+            Write-Host "✓ Windows .zip files restructured (OS folders removed)"
+          }
+
       - name: Validate Artifacts Exist
         if: runner.os != 'Windows'
         run: |
