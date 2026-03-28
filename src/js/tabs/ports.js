@@ -119,11 +119,8 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
         promise
             .then(function() {
-                // Request board info if not already loaded
-                if (!CONFIG.boardIdentifier || CONFIG.boardIdentifier.trim() === '') {
-                    return MSP.promise(MSPCodes.MSP_BOARD_INFO);
-                }
-                return Promise.resolve();
+                // Always fetch board info to ensure CONFIG.boardIdentifier is populated
+                return MSP.promise(MSPCodes.MSP_BOARD_INFO);
             })
             .then(function() {
                 MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
