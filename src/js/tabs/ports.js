@@ -117,9 +117,17 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         } else {
             promise = Promise.resolve();
         }
-        promise.then(function() {
-            MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
-        });
+        promise
+            .then(function() {
+                // Request board info if not already loaded
+                if (!CONFIG.boardIdentifier || CONFIG.boardIdentifier.trim() === '') {
+                    return MSP.promise(MSPCodes.MSP_BOARD_INFO);
+                }
+                return Promise.resolve();
+            })
+            .then(function() {
+                MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
+            });
 
         function on_configuration_loaded_handler() {
             $('#content').load("./tabs/ports.html", on_tab_loaded_handler);
@@ -134,10 +142,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
 
         board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
-        // Only log if board identifier was successfully detected
-        if (CONFIG.boardIdentifier && board_definition.identifier !== "????") {
-            console.log('Using board definition', board_definition);
-        }
+        console.log('Using board definition', board_definition);
 
         const VCP_PORT_IDENTIFIER = 20;
 
