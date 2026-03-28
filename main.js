@@ -2,6 +2,22 @@ const { app, BrowserWindow, ipcMain, Menu, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+function safeSendToRenderer(sender, channel, ...args) {
+  if (!sender || sender.isDestroyed()) {
+    return false;
+  }
+
+  try {
+    sender.send(channel, ...args);
+    return true;
+  } catch (e) {
+    if (!e.message || !e.message.includes('Object has been destroyed')) {
+      console.error(`main.js: error sending ${channel} to renderer:`, e.message);
+    }
+    return false;
+  }
+}
+
 // IPC: Provide package.json manifest data to renderer (for getManifest shim)
 ipcMain.on('get-manifest', (event) => {
   try {
@@ -142,20 +158,12 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
     });
     // Forward incoming data to renderer
     _serialPort.on('data', (data) => {
-      try {
-        event.sender.send('serial-data', data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
-      } catch (e) {
-        console.error('main.js: error sending serial-data to renderer:', e.message);
-      }
+      safeSendToRenderer(event.sender, 'serial-data', data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     });
     // Enhanced error handler to prevent uncaught exceptions
     _serialPort.on('error', (err) => {
       console.error('main.js serialport error:', err.message);
-      try {
-        event.sender.send('serial-error', err.message);
-      } catch (e) {
-        console.error('main.js: error sending serial-error to renderer:', e.message);
-      }
+      safeSendToRenderer(event.sender, 'serial-error', err.message);
       // Attempt graceful recovery
       if (_serialPort && _serialPort.isOpen) {
         _serialPort.close(() => {
@@ -164,11 +172,7 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
       }
     });
     _serialPort.on('close', () => {
-      try {
-        event.sender.send('serial-close');
-      } catch (e) {
-        console.error('main.js: error sending serial-close to renderer:', e.message);
-      }
+      safeSendToRenderer(event.sender, 'serial-close');
     });
     return { connectionId: 1, bitrate: options.bitrate || 115200 };
   } catch (e) {
@@ -264,15 +268,15 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     _tcpSockets.set(socketId, socket);
     socket.setNoDelay(true);
     socket.on('data', (data) => {
-      event.sender.send('tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+      safeSendToRenderer(event.sender, 'tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     });
     socket.on('error', (err) => {
       console.error(`main.js: tcp socket ${socketId} error:`, err.message);
-      event.sender.send('tcp-error', socketId, err.message);
+      safeSendToRenderer(event.sender, 'tcp-error', socketId, err.message);
     });
     socket.on('close', () => {
       _tcpSockets.delete(socketId);
-      event.sender.send('tcp-close', socketId);
+      safeSendToRenderer(event.sender, 'tcp-close', socketId);
     });
     const connectionErrorHandler = () => {
       resolve(-102); // CONNECTION_REFUSED
