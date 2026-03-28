@@ -27,12 +27,13 @@ const DIST = path.join(ROOT, 'dist');
 const pkg  = require(path.join(ROOT, 'package.json'));
 
 // Files/dirs excluded from src → dist copy (mirrors gulp distSources negations)
+// NOTE: support/ MUST NOT be excluded - preload.js is required for Electron!
 const SRC_EXCLUDE_FILES = [
   'css/dropdown-lists/LICENSE',
   'css/font-awesome/css/font-awesome.css',
 ];
 const SRC_EXCLUDE_DIRS = [
-  'support',
+  // 'support', // CRITICAL: preload.js must be available for Electron
 ];
 
 function srcFilter(src) {

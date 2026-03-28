@@ -23,7 +23,7 @@ i18n.init = function(cb) {
                 ns: ['messages'],
                 defaultNS:['messages'],
                 fallbackLng: 'en',
-                backend: { loadPath: '/locales/{{lng}}/{{ns}}.json' }
+                backend: { loadPath: '../locales/{{lng}}/{{ns}}.json' }
                 }, function(err, t) {
                     if (err !== undefined) {
                         console.error('Error loading i18n ' + err);
