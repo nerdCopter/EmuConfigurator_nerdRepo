@@ -166,30 +166,41 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
   if (!_serialPort || !_serialPort.isOpen) return { bytesSent: 0, error: 'not_connected' };
   const buf = Buffer.from(bufferData);
   return new Promise((resolve) => {
+    let settled = false;
     // Timeout protection: prevent indefinite hang on native module
     const timeoutId = setTimeout(() => {
-      console.error('main.js: serial-send timeout after 10s, forcibly resolving');
-      resolve({ bytesSent: 0, error: 'timeout' });
+      if (!settled) {
+        settled = true;
+        console.error('main.js: serial-send timeout after 10s, forcibly resolving');
+        resolve({ bytesSent: 0, error: 'timeout' });
+      }
     }, 10000);
 
     try {
       _serialPort.write(buf, (err) => {
+        if (settled) return;
         clearTimeout(timeoutId);
         if (err) {
+          settled = true;
           console.error('main.js: serial-send write error:', err.message);
           resolve({ bytesSent: 0, error: err.message });
         } else {
           _serialPort.drain((drainErr) => {
+            if (settled) return;
             if (drainErr) {
+              settled = true;
               console.error('main.js: serial-send drain error:', drainErr.message);
               resolve({ bytesSent: 0, error: drainErr.message });
             } else {
+              settled = true;
               resolve({ bytesSent: buf.length });
             }
           });
         }
       });
     } catch (e) {
+      if (settled) return;
+      settled = true;
       clearTimeout(timeoutId);
       console.error('main.js: serial-send exception:', e.message);
       resolve({ bytesSent: 0, error: e.message });
@@ -247,8 +258,14 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
       _tcpSockets.delete(socketId);
       event.sender.send('tcp-close', socketId);
     });
-    socket.connect(port, host, () => resolve(0));
-    socket.once('error', () => resolve(-102)); // CONNECTION_REFUSED
+    const connectionErrorHandler = () => {
+      resolve(-102); // CONNECTION_REFUSED
+    };
+    socket.once('error', connectionErrorHandler);
+    socket.connect(port, host, () => {
+      socket.removeListener('error', connectionErrorHandler);
+      resolve(0);
+    });
   });
 });
 
@@ -483,7 +500,11 @@ ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
 ipcMain.handle('usb-bulk-transfer', async (event, deviceKey, options) => {
   try {
     const device = ensureUsbDeviceOpen(deviceKey);
-    const iface = device.interfaces[0];
+    const interfaceNumber = options.interfaceNumber !== undefined ? options.interfaceNumber : 0;
+    const iface = device.interfaces[interfaceNumber];
+    if (!iface) {
+      throw new Error(`Interface ${interfaceNumber} not found on device`);
+    }
     const endpointNumber = options.endpoint || 1;
     const endpointAddress = options.direction === 'in' ? (endpointNumber | 0x80) : endpointNumber;
     const endpoint = (iface.endpoints || []).find((ep) => ep.address === endpointAddress);
@@ -582,9 +603,16 @@ ipcMain.handle('file-read-binary', async (event, filePath) => {
   return data;
 });
 
-// IPC: truncate file to size (kept for compatibility)
+// IPC: truncate file to size
 ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
-  return size;
+  try {
+    await fs.promises.truncate(filePath, size);
+    console.log(`Truncated ${filePath} to ${size} bytes`);
+    return size;
+  } catch (e) {
+    console.error(`Truncate failed for ${filePath}:`, e.message);
+    throw e;
+  }
 });
 
 // IPC: write to file (kept for compatibility)
@@ -602,9 +630,9 @@ function createWindow() {
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      preload: path.join(__dirname, 'src/support/preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'dist', 'support', 'preload.js'),
     },
     icon: path.join(__dirname, 'assets/osx/app-icon.icns'),
   });

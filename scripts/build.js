@@ -84,6 +84,7 @@ function build() {
   const jboxSrc = path.join(ROOT, 'node_modules', 'jbox', 'dist', 'jBox.min.css');
   const jboxDst = path.join(DIST, 'css', 'jBox.min.css');
   if (fs.existsSync(jboxSrc)) {
+    fse.ensureDirSync(path.dirname(jboxDst));
     fse.copyFileSync(jboxSrc, jboxDst);
   } else {
     console.warn('[build] WARNING: jBox.min.css not found at', jboxSrc);

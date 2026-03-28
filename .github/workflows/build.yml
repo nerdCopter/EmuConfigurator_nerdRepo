@@ -89,6 +89,7 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
+          ROOT_DIR=$(pwd)
           cd out/make/zip
           for zipfile in */*.zip; do
             dirname=$(dirname "$zipfile")
@@ -101,7 +102,7 @@ jobs:
             cd "$app_folder"
             # Re-zip from app contents
             zip -r -q "../../${basename}" .
-            cd /home/ndronet/SYNC/nerdCopter-GIT/EmuConfigurator_nerdRepo-rethink-WM/out/make/zip
+            cd "$ROOT_DIR/out/make/zip"
             rm -rf "$tmpdir"
           done
           echo "✓ .zip files restructured (OS folders removed)"
@@ -116,7 +117,8 @@ jobs:
               $zipFile = $_.FullName
               $parentDir = Split-Path $zipFile -Parent
               $zipName = Split-Path $zipFile -Leaf
-              $tmpDir = New-TemporaryDirectory
+              $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+              New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
               Expand-Archive -Path $zipFile -DestinationPath $tmpDir
               $appFolder = Get-ChildItem -Directory $tmpDir | Select-Object -First 1
               $newZipPath = Join-Path $parentDir $zipName
@@ -135,6 +137,17 @@ jobs:
             exit 1
           fi
           echo "✓ Artifacts validated"
+
+      - name: Validate Artifacts Exist (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $files = Get-ChildItem -Path "out/make" -Recurse -File
+          if ($files.Count -eq 0) {
+            Write-Error "No artifacts found in out/make/"
+            exit 1
+          }
+          Write-Host "✓ Artifacts validated (Windows)"
 
       # Upload Linux .deb
       - name: Upload Artifact (linux .deb)
@@ -230,5 +243,11 @@ jobs:
             ./Artifacts/EmuConfigurator-linux-rpm/out/make/rpm/**/*.rpm
             ./Artifacts/EmuConfigurator-linux-zip/out/make/zip/**/*.zip
           draft: true
-          prerelease: ${{ contains(github.ref, 'test') || contains(github.ref, 'rc') }}
-        continue-on-error: true
+          prerelease: ${{ contains(github.ref, 'rc') }}
+        continue-on-error: false
+
+      - name: Release Failed Notification
+        if: failure()
+        run: |
+          echo "❌ Release upload failed for ${{ github.ref_name }}"
+          exit 1

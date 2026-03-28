@@ -114,6 +114,7 @@ const chromeSockets = {
     tcp: {
         _receiveListeners: [],
         _errorListeners: [],
+        _socketHandlers: new Map(), // Map socketId → {dataHandler, errorHandler, closeHandler}
 
         create: function (props, callback) {
             ipcRenderer.invoke('tcp-allocate').then(function (id) {
@@ -122,23 +123,27 @@ const chromeSockets = {
         },
 
         connect: function (socketId, host, port, callback) {
-            // Register IPC event listeners for this socket before connecting
-            ipcRenderer.removeAllListeners(`tcp-data`);
-            ipcRenderer.removeAllListeners(`tcp-error`);
-            ipcRenderer.removeAllListeners(`tcp-close`);
-
-            ipcRenderer.on('tcp-data', function (event, id, arrayBuffer) {
+            // Define handlers for this specific socket
+            const dataHandler = function (event, id, arrayBuffer) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceive.dispatch({ socketId: id, data: arrayBuffer });
-            });
-            ipcRenderer.on('tcp-error', function (event, id, msg) {
+            };
+            const errorHandler = function (event, id, msg) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -1, message: msg });
-            });
-            ipcRenderer.on('tcp-close', function (event, id) {
+            };
+            const closeHandler = function (event, id) {
                 if (id !== socketId) return;
                 chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
-            });
+            };
+
+            // Store handlers for later removal
+            chromeSockets.tcp._socketHandlers.set(socketId, { dataHandler, errorHandler, closeHandler });
+
+            // Register IPC event listeners for this socket
+            ipcRenderer.on('tcp-data', dataHandler);
+            ipcRenderer.on('tcp-error', errorHandler);
+            ipcRenderer.on('tcp-close', closeHandler);
 
             ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
                 callback(result); // 0 = success, negative = failure
@@ -152,9 +157,14 @@ const chromeSockets = {
         },
 
         close: function (socketId, callback) {
-            ipcRenderer.removeAllListeners('tcp-data');
-            ipcRenderer.removeAllListeners('tcp-error');
-            ipcRenderer.removeAllListeners('tcp-close');
+            // Remove only the handlers registered for this specific socketId
+            const handlers = chromeSockets.tcp._socketHandlers.get(socketId);
+            if (handlers) {
+                ipcRenderer.removeListener('tcp-data', handlers.dataHandler);
+                ipcRenderer.removeListener('tcp-error', handlers.errorHandler);
+                ipcRenderer.removeListener('tcp-close', handlers.closeHandler);
+                chromeSockets.tcp._socketHandlers.delete(socketId);
+            }
             ipcRenderer.invoke('tcp-disconnect', socketId).then(function () {
                 if (callback) callback();
             }).catch(function () { if (callback) callback(); });
@@ -466,8 +476,14 @@ const chromeFileSystem = {
                         onerror: null,
                         onwriteend: null,
                         truncate: (size) => {
-                            writer.length = size;
-                            if (writer.onwriteend) writer.onwriteend();
+                            // Actually truncate the file on disk via IPC
+                            ipcRenderer.invoke('dialog:truncate-file', filePath, size).then(truncatedSize => {
+                                writer.length = truncatedSize || size;
+                                if (writer.onwriteend) writer.onwriteend();
+                            }).catch(err => {
+                                console.error(`[preload] truncate-file failed:`, err);
+                                if (writer.onerror) writer.onerror(err);
+                            });
                         },
                         write: (blob) => {
                             blob.arrayBuffer().then(arrayBuffer => {

@@ -92,21 +92,67 @@
     <!-- jQuery & npm packages via Node.js require (since nodeIntegration: true in Electron) -->
     <script type="text/javascript">
         // Use Node.js require to load npm packages directly from node_modules
+        // Load each critical package individually so we know which one fails
         try {
             window.jQuery = window.$ = require('jquery');
-            // jBox is loaded via script tag and depends on jQuery
+            console.log('✓ jQuery loaded');
+        } catch(e) {
+            console.error('FATAL: Failed to load jQuery:', e.message);
+            throw new Error('jQuery is required; jBox.min.js depends on it. Cannot continue.');
+        }
+
+        try {
             window.i18next = require('i18next');
+            console.log('✓ i18next loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load i18next:', e.message);
+        }
+
+        try {
             window.i18nextXHRBackend = require('i18next-xhr-backend');
+            console.log('✓ i18next-xhr-backend loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load i18next-xhr-backend:', e.message);
+        }
+
+        try {
             window.marked = require('marked');
+            console.log('✓ marked loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load marked:', e.message);
+        }
+
+        try {
             window.ShortUniqueId = require('short-unique-id');
+            console.log('✓ short-unique-id loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load short-unique-id:', e.message);
+        }
+
+        try {
             window.objectHash = require('object-hash');
+            console.log('✓ object-hash loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load object-hash:', e.message);
+        }
+
+        try {
             window.inflection = require('inflection');
+            console.log('✓ inflection loaded');
+        } catch(e) {
+            console.error('ERROR: Failed to load inflection:', e.message);
+        }
+
+        try {
             // Bluebird extends Promise with .reduce(), .map() etc. used by cli.js and others
             window.Promise = require('bluebird');
-            console.log('✓ npm packages loaded via require()');
+            console.log('✓ bluebird Promise loaded');
         } catch(e) {
-            console.error('Warning: Failed to load some npm packages via require():', e.message);
+            console.error('ERROR: Failed to load bluebird:', e.message);
+            console.log('Falling back to native Promise (some features may not work)');
         }
+
+        console.log('✓ npm packages loaded via require()');
     </script>
     <script type="text/javascript" src="../node_modules/jbox/dist/jBox.min.js"></script>
     

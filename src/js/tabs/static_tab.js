@@ -37,11 +37,21 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
             $.getScript('./js/tabs/mixercalc.js', loadAndInitialize)
                 .fail(function(jqxhr, settings, exception) {
                     console.error('Failed to load mixercalc.js:', exception);
-                    const errorMsg = `Error loading Mixer Calculator: ${exception}`;
-                    if (processLogger) processLogger.log(errorMsg, 'style_danger');
-                    // Show error in UI
+                    // Escape exception for safe HTML injection
+                    const escapedMsg = String(exception).replace(/[&<>"']/g, function(c) {
+                      return {'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":"&#39;"}[c];
+                    });
+                    const errorMsg = `Error loading Mixer Calculator: ${escapedMsg}`;
+                    // Type-check processLogger before use
+                    if (typeof processLogger !== 'undefined' && processLogger && typeof processLogger.log === 'function') {
+                      processLogger.log(errorMsg, 'style_danger');
+                    }
+                    // Show error in UI (using text() to avoid injection)
                     const $content = $("#content");
-                    $content.html(`<div style="color: red; padding: 20px;">${errorMsg}</div>`);
+                    $content.html('<div style="color: red; padding: 20px;"></div>');
+                    $content.find('div').text(errorMsg);
+                    // Always notify that content loading is complete (even on error)
+                    GUI.content_ready(callback);
                 });
         } else {
             loadAndInitialize();
