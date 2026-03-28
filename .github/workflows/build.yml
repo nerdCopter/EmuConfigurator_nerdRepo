@@ -89,23 +89,79 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
+          set -euo pipefail
           ROOT_DIR=$(pwd)
-          cd out/make/zip
-          for zipfile in */*.zip; do
-            dirname=$(dirname "$zipfile")
+          ZIP_DIR="$ROOT_DIR/out/make/zip"
+          
+          # Use nullglob to safely handle no matches
+          shopt -s nullglob
+          zipfiles=( "$ZIP_DIR"/*/*.zip )
+          shopt -u nullglob
+          
+          if [ ${#zipfiles[@]} -eq 0 ]; then
+            echo "⚠ No .zip files found in $ZIP_DIR - skipping restructure"
+            exit 0
+          fi
+          
+          for zipfile in "${zipfiles[@]}"; do
             basename=$(basename "$zipfile")
-            tmpdir=$(mktemp -d)
-            unzip -q "$zipfile" -d "$tmpdir"
-            # Move app folder up one level (remove OS folder wrapper)
-            cd "$tmpdir"
-            app_folder=$(ls -d */ | head -1)
-            cd "$app_folder"
-            # Re-zip from app contents
-            zip -r -q "../../${basename}" .
-            cd "$ROOT_DIR/out/make/zip"
-            rm -rf "$tmpdir"
+            dirname=$(dirname "$zipfile")
+            tmpdir=$(mktemp -d) || { echo "✗ FAILED: mktemp failed"; exit 1; }
+            
+            echo "Processing: $zipfile"
+            
+            # Unzip with error handling
+            if ! unzip -q "$zipfile" -d "$tmpdir"; then
+              echo "✗ FAILED: unzip failed for $zipfile"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Find the first directory safely
+            if ! cd "$tmpdir"; then
+              echo "✗ FAILED: cannot cd to tmpdir $tmpdir"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Find first directory using a robust method
+            app_folder=$(find . -maxdepth 1 -type d ! -name '.' -print -quit)
+            if [ -z "$app_folder" ]; then
+              echo "✗ FAILED: no app folder found in $tmpdir for $zipfile"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            app_folder="${app_folder#./}"  # Remove leading ./
+            if ! cd "$app_folder"; then
+              echo "✗ FAILED: cannot cd to app folder $app_folder in $tmpdir"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Re-zip with error handling
+            if ! zip -r -q "../../${basename}" .; then
+              echo "✗ FAILED: zip failed for $zipfile in app folder $app_folder"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Return to zip directory
+            if ! cd "$ZIP_DIR"; then
+              echo "✗ FAILED: cannot return to $ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Cleanup
+            rm -rf "$tmpdir" || { echo "⚠ Warning: failed to remove tmpdir $tmpdir"; }
+            echo "✓ Restructured: $basename"
           done
-          echo "✓ .zip files restructured (OS folders removed)"
+          
+          echo "✓ All .zip files restructured (OS folders removed)"
 
       - name: Restructure Windows .zip Artifacts
         if: runner.os == 'Windows'
