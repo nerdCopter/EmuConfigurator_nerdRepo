@@ -97,7 +97,32 @@ function setupMenu(buildMode) {
     },
     {
       label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }]
+      submenu: [
+        { role: 'minimize' },
+        {
+          label: 'Maximize',
+          click: () => {
+            const win = BrowserWindow.getFocusedWindow();
+            if (win && !win.isDestroyed()) {
+              if (win.isMinimized()) {
+                win.restore();
+              }
+              if (!win.isMaximized()) {
+                win.maximize();
+              }
+            }
+          },
+        },
+        {
+          label: 'Restore Window Size',
+          click: () => {
+            const win = BrowserWindow.getFocusedWindow();
+            resetWindowToPreferredBounds(win);
+          },
+        },
+        { type: 'separator' },
+        { role: 'close' }
+      ]
     },
     {
       label: 'Help',
@@ -147,6 +172,26 @@ function getInitialWindowBounds() {
     x: workArea.x + Math.max(0, Math.floor((workArea.width - width) / 2)),
     y: workArea.y + Math.max(0, Math.floor((workArea.height - height) / 2)),
   };
+}
+
+function resetWindowToPreferredBounds(win) {
+  if (!win || win.isDestroyed()) {
+    return;
+  }
+
+  if (win.isMinimized()) {
+    win.restore();
+  }
+
+  if (win.isFullScreen()) {
+    win.setFullScreen(false);
+  }
+
+  if (win.isMaximized()) {
+    win.unmaximize();
+  }
+
+  win.setBounds(getInitialWindowBounds());
 }
 
 // --- Serial port IPC bridge ---
