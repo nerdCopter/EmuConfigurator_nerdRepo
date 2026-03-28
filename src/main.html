@@ -98,7 +98,7 @@
             console.log('✓ jQuery loaded');
         } catch(e) {
             console.error('FATAL: Failed to load jQuery:', e.message);
-            throw new Error('jQuery is required; jBox.min.js depends on it. Cannot continue.');
+            console.error('jBox.min.js depends on jQuery and will fail to load');
         }
 
         try {
