@@ -261,7 +261,7 @@ LRUMap.prototype.values = function() {
 };
 
 LRUMap.prototype.entries = function() {
-  return this;
+  return new EntryIterator(this.oldest);
 };
 
 LRUMap.prototype[Symbol.iterator] = function() {

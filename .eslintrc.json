@@ -45,7 +45,21 @@
     "out/",
     "node_modules/",
     "libraries/",
-    "test/",
     "presets/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "test/**/*.js",
+        "test/**/*.ts"
+      ],
+      "env": {
+        "mocha": true,
+        "jest": true
+      },
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
   ]
 }

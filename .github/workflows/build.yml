@@ -105,8 +105,8 @@ jobs:
           
           for zipfile in "${zipfiles[@]}"; do
             basename=$(basename "$zipfile")
-            dirname=$(dirname "$zipfile")
             tmpdir=$(mktemp -d) || { echo "✗ FAILED: mktemp failed"; exit 1; }
+            output_zip="$ZIP_DIR/$basename"
             
             echo "Processing: $zipfile"
             
@@ -142,7 +142,7 @@ jobs:
             fi
             
             # Re-zip with error handling
-            if ! zip -r -q "../../${basename}" .; then
+            if ! zip -r -q "$output_zip" .; then
               echo "✗ FAILED: zip failed for $zipfile in app folder $app_folder"
               cd "$ZIP_DIR"
               rm -rf "$tmpdir"
@@ -291,13 +291,13 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-exe/out/make/squirrel.windows/**/*.exe
-            ./Artifacts/EmuConfigurator-windows-zip/out/make/zip/**/*.zip
-            ./Artifacts/EmuConfigurator-macos-arm64-zip/out/make/zip/**/*.zip
-            ./Artifacts/EmuConfigurator-macos-x86_64-zip/out/make/zip/**/*.zip
-            ./Artifacts/EmuConfigurator-linux-deb/out/make/deb/**/*.deb
-            ./Artifacts/EmuConfigurator-linux-rpm/out/make/rpm/**/*.rpm
-            ./Artifacts/EmuConfigurator-linux-zip/out/make/zip/**/*.zip
+            ./Artifacts/EmuConfigurator-windows-exe/**/*.exe
+            ./Artifacts/EmuConfigurator-windows-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-arm64-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-x86_64-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-linux-deb/**/*.deb
+            ./Artifacts/EmuConfigurator-linux-rpm/**/*.rpm
+            ./Artifacts/EmuConfigurator-linux-zip/**/*.zip
           draft: true
           prerelease: ${{ contains(github.ref, 'rc') }}
         continue-on-error: false

@@ -262,12 +262,13 @@ const chromeUsb = {
 
     openDevice: function (device, callback) {
         const handleId = ++chromeUsb._handleCounter;
-        chromeUsb._openHandles[handleId] = device;
         
         ipcRenderer.invoke('usb-open-device', device.device).then(function (_result) {
+            chromeUsb._openHandles[handleId] = device;
             callback({ handle: handleId, device: device });
         }).catch(function (err) {
             console.error('usb-open-device error:', err);
+            chromeUsb._handleCounter = Math.max(0, chromeUsb._handleCounter - 1);
             callback(undefined);
         });
     },
@@ -405,13 +406,13 @@ const chromeUsb = {
 const chromeRuntime = {
     lastError: null,
     onSuspend: { addListener: function () {} },
+    _manifestCache: null,
     getManifest: function () {
         // Use IPC to main process to get package.json data (renderer cannot require files outside dist)
-        if (window._manifestCache) return window._manifestCache;
-        const { ipcRenderer } = require('electron');
+        if (chromeRuntime._manifestCache) return chromeRuntime._manifestCache;
         // Synchronous IPC for simplicity; can be made async if needed
         const manifest = ipcRenderer.sendSync('get-manifest');
-        window._manifestCache = manifest;
+        chromeRuntime._manifestCache = manifest;
         return manifest;
     },
 };
@@ -489,7 +490,8 @@ const chromeFileSystem = {
                             blob.arrayBuffer().then(arrayBuffer => {
                                 // Send as binary data via separate IPC channel
                                 ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer))).then(written => {
-                                    writer.length += written;
+                                    const safeWritten = Number.isFinite(Number(written)) ? Number(written) : 0;
+                                    writer.length += safeWritten;
                                     if (writer.onwriteend) writer.onwriteend();
                                 }).catch(err => {
                                     console.error(`[preload] write-binary-file failed:`, err);

@@ -87,8 +87,8 @@ PortHandler.check = function () {
                                 }
                             });
                         } else {
-                        console.log('Last used port wasn\'t saved "yet", auto-select disabled.');
-                    }
+                            console.log('Last used port wasn\'t saved "yet", auto-select disabled.');
+                        }
                     });
                 } else {
                     // Log warning only once when storage API is first detected as unavailable

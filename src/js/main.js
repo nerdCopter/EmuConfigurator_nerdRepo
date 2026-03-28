@@ -11,6 +11,14 @@ const os = require('os');
 
 const presetsFolders = os.tmpdir();
 
+function writePresetFile(filePath, response) {
+    fs.writeFile(filePath, response, (err) => {
+        if (err) {
+        console.error(err);
+        }
+    });
+}
+
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
         var anHttpRequest = new XMLHttpRequest();
@@ -42,66 +50,27 @@ var helioUrlv040 = "https://raw.githubusercontent.com/emuflight/emuflight-preset
 // TODO: migrate to a function to get rid of code duplication
 
 client.get(nonHelioUrlv020, function(response) {
-  fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response, (err) => {
-    if (err) {
-      // FIXME: add error handling
-      console.error(err);
-      return;
-    }
-    //file written successfully
-  })
+        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response);
 });
 
 client.get(helioUrlv020, function(response) {
-    fs.writeFile(presetsFolders + "/presets-HELIO-v0.2.0.json", response, (err) => {
-        if (err) {
-        console.error(err);
-        return;
-        }
-        //file written successfully
-    })
+        writePresetFile(presetsFolders + "/presets-HELIO-v0.2.0.json", response);
 });
 
 client.get(nonHelioUrlv030, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
+        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response);
   });
 
   client.get(helioUrlv030, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.3.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
+            writePresetFile(presetsFolders + "/presets-HELIO-v0.3.0.json", response);
   });
 
 client.get(nonHelioUrlv040, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
+        writePresetFile(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response);
   });
 
   client.get(helioUrlv040, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.4.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
+            writePresetFile(presetsFolders + "/presets-HELIO-v0.4.0.json", response);
   });
 
 

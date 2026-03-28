@@ -513,29 +513,69 @@ ipcMain.handle('usb-bulk-transfer', async (event, deviceKey, options) => {
       return { resultCode: 1, bytesTransferred: 0, data: [] };
     }
 
-    if (options.direction === 'in') {
-      const data = await new Promise((resolve, reject) => {
-        endpoint.transfer(options.length || 64, (err, inData) => {
-          if (err) {
-            reject(err);
-            return;
+    const withTransferTimeout = (transferPromiseFactory, timeoutMessage) => {
+      return new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          try {
+            if (typeof endpoint.stopPoll === 'function') {
+              endpoint.stopPoll(() => {});
+            }
+          } catch {
+            // ignore endpoint stopPoll errors during timeout recovery
           }
-          resolve(inData || Buffer.alloc(0));
-        });
+
+          try {
+            if (typeof endpoint.clearHalt === 'function') {
+              endpoint.clearHalt(() => {});
+            }
+          } catch {
+            // ignore endpoint clearHalt errors during timeout recovery
+          }
+
+          reject(new Error(timeoutMessage));
+        }, 10000);
+
+        transferPromiseFactory()
+          .then((result) => {
+            clearTimeout(timeoutId);
+            resolve(result);
+          })
+          .catch((err) => {
+            clearTimeout(timeoutId);
+            reject(err);
+          });
       });
+    };
+
+    if (options.direction === 'in') {
+      const data = await withTransferTimeout(() => {
+        return new Promise((resolve, reject) => {
+          endpoint.transfer(options.length || 64, (err, inData) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(inData || Buffer.alloc(0));
+          });
+        });
+      }, 'USB bulk IN transfer timeout');
+
       return { resultCode: 0, bytesTransferred: data.length, data: Array.from(data) };
     }
 
     const outData = options.data ? Buffer.from(options.data) : Buffer.alloc(0);
-    await new Promise((resolve, reject) => {
-      endpoint.transfer(outData, (err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve();
+    await withTransferTimeout(() => {
+      return new Promise((resolve, reject) => {
+        endpoint.transfer(outData, (err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
       });
-    });
+    }, 'USB bulk OUT transfer timeout');
+
     return { resultCode: 0, bytesTransferred: outData.length };
   } catch (e) {
     console.error('usb-bulk-transfer error:', e.message);
@@ -717,9 +757,15 @@ function createWindow() {
         const tag = level >= 3 ? '[Renderer ERROR]' : level >= 2 ? '[Renderer WARN]' : '[Renderer]';
         console.log(`${tag} ${message} (${sourceId || ''}:${line || ''})`);
       }
-      if (message.includes('is not defined')) {
-        console.error('Fatal error detected in renderer, quitting Electron app.');
-        app.quit();
+      const trimmedMessage = message.trim();
+      const undefinedRefPattern = /^[A-Za-z_$][\w$]* is not defined$/;
+      const isAppSource = typeof sourceId === 'string' && (
+        sourceId.includes('/dist/') ||
+        sourceId.includes('/src/') ||
+        sourceId.endsWith('main.html')
+      );
+      if (level >= 3 && undefinedRefPattern.test(trimmedMessage) && isAppSource) {
+        console.error(`Renderer ReferenceError detected: ${trimmedMessage} (${sourceId || ''}:${line || ''})`);
       }
     }
   });
@@ -733,45 +779,109 @@ app.whenReady().then(createWindow);
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
 // "device still open" warnings and ensures the device is left in a clean state.
-app.on('before-quit', () => {
-  // Attempt graceful DFU device exit: send DETACH command to return FC to normal mode
-  // (avoids leaving device stuck in bootloader requiring unplug/replug)
-  for (const [, device] of _usbOpenDevices) {
-    try {
-      // DFU DETACH: tells device to exit bootloader and run application firmware
-      // bmRequestType: 0x21 (OUT, CLASS, INTERFACE)
-      // bRequest: 0x00 (DETACH)
-      // wValue: 0 (timeout, unused)
-      // wIndex: 0 (interface 0)
-      // wLength: 0 (no data)
-      device.controlTransfer(0x21, 0x00, 0, 0, 0, (err) => {
-        // Ignore errors; attempt close regardless
-        try { device.close(); } catch { /* ignore */ }
+let _allowProcessQuit = false;
+
+function withTimeout(promise, timeoutMs, timeoutMessage) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+    promise
+      .then((value) => {
+        clearTimeout(timer);
+        resolve(value);
+      })
+      .catch((error) => {
+        clearTimeout(timer);
+        reject(error);
       });
-    } catch {
-      // If DETACH fails, still attempt to close the device
-      try { device.close(); } catch { /* ignore */ }
-    }
+  });
+}
+
+async function cleanupConnectionsBeforeQuit() {
+  const usbCleanupPromises = [];
+
+  for (const [, device] of _usbOpenDevices) {
+    const cleanupOneDevice = withTimeout(new Promise((resolve) => {
+      let completed = false;
+      const finish = () => {
+        if (!completed) {
+          completed = true;
+          resolve();
+        }
+      };
+
+      const closeDevice = () => {
+        try {
+          device.close(() => finish());
+        } catch {
+          try {
+            device.close();
+          } catch {
+            // ignore close errors
+          }
+          finish();
+        }
+      };
+
+      try {
+        device.controlTransfer(0x21, 0x00, 0, 0, 0, () => {
+          closeDevice();
+        });
+      } catch {
+        closeDevice();
+      }
+    }), 2000, 'USB cleanup timeout').catch((error) => {
+      console.error('USB cleanup error:', error.message);
+    });
+
+    usbCleanupPromises.push(cleanupOneDevice);
   }
+
+  await Promise.allSettled(usbCleanupPromises);
   _usbOpenDevices.clear();
 
   if (_serialPort && _serialPort.isOpen) {
     try {
-      // Send exit command to CLI to gracefully close the serial session.
-      // This ensures the FC isn't left in a connected state when the port closes.
-      const exitCmd = 'exit\r';
-      _serialPort.write(Buffer.from(exitCmd), () => {
-        // Give it a moment to process the exit, then close
-        setTimeout(() => {
-          try { _serialPort.close(() => {}); } catch { /* ignore */ }
-        }, 100);
-      });
-    } catch {
-      // If write fails, still attempt to close
-      try { _serialPort.close(() => {}); } catch { /* ignore */ }
+      const currentPort = _serialPort;
+      await withTimeout(new Promise((resolve) => {
+        const closePort = () => {
+          try {
+            currentPort.close(() => resolve());
+          } catch {
+            resolve();
+          }
+        };
+
+        currentPort.write(Buffer.from('exit\r'), () => {
+          setTimeout(closePort, 100);
+        });
+      }), 3000, 'Serial cleanup timeout');
+    } catch (error) {
+      console.error('Serial cleanup error:', error.message);
+      try {
+        _serialPort.close(() => {});
+      } catch {
+        // ignore forced close errors
+      }
+    } finally {
+      _serialPort = null;
     }
-    _serialPort = null;
   }
+}
+
+app.on('will-quit', (event) => {
+  if (_allowProcessQuit) {
+    return;
+  }
+
+  event.preventDefault();
+  cleanupConnectionsBeforeQuit()
+    .catch((error) => {
+      console.error('Quit cleanup failed:', error.message);
+    })
+    .finally(() => {
+      _allowProcessQuit = true;
+      app.quit();
+    });
 });
 
 app.on('window-all-closed', () => {
