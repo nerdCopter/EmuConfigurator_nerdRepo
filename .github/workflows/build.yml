@@ -99,27 +99,27 @@ jobs:
           shopt -u nullglob
           
           if [ ${#zipfiles[@]} -eq 0 ]; then
-            echo "⚠ No .zip files found in $ZIP_DIR - skipping restructure"
+            echo "[WARN] No .zip files found in $ZIP_DIR - skipping restructure"
             exit 0
           fi
           
           for zipfile in "${zipfiles[@]}"; do
             basename=$(basename "$zipfile")
-            tmpdir=$(mktemp -d) || { echo "✗ FAILED: mktemp failed"; exit 1; }
+            tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
             output_zip="$ZIP_DIR/$basename"
             
             echo "Processing: $zipfile"
             
             # Unzip with error handling
             if ! unzip -q "$zipfile" -d "$tmpdir"; then
-              echo "✗ FAILED: unzip failed for $zipfile"
+              echo "[FAIL] unzip failed for $zipfile"
               rm -rf "$tmpdir"
               exit 1
             fi
             
             # Find the first directory safely
             if ! cd "$tmpdir"; then
-              echo "✗ FAILED: cannot cd to tmpdir $tmpdir"
+              echo "[FAIL] cannot cd to tmpdir $tmpdir"
               rm -rf "$tmpdir"
               exit 1
             fi
@@ -127,7 +127,7 @@ jobs:
             # Find first directory using a robust method
             app_folder=$(find . -maxdepth 1 -type d ! -name '.' -print -quit)
             if [ -z "$app_folder" ]; then
-              echo "✗ FAILED: no app folder found in $tmpdir for $zipfile"
+              echo "[FAIL] no app folder found in $tmpdir for $zipfile"
               cd "$ZIP_DIR"
               rm -rf "$tmpdir"
               exit 1
@@ -135,7 +135,7 @@ jobs:
             
             app_folder="${app_folder#./}"  # Remove leading ./
             if ! cd "$app_folder"; then
-              echo "✗ FAILED: cannot cd to app folder $app_folder in $tmpdir"
+              echo "[FAIL] cannot cd to app folder $app_folder in $tmpdir"
               cd "$ZIP_DIR"
               rm -rf "$tmpdir"
               exit 1
@@ -143,7 +143,7 @@ jobs:
             
             # Re-zip with error handling
             if ! zip -r -q "$output_zip" .; then
-              echo "✗ FAILED: zip failed for $zipfile in app folder $app_folder"
+              echo "[FAIL] zip failed for $zipfile in app folder $app_folder"
               cd "$ZIP_DIR"
               rm -rf "$tmpdir"
               exit 1
@@ -151,17 +151,17 @@ jobs:
             
             # Return to zip directory
             if ! cd "$ZIP_DIR"; then
-              echo "✗ FAILED: cannot return to $ZIP_DIR"
+              echo "[FAIL] cannot return to $ZIP_DIR"
               rm -rf "$tmpdir"
               exit 1
             fi
             
             # Cleanup
-            rm -rf "$tmpdir" || { echo "⚠ Warning: failed to remove tmpdir $tmpdir"; }
-            echo "✓ Restructured: $basename"
+            rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
+            echo "[OK] Restructured: $basename"
           done
           
-          echo "✓ All .zip files restructured (OS folders removed)"
+          echo "[OK] All .zip files restructured (OS folders removed)"
 
       - name: Restructure Windows .zip Artifacts
         if: runner.os == 'Windows'
@@ -189,10 +189,10 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
-            echo "❌ ERROR: No artifacts found in out/make/"
+            echo "[ERROR] No artifacts found in out/make/"
             exit 1
           fi
-          echo "✓ Artifacts validated"
+          echo "[OK] Artifacts validated"
 
       - name: Validate Artifacts Exist (Windows)
         if: runner.os == 'Windows'
@@ -305,5 +305,5 @@ jobs:
       - name: Release Failed Notification
         if: failure()
         run: |
-          echo "❌ Release upload failed for ${{ github.ref_name }}"
+          echo "[ERROR] Release upload failed for ${{ github.ref_name }}"
           exit 1
