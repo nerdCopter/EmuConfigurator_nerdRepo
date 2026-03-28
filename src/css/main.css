@@ -1060,9 +1060,9 @@ li.active .ic_mission {
 
 dialog {
     background-color: white;
-    padding: 0.6em 1em;
+    padding: 0.4em 0.8em;
     height: auto;
-    max-height: 80vh;
+    max-height: 50vh;
     margin: auto auto;
     position: absolute;
     width: 400px;
