@@ -126,14 +126,33 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
     });
     // Forward incoming data to renderer
     _serialPort.on('data', (data) => {
-      event.sender.send('serial-data', data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+      try {
+        event.sender.send('serial-data', data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+      } catch (e) {
+        console.error('main.js: error sending serial-data to renderer:', e.message);
+      }
     });
+    // Enhanced error handler to prevent uncaught exceptions
     _serialPort.on('error', (err) => {
       console.error('main.js serialport error:', err.message);
-      event.sender.send('serial-error', err.message);
+      try {
+        event.sender.send('serial-error', err.message);
+      } catch (e) {
+        console.error('main.js: error sending serial-error to renderer:', e.message);
+      }
+      // Attempt graceful recovery
+      if (_serialPort && _serialPort.isOpen) {
+        _serialPort.close(() => {
+          console.log('main.js: closed serial port after error');
+        });
+      }
     });
     _serialPort.on('close', () => {
-      event.sender.send('serial-close');
+      try {
+        event.sender.send('serial-close');
+      } catch (e) {
+        console.error('main.js: error sending serial-close to renderer:', e.message);
+      }
     });
     return { connectionId: 1, bitrate: options.bitrate || 115200 };
   } catch (e) {
@@ -147,24 +166,62 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
   if (!_serialPort || !_serialPort.isOpen) return { bytesSent: 0, error: 'not_connected' };
   const buf = Buffer.from(bufferData);
   return new Promise((resolve) => {
-    _serialPort.write(buf, (err) => {
-      if (err) {
-        resolve({ bytesSent: 0, error: err.message });
-      } else {
-        _serialPort.drain(() => resolve({ bytesSent: buf.length }));
-      }
-    });
+    // Timeout protection: prevent indefinite hang on native module
+    const timeoutId = setTimeout(() => {
+      console.error('main.js: serial-send timeout after 10s, forcibly resolving');
+      resolve({ bytesSent: 0, error: 'timeout' });
+    }, 10000);
+
+    try {
+      _serialPort.write(buf, (err) => {
+        clearTimeout(timeoutId);
+        if (err) {
+          console.error('main.js: serial-send write error:', err.message);
+          resolve({ bytesSent: 0, error: err.message });
+        } else {
+          _serialPort.drain((drainErr) => {
+            if (drainErr) {
+              console.error('main.js: serial-send drain error:', drainErr.message);
+              resolve({ bytesSent: 0, error: drainErr.message });
+            } else {
+              resolve({ bytesSent: buf.length });
+            }
+          });
+        }
+      });
+    } catch (e) {
+      clearTimeout(timeoutId);
+      console.error('main.js: serial-send exception:', e.message);
+      resolve({ bytesSent: 0, error: e.message });
+    }
   });
 });
 
 // IPC: close serial port
 ipcMain.handle('serial-disconnect', async () => {
-  if (!_serialPort || !_serialPort.isOpen) return true;
+  if (!_serialPort || !_serialPort.isOpen) {
+    _serialPort = null;
+    return true;
+  }
   return new Promise((resolve) => {
-    _serialPort.close((err) => {
+    const timeoutId = setTimeout(() => {
+      console.error('main.js: serial-disconnect timeout, forcing cleanup');
       _serialPort = null;
-      resolve(!err);
-    });
+      resolve(false);
+    }, 5000);
+
+    try {
+      _serialPort.close((err) => {
+        clearTimeout(timeoutId);
+        _serialPort = null;
+        resolve(!err);
+      });
+    } catch (e) {
+      clearTimeout(timeoutId);
+      console.error('main.js: serial-disconnect exception:', e.message);
+      _serialPort = null;
+      resolve(false);
+    }
   });
 });
 
@@ -377,7 +434,12 @@ ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
     if (options.direction === 'in') {
       const length = options.length || 0;
       const data = await new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+          reject(new Error('USB control transfer timeout'));
+        }, 10000);
+
         device.controlTransfer(bmRequestType, bRequest, wValue, wIndex, length, (err, inData) => {
+          clearTimeout(timeoutId);
           if (err) {
             reject(err);
             return;
@@ -391,7 +453,12 @@ ipcMain.handle('usb-control-transfer', async (event, deviceKey, options) => {
 
     const outData = options.data ? Buffer.from(options.data) : Buffer.alloc(0);
     await new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        reject(new Error('USB control transfer timeout'));
+      }, 10000);
+
       device.controlTransfer(bmRequestType, bRequest, wValue, wIndex, outData, (err) => {
+        clearTimeout(timeoutId);
         if (err) {
           reject(err);
           return;
