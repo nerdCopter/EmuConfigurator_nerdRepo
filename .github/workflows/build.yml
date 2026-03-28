@@ -121,15 +121,6 @@ jobs:
           path: out/make/zip/**/*.zip
           retention-days: 30
 
-      # Upload macOS ARM64 .dmg
-      - name: Upload Artifact (macos arm64 .dmg)
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: EmuConfigurator-macos-arm64-dmg
-          path: out/make/dmg/**/*.dmg
-          retention-days: 30
-
       # Upload macOS ARM64 .zip
       - name: Upload Artifact (macos arm64 .zip)
         if: matrix.os == 'macos-latest'
@@ -179,7 +170,7 @@ jobs:
       - name: List Release Artifacts
         run: |
           echo "### Release Artifacts ###"
-          find ./Artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
+          find ./Artifacts -type f \( -name "*.exe" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v1
@@ -191,7 +182,6 @@ jobs:
           files: |
             ./Artifacts/EmuConfigurator-windows-exe/out/make/squirrel.windows/**/*.exe
             ./Artifacts/EmuConfigurator-windows-zip/out/make/zip/**/*.zip
-            ./Artifacts/EmuConfigurator-macos-arm64-dmg/out/make/dmg/**/*.dmg
             ./Artifacts/EmuConfigurator-macos-arm64-zip/out/make/zip/**/*.zip
             ./Artifacts/EmuConfigurator-macos-x86_64-zip/out/make/zip/**/*.zip
             ./Artifacts/EmuConfigurator-linux-deb/out/make/deb/**/*.deb
