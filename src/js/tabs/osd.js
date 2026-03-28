@@ -80,7 +80,7 @@ FONT.initData = function () {
     }
     FONT.data = {
         // default font file name
-        loaded_font_file: 'default',
+            loaded_font_file: 'clarity',
         // array of arry of image bytes ready to upload to fc
         characters_bytes: [],
         // array of array of image bits by character
@@ -2275,6 +2275,8 @@ TABS.osd.initialize = function (callback) {
             fontPresetsElement.append($(option));
             return fontIteration === fontCount;
         });
+
+        fontPresetsElement.val(FONT.data.loaded_font_file);
 
         var fontbuttons = $('.fontpresets_wrapper');
         fontbuttons.append($('<button>', { class: "load_font_file", i18n: "osdSetupOpenFont" }));
