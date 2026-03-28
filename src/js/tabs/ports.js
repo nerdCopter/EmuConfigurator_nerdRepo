@@ -123,9 +123,6 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 
         function on_configuration_loaded_handler() {
             $('#content').load("./tabs/ports.html", on_tab_loaded_handler);
-
-            board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
-            console.log('Using board definition', board_definition);
         }
     }
 
@@ -136,7 +133,8 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             return;
         }
 
-        $(".tab-ports").addClass("supported");
+        board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
+        console.log('Using board definition', board_definition);
 
         const VCP_PORT_IDENTIFIER = 20;
 
