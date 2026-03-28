@@ -39,8 +39,11 @@ Download the installer for your platform from the [Releases](https://github.com/
 | `yarn dev` | Start dev mode with devtools |
 | `yarn build` | Build `dist/` only |
 | `yarn make` | Create release packages (all platforms) |
+| `yarn make:dev` | Alias for `yarn make:debug` |
 | `yarn make:debug` | Release packages with devtools |
 | `yarn lint` | Run ESLint |
+
+The project intentionally does not add extra aliases like `yarn start` or `yarn debug` to keep the command surface small and predictable.
 
 ### Build Output
 
