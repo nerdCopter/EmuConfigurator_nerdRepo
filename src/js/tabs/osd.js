@@ -2276,8 +2276,6 @@ TABS.osd.initialize = function (callback) {
             return fontIteration === fontCount;
         });
 
-        fontPresetsElement.val(FONT.data.loaded_font_file);
-
         var fontbuttons = $('.fontpresets_wrapper');
         fontbuttons.append($('<button>', { class: "load_font_file", i18n: "osdSetupOpenFont" }));
 
@@ -2910,6 +2908,7 @@ TABS.osd.initialize = function (callback) {
 
         // init structs once, also clears current font
         FONT.initData();
+        fontPresetsElement.val(FONT.data.loaded_font_file);
 
         fontPresetsElement.change(function (e) {
             var $font = $('.fontpresets option:selected');

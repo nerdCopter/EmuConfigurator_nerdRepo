@@ -9,7 +9,7 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
     }
     var tabFile = './tabs/' + staticTabName + '.html';
 
-    $('#content').html('<div id="tab-static"><div id="tab-static-contents"></div>');
+    $('#content').html('<div id="tab-static"><div id="tab-static-contents"></div></div>');
     
     // Load mixercalc assets and script dynamically when tab is opened
     var loadAndInitialize = function() {
@@ -37,11 +37,7 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
             $.getScript('./js/tabs/mixercalc.js', loadAndInitialize)
                 .fail(function(jqxhr, settings, exception) {
                     console.error('Failed to load mixercalc.js:', exception);
-                    // Escape exception for safe HTML injection
-                    const escapedMsg = String(exception).replace(/[&<>"']/g, function(c) {
-                      return {'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":"&#39;"}[c];
-                    });
-                    const errorMsg = `Error loading Mixer Calculator: ${escapedMsg}`;
+                    const errorMsg = `Error loading Mixer Calculator: ${String(exception)}`;
                     // Type-check processLogger before use
                     if (typeof processLogger !== 'undefined' && processLogger && typeof processLogger.log === 'function') {
                       processLogger.log(errorMsg, 'style_danger');

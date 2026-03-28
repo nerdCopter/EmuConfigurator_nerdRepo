@@ -3539,9 +3539,3 @@ TABS.pid_tuning.changeRatesSystem = function(sameType) {
     }
 };
 //end MSP 1.51
-
-
-TABS.pid_tuning.cleanup = function (callback) {
-    this.keepRendering = false;
-    if (callback) callback();
-};
