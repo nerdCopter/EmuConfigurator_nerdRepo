@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, Menu, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+let mainWindow = null;
+
 function safeSendToRenderer(sender, channel, ...args) {
   if (!sender || sender.isDestroyed()) {
     return false;
@@ -795,9 +797,32 @@ function createWindow() {
   win.webContents.on('crashed', () => {
     console.error('Renderer process crashed!');
   });
+
+  mainWindow = win;
+
+  win.on('closed', () => {
+    if (mainWindow === win) {
+      mainWindow = null;
+    }
+  });
 }
 
-app.whenReady().then(createWindow);
+const hasSingleInstanceLock = app.requestSingleInstanceLock();
+
+if (!hasSingleInstanceLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.focus();
+    }
+  });
+
+  app.whenReady().then(createWindow);
+}
 
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
@@ -914,7 +939,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
+  if (BrowserWindow.getAllWindows().length === 0 && hasSingleInstanceLock) {
     createWindow();
   }
 });
