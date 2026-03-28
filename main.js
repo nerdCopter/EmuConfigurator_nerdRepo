@@ -630,8 +630,8 @@ function createWindow() {
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
+      nodeIntegration: true,
+      contextIsolation: false,
       preload: path.join(__dirname, 'dist', 'support', 'preload.js'),
     },
     icon: path.join(__dirname, 'assets/osx/app-icon.icns'),
