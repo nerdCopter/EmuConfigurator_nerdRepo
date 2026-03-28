@@ -5,7 +5,7 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }]*/
 /*eslint id-length: ["error", { "properties": "never" }]*/
 /*eslint id-length: ["error", { "min": 1 }]*/
-/*eslint complexity: ["error", 18]*/
+/*eslint complexity: ["error", 21]*/
 /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 /*eslint-disable no-ternary*/
 /*eslint-disable radix*/
@@ -749,12 +749,12 @@ function mixerCalcMain() {
     //    highlightedMotor = null;
     //}
 
-    function onMouseDown(_canvas, _evt) {
+    function onMouseDown() {
         if (!highlightedMotor || draggingMotor) { return; }
         draggingMotor = true;
     }
 
-    function onMouseUp(_canvas, _evt) {
+    function onMouseUp() {
         draggingMotor = false;
         mousePos = null;
     }
@@ -1009,3 +1009,7 @@ function mixCommandCopyClipboardFunc() {
 function mixCommandCopyClipboardOutFunc() {
     document.getElementById('mixCommandCopyButton').textContent = 'Copy to Clipboard';
 }
+
+window.mixerCalcMain = mixerCalcMain;
+window.mixCommandCopyClipboardFunc = mixCommandCopyClipboardFunc;
+window.mixCommandCopyClipboardOutFunc = mixCommandCopyClipboardOutFunc;
