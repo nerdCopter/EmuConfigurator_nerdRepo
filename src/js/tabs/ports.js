@@ -118,6 +118,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             promise = Promise.resolve();
         }
         promise.then(function() {
+            // Ensure board info is loaded before processing
+            return MSP.promise(MSPCodes.MSP_BOARD_INFO);
+        }).then(function() {
             MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
         });
 
