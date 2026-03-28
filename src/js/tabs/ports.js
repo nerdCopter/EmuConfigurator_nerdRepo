@@ -118,9 +118,6 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             promise = Promise.resolve();
         }
         promise.then(function() {
-            // Ensure board info is loaded before processing
-            return MSP.promise(MSPCodes.MSP_BOARD_INFO);
-        }).then(function() {
             MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
         });
 
@@ -137,7 +134,10 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
 
         board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
-        console.log('Using board definition', board_definition);
+        // Only log if board identifier was successfully detected
+        if (CONFIG.boardIdentifier && board_definition.identifier !== "????") {
+            console.log('Using board definition', board_definition);
+        }
 
         const VCP_PORT_IDENTIFIER = 20;
 
