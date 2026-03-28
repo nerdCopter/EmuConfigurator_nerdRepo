@@ -156,6 +156,11 @@ jobs:
               exit 1
             fi
             
+            # Remove the original nested zip only after successful re-zip
+            if [ -f "$zipfile" ] && [ "$zipfile" != "$output_zip" ]; then
+              rm -f "$zipfile" || { echo "[WARN] failed to remove original zip $zipfile"; }
+            fi
+
             # Cleanup
             rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
             echo "[OK] Restructured: $basename"
@@ -171,15 +176,16 @@ jobs:
           if (Test-Path $zipPath) {
             Get-ChildItem "$zipPath\*\*.zip" | ForEach-Object {
               $zipFile = $_.FullName
-              $parentDir = Split-Path $zipFile -Parent
               $zipName = Split-Path $zipFile -Leaf
               $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
               New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
               Expand-Archive -Path $zipFile -DestinationPath $tmpDir
               $appFolder = Get-ChildItem -Directory $tmpDir | Select-Object -First 1
-              $newZipPath = Join-Path $parentDir $zipName
-              Remove-Item $zipFile -Force
+              $newZipPath = Join-Path $zipPath $zipName
               Compress-Archive -Path (Join-Path $appFolder.FullName "*") -DestinationPath $newZipPath -Force
+              if ($zipFile -ne $newZipPath) {
+                Remove-Item $zipFile -Force
+              }
               Remove-Item $tmpDir -Recurse -Force
             }
             Write-Host "[OK] Windows .zip files restructured (OS folders removed)"
@@ -212,7 +218,7 @@ jobs:
         with:
           name: EmuConfigurator-linux-deb
           path: out/make/deb/**/*.deb
-          retention-days: 30
+          retention-days: 20
 
       # Upload Linux .rpm
       - name: Upload Artifact (linux .rpm)
@@ -221,7 +227,7 @@ jobs:
         with:
           name: EmuConfigurator-linux-rpm
           path: out/make/rpm/**/*.rpm
-          retention-days: 30
+          retention-days: 20
 
       # Upload Linux .zip
       - name: Upload Artifact (linux .zip)
@@ -230,7 +236,7 @@ jobs:
         with:
           name: EmuConfigurator-linux-zip
           path: out/make/zip/**/*.zip
-          retention-days: 30
+          retention-days: 20
 
       # Upload macOS ARM64 .zip
       - name: Upload Artifact (macos arm64 .zip)
@@ -239,7 +245,7 @@ jobs:
         with:
           name: EmuConfigurator-macos-arm64-zip
           path: out/make/zip/**/*.zip
-          retention-days: 30
+          retention-days: 20
 
       # Upload macOS x86_64 .zip
       - name: Upload Artifact (macos x86_64 .zip)
@@ -248,7 +254,7 @@ jobs:
         with:
           name: EmuConfigurator-macos-x86_64-zip
           path: out/make/zip/**/*.zip
-          retention-days: 30
+          retention-days: 20
 
       # Upload Windows .exe
       - name: Upload Artifact (windows .exe)
@@ -257,7 +263,7 @@ jobs:
         with:
           name: EmuConfigurator-windows-exe
           path: out/make/squirrel.windows/**/*.exe
-          retention-days: 30
+          retention-days: 20
 
       # Upload Windows .zip
       - name: Upload Artifact (windows .zip)
@@ -266,7 +272,7 @@ jobs:
         with:
           name: EmuConfigurator-windows-zip
           path: out/make/zip/**/*.zip
-          retention-days: 30
+          retention-days: 20
 
   release:
     needs: build
@@ -288,7 +294,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
             ./Artifacts/EmuConfigurator-windows-exe/**/*.exe
@@ -300,7 +306,6 @@ jobs:
             ./Artifacts/EmuConfigurator-linux-zip/**/*.zip
           draft: true
           prerelease: ${{ contains(github.ref, 'rc') }}
-        continue-on-error: false
 
       - name: Release Failed Notification
         if: failure()
