@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -88,6 +88,22 @@ function setupMenu(buildMode) {
 // Window size constraints
 const MIN_WINDOW_WIDTH = 980;
 const MIN_WINDOW_HEIGHT = 600;
+const PREFERRED_WINDOW_WIDTH = 1700;
+const PREFERRED_WINDOW_HEIGHT = 1080;
+
+function getInitialWindowBounds() {
+  const display = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+  const workArea = display.workArea;
+  const width = Math.min(PREFERRED_WINDOW_WIDTH, workArea.width);
+  const height = Math.min(PREFERRED_WINDOW_HEIGHT, workArea.height);
+
+  return {
+    width,
+    height,
+    x: workArea.x + Math.max(0, Math.floor((workArea.width - width) / 2)),
+    y: workArea.y + Math.max(0, Math.floor((workArea.height - height) / 2)),
+  };
+}
 
 // --- Serial port IPC bridge ---
 let _serialPort = null; // active serialport instance
@@ -676,10 +692,13 @@ ipcMain.handle('dialog:write-file', async (event, filePath, _data) => {
 function createWindow() {
   const buildMode = getBuildMode();
   setupMenu(buildMode);
+  const initialBounds = getInitialWindowBounds();
 
   const win = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: initialBounds.width,
+    height: initialBounds.height,
+    x: initialBounds.x,
+    y: initialBounds.y,
     minWidth: MIN_WINDOW_WIDTH,
     minHeight: MIN_WINDOW_HEIGHT,
     webPreferences: {
