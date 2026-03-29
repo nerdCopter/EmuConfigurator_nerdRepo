@@ -113,16 +113,25 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 
         let promise;
         if(semver.gte(CONFIG.apiVersion, "1.40.0")) {
-            promise = MSP.promise(MSPCodes.MSP_VTX_CONFIG);
+            promise = MSP.promise(MSPCodes.MSP_VTX_CONFIG).catch(function(e) {
+                console.log('VTX config fetch skipped or failed:', e);
+                return Promise.resolve();
+            });
         } else {
             promise = Promise.resolve();
         }
         promise
             .then(function() {
-                // Fetch board info to ensure CONFIG.boardIdentifier is populated
+                console.log('Ports: Fetching board info...');
                 return MSP.promise(MSPCodes.MSP_BOARD_INFO);
             })
             .then(function() {
+                console.log('Ports: Board info fetched, CONFIG.boardIdentifier =', CONFIG.boardIdentifier);
+                MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
+            })
+            .catch(function(e) {
+                console.error('Ports: Load chain error:', e);
+                // Fallback: still load serial config even if board info failed
                 MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
             });
 
