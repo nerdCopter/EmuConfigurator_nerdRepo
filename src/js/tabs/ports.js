@@ -123,6 +123,12 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 
         function on_configuration_loaded_handler() {
             $('#content').load("./tabs/ports.html", on_tab_loaded_handler);
+
+            board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
+            // Only log if a known board is identified
+            if (board_definition.identifier !== "????") {
+                console.log('Using board definition', board_definition);
+            }
         }
     }
 
@@ -133,10 +139,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             return;
         }
 
-        board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
-        if (board_definition.identifier !== "????") {
-            console.log('Using board definition', board_definition);
-        }
+        $(".tab-ports").addClass("supported");
 
         const VCP_PORT_IDENTIFIER = 20;
 
