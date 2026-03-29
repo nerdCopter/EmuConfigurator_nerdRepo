@@ -3,7 +3,7 @@
 TABS.ports = {};
 TABS.ports.initialize = function (callback, scrollPosition) {
     var self = this;
-    var board_definition = {};
+
     var functionRules = [
          {name: 'MSP',                  groups: ['configuration', 'msp'], maxPorts: 2},
          {name: 'GPS',                  groups: ['sensors'], maxPorts: 1},
@@ -138,8 +138,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         function on_configuration_loaded_handler() {
             $('#content').load("./tabs/ports.html", on_tab_loaded_handler);
 
-            board_definition = BOARD.find_board_definition(CONFIG.boardIdentifier);
-            console.log('Using board definition', board_definition);
+            if (CONFIG.boardIdentifier) {
+                console.log('Board identifier:', CONFIG.boardIdentifier);
+            }
         }
     }
 

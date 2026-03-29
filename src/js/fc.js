@@ -602,10 +602,8 @@ var FC = {
         var hasVcp = false;
         if (semver.gte(CONFIG.apiVersion, "1.37.0")) {
             hasVcp = (CONFIG.commCapabilities & FC.COMM_CAPABILITIES_FLAGS.HAS_VCP) !== 0;
-        } else {
-            hasVcp = BOARD.find_board_definition(CONFIG.boardIdentifier).vcp;
         }
-
+        // For older API versions, default to false (legacy firmware without VCP capability flag)
         return hasVcp;
     },
 
