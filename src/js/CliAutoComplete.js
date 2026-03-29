@@ -266,7 +266,7 @@ CliAutoComplete._initTextcomplete = function() {
             }
         }
     )
-    .on('textComplete:show', function(e) {
+    .on('textComplete:show', function() {
         /**
          * The purpose of this code is to disable initially the `mouseover` menu item handler.
          * Normally, when the menu pops up, if the mouse cursor is in the same area,
