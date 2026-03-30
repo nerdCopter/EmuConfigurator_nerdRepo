@@ -30,7 +30,7 @@
 /**
  * Manages caching of downloaded firmware files
  */
-let FirmwareCache = (function () {
+let FirmwareCache = (function () { // eslint-disable-line no-unused-vars
 
     let onPutToCacheCallback,
         onRemoveFromCacheCallback;

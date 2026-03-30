@@ -248,13 +248,10 @@ Features.prototype.updateData = function (featureElement) {
     if (featureElement.attr('type') === 'checkbox') {
         var bit = featureElement.data('bit');
 
-        var featureValue;
         if (featureElement.is(':checked')) {
             self._featureMask = bit_set(self._featureMask, bit);
-            featureValue = 'On';
         } else {
             self._featureMask = bit_clear(self._featureMask, bit);
-            featureValue = 'Off';
         }
     } else if (featureElement.prop('localName') === 'select') {
         var controlElements = featureElement.children();
