@@ -16,8 +16,9 @@ jobs:
   build:
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
-    # Using Node.js 24.x (latest LTS as of March 2026)
-    # https://nodejs.org/en/about/releases/
+    # Node.js 24.x "Krypton" - Active LTS (confirmed 2026-03-30)
+    # https://nodejs.org/en/about/previous-releases
+    # actions/checkout@v6, actions/setup-node@v6 (confirmed 2026-03-30)
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
       COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
@@ -39,7 +40,7 @@ jobs:
       shortsha: ${{ steps.build-info.outputs.sha }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build Info
         id: build-info
@@ -52,7 +53,7 @@ jobs:
           echo "sha=$SHA" >> $GITHUB_OUTPUT
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '24.x'
           cache: 'yarn'
@@ -281,6 +282,7 @@ jobs:
     steps:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
+        # v4 is current latest for download-artifact
         with:
           path: ./Artifacts
 
@@ -290,7 +292,7 @@ jobs:
           find ./Artifacts -type f \( -name "*.exe" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
 
       - name: Upload Release Assets
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
