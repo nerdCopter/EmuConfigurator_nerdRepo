@@ -1,8 +1,9 @@
 'use strict';
+/* exported FirmwareCache */
 
 /**
  * Caching of previously downloaded firmwares and release descriptions
- * 
+ *
  * Depends on LRUMap for which the docs can be found here:
  * https://github.com/rsms/js-lru
  */
@@ -30,7 +31,7 @@
 /**
  * Manages caching of downloaded firmware files
  */
-let FirmwareCache = (function () { // eslint-disable-line no-unused-vars
+let FirmwareCache = (function () {
 
     let onPutToCacheCallback,
         onRemoveFromCacheCallback;

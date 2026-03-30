@@ -1,8 +1,9 @@
 'use strict';
+/* exported configuration_backup, configuration_restore */
 
 // code below is highly experimental, although it runs fine on latest firmware
 // the data inside nested objects needs to be verified if deep copy works properly
-function configuration_backup(callback) { // eslint-disable-line no-unused-vars
+function configuration_backup(callback) {
     var activeProfile = null;
 
     var version = CONFIGURATOR.version;
@@ -274,7 +275,7 @@ function configuration_backup(callback) { // eslint-disable-line no-unused-vars
 
 }
 
-function configuration_restore(callback) { // eslint-disable-line no-unused-vars
+function configuration_restore(callback) {
     var chosenFileEntry = null;
 
     var accepts = [{

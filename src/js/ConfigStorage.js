@@ -1,8 +1,9 @@
 'use strict';
+/* exported ConfigStorage */
 
 // idea here is to abstract around the use of chrome.storage.local as it functions differently from "localStorage" and IndexedDB
 // localStorage deals with strings, not objects, so the objects have been serialized.
-var ConfigStorage = { // eslint-disable-line no-unused-vars
+var ConfigStorage = {
     // key can be one string, or array of strings
     get: function(key, callback) {
       if (GUI.isChromeApp()) {

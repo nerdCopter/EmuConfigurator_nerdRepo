@@ -27,6 +27,9 @@
     "MSPCodes": "readonly",
     "TABS": "readonly",
     "ConfigStorage": "readonly",
+    "FirmwareCache": "readonly",
+    "configuration_backup": "readonly",
+    "configuration_restore": "readonly",
     "initializeSerialBackend": "readonly",
     "CliAutoComplete": "readonly",
     "DarkTheme": "readonly",
@@ -37,7 +40,7 @@
   },
   "rules": {
     "no-debugger": "warn",
-    "no-unused-vars": "warn",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "complexity": "warn"
   },
   "ignorePatterns": [
@@ -58,6 +61,19 @@
       },
       "rules": {
         "no-unused-expressions": "off"
+      }
+    },
+    {
+      "files": [
+        "src/js/ConfigStorage.js",
+        "src/js/FirmwareCache.js",
+        "src/js/backup_restore.js"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      },
+      "rules": {
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(ConfigStorage|FirmwareCache|configuration_backup|configuration_restore)$" }]
       }
     }
   ]
