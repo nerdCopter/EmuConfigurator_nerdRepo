@@ -164,10 +164,6 @@
 }
 
 .tab-onboard_logging dialog {
-    width: min(32rem, calc(100vw - 2rem));
-    max-width: 32rem;
-    box-sizing: border-box;
-    padding: 1rem 1.25rem;
     border-radius: 5px;
 }
 
