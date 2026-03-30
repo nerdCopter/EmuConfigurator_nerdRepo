@@ -114,7 +114,6 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         let promise;
         if(semver.gte(CONFIG.apiVersion, "1.40.0")) {
             promise = MSP.promise(MSPCodes.MSP_VTX_CONFIG).catch(function(e) {
-                console.log('VTX config fetch skipped or failed:', e);
                 return Promise.resolve();
             });
         } else {
@@ -122,11 +121,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
         promise
             .then(function() {
-                console.log('Ports: Fetching board info...');
                 return MSP.promise(MSPCodes.MSP_BOARD_INFO);
             })
             .then(function() {
-                console.log('Ports: Board info fetched, CONFIG.boardIdentifier =', CONFIG.boardIdentifier);
                 MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
             })
             .catch(function(e) {
@@ -139,7 +136,6 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             $('#content').load("./tabs/ports.html", on_tab_loaded_handler);
 
             if (CONFIG.boardIdentifier) {
-                console.log('Board identifier:', CONFIG.boardIdentifier);
             }
         }
     }
