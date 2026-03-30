@@ -1,0 +1,64 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "globals": {
+    "$": "readonly",
+    "jQuery": "readonly",
+    "i18next": "readonly",
+    "i18n": "readonly",
+    "chrome": "readonly",
+    "d3": "readonly",
+    "semver": "readonly",
+    "bit_check": "readonly",
+    "bit_set": "readonly",
+    "bit_clear": "readonly",
+    "Plotly": "readonly",
+    "THREE": "readonly",
+    "CONFIGURATOR": "readonly",
+    "GUI": "readonly",
+    "MSP": "readonly",
+    "MSPCodes": "readonly",
+    "TABS": "readonly",
+    "ConfigStorage": "readonly",
+    "initializeSerialBackend": "readonly",
+    "CliAutoComplete": "readonly",
+    "DarkTheme": "readonly",
+    "FEATURE_CONFIG": "readonly",
+    "ReleaseChecker": "readonly",
+    "CONFIG": "readonly",
+    "have_sensor": "readonly"
+  },
+  "rules": {
+    "no-debugger": "warn",
+    "no-unused-vars": "warn",
+    "complexity": "warn"
+  },
+  "ignorePatterns": [
+    "dist/",
+    "out/",
+    "node_modules/",
+    "libraries/",
+    "presets/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "test/**/*.js",
+        "test/**/*.ts"
+      ],
+      "env": {
+        "mocha": true
+      },
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
+}
