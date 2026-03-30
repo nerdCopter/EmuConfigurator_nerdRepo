@@ -908,6 +908,7 @@ function createWindow() {
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 if (!hasSingleInstanceLock) {
+  console.log('[EmuConfigurator] Another instance is already running. Exiting.');
   app.quit();
 } else {
   app.on('second-instance', () => {
