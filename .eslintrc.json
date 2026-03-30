@@ -34,6 +34,26 @@
     "CliAutoComplete": "readonly",
     "DarkTheme": "readonly",
     "FEATURE_CONFIG": "readonly",
+    "BF_CONFIG": "readonly",
+    "BEEPER_CONFIG": "readonly",
+    "MIXER_CONFIG": "readonly",
+    "BOARD_ALIGNMENT_CONFIG": "readonly",
+    "LED_STRIP": "readonly",
+    "LED_COLORS": "readonly",
+    "LED_MODE_COLORS": "readonly",
+    "PID": "readonly",
+    "PID_names": "readonly",
+    "PIDs": "readonly",
+    "RC_MAP": "readonly",
+    "RC": "readonly",
+    "RC_tuning": "readonly",
+    "EMUF_ADVANCED": "readonly",
+    "AUX_CONFIG": "readonly",
+    "AUX_CONFIG_IDS": "readonly",
+    "MODE_RANGES": "readonly",
+    "MODE_RANGES_EXTRA": "readonly",
+    "defaultHuffmanTree": "readonly",
+    "defaultHuffmanLenIndex": "readonly",
     "ReleaseChecker": "readonly",
     "CONFIG": "readonly",
     "have_sensor": "readonly"
@@ -67,13 +87,34 @@
       "files": [
         "src/js/ConfigStorage.js",
         "src/js/FirmwareCache.js",
-        "src/js/backup_restore.js"
+        "src/js/backup_restore.js",
+        "src/js/data_storage.js",
+        "src/js/default_huffman_tree.js"
       ],
       "parserOptions": {
         "sourceType": "script"
       },
       "rules": {
-        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(ConfigStorage|FirmwareCache|configuration_backup|configuration_restore)$" }]
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(ConfigStorage|FirmwareCache|configuration_backup|configuration_restore|CONFIGURATOR|defaultHuffmanTree|defaultHuffmanLenIndex)$" }]
+      }
+    },
+    {
+      "files": [
+        "src/js/fc.js"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      },
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": [
+        "src/js/backup_restore.js"
+      ],
+      "rules": {
+        "complexity": "off"
       }
     }
   ]
