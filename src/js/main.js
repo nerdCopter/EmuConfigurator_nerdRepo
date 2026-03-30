@@ -11,6 +11,24 @@ const os = require('os');
 
 const presetsFolders = os.tmpdir();
 
+function writePresetFile(filePath, response) {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, response, (err) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
+function writePresetFileWithLogging(filePath, response) {
+    writePresetFile(filePath, response).catch((err) => {
+        console.error(`Failed to write preset file ${filePath}:`, err);
+    });
+}
+
 var HttpClient = function() {
     this.get = function(aUrl, aCallback) {
         var anHttpRequest = new XMLHttpRequest();
@@ -42,66 +60,27 @@ var helioUrlv040 = "https://raw.githubusercontent.com/emuflight/emuflight-preset
 // TODO: migrate to a function to get rid of code duplication
 
 client.get(nonHelioUrlv020, function(response) {
-  fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response, (err) => {
-    if (err) {
-      // FIXME: add error handling
-      console.error(err);
-      return;
-    }
-    //file written successfully
-  })
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.2.0.json", response);
 });
 
 client.get(helioUrlv020, function(response) {
-    fs.writeFile(presetsFolders + "/presets-HELIO-v0.2.0.json", response, (err) => {
-        if (err) {
-        console.error(err);
-        return;
-        }
-        //file written successfully
-    })
+        writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.2.0.json", response);
 });
 
 client.get(nonHelioUrlv030, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.3.0.json", response);
   });
 
   client.get(helioUrlv030, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.3.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
+            writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.3.0.json", response);
   });
 
 client.get(nonHelioUrlv040, function(response) {
-    fs.writeFile(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response, (err) => {
-      if (err) {
-        // FIXME: add error handling
-        console.error(err);
-        return;
-      }
-      //file written successfully
-    })
+        writePresetFileWithLogging(presetsFolders + "/presets-nonHELIO-v0.4.0.json", response);
   });
 
   client.get(helioUrlv040, function(response) {
-      fs.writeFile(presetsFolders + "/presets-HELIO-v0.4.0.json", response, (err) => {
-          if (err) {
-          console.error(err);
-          return;
-          }
-          //file written successfully
-      })
+            writePresetFileWithLogging(presetsFolders + "/presets-HELIO-v0.4.0.json", response);
   });
 
 
@@ -197,11 +176,6 @@ function startProcess() {
         checkForConfiguratorUpdates();
     }
 
-    // log webgl capability
-    // it would seem the webgl "enabling" through advanced settings will be ignored in the future
-    // and webgl will be supported if gpu supports it by default (canary 40.0.2175.0), keep an eye on this one
-    var canvas = document.createElement('canvas');
-
     // log library versions in console to make version tracking easier
     console.log('Libraries: jQuery - ' + $.fn.jquery + ', d3 - ' + d3.version + ', three.js - ' + THREE.REVISION);
 
@@ -277,9 +251,6 @@ function startProcess() {
 
                     case 'landing':
                         TABS.landing.initialize(content_ready);
-                        break;
-                    case 'changelog':
-                        TABS.staticTab.initialize('changelog', content_ready);
                         break;
                     case 'privacy_policy':
                         TABS.staticTab.initialize('privacy_policy', content_ready);
