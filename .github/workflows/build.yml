@@ -1,257 +1,314 @@
 on:
   push:
     tags:
-    - '*'
-    #branches:
-    #- '*'
+      - 'v*'
+      - 'test-*'
+    branches:
+      - main
+      - develop
   pull_request:
     branches:
-    - '*'
-  # repository_dispatch is a newer github-actions feature that will allow building from triggers other than code merge/PR
-  repository_dispatch:
-    types: [build]
+      - '*'
   workflow_dispatch:
 
-name: Build EmuConfigurator
+name: Build EmuConfigurator (Electron)
 jobs:
   build:
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-    timeout-minutes: 40
-    continue-on-error: false
+    timeout-minutes: 60
     runs-on: ${{ matrix.os }}
+    # Using Node.js 24.x (latest LTS as of March 2026)
+    # https://nodejs.org/en/about/releases/
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
     strategy:
       fail-fast: false
-      max-parallel: 3
       matrix:
-        #https://github.com/actions/runner-images
-        os: [ubuntu-22.04, macos-11, windows-2022]
+        os: [ubuntu-latest, macos-latest, macos-26-intel, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact-suffix: linux-x64
+          - os: macos-latest
+            artifact-suffix: macos-arm64
+          - os: macos-26-intel
+            artifact-suffix: macos-x86_64
+          - os: windows-latest
+            artifact-suffix: windows-x64
     outputs:
-      buildtag: ${{ steps.ids.outputs.buildtag }}
-      shortsha: ${{ steps.ids.outputs.shortsha }}
+      buildtag: ${{ steps.build-info.outputs.tag }}
+      shortsha: ${{ steps.build-info.outputs.sha }}
     steps:
-      - name: git checkout
+      - name: Checkout
         uses: actions/checkout@v4
-        continue-on-error: false
 
-      - name: get tag & short-sha
+      - name: Build Info
+        id: build-info
+        shell: bash
         run: |
-          echo "REVISION_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        continue-on-error: true
+          TAG=${GITHUB_REF#refs/tags/}
+          if [ "$TAG" = "$GITHUB_REF" ]; then TAG="$GITHUB_RUN_NUMBER"; fi
+          SHA=$(git rev-parse --short HEAD)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "sha=$SHA" >> $GITHUB_OUTPUT
 
-      - id: ids
-        name : set outputs
-        run: |
-          echo "::set-output name=buildtag::${{ env.REVISION_TAG }}"
-          echo "::set-output name=shortsha::${{ env.SHORT_SHA }}"
-        continue-on-error: true
-
-      - name: setup node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '12'
-        continue-on-error: false
+          node-version: '24.x'
+          cache: 'yarn'
 
-      # for debugging
-      - name: show variables
-        run: |
-          echo "Build: ${{ github.RUN_NUMBER }}"
-          echo "Commit: ${{ github.SHA }}"
-          echo "ShortSHA: ${{ env.SHORT_SHA }}"
-          echo "Ref: ${{ GITHUB.REF }}"
-          echo "Rev Tag: ${{ env.REVISION_TAG }}"
-          echo "Actor: ${{ github.ACTOR }}"
-          echo "Repo: ${{ github.REPOSITORY }}"
-          echo "BuildTag: ${{ steps.ids.outputs.buildtag }}"
-          echo "ShortSha: ${{ steps.ids.outputs.shortsha }}"
+      - name: Setup Linux (rpm, build tools)
+        if: runner.os == 'Linux'
+        run: sudo apt update && sudo apt install -y rpm build-essential python3 libudev-dev
+
+      - name: Yarn Install
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
         continue-on-error: true
 
-      - name: which python
+      - name: Build Distribution
+        run: yarn build
+
+      - name: Make Packages
+        env:
+          APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
+          # For certificate-based signing, set these as GitHub secrets:
+          # APPLE_SIGNING_IDENTITY: "Apple Distribution: [Team Name]"
+          # APPLE_TEAM_ID: "XXXXXXXXXX"
+          # WINDOWS_CERT_FILE: path to EmuCert.p12
+          # WINDOWS_CERT_PASSWORD: certificate password
+        run: yarn make
+        # Packages built (CI only builds what works cross-platform):
+        # macOS: .zip (portable, DMG skipped - requires native macos-alias module)
+        # Windows: .exe (Squirrel.Windows - delta-update framework, app launches after setup by design)
+        # Linux: .deb, .rpm (native package managers)
+
+      - name: Restructure .zip Artifacts (flatten OS folders)
+        if: runner.os != 'Windows'
+        shell: bash
         run: |
-          echo "python version:"
-          python --version
-          which python
+          set -euo pipefail
+          ROOT_DIR=$(pwd)
+          ZIP_DIR="$ROOT_DIR/out/make/zip"
+          
+          # Use nullglob to safely handle no matches
+          shopt -s nullglob
+          zipfiles=( "$ZIP_DIR"/*/*.zip )
+          shopt -u nullglob
+          
+          if [ ${#zipfiles[@]} -eq 0 ]; then
+            echo "[WARN] No .zip files found in $ZIP_DIR - skipping restructure"
+            exit 0
+          fi
+          
+          for zipfile in "${zipfiles[@]}"; do
+            basename=$(basename "$zipfile")
+            tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
+            output_zip="$ZIP_DIR/$basename"
+            
+            echo "Processing: $zipfile"
+            
+            # Unzip with error handling
+            if ! unzip -q "$zipfile" -d "$tmpdir"; then
+              echo "[FAIL] unzip failed for $zipfile"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Find the first directory safely
+            if ! cd "$tmpdir"; then
+              echo "[FAIL] cannot cd to tmpdir $tmpdir"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Find first directory using a robust method
+            app_folder=$(find . -maxdepth 1 -type d ! -name '.' -print -quit)
+            if [ -z "$app_folder" ]; then
+              echo "[FAIL] no app folder found in $tmpdir for $zipfile"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            app_folder="${app_folder#./}"  # Remove leading ./
+            if ! cd "$app_folder"; then
+              echo "[FAIL] cannot cd to app folder $app_folder in $tmpdir"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Re-zip with error handling
+            if ! zip -r -q "$output_zip" .; then
+              echo "[FAIL] zip failed for $zipfile in app folder $app_folder"
+              cd "$ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Return to zip directory
+            if ! cd "$ZIP_DIR"; then
+              echo "[FAIL] cannot return to $ZIP_DIR"
+              rm -rf "$tmpdir"
+              exit 1
+            fi
+            
+            # Remove the original nested zip only after successful re-zip
+            if [ -f "$zipfile" ] && [ "$zipfile" != "$output_zip" ]; then
+              rm -f "$zipfile" || { echo "[WARN] failed to remove original zip $zipfile"; }
+            fi
 
-      # build stuff
-      - name: yarn install
+            # Cleanup
+            rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
+            echo "[OK] Restructured: $basename"
+          done
+          
+          echo "[OK] All .zip files restructured (OS folders removed)"
+
+      - name: Restructure Windows .zip Artifacts
+        if: runner.os == 'Windows'
+        shell: powershell
         run: |
-          npm config set fetch-retry-maxtimeout 600000 -g
-          yarn install --immutable --immutable-cache --check-cache
+          $zipPath = "out\make\zip"
+          if (Test-Path $zipPath) {
+            Get-ChildItem "$zipPath\*\*.zip" | ForEach-Object {
+              $zipFile = $_.FullName
+              $zipName = Split-Path $zipFile -Leaf
+              $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
+              New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
+              Expand-Archive -Path $zipFile -DestinationPath $tmpDir
+              $appFolder = Get-ChildItem -Directory $tmpDir | Select-Object -First 1
+              $newZipPath = Join-Path $zipPath $zipName
+              Compress-Archive -Path (Join-Path $appFolder.FullName "*") -DestinationPath $newZipPath -Force
+              if ($zipFile -ne $newZipPath) {
+                Remove-Item $zipFile -Force
+              }
+              Remove-Item $tmpDir -Recurse -Force
+            }
+            Write-Host "[OK] Windows .zip files restructured (OS folders removed)"
+          }
 
-      # this forces appdmg install even though package.json optionalDependencies has/needs it.
-      - name: setup macos
-        if: ${{ startsWith(matrix.os, 'macos') }}
+      - name: Validate Artifacts Exist
+        if: runner.os != 'Windows'
         run: |
-          npm install appdmg@0.6.6 --python=python2.7
-        continue-on-error: true
+          if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
+            echo "[ERROR] No artifacts found in out/make/"
+            exit 1
+          fi
+          echo "[OK] Artifacts validated"
 
-      - name: yarn gulp clean-release
-        run: yarn gulp clean-release
-        continue-on-error: true
-
-      - name: yarn gulp release --linux64
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+      - name: Validate Artifacts Exist (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
         run: |
-          sudo apt install -y rpm
-          yarn gulp release --linux64
-        continue-on-error: false
+          $files = Get-ChildItem -Path "out/make" -Recurse -File
+          if ($files.Count -eq 0) {
+            Write-Error "No artifacts found in out/make/"
+            exit 1
+          }
+          Write-Host "[OK] Artifacts validated (Windows)"
 
-      - name: yarn gulp release --osx64
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        run: |
-          yarn gulp release --osx64
-        continue-on-error: false
-
-      - name: yarn gulp release  --win32 --win64
-        if: ${{ startsWith(matrix.os, 'windows') }}
-        run: yarn gulp release  --win32 --win64
-        continue-on-error: false
-
-      - name: Upload Artifacts
-        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+      # Upload Linux .deb
+      - name: Upload Artifact (linux .deb)
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-Linux
-          path: |
-            release/*.rpm
-            release/*.deb
-            release/*.zip
-      - name: Upload Artifacts
-        if: ${{ startsWith(matrix.os, 'macos') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-OSX
-          path: release/*.dmg
-      - name: Upload Artifacts
-        if: ${{ startsWith(matrix.os, 'windows') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: EmuConfigurator-${{ github.ACTOR }}-${{ github.RUN_NUMBER }}-Windows
-          path: |
-            release/*win*.exe
-            release/*win*.zip
+          name: EmuConfigurator-linux-deb
+          path: out/make/deb/**/*.deb
+          retention-days: 20
 
-  releases:
-    if: startsWith(github.ref, 'refs/tags/')
+      # Upload Linux .rpm
+      - name: Upload Artifact (linux .rpm)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-rpm
+          path: out/make/rpm/**/*.rpm
+          retention-days: 20
+
+      # Upload Linux .zip
+      - name: Upload Artifact (linux .zip)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 20
+
+      # Upload macOS ARM64 .zip
+      - name: Upload Artifact (macos arm64 .zip)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-arm64-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 20
+
+      # Upload macOS x86_64 .zip
+      - name: Upload Artifact (macos x86_64 .zip)
+        if: matrix.os == 'macos-26-intel'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-x86_64-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 20
+
+      # Upload Windows .exe
+      - name: Upload Artifact (windows .exe)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-exe
+          path: out/make/squirrel.windows/**/*.exe
+          retention-days: 20
+
+      # Upload Windows .zip
+      - name: Upload Artifact (windows .zip)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-zip
+          path: out/make/zip/**/*.zip
+          retention-days: 20
+
+  release:
     needs: build
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    timeout-minutes: 10
     runs-on: ubuntu-latest
-    continue-on-error: false
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      # for debugging
-      - name: show variables
-        run: |
-          echo "Build: ${{ github.RUN_NUMBER }}"
-          echo "Commit: ${{ github.SHA }}"
-          echo "Ref: ${{ GITHUB.REF }}"
-          echo "Actor: ${{ github.ACTOR }}"
-          echo "Repo: ${{ github.REPOSITORY }}"
-          echo "outputs.buildtag: ${{ needs.build.outputs.buildtag }}"
-          echo "outputs.shortsha: ${{ needs.build.outputs.shortsha }}"
-          echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
-        continue-on-error: true
-
-      - name: download artifacts
+      - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./Artifacts
-        continue-on-error: false
 
-      - name: list artifacts
+      - name: List Release Artifacts
         run: |
-          echo "######## debug find emuflight* ########"
-          find ./ -iname "emuflight-configurator*.*"
-        continue-on-error: true
+          echo "### Release Artifacts ###"
+          find ./Artifacts -type f \( -name "*.exe" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
 
-      # Draft Dev-Unstable releases via ncipollo/release-action
-      # softprops/action-gh-release fails to release on separate repo
-      - name: dev-unstable draft
-        if: contains(github.ref, 'test') || contains(github.ref, 'unstab')
-        uses: ncipollo/release-action@v1
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo: dev-unstable
-          owner: emuflight
-          token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ env.NOW }}-cfg"
+          tag_name: ${{ github.ref_name }}
+          release_name: "EmuConfigurator ${{ github.ref_name }}"
+          files: |
+            ./Artifacts/EmuConfigurator-windows-exe/**/*.exe
+            ./Artifacts/EmuConfigurator-windows-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-arm64-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-macos-x86_64-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-linux-deb/**/*.deb
+            ./Artifacts/EmuConfigurator-linux-rpm/**/*.rpm
+            ./Artifacts/EmuConfigurator-linux-zip/**/*.zip
           draft: true
-          prerelease: true
-          allowUpdates: true
-          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
-          artifactContentType: raw
-          name:  "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
-          body: |
-            ## EmuConfigurator BUILD for TESTING
-            ### Build ${{ github.run_number }}
-            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
-            ### BuildTag: ${{ needs.build.outputs.buildtag }}
-            ### What to Test/Feedback: (Feedback in EmuFlight's Discord or GitHub Discussions)
-            <details><summary>Changes in this Build:</summary>
-            <!-- require single blank line below -->
+          prerelease: ${{ contains(github.ref, 'rc') }}
 
-            ```
-            [insert commit history here]
-            ```
-            </details>
-        continue-on-error: true
-
-      # Draft Dev-master releases via ncipollo/release-action
-      # softprops/action-gh-release fails to release on separate repo
-      - name: dev-master draft
-        if: contains(github.ref, 'master')
-        uses: ncipollo/release-action@v1
-        with:
-          repo: dev-master
-          owner: emuflight
-          token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ env.NOW }}-cfg"
-          draft: true
-          prerelease: true
-          allowUpdates: true
-          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
-          artifactContentType: raw
-          name:  "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
-          body: |
-            ## EmuConfigurator BUILD of MASTER
-            ### Build ${{ github.run_number }}
-            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
-            ### BuildTag: ${{ needs.build.outputs.buildtag }}
-            ### Feedback Welcome in EmuFlight's Discord or GitHub Discussions.
-            <details><summary>Changes in this Build:</summary>
-            <!-- require single blank line below -->
-
-            ```
-            [insert commit history here]
-            ```
-            </details>
-        continue-on-error: true
-
-      - name: main-repo draft release
-        if: contains(github.ref, 'releas')
-        uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          draft: true
-          prerelease: true
-          allowUpdates: true
-          # tag: use the build Number, but we MUST manually change to version so that it creates a version-tag on release
-          tag: "${{ github.RUN_NUMBER }}"
-          artifacts: ./Artifacts/EmuConfigurator-*/emuflight-configurator*.*
-          artifactContentType: raw
-          name:  "DRAFT / EmuConfigurator / GitHub Build ${{ github.RUN_NUMBER }}"
-          body: |
-            ## EmuConfigurator
-            ### Build: ${{ github.RUN_NUMBER }}
-            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
-            ### BuildTag: ${{ needs.build.outputs.buildtag }}
-            <details><summary>Changes in this Release:</summary>
-            <!-- require single blank line below -->
-
-            ```
-            [insert commit history here]
-            ```
-            </details>
-        continue-on-error: false
+      - name: Release Failed Notification
+        if: failure()
+        run: |
+          echo "[ERROR] Release upload failed for ${{ github.ref_name }}"
+          exit 1
