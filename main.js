@@ -776,6 +776,15 @@ ipcMain.handle('file-read-binary', async (event, filePath) => {
 });
 
 // IPC: truncate file to size
+ipcMain.handle('dialog:get-file-size', async (_event, filePath) => {
+    try {
+        const stat = await fs.promises.stat(filePath);
+        return stat.size;
+    } catch (e) {
+        return 0; // file doesn't exist yet
+    }
+});
+
 ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   try {
     // Ensure the directory exists before truncating

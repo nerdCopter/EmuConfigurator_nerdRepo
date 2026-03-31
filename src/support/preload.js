@@ -469,6 +469,68 @@ if (typeof window.chrome === 'undefined' || !window.chrome.serial) {
 
 // Polyfill for chrome.fileSystem (file save/load dialogs)
 const chromeFileSystem = {
+    // Build a full entry object from a file path (used by chooseEntry and restoreEntry)
+    _makeEntry: (filePath) => {
+        const entry = {
+            _filePath: filePath,
+            isFile: true,
+            isDirectory: false,
+            name: filePath.split('/').pop(),
+            createWriter: (onWriter, onError) => {
+                ipcRenderer.invoke('dialog:get-file-size', filePath).then(size => {
+                    const writer = {
+                        length: size || 0,
+                        position: size || 0,
+                        readyState: 0, // INIT
+                        onerror: null,
+                        onwriteend: null,
+                        seek: (pos) => { writer.position = pos; },
+                        truncate: (sz) => {
+                            ipcRenderer.invoke('dialog:truncate-file', filePath, sz).then(truncatedSize => {
+                                writer.length = truncatedSize || sz;
+                                writer.position = 0;
+                                if (writer.onwriteend) writer.onwriteend();
+                            }).catch(err => {
+                                if (writer.onerror) writer.onerror(err);
+                            });
+                        },
+                        write: (blob) => {
+                            writer.readyState = 1; // WRITING
+                            blob.arrayBuffer().then(arrayBuffer => {
+                                const isFirstWrite = writer.length === 0;
+                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer)), isFirstWrite).then(written => {
+                                    const safeWritten = Number.isFinite(Number(written)) ? Number(written) : 0;
+                                    writer.length += safeWritten;
+                                    writer.position = writer.length;
+                                    writer.readyState = 2; // DONE
+                                    if (writer.onwriteend) writer.onwriteend();
+                                    writer.readyState = 0; // INIT — ready for next write
+                                }).catch(err => {
+                                    writer.readyState = 0;
+                                    if (writer.onerror) writer.onerror(err);
+                                });
+                            }).catch(err => {
+                                writer.readyState = 0;
+                                if (writer.onerror) writer.onerror(err);
+                            });
+                        },
+                    };
+                    onWriter(writer);
+                }).catch(err => {
+                    if (onError) onError(err);
+                });
+            },
+            file: (callback, _onError) => {
+                ipcRenderer.invoke('dialog:read-file', filePath).then(buffer => {
+                    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+                    callback(blob);
+                }).catch(err => {
+                    if (_onError) _onError(err);
+                });
+            },
+        };
+        return entry;
+    },
     chooseEntry: (options, callback) => {
         ipcRenderer.invoke('dialog:choose-entry', options).then(result => {
             if (result.canceled) {
@@ -481,57 +543,7 @@ const chromeFileSystem = {
                 callback(null);
                 return;
             }
-            // Return a mock entry object with file() and createWriter methods
-            const entry = {
-                _filePath: filePath,
-                file: (success, error) => {
-                    // Request main process to read file as binary
-                    ipcRenderer.invoke('file-read-binary', filePath).then(buffer => {
-                        // Convert buffer to Blob
-                        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-                        success(blob);
-                    }).catch(err => {
-                        console.error('File read error:', err);
-                        if (error) error(err);
-                    });
-                },
-                createWriter: (onWriter, _onError) => {
-                    const writer = {
-                        length: 0,
-                        onerror: null,
-                        onwriteend: null,
-                        truncate: (size) => {
-                            // Actually truncate the file on disk via IPC
-                            ipcRenderer.invoke('dialog:truncate-file', filePath, size).then(truncatedSize => {
-                                writer.length = truncatedSize || size;
-                                if (writer.onwriteend) writer.onwriteend();
-                            }).catch(err => {
-                                console.error(`[preload] truncate-file failed:`, err);
-                                if (writer.onerror) writer.onerror(err);
-                            });
-                        },
-                        write: (blob) => {
-                            blob.arrayBuffer().then(arrayBuffer => {
-                                // First write creates/truncates; subsequent writes append chunks
-                                const isFirstWrite = writer.length === 0;
-                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer)), isFirstWrite).then(written => {
-                                    const safeWritten = Number.isFinite(Number(written)) ? Number(written) : 0;
-                                    writer.length += safeWritten;
-                                    if (writer.onwriteend) writer.onwriteend();
-                                }).catch(err => {
-                                    console.error(`[preload] write-binary-file failed:`, err);
-                                    if (writer.onerror) writer.onerror(err);
-                                });
-                            }).catch(err => {
-                                console.error(`[preload] blob.arrayBuffer() failed:`, err);
-                                if (writer.onerror) writer.onerror(err);
-                            });
-                        }
-                    };
-                    onWriter(writer);
-                }
-            };
-            callback(entry);
+            callback(chromeFileSystem._makeEntry(filePath));
         }).catch(err => {
             console.error('File dialog error:', err);
             callback(null);
@@ -544,7 +556,21 @@ const chromeFileSystem = {
         } else {
             callback('');
         }
-    }
+    },
+    // In Electron the file dialog already returns a writable path — pass through
+    getWritableEntry: (fileEntry, callback) => {
+        callback(fileEntry);
+    },
+    // In Electron all saved entries are writable — always true
+    isWritableEntry: (_fileEntry, callback) => {
+        callback(true);
+    },
+    // Retain/restore: store the file path string; rebuild a full entry object on restore
+    retainEntry: (fileEntry) => fileEntry._filePath || '',
+    restoreEntry: (filePath, callback) => {
+        if (!filePath) { callback(null); return; }
+        callback(chromeFileSystem._makeEntry(filePath));
+    },
 };
 
 if (typeof window.chrome === 'undefined' || !window.chrome.fileSystem) {
