@@ -953,6 +953,19 @@ if (!hasSingleInstanceLock) {
   app.whenReady().then(createWindow);
 }
 
+// Handle SIGINT (Ctrl+C) and SIGTERM gracefully to ensure single-instance lock cleanup.
+// Without this, Ctrl+C in yarn dev terminates the process before app.quit() runs,
+// leaving the lock file stale and blocking the next instance.
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully...');
+  app.quit();
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully...');
+  app.quit();
+});
+
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
 // "device still open" warnings and ensures the device is left in a clean state.
