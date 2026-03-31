@@ -907,7 +907,7 @@ function createWindow() {
   }
   
   // Setup context menu for right-click (cut/copy/paste/select all)
-  win.webContents.on('context-menu', (event, params) => {
+  win.webContents.on('context-menu', (_event, _params) => {
     const contextMenu = Menu.buildFromTemplate([
       { role: 'cut' },
       { role: 'copy' },

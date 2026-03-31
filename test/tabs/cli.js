@@ -114,7 +114,7 @@ describe('TABS.cli', () => {
                 callback();
             });
             sinon.stub(TABS.cli, 'send');
-            sinon.stub(Promise, 'reduce').callsFake((items, cb, initialValue) => {
+            sinon.stub(Promise, 'reduce').callsFake((items, cb, _initialValue) => {
                 items.forEach((line, idx) => cb(0, line, idx));
             });
             sinon.stub(window, 'Promise').callsFake(resolve => resolve(0));
