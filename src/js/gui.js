@@ -292,7 +292,7 @@ GUI_control.prototype.switchery = function() {
               secondaryColor: '#c4c4c4'
             });
         }
-        $(elem).on("change", function (evt) {
+        $(elem).on("change", function (_evt) {
             switchery.setPosition();
         });
         $(elem).removeClass('togglesmall');
@@ -310,7 +310,7 @@ GUI_control.prototype.switchery = function() {
                 secondaryColor: '#c4c4c4'
             });
         }
-        $(elem).on("change", function (evt) {
+        $(elem).on("change", function (_evt) {
             switchery.setPosition();
         });
         $(elem).removeClass('toggle');
@@ -330,7 +330,7 @@ GUI_control.prototype.switchery = function() {
                 secondaryColor: '#c4c4c4'
              });
         }
-         $(elem).on("change", function (evt) {
+         $(elem).on("change", function (_evt) {
              switchery.setPosition();
          });
          $(elem).removeClass('togglemedium');
