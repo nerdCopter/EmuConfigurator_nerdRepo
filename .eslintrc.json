@@ -60,7 +60,7 @@
   },
   "rules": {
     "no-debugger": "warn",
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-unused-vars": ["warn", { "vars": "local", "argsIgnorePattern": "^_", "varsIgnorePattern": "^[A-Z_][A-Z0-9_]*$|^(isDev|checked)$" }],
     "complexity": "warn"
   },
   "ignorePatterns": [
@@ -115,6 +115,18 @@
       ],
       "rules": {
         "complexity": "off"
+      }
+    },
+    {
+      "files": [
+        "src/js/**/*.js",
+        "src/support/**/*.js"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      },
+      "rules": {
+        "no-unused-vars": "off"
       }
     }
   ]
