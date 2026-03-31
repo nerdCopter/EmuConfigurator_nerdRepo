@@ -512,8 +512,9 @@ const chromeFileSystem = {
                         },
                         write: (blob) => {
                             blob.arrayBuffer().then(arrayBuffer => {
-                                // Send as binary data via separate IPC channel
-                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer))).then(written => {
+                                // First write creates/truncates; subsequent writes append chunks
+                                const isFirstWrite = writer.length === 0;
+                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer)), isFirstWrite).then(written => {
                                     const safeWritten = Number.isFinite(Number(written)) ? Number(written) : 0;
                                     writer.length += safeWritten;
                                     if (writer.onwriteend) writer.onwriteend();

@@ -721,12 +721,13 @@ ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
 });
 
 // IPC: write binary content to file (preserves binary data)
-ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray) => {
+ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, isFirstWrite = true) => {
   const dir = path.dirname(filePath);
   await fs.promises.mkdir(dir, { recursive: true });
   const buffer = Buffer.from(byteArray);
-  await fs.promises.writeFile(filePath, buffer);
-  console.log(`Saved ${buffer.length} bytes (binary) to ${filePath}`);
+  // isFirstWrite=true: create/truncate the file; false: append chunk to existing file
+  await fs.promises.writeFile(filePath, buffer, { flag: isFirstWrite ? 'w' : 'a' });
+  console.log(`Saved ${buffer.length} bytes (binary, ${isFirstWrite ? 'create' : 'append'}) to ${filePath}`);
   return buffer.length;
 });
 
