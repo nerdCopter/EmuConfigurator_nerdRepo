@@ -362,6 +362,14 @@ TABS.firmware_flasher.initialize = function (callback) {
                     return;
                 }
 
+                if (!fileEntry) {
+                    // Dialog was cancelled — re-enable controls and bail
+                    self.enableFlashing(false);
+                    self.localFileLoaded = false;
+
+                    return;
+                }
+
                 // hide github info (if it exists)
                 $('div.git_info').slideUp();
 
