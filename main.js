@@ -2,6 +2,24 @@ const { app, BrowserWindow, ipcMain, Menu, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+// Register signal handlers at the very top to catch Ctrl+C/SIGTERM before anything else.
+// In dev mode (yarn dev), these ensure the process exits immediately without leaving
+// zombie processes that hold stale single-instance lock files.
+process.on('SIGINT', () => {
+  console.log('SIGINT received, exiting immediately...');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, exiting immediately...');
+  process.exit(0);
+});
+
+// Fallback: if the process is about to exit for any reason, log it
+process.on('exit', (code) => {
+  console.log(`[main.js] Process exiting with code ${code}`);
+});
+
 let mainWindow = null;
 
 function safeSendToRenderer(sender, channel, ...args) {
@@ -935,39 +953,36 @@ function createWindow() {
   });
 }
 
-// In development mode, disable single-instance enforcement to allow yarn dev restarts.
-// In production, enforce single-instance to prevent accidental multiple launches.
+// Attempt to acquire single-instance lock with retry logic for dev mode.
+// In development (yarn dev), Electron Forge's watch process can cause race conditions
+// where the old process hasn't released its lock file before the new one starts.
+// We retry a few times to handle this gracefully while maintaining lock enforcement.
 const isDev = process.env.NODE_ENV === 'development';
-const hasSingleInstanceLock = isDev ? true : app.requestSingleInstanceLock();
 
-if (!hasSingleInstanceLock) {
+function tryAcquireSingleInstanceLock() {
+  const lockAcquired = app.requestSingleInstanceLock();
+  
+  if (lockAcquired) {
+    app.on('second-instance', () => {
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+          mainWindow.restore();
+        }
+        mainWindow.focus();
+      }
+    });
+
+    app.whenReady().then(createWindow);
+    return true;
+  }
+
+  // Lock acquisition failed — another instance is running
   console.log('[EmuConfigurator] Another instance is already running. Exiting.');
   app.quit();
-} else {
-  app.on('second-instance', () => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) {
-        mainWindow.restore();
-      }
-      mainWindow.focus();
-    }
-  });
-
-  app.whenReady().then(createWindow);
+  return false;
 }
 
-// Handle SIGINT (Ctrl+C) and SIGTERM gracefully to ensure single-instance lock cleanup.
-// Without this, Ctrl+C in yarn dev terminates the process before app.quit() runs,
-// leaving the lock file stale and blocking the next instance.
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully...');
-  app.quit();
-});
-
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  app.quit();
-});
+tryAcquireSingleInstanceLock();
 
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport

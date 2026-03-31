@@ -1,9 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 const buildMode = process.env.EMUCFG_BUILD_MODE || 'release';
+
+// Handle graceful shutdown in development mode
+// When yarn dev receives Ctrl+C, kill any remaining Electron child processes
+if (process.env.NODE_ENV !== 'production') {
+  process.on('SIGINT', () => {
+    console.log('[forge.config.js] SIGINT received, killing Electron processes...');
+    spawn('killall', ['electron'], { stdio: 'inherit' });
+    process.exit(0);
+  });
+}
 
 module.exports = {
   packagerConfig: {
