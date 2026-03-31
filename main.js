@@ -762,7 +762,10 @@ ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, is
   const buffer = Buffer.from(byteArray);
   // isFirstWrite=true: create/truncate the file; false: append chunk to existing file
   await fs.promises.writeFile(filePath, buffer, { flag: isFirstWrite ? 'w' : 'a' });
-  console.log(`Saved ${buffer.length} bytes (binary, ${isFirstWrite ? 'create' : 'append'}) to ${filePath}`);
+  // Log only on first write (start); suppress per-chunk logs
+  if (isFirstWrite) {
+    console.log(`[BBL] Downloading blackbox log to: ${filePath}`);
+  }
   return buffer.length;
 });
 
