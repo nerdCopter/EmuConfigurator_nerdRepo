@@ -83,6 +83,15 @@ function setupMenu(buildMode) {
       submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
     }] : []),
     {
+      label: 'Edit',
+      submenu: [
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectAll' },
+      ]
+    },
+    {
       label: 'View',
       submenu: [
         { role: 'togglefullscreen' },
@@ -703,9 +712,14 @@ ipcMain.handle('dialog:choose-entry', async (event, options) => {
       filters: filters.length > 0 ? filters : undefined,
     });
   } else if (type === 'openFile') {
+    const openFilters = accepts
+      ? accepts.filter(a => Array.isArray(a.extensions) && a.extensions.length > 0)
+               .map(a => ({ name: a.description, extensions: a.extensions }))
+      : [];
     return await dialog.showOpenDialog({
       defaultPath: suggestedName,
-      filters: accepts ? accepts.map(a => ({ name: a.description, extensions: a.extensions })) : [],
+      filters: openFilters,
+      properties: ['openFile'],
     });
   }
   return { canceled: true };
