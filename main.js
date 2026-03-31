@@ -94,6 +94,9 @@ function setupMenu(buildMode) {
     {
       label: 'View',
       submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
         { role: 'togglefullscreen' },
         { role: 'resetZoom' },
         { role: 'zoomIn' },
@@ -872,6 +875,18 @@ function createWindow() {
   if (buildMode === 'dev') {
     win.webContents.openDevTools();
   }
+  
+  // Setup context menu for right-click (cut/copy/paste/select all)
+  win.webContents.on('context-menu', (event, params) => {
+    const contextMenu = Menu.buildFromTemplate([
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { type: 'separator' },
+      { role: 'selectAll' }
+    ]);
+    contextMenu.popup(win);
+  });
   
   // Intercept navigation to external URLs and open them in system browser
   win.webContents.on('will-navigate', (event, url) => {
