@@ -935,7 +935,10 @@ function createWindow() {
   });
 }
 
-const hasSingleInstanceLock = app.requestSingleInstanceLock();
+// In development mode, disable single-instance enforcement to allow yarn dev restarts.
+// In production, enforce single-instance to prevent accidental multiple launches.
+const isDev = process.env.NODE_ENV === 'development';
+const hasSingleInstanceLock = isDev ? true : app.requestSingleInstanceLock();
 
 if (!hasSingleInstanceLock) {
   console.log('[EmuConfigurator] Another instance is already running. Exiting.');
