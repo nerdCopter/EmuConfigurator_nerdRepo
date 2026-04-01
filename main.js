@@ -775,6 +775,12 @@ ipcMain.handle('file-read-binary', async (event, filePath) => {
   return data;
 });
 
+// IPC: read file as UTF-8 text (used by fileEntry.file() in preload chromeFileSystem shim)
+ipcMain.handle('dialog:read-file', async (event, filePath) => {
+  const data = await fs.promises.readFile(filePath);
+  return data;
+});
+
 // IPC: truncate file to size
 ipcMain.handle('dialog:get-file-size', async (_event, filePath) => {
     try {
