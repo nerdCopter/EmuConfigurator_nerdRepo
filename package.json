@@ -16,9 +16,9 @@
     "dev:verbose":   "node scripts/build.js && cross-env NODE_ENV=development electron-forge start",
     "make":          "node scripts/build.js && electron-forge make",
     "make:dev":      "yarn make:debug",
-    "make:debug":    "node scripts/build.js && cross-env EMUCFG_BUILD_MODE=debug_package electron-forge make",
+    "make:debug":    "node scripts/build.js && cross-env EMUCFG_BUILD_MODE=dev-release electron-forge make",
     "package":       "node scripts/build.js && electron-forge package",
-    "package:debug": "node scripts/build.js && cross-env EMUCFG_BUILD_MODE=debug_package electron-forge package",
+    "package:debug": "node scripts/build.js && cross-env EMUCFG_BUILD_MODE=dev-release electron-forge package",
     "build":         "node scripts/build.js",
     "lint":          "eslint .",
     "commands":      "node .commands.js"

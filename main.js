@@ -81,8 +81,8 @@ ipcMain.on('get-manifest', (event) => {
 
 // Build modes (set by npm scripts in package.json):
 //   'dev'           - `yarn dev` sets NODE_ENV=development → devtools auto-open + menu item
-//   'debug_package' - `yarn make:debug` sets EMUCFG_BUILD_MODE=debug_package → menu item only, no auto-open
-//   'release'       - `yarn make` (default) → no devtools, no menu item
+//   'dev-release'   - `yarn make:debug` sets EMUCFG_BUILD_MODE=dev-release → all menu items including toggle devtools
+//   'release'       - `yarn make` (default) → all menu items except toggle devtools (inspect only)
 function getBuildMode() {
   if (process.env.NODE_ENV === 'development') return 'dev';
   try {
@@ -94,6 +94,7 @@ function getBuildMode() {
 }
 
 function setupMenu(buildMode) {
+  // Show Developer Tools menu item for dev and dev-release; hide only for release
   const showDevTools = buildMode !== 'release';
   const template = [
     ...(process.platform === 'darwin' ? [{
