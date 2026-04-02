@@ -35,6 +35,10 @@ jobs:
             artifact-suffix: macos-x86_64
           - os: windows-latest
             artifact-suffix: windows-x64
+            arch: x64
+          - os: windows-latest
+            artifact-suffix: windows-ia32
+            arch: ia32
     outputs:
       buildtag: ${{ steps.build-info.outputs.tag }}
       shortsha: ${{ steps.build-info.outputs.sha }}
@@ -75,16 +79,17 @@ jobs:
       - name: Make Packages
         env:
           APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
+          EMUCFG_ARCH: ${{ matrix.arch || '' }}
           # For certificate-based signing, set these as GitHub secrets:
           # APPLE_SIGNING_IDENTITY: "Apple Distribution: [Team Name]"
           # APPLE_TEAM_ID: "XXXXXXXXXX"
           # WINDOWS_CERT_FILE: path to EmuCert.p12
           # WINDOWS_CERT_PASSWORD: certificate password
         run: yarn make
-        # Packages built (CI only builds what works cross-platform):
-        # macOS: .zip (portable, DMG skipped - requires native macos-alias module)
-        # Windows: .exe (Squirrel.Windows - delta-update framework, app launches after setup by design)
-        # Linux: .deb, .rpm (native package managers)
+        # Packages built on each platform (architecture-specific for Windows):
+        # macOS: .zip (portable, DMG skipped in CI - requires native macos-alias module)
+        # Windows: .exe (Squirrel.Windows - delta-update framework)
+        # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
       - name: Restructure .zip Artifacts (flatten OS folders)
         if: runner.os != 'Windows'
@@ -169,29 +174,6 @@ jobs:
           
           echo "[OK] All .zip files restructured (OS folders removed)"
 
-      - name: Restructure Windows .zip Artifacts
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          $zipPath = "out\make\zip"
-          if (Test-Path $zipPath) {
-            Get-ChildItem "$zipPath\*\*.zip" | ForEach-Object {
-              $zipFile = $_.FullName
-              $zipName = Split-Path $zipFile -Leaf
-              $tmpDir = Join-Path ([System.IO.Path]::GetTempPath()) ([System.IO.Path]::GetRandomFileName())
-              New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null
-              Expand-Archive -Path $zipFile -DestinationPath $tmpDir
-              $appFolder = Get-ChildItem -Directory $tmpDir | Select-Object -First 1
-              $newZipPath = Join-Path $zipPath $zipName
-              Compress-Archive -Path (Join-Path $appFolder.FullName "*") -DestinationPath $newZipPath -Force
-              if ($zipFile -ne $newZipPath) {
-                Remove-Item $zipFile -Force
-              }
-              Remove-Item $tmpDir -Recurse -Force
-            }
-            Write-Host "[OK] Windows .zip files restructured (OS folders removed)"
-          }
-
       - name: Validate Artifacts Exist
         if: runner.os != 'Windows'
         run: |
@@ -205,12 +187,12 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          $files = Get-ChildItem -Path "out/make" -Recurse -File
+          $files = Get-ChildItem -Path "out/make/squirrel.windows" -Recurse -File -ErrorAction SilentlyContinue
           if ($files.Count -eq 0) {
-            Write-Error "No artifacts found in out/make/"
+            Write-Error "No .exe artifacts found in out/make/squirrel.windows/"
             exit 1
           }
-          Write-Host "[OK] Artifacts validated (Windows)"
+          Write-Host "[OK] Windows .exe artifacts validated"
 
       # Upload Linux .deb
       - name: Upload Artifact (linux .deb)
@@ -262,17 +244,8 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-windows-exe
+          name: EmuConfigurator-windows-exe-${{ matrix.artifact-suffix }}
           path: out/make/squirrel.windows/**/*.exe
-          retention-days: 20
-
-      # Upload Windows .zip
-      - name: Upload Artifact (windows .zip)
-        if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: EmuConfigurator-windows-zip
-          path: out/make/zip/**/*.zip
           retention-days: 20
 
   release:
@@ -299,8 +272,7 @@ jobs:
           tag_name: ${{ github.ref_name }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-exe/**/*.exe
-            ./Artifacts/EmuConfigurator-windows-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-windows-exe-*/**/*.exe
             ./Artifacts/EmuConfigurator-macos-arm64-zip/**/*.zip
             ./Artifacts/EmuConfigurator-macos-x86_64-zip/**/*.zip
             ./Artifacts/EmuConfigurator-linux-deb/**/*.deb

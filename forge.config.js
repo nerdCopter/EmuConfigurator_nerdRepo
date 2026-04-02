@@ -20,6 +20,9 @@ module.exports = {
   packagerConfig: {
     asar: true,
     icon: path.resolve(__dirname, 'assets/osx/app-icon'),
+    // Specify architecture: defaults to current platform arch, override with EMUCFG_ARCH env var
+    // Valid values: x64, ia32 (for Windows), x64, arm64 (for macOS), x64, arm64 (for Linux)
+    arch: process.env.EMUCFG_ARCH || undefined,
     // Bake build mode into packaged package.json so main.js can read it at runtime
     extraMetadata: {
       buildMode: buildMode
@@ -59,7 +62,8 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin', 'win32', 'linux'],
+      platforms: ['darwin', 'linux'],
+      // Note: ZIP maker excluded for Windows (use Squirrel installer instead)
     },
     {
       name: '@electron-forge/maker-deb',
