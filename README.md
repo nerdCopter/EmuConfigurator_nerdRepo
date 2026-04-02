@@ -28,9 +28,9 @@ Download the installer for your platform from the [Releases](https://github.com/
 
 ### Requirements
 
-1. [Node.js](https://nodejs.org/en/download/package-manager/) (LTS recommended)
-2. Yarn: `npm install -g yarn`
-3. `yarn install`
+1. [Node.js](https://nodejs.org/en/) (LTS recommended)
+2. [nvm](https://www.nvmnode.com/) (Node version manager; optional but recommended for reproducible local Node versions)
+3. [Yarn](https://yarnpkg.com/) (`npm install -g yarn`)
 
 ### Commands
 
