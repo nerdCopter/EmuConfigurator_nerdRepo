@@ -19,7 +19,7 @@ Download the installer for your platform from the [Releases](https://github.com/
 ## Support
 
 - [Emuflight Discord](https://discord.gg/gdP9CwE)
-- [Configurator issues](https://github.com/nerdCopter/EmuConfigurator_nerdRepo/issues)
+- [Configurator issues](https://github.com/EmuFlight/EmuConfigurator/issues)
 - [Firmware issues](https://github.com/emuflight/EmuFlight/issues)
 
 ---
