@@ -23,6 +23,8 @@ module.exports = {
     // Specify architecture: defaults to current platform arch, override with EMUCFG_ARCH env var
     // Valid values: x64, ia32 (for Windows), x64, arm64 (for macOS), x64, arm64 (for Linux)
     arch: process.env.EMUCFG_ARCH || undefined,
+    // Ensure the binary is named as expected for Linux makers
+    executableName: 'emuflight-configurator',
     // Bake build mode into packaged package.json so main.js can read it at runtime
     extraMetadata: {
       buildMode: buildMode
