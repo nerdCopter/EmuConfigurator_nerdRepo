@@ -195,10 +195,14 @@ jobs:
       - name: "Restructure .zip Artifacts (macOS: .app at root)"
         if: startsWith(matrix.os, 'macos')
         shell: bash
+        env:
+          APP_SUFFIX: ${{ matrix.artifact-suffix }}
         run: |
           set -euo pipefail
           ROOT_DIR=$(pwd)
           ZIP_DIR="$ROOT_DIR/out/make/zip"
+          ARCH_NAME="${APP_SUFFIX#macos-}"
+          APP_NAME="EmuConfigurator-${ARCH_NAME}.app"
 
           shopt -s nullglob
           zipfiles=( "$ZIP_DIR"/*/*/*.zip )
@@ -212,31 +216,54 @@ jobs:
           for zipfile in "${zipfiles[@]}"; do
             basename=$(basename "$zipfile")
             tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
-            output_zip="$ZIP_DIR/$basename"
+            output_zip="$ZIP_DIR/$basename.tmp"
 
             echo "Processing: $zipfile"
 
-            # Unzip with error handling
             if ! unzip -q "$zipfile" -d "$tmpdir"; then
               echo "[FAIL] unzip failed for $zipfile"
               rm -rf "$tmpdir"
               exit 1
             fi
 
-            # Find the .app bundle (should be in the top-level directory after unzip)
-            app_bundle=$(find "$tmpdir" -maxdepth 2 -type d -name '*.app' | head -n1)
-            if [ -z "$app_bundle" ]; then
-              echo "[FAIL] no .app bundle found in $tmpdir for $zipfile"
-              rm -rf "$tmpdir"
-              exit 1
+            nested_zip=$(find "$tmpdir" -type f -name '*.zip' | head -n1 || true)
+            if [ -n "$nested_zip" ]; then
+              nested_tmp=$(mktemp -d) || { echo "[FAIL] mktemp failed"; rm -rf "$tmpdir"; exit 1; }
+              if ! unzip -q "$nested_zip" -d "$nested_tmp"; then
+                echo "[FAIL] unzip failed for nested zip $nested_zip"
+                rm -rf "$tmpdir" "$nested_tmp"
+                exit 1
+              fi
+              rm -f "$nested_zip"
+              rm -rf "$tmpdir"/*
+              mv "$nested_tmp"/* "$tmpdir" || true
+              rm -rf "$nested_tmp"
             fi
 
-            # Re-zip the .app bundle so it is at the root of the zip
-            (cd "$(dirname "$app_bundle")" && zip -r -q "$output_zip" "$(basename "$app_bundle")")
+            app_bundle=$(find "$tmpdir" -maxdepth 4 -type d -name '*.app' | head -n1 || true)
+            if [ -z "$app_bundle" ]; then
+              contents_dir=$(find "$tmpdir" -maxdepth 4 -type d -name Contents | head -n1 || true)
+              if [ -z "$contents_dir" ]; then
+                echo "[FAIL] no .app bundle or Contents directory found in $tmpdir for $zipfile"
+                rm -rf "$tmpdir"
+                exit 1
+              fi
+              mkdir -p "$tmpdir/$APP_NAME"
+              mv "$contents_dir" "$tmpdir/$APP_NAME/"
+              app_bundle="$tmpdir/$APP_NAME"
+            fi
 
-            # Remove the original nested zip only after successful re-zip
-            if [ -f "$zipfile" ] && [ "$zipfile" != "$output_zip" ]; then
-              rm -f "$zipfile" || { echo "[WARN] failed to remove original zip $zipfile"; }
+            if [ "$(basename "$app_bundle")" != "$APP_NAME" ]; then
+              final_dir=$(mktemp -d)
+              mv "$app_bundle" "$final_dir/$APP_NAME"
+              app_bundle="$final_dir/$APP_NAME"
+            fi
+
+            (cd "$(dirname "$app_bundle")" && zip -r -q "$output_zip" "$(basename "$app_bundle")")
+            mv -f "$output_zip" "$ZIP_DIR/$basename"
+
+            if [ -f "$zipfile" ]; then
+              rm -f "$zipfile"
             fi
             rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
             echo "[OK] Restructured: $basename (.app at root)"
@@ -259,6 +286,23 @@ jobs:
               mv -f "$f" "$dest" && echo "[OK] Flattened: $(basename "$f")"
             done
             find "$dir" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+          done
+
+      - name: Rename Windows MSI artifacts
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for src in out/make/wix/*.msi; do
+            [ -f "$src" ] || continue
+            filename=$(basename "$src")
+            if [[ "$filename" =~ win32-(x64|ia32)-(.*)\.msi$ ]]; then
+              arch="${BASH_REMATCH[1]}"
+              version="${BASH_REMATCH[2]}"
+              dest="$(dirname "$src")/EmuConfigurator-${arch}-${version}.msi"
+              mv -f "$src" "$dest"
+              echo "[OK] Renamed $filename -> $(basename "$dest")"
+            fi
           done
 
       - name: Validate Artifacts Exist
