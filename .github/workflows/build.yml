@@ -244,6 +244,95 @@ jobs:
 
           echo "[OK] All macOS .zip files restructured (.app at root)"
 
+      - name: Flatten Artifacts for Upload
+        shell: bash
+        run: |
+          set -uo pipefail
+          # Move every artifact to the root of its maker output directory.
+          # Electron Forge nests output at <maker>/[platform/][arch]/file — we want <maker>/file.
+          # On non-Windows the zip restructure step already handled out/make/zip.
+          for dir in out/make/zip out/make/wix out/make/deb out/make/rpm; do
+            [ -d "$dir" ] || continue
+            find "$dir" -mindepth 2 -type f | while IFS= read -r f; do
+              dest="$dir/$(basename "$f")"
+              [ "$f" = "$dest" ] && continue
+              mv -f "$f" "$dest" && echo "[OK] Flattened: $(basename "$f")"
+            done
+            find "$dir" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+          done
+
+      - name: Validate Artifacts Exist
+        shell: bash
+        run: |
+          if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
+            echo "[ERROR] No artifacts found in out/make/"
+            exit 1
+          fi
+          echo "[OK] Artifacts validated"
+
+      # Upload Linux .deb
+      - name: Upload Artifact (linux .deb)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-deb
+          path: out/make/deb/*.deb
+          retention-days: 20
+
+      # Upload Linux .rpm
+      - name: Upload Artifact (linux .rpm)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-rpm
+          path: out/make/rpm/*.rpm
+          retention-days: 20
+
+      # Upload Linux .zip
+      - name: Upload Artifact (linux .zip)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-linux-zip
+          path: out/make/zip/*.zip
+          retention-days: 20
+
+      # Upload macOS ARM64 .zip
+      - name: Upload Artifact (macos arm64 .zip)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-arm64-zip
+          path: out/make/zip/*.zip
+          retention-days: 20
+
+      # Upload macOS x86_64 .zip
+      - name: Upload Artifact (macos x86_64 .zip)
+        if: matrix.os == 'macos-26-intel'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-macos-x86_64-zip
+          path: out/make/zip/*.zip
+          retention-days: 20
+
+      # Upload Windows .msi (WiX installer)
+      - name: Upload Artifact (windows .msi)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-msi-${{ matrix.artifact-suffix }}
+          path: out/make/wix/*.msi
+          retention-days: 20
+
+      # Upload Windows .zip (portable)
+      - name: Upload Artifact (windows .zip)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-zip-${{ matrix.artifact-suffix }}
+          path: out/make/zip/*.zip
+          retention-days: 20
+
   release:
     needs: build
     runs-on: ubuntu-latest
