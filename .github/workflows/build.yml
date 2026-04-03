@@ -86,7 +86,16 @@ jobs:
           # APPLE_TEAM_ID: "XXXXXXXXXX"
           # WINDOWS_CERT_FILE: path to EmuCert.p12
           # WINDOWS_CERT_PASSWORD: certificate password
-        run: yarn make
+        shell: bash
+        run: |
+          node scripts/build.js
+          if [ -n "${EMUCFG_ARCH:-}" ]; then
+            # Explicitly pass --arch: electron-forge make defaults to host arch (always x64)
+            # and ignores packagerConfig.arch unless --arch is given on the command line.
+            yarn run electron-forge make --arch "$EMUCFG_ARCH"
+          else
+            yarn run electron-forge make
+          fi
         # Packages built on each platform (architecture-specific for Windows):
         # macOS: .zip (portable, DMG skipped in CI - requires native macos-alias module)
         # Windows: .msi (WiX installer → Program Files, proper Add/Remove, no auto-launch) + .zip (portable)
@@ -178,6 +187,23 @@ jobs:
 
           echo "[OK] All .zip files restructured (OS folders removed)"
 
+      - name: Flatten Artifacts for Upload
+        shell: bash
+        run: |
+          set -uo pipefail
+          # Move every artifact to the root of its maker output directory.
+          # Electron Forge nests output at <maker>/[platform/][arch]/file — we want <maker>/file.
+          # On non-Windows the zip restructure step already handled out/make/zip.
+          for dir in out/make/zip out/make/wix out/make/deb out/make/rpm; do
+            [ -d "$dir" ] || continue
+            find "$dir" -mindepth 2 -type f | while IFS= read -r f; do
+              dest="$dir/$(basename "$f")"
+              [ "$f" = "$dest" ] && continue
+              mv -f "$f" "$dest" && echo "[OK] Flattened: $(basename "$f")"
+            done
+            find "$dir" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+          done
+
       - name: Validate Artifacts Exist
         shell: bash
         run: |
@@ -193,7 +219,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-deb
-          path: out/make/deb/**/*.deb
+          path: out/make/deb/*.deb
           retention-days: 20
 
       # Upload Linux .rpm
@@ -202,7 +228,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-rpm
-          path: out/make/rpm/**/*.rpm
+          path: out/make/rpm/*.rpm
           retention-days: 20
 
       # Upload Linux .zip
@@ -211,7 +237,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-zip
-          path: out/make/zip/**/*.zip
+          path: out/make/zip/*.zip
           retention-days: 20
 
       # Upload macOS ARM64 .zip
@@ -220,7 +246,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-macos-arm64-zip
-          path: out/make/zip/**/*.zip
+          path: out/make/zip/*.zip
           retention-days: 20
 
       # Upload macOS x86_64 .zip
@@ -229,7 +255,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-macos-x86_64-zip
-          path: out/make/zip/**/*.zip
+          path: out/make/zip/*.zip
           retention-days: 20
 
       # Upload Windows .msi (WiX installer)
@@ -238,7 +264,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-msi-${{ matrix.artifact-suffix }}
-          path: out/make/wix/**/*.msi
+          path: out/make/wix/*.msi
           retention-days: 20
 
       # Upload Windows .zip (portable)
@@ -247,7 +273,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-zip-${{ matrix.artifact-suffix }}
-          path: out/make/zip/**/*.zip
+          path: out/make/zip/*.zip
           retention-days: 20
 
   release:
@@ -274,13 +300,13 @@ jobs:
           tag_name: ${{ github.ref_name }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-msi-*/**/*.msi
-            ./Artifacts/EmuConfigurator-windows-zip-*/**/*.zip
-            ./Artifacts/EmuConfigurator-macos-arm64-zip/**/*.zip
-            ./Artifacts/EmuConfigurator-macos-x86_64-zip/**/*.zip
-            ./Artifacts/EmuConfigurator-linux-deb/**/*.deb
-            ./Artifacts/EmuConfigurator-linux-rpm/**/*.rpm
-            ./Artifacts/EmuConfigurator-linux-zip/**/*.zip
+            ./Artifacts/EmuConfigurator-windows-msi-*/*.msi
+            ./Artifacts/EmuConfigurator-windows-zip-*/*.zip
+            ./Artifacts/EmuConfigurator-macos-arm64-zip/*.zip
+            ./Artifacts/EmuConfigurator-macos-x86_64-zip/*.zip
+            ./Artifacts/EmuConfigurator-linux-deb/*.deb
+            ./Artifacts/EmuConfigurator-linux-rpm/*.rpm
+            ./Artifacts/EmuConfigurator-linux-zip/*.zip
           draft: true
           prerelease: ${{ contains(github.ref, 'rc') }}
 
