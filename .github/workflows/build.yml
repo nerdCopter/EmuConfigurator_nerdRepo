@@ -298,7 +298,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: "EmuConfigurator ${{ github.ref_name }}"
+          name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
             ./Artifacts/EmuConfigurator-windows-msi-*/*.msi
             ./Artifacts/EmuConfigurator-windows-zip-*/*.zip
