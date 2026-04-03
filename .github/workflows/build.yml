@@ -192,7 +192,7 @@ jobs:
 
           echo "[OK] All .zip files restructured (OS folders removed)"
 
-      - name: Restructure .zip Artifacts (macOS: .app at root)
+      - name: "Restructure .zip Artifacts (macOS: .app at root)"
         if: startsWith(matrix.os, 'macos')
         shell: bash
         run: |
