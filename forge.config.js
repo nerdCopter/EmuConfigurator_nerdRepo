@@ -50,20 +50,20 @@ module.exports = {
   rebuildConfig: {},
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
+      name: '@electron-forge/maker-wix',
       platforms: ['win32'],
       config: {
+        // WiX MSI: installs to Program Files, proper Add/Remove Programs, clean uninstall.
+        // No auto-launch during install/uninstall (unlike Squirrel.Windows).
+        // Requires WiX Toolset v3, pre-installed on GitHub Actions windows-latest.
         certificateFile: process.env.WINDOWS_CERT_FILE,
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
-        // Note: Squirrel.Windows runs app after setup by design (delta-update framework).
-        // Users: Manual app launch from Start Menu or shortcuts avoids connection state issues.
-        // For true NSIS installer, consider switching to electron-builder separately.
       },
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin', 'linux'],
-      // Note: ZIP maker excluded for Windows (use Squirrel installer instead)
+      platforms: ['darwin', 'linux', 'win32'],
+      // Portable ZIP for all platforms: extract and run, no installer needed.
     },
     {
       name: '@electron-forge/maker-deb',

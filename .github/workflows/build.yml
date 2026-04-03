@@ -25,7 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-26-intel, windows-latest]
+        # Pure include-only matrix: each entry is an explicit standalone job.
+        # Avoids GitHub Actions ambiguity when two includes share the same os value.
         include:
           - os: ubuntu-latest
             artifact-suffix: linux-x64
@@ -88,48 +89,48 @@ jobs:
         run: yarn make
         # Packages built on each platform (architecture-specific for Windows):
         # macOS: .zip (portable, DMG skipped in CI - requires native macos-alias module)
-        # Windows: .exe (Squirrel.Windows - delta-update framework)
+        # Windows: .msi (WiX installer → Program Files, proper Add/Remove, no auto-launch) + .zip (portable)
         # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
       - name: Restructure .zip Artifacts (flatten OS folders)
-        if: runner.os != 'Windows'
         shell: bash
         run: |
           set -euo pipefail
           ROOT_DIR=$(pwd)
           ZIP_DIR="$ROOT_DIR/out/make/zip"
-          
+
+          # Electron Forge places ZIPs at zip/platform/arch/file.zip (three levels).
           # Use nullglob to safely handle no matches
           shopt -s nullglob
-          zipfiles=( "$ZIP_DIR"/*/*.zip )
+          zipfiles=( "$ZIP_DIR"/*/*/*.zip )
           shopt -u nullglob
-          
+
           if [ ${#zipfiles[@]} -eq 0 ]; then
             echo "[WARN] No .zip files found in $ZIP_DIR - skipping restructure"
             exit 0
           fi
-          
+
           for zipfile in "${zipfiles[@]}"; do
             basename=$(basename "$zipfile")
             tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
             output_zip="$ZIP_DIR/$basename"
-            
+
             echo "Processing: $zipfile"
-            
+
             # Unzip with error handling
             if ! unzip -q "$zipfile" -d "$tmpdir"; then
               echo "[FAIL] unzip failed for $zipfile"
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             # Find the first directory safely
             if ! cd "$tmpdir"; then
               echo "[FAIL] cannot cd to tmpdir $tmpdir"
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             # Find first directory using a robust method
             app_folder=$(find . -maxdepth 1 -type d ! -name '.' -print -quit)
             if [ -z "$app_folder" ]; then
@@ -138,7 +139,7 @@ jobs:
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             app_folder="${app_folder#./}"  # Remove leading ./
             if ! cd "$app_folder"; then
               echo "[FAIL] cannot cd to app folder $app_folder in $tmpdir"
@@ -146,7 +147,7 @@ jobs:
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             # Re-zip with error handling
             if ! zip -r -q "$output_zip" .; then
               echo "[FAIL] zip failed for $zipfile in app folder $app_folder"
@@ -154,14 +155,14 @@ jobs:
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             # Return to zip directory
             if ! cd "$ZIP_DIR"; then
               echo "[FAIL] cannot return to $ZIP_DIR"
               rm -rf "$tmpdir"
               exit 1
             fi
-            
+
             # Remove the original nested zip only after successful re-zip
             if [ -f "$zipfile" ] && [ "$zipfile" != "$output_zip" ]; then
               rm -f "$zipfile" || { echo "[WARN] failed to remove original zip $zipfile"; }
@@ -171,28 +172,17 @@ jobs:
             rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
             echo "[OK] Restructured: $basename"
           done
-          
+
           echo "[OK] All .zip files restructured (OS folders removed)"
 
       - name: Validate Artifacts Exist
-        if: runner.os != 'Windows'
+        shell: bash
         run: |
           if [ ! -d "out/make" ] || [ -z "$(find out/make -type f 2>/dev/null | head -1)" ]; then
             echo "[ERROR] No artifacts found in out/make/"
             exit 1
           fi
           echo "[OK] Artifacts validated"
-
-      - name: Validate Artifacts Exist (Windows)
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          $files = Get-ChildItem -Path "out/make/squirrel.windows" -Recurse -File -ErrorAction SilentlyContinue
-          if ($files.Count -eq 0) {
-            Write-Error "No .exe artifacts found in out/make/squirrel.windows/"
-            exit 1
-          }
-          Write-Host "[OK] Windows .exe artifacts validated"
 
       # Upload Linux .deb
       - name: Upload Artifact (linux .deb)
@@ -239,13 +229,22 @@ jobs:
           path: out/make/zip/**/*.zip
           retention-days: 20
 
-      # Upload Windows .exe
-      - name: Upload Artifact (windows .exe)
+      # Upload Windows .msi (WiX installer)
+      - name: Upload Artifact (windows .msi)
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-windows-exe-${{ matrix.artifact-suffix }}
-          path: out/make/squirrel.windows/**/*.exe
+          name: EmuConfigurator-windows-msi-${{ matrix.artifact-suffix }}
+          path: out/make/wix/**/*.msi
+          retention-days: 20
+
+      # Upload Windows .zip (portable)
+      - name: Upload Artifact (windows .zip)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-zip-${{ matrix.artifact-suffix }}
+          path: out/make/zip/**/*.zip
           retention-days: 20
 
   release:
@@ -262,7 +261,7 @@ jobs:
       - name: List Release Artifacts
         run: |
           echo "### Release Artifacts ###"
-          find ./Artifacts -type f \( -name "*.exe" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
+          find ./Artifacts -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
@@ -272,7 +271,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           release_name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-exe-*/**/*.exe
+            ./Artifacts/EmuConfigurator-windows-msi-*/**/*.msi
+            ./Artifacts/EmuConfigurator-windows-zip-*/**/*.zip
             ./Artifacts/EmuConfigurator-macos-arm64-zip/**/*.zip
             ./Artifacts/EmuConfigurator-macos-x86_64-zip/**/*.zip
             ./Artifacts/EmuConfigurator-linux-deb/**/*.deb
