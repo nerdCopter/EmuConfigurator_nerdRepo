@@ -243,7 +243,6 @@ jobs:
           done
 
           echo "[OK] All macOS .zip files restructured (.app at root)"
-          retention-days: 20
 
   release:
     needs: build
