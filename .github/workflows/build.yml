@@ -93,6 +93,9 @@ jobs:
         # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
       - name: Restructure .zip Artifacts (flatten OS folders)
+        if: runner.os != 'Windows'
+        # Windows ZIPs from Electron Forge use backslash path separators which Git Bash
+        # unzip cannot handle. Windows portable ZIPs are uploaded as-is (app folder inside).
         shell: bash
         run: |
           set -euo pipefail
