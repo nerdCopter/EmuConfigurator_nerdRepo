@@ -12,7 +12,11 @@ var CliAutoComplete = {
 };
 
 CliAutoComplete.isEnabled = function() {
-    return this.isBuilding() || (this.configEnabled && CONFIG.flightControllerIdentifier == "EMUF" && this.builder.state != 'fail');
+    // Should suppress non-CLI output when:
+    // 1. We're still building the CLI cache, OR
+    // 2. We've finished building and have valid CLI data (state='done')
+    // Do NOT suppress when state='reset' (cleanup state) or 'fail' (error state)
+    return this.isBuilding() || (this.configEnabled && CONFIG.flightControllerIdentifier == "EMUF" && this.builder.state == 'done');
 };
 
 CliAutoComplete.isBuilding = function() {
