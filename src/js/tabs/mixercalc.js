@@ -803,9 +803,9 @@ function mixerCalcMain() {
                     const motor = motors[highlightedMotor];
                     motor.direction = 1 - motor.direction;
                     if (motor.direction === 1) {
-                        motor.image.src = 'resources/mixercalc/emu-prop-cw.png';
+                        motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-cw.png';
                     } else {
-                        motor.image.src = 'resources/mixercalc/emu-prop-ccw.png';
+                        motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png';
                     }
                 }
                 break;
