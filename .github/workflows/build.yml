@@ -106,18 +106,6 @@ jobs:
         # Windows: .msi (WiX installer → Program Files, proper Add/Remove, no auto-launch) + .zip (portable)
         # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
-      - name: Debug - List Forge output structure
-        if: startsWith(matrix.os, 'macos')
-        shell: bash
-        run: |
-          echo "=== out/make tree ==="
-          find out/make -print | head -60 || echo "(no out/make)"
-          echo "=== zip contents of any .zip found ==="
-          find out/make -name '*.zip' | while read zf; do
-            echo "--- $zf ---"
-            unzip -l "$zf" | head -10
-          done
-
       - name: Restructure .zip Artifacts (flatten OS folders)
         if: runner.os == 'Linux'
         # macOS ZIPs are handled by the macOS-specific step below (preserves .app bundle).
@@ -216,7 +204,6 @@ jobs:
           ZIP_DIR="$ROOT_DIR/out/make/zip"
           ARCH_NAME="${APP_SUFFIX#macos-}"
           APP_NAME="EmuConfigurator-${ARCH_NAME}.app"
-          FINAL_DEST="$ZIP_DIR/$APP_NAME"
 
           # Forge output: zip/darwin/{arch}/EmuConfigurator-darwin-{arch}-{ver}.zip
           shopt -s nullglob
@@ -229,14 +216,18 @@ jobs:
           fi
 
           for zipfile in "${zipfiles[@]}"; do
-            echo "Processing: $zipfile"
+            # Derive output zip name: replace EmuConfigurator-darwin-{arch} with EmuConfigurator-{ARCH_NAME}
+            orig_name=$(basename "$zipfile")
+            out_name="${orig_name/EmuConfigurator-darwin-*/EmuConfigurator-${ARCH_NAME}-${orig_name##*-}}"
+            # Simpler: just derive version from orig filename
+            version=$(echo "$orig_name" | grep -oP '\d+\.\d+\.\d+' || echo '0.0.0')
+            OUTPUT_ZIP="$ZIP_DIR/EmuConfigurator-darwin-${ARCH_NAME}-${version}.zip"
+
+            echo "Processing: $zipfile -> $OUTPUT_ZIP"
             tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
 
             # Extract outer zip
-            if ! unzip -q "$zipfile" -d "$tmpdir"; then
-              echo "[FAIL] unzip failed for $zipfile"
-              rm -rf "$tmpdir"; exit 1
-            fi
+            unzip -q "$zipfile" -d "$tmpdir"
 
             # Handle nested zip (Forge sometimes wraps in another zip)
             nested_zip=$(find "$tmpdir" -type f -name '*.zip' | head -n1 || true)
@@ -247,10 +238,9 @@ jobs:
               tmpdir="$nested_tmp"
             fi
 
-            # Find .app bundle (most common case)
+            # Find .app bundle
             app_bundle=$(find "$tmpdir" -type d -name '*.app' | head -n1 || true)
             if [ -z "$app_bundle" ]; then
-              # Fallback: if only Contents/ exists, reconstruct .app
               contents_dir=$(find "$tmpdir" -type d -name 'Contents' | head -n1 || true)
               if [ -n "$contents_dir" ]; then
                 app_bundle="$(dirname "$contents_dir")"
@@ -260,24 +250,31 @@ jobs:
               fi
             fi
 
-            # Move .app to final destination (absolute path, no relative issues)
-            rm -rf "$FINAL_DEST"
-            cp -r "$app_bundle" "$FINAL_DEST"
+            # Rename .app bundle to arch-specific name
+            app_parent="$(dirname "$app_bundle")"
+            mv "$app_bundle" "$app_parent/$APP_NAME"
+
+            # Re-zip the .app so upload-artifact gets a plain .zip file
+            # Result: EmuConfigurator-darwin-arm64-0.4.3.zip → EmuConfigurator-arm64.app/
+            (cd "$app_parent" && zip -r -q "$OUTPUT_ZIP" "$APP_NAME")
+
             rm -rf "$tmpdir"
             rm -f "$zipfile"
-            echo "[OK] Extracted .app to $FINAL_DEST"
+            echo "[OK] Created $OUTPUT_ZIP containing $APP_NAME"
           done
 
           # Clean empty subdirs
           find "$ZIP_DIR" -mindepth 1 -type d -empty -delete 2>/dev/null || true
 
-          # Verify output exists
-          if [ -d "$FINAL_DEST" ]; then
-            echo "[OK] $APP_NAME exists and ready for upload"
-          else
-            echo "[FAIL] $APP_NAME not found after extraction"
+          # Verify
+          shopt -s nullglob
+          out_zips=( "$ZIP_DIR"/*.zip )
+          shopt -u nullglob
+          if [ ${#out_zips[@]} -eq 0 ]; then
+            echo "[FAIL] No output zip found after macOS extraction"
             exit 1
           fi
+          echo "[OK] macOS release zip ready: ${out_zips[*]}"
 
       - name: Flatten Artifacts for Upload
         shell: bash
@@ -355,22 +352,22 @@ jobs:
           path: out/make/zip/*.zip
           retention-days: 20
 
-      # Upload macOS ARM64 .app (directory; upload-artifact wraps it once → artifact.zip → .app/)
+      # Upload macOS ARM64 .zip (contains EmuConfigurator-arm64.app at root)
       - name: Upload Artifact (macos arm64 .app)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-macos-arm64
-          path: out/make/zip/EmuConfigurator-arm64.app
+          path: out/make/zip/*.zip
           retention-days: 20
 
-      # Upload macOS x86_64 .app (directory; upload-artifact wraps it once → artifact.zip → .app/)
+      # Upload macOS x86_64 .zip (contains EmuConfigurator-x86_64.app at root)
       - name: Upload Artifact (macos x86_64 .app)
         if: matrix.os == 'macos-26-intel'
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-macos-x86_64
-          path: out/make/zip/EmuConfigurator-x86_64.app
+          path: out/make/zip/*.zip
           retention-days: 20
 
       # Upload Windows .msi (WiX installer)
