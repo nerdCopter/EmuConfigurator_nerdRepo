@@ -106,6 +106,18 @@ jobs:
         # Windows: .msi (WiX installer → Program Files, proper Add/Remove, no auto-launch) + .zip (portable)
         # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
+      - name: Debug - List Forge output structure
+        if: startsWith(matrix.os, 'macos')
+        shell: bash
+        run: |
+          echo "=== out/make tree ==="
+          find out/make -print | head -60 || echo "(no out/make)"
+          echo "=== zip contents of any .zip found ==="
+          find out/make -name '*.zip' | while read zf; do
+            echo "--- $zf ---"
+            unzip -l "$zf" | head -10
+          done
+
       - name: Restructure .zip Artifacts (flatten OS folders)
         if: runner.os == 'Linux'
         # macOS ZIPs are handled by the macOS-specific step below (preserves .app bundle).
@@ -258,7 +270,7 @@ jobs:
 
           # Clean empty subdirs
           find "$ZIP_DIR" -mindepth 1 -type d -empty -delete 2>/dev/null || true
-          
+
           # Verify output exists
           if [ -d "$FINAL_DEST" ]; then
             echo "[OK] $APP_NAME exists and ready for upload"
