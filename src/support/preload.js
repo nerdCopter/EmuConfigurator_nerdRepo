@@ -134,6 +134,17 @@ const chromeSockets = {
         },
 
         connect: function (socketId, host, port, callback) {
+            // Helper to remove all three IPC listeners and the socketHandlers entry.
+            function cleanupSocketHandlers(id) {
+                const h = chromeSockets.tcp._socketHandlers.get(id);
+                if (h) {
+                    ipcRenderer.removeListener('tcp-data', h.dataHandler);
+                    ipcRenderer.removeListener('tcp-error', h.errorHandler);
+                    ipcRenderer.removeListener('tcp-close', h.closeHandler);
+                    chromeSockets.tcp._socketHandlers.delete(id);
+                }
+            }
+
             // Define handlers for this specific socket
             const dataHandler = function (event, id, arrayBuffer) {
                 if (id !== socketId) return;
@@ -145,6 +156,9 @@ const chromeSockets = {
             };
             const closeHandler = function (event, id) {
                 if (id !== socketId) return;
+                // Clean up listeners and the handler entry before dispatching so
+                // retries with the same socketId do not accumulate handlers.
+                cleanupSocketHandlers(socketId);
                 chromeSockets.tcp.onReceiveError.dispatch({ socketId: id, resultCode: -100 });
             };
 
@@ -157,8 +171,16 @@ const chromeSockets = {
             ipcRenderer.on('tcp-close', closeHandler);
 
             ipcRenderer.invoke('tcp-connect', socketId, host, port).then(function (result) {
+                if (result !== 0) {
+                    // Connect failed (negative result code); remove listeners immediately
+                    // so the caller can retry without accumulating handlers.
+                    cleanupSocketHandlers(socketId);
+                }
                 callback(result); // 0 = success, negative = failure
-            }).catch(function () { callback(-1); });
+            }).catch(function () {
+                cleanupSocketHandlers(socketId);
+                callback(-1);
+            });
         },
 
         send: function (socketId, data, callback) {
