@@ -509,17 +509,24 @@ TABS.cli.cleanup = function (callback) {
         return;
     }
     this.send(getCliCommand('exit\r', this.cliBuffer), function (writeInfo) {
-        // Clear CLI flags before invoking callback so that any serial bytes
-        // arriving after the tab switch are routed to MSP.read() and not
-        // to TABS.cli.read().  Previously cliActive/cliValid were cleared
-        // AFTER callback(), leaving a window where incoming bytes were
-        // misrouted, causing MSP parser corruption and slowdowns.
+        // Clear CLI flags immediately so incoming serial bytes route to
+        // MSP.read() rather than TABS.cli.read().
         CONFIGURATOR.cliActive = false;
         CONFIGURATOR.cliValid = false;
 
-        if (callback) {
-            callback();
-        }
+        // Flush any stale MSP retransmit timers (setInterval in msp.js
+        // send_message) that were pending before CLI was entered.
+        // Without this they keep firing serial.send() every 1s, competing
+        // with the next tab's legitimate MSP polls.
+        MSP.callbacks_cleanup();
+
+        // Give the FC ~500ms to finish processing 'exit' and leave CLI mode
+        // before the next tab starts sending MSP requests. Without this delay,
+        // the FC may still be in a transitional state and return malformed
+        // responses, causing CRC errors and MSP parser corruption.
+        setTimeout(function () {
+            if (callback) { callback(); }
+        }, 500);
     });
 
     CliAutoComplete.cleanup();
