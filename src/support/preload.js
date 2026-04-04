@@ -526,7 +526,11 @@ const chromeFileSystem = {
                             writer.readyState = 1; // WRITING
                             blob.arrayBuffer().then(arrayBuffer => {
                                 const isFirstWrite = writer.length === 0;
-                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer)), isFirstWrite).then(written => {
+                                // Pass writer.position so the IPC handler writes at the
+                                // correct offset; enables seek()-based overwrites rather
+                                // than always appending to the end of the file.
+                                const writePosition = isFirstWrite ? null : writer.position;
+                                ipcRenderer.invoke('dialog:write-binary-file', filePath, Array.from(new Uint8Array(arrayBuffer)), isFirstWrite, writePosition).then(written => {
                                     const safeWritten = Number.isFinite(Number(written)) ? Number(written) : 0;
                                     writer.length += safeWritten;
                                     writer.position = writer.length;

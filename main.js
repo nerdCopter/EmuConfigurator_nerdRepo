@@ -770,12 +770,26 @@ ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
 });
 
 // IPC: write binary content to file (preserves binary data)
-ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, isFirstWrite = true) => {
+// position: byte offset to write at; null means append (legacy) or create (isFirstWrite)
+ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, isFirstWrite = true, position = null) => {
   const dir = path.dirname(filePath);
   await fs.promises.mkdir(dir, { recursive: true });
   const buffer = Buffer.from(byteArray);
-  // isFirstWrite=true: create/truncate the file; false: append chunk to existing file
-  await fs.promises.writeFile(filePath, buffer, { flag: isFirstWrite ? 'w' : 'a' });
+  if (isFirstWrite) {
+    // Create/truncate and write from the beginning
+    await fs.promises.writeFile(filePath, buffer, { flag: 'w' });
+  } else if (position !== null && Number.isFinite(position)) {
+    // Write at the specified position without truncating (seek-based write)
+    const fh = await fs.promises.open(filePath, 'r+');
+    try {
+      await fh.write(buffer, 0, buffer.length, position);
+    } finally {
+      await fh.close();
+    }
+  } else {
+    // Append chunk to existing file (legacy behaviour)
+    await fs.promises.writeFile(filePath, buffer, { flag: 'a' });
+  }
   // Log only on first write (start); suppress per-chunk logs
   if (isFirstWrite) {
     console.log(`[BBL] Downloading blackbox log to: ${filePath}`);
