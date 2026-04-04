@@ -324,7 +324,19 @@ function finishOpen() {
 
     onConnect();
 
-    GUI.selectDefaultTabWhenConnected();
+    // If cli.cleanup stored a pending tab-switch callback (because the CLI
+    // 'exit' command causes an FC reboot and USB re-enumerate), invoke it here
+    // exactly once now that the full MSP handshake is verified complete.
+    // Skipping selectDefaultTabWhenConnected avoids a double tab-initialization
+    // that would occur if both code paths tried to initialize the target tab.
+    if (GUI.pendingAfterReconnect) {
+        var pending = GUI.pendingAfterReconnect;
+        GUI.pendingAfterReconnect = null;
+        console.log('[finishOpen] invoking pending CLI exit tab-switch callback');
+        GUI.timeout_add('cli_exit_tab_switch', pending, 200);
+    } else {
+        GUI.selectDefaultTabWhenConnected();
+    }
 }
 
 function connectCli() {
@@ -433,7 +445,6 @@ function onClosed(result) {
     // Without this, CliAutoComplete.builder.state remains in building state and
     // isBuilding() returns true even after disconnect.
     if (typeof CliAutoComplete !== 'undefined') {
-        console.log('[serial_backend] onClosed() - calling CliAutoComplete.cleanup()');
         CliAutoComplete.cleanup();
     }
 }
@@ -680,14 +691,23 @@ function update_dataflash_global() {
 function reinitialiseConnection(originatorTab, callback) {
     GUI.log(i18n.getMessage('deviceRebooting'));
 
-    if (FC.boardHasVcp()) { // VCP-based flight controls may crash old drivers, we catch and reconnect
-        GUI.timeout_add('waiting_for_disconnect', function waiting_for_bootup() {
-            if (callback) {
-                callback();
+    if (FC.boardHasVcp()) {
+        // VCP boards (virtually all modern USB FCs): the port disappears and
+        // reappears after systemReset().  GUI.timeout_add timers are cleared on
+        // disconnect so we must use a raw setInterval that survives the port
+        // drop.  Poll until a NEW connection has completed its full MSP
+        // handshake (connectionTimestamp is updated in finishOpen).
+        var prevTs = connectionTimestamp;
+        var attempts = 0;
+        var poll = setInterval(function () {
+            if (connectionTimestamp !== prevTs && CONFIGURATOR.connectionValid) {
+                clearInterval(poll);
+                if (callback) { callback(); }
+            } else if (++attempts > 100) { // 10 s hard timeout
+                clearInterval(poll);
+                if (callback) { callback(); }
             }
         }, 100);
-        //TODO: Need to work out how to do a proper reconnect here.
-        // caveat: Timeouts set with `GUI.timeout_add()` are removed on disconnect.
     } else {
         GUI.timeout_add('waiting_for_bootup', function waiting_for_bootup() {
             if (callback) {

@@ -12,14 +12,15 @@ var CliAutoComplete = {
 };
 
 CliAutoComplete.isEnabled = function() {
-    // Enable autocomplete when:
-    // 1. We're building the CLI cache, OR
-    // 2. Config is enabled AND we have valid CLI data (state='done') AND not failed
-    return this.isBuilding() || (this.configEnabled && CONFIG.flightControllerIdentifier == "EMUF" && this.builder.state == 'done');
+    // True when autocomplete is active or ready to build.
+    // state='reset': ready to build (builderStart not yet called)
+    // state='done':  cache built, suggestions available
+    // state='fail':  gave up — disable entirely
+    // isBuilding():  currently fetching help/dump — suppress raw output
+    return this.isBuilding() || (this.configEnabled && CONFIG.flightControllerIdentifier == "EMUF" && this.builder.state != 'fail');
 };
 
 CliAutoComplete.isBuilding = function() {
-    // Suppress output (building state) when state is NOT reset/done/fail
     return this.builder.state != 'reset' && this.builder.state != 'done' && this.builder.state != 'fail';
 };
 
@@ -40,17 +41,14 @@ CliAutoComplete.openLater = function(force) {
 };
 
 CliAutoComplete.setEnabled = function(enable) {
-    console.log('[CliAutoComplete] setEnabled:', enable, '(was:', this.configEnabled, ')');
     if (this.configEnabled != enable) {
         this.configEnabled = enable;
 
         if (CONFIGURATOR.cliActive && CONFIGURATOR.cliValid) {
             // cli is already open
             if (this.isEnabled()) {
-                console.log('[CliAutoComplete] setEnabled -> starting builder');
                 this.builderStart();
             } else if (!this.isEnabled() && !this.isBuilding()) {
-                console.log('[CliAutoComplete] setEnabled -> cleaning up');
                 this.cleanup();
             }
         }
@@ -58,7 +56,6 @@ CliAutoComplete.setEnabled = function(enable) {
 };
 
 CliAutoComplete.initialize = function($textarea, sendLine, writeToOutput) {
-    console.log('[CliAutoComplete] initialize called');
     this.$textarea = $textarea;
     this.forceOpen = false;
     this.sendLine = sendLine;
@@ -67,16 +64,13 @@ CliAutoComplete.initialize = function($textarea, sendLine, writeToOutput) {
 };
 
 CliAutoComplete.cleanup = function() {
-    console.log('[CliAutoComplete] cleanup START - stopping watchdog, resetting builder state');
     // Stop the watchdog FIRST so it cannot fire after cleanup and call
     // builderStart() again, which would send CLI sentinel bytes to the
     // serial port after cliActive is false, poisoning the MSP stream.
     this._builderWatchdogStop();
     this.$textarea.textcomplete('destroy');
-    var oldState = this.builder.state;
     this.builder.state = 'reset';
     this.builder.numFails = 0;
-    console.log('[CliAutoComplete] cleanup DONE - builder.state:', oldState, '->', this.builder.state);
 };
 
 CliAutoComplete._builderWatchdogTouch = function() {
@@ -85,23 +79,19 @@ CliAutoComplete._builderWatchdogTouch = function() {
     this._builderWatchdogStop();
 
     GUI.timeout_add('autocomplete_builder_watchdog', function() {
-        console.log('[CliAutoComplete] watchdog fired, numFails:', self.builder.numFails, 'cliActive:', CONFIGURATOR.cliActive, 'cliValid:', CONFIGURATOR.cliValid);
         // Do not retry if we are no longer in an active CLI session.
         // Without this guard the watchdog sends CLI sentinel bytes to the
         // serial port after the tab has been closed, corrupting the MSP stream.
         if (!CONFIGURATOR.cliActive || !CONFIGURATOR.cliValid) {
-            console.log('[CliAutoComplete] watchdog: not in active CLI, resetting state to reset');
             self.builder.state = 'reset';
             self.builder.numFails = 0;
             return;
         }
         if (self.builder.numFails++) {
-            console.log('[CliAutoComplete] watchdog: numFails is now', self.builder.numFails, '- marking as fail');
             self.builder.state = 'fail';
             self.writeToOutput('Failed!<br># ');
             $(self).trigger('build:stop');
         } else {
-            console.log('[CliAutoComplete] watchdog: retry #1');
             // give it one more try
             self.builder.state = 'reset';
             self.builderStart();
@@ -110,16 +100,13 @@ CliAutoComplete._builderWatchdogTouch = function() {
 };
 
 CliAutoComplete._builderWatchdogStop = function() {
-    console.log('[CliAutoComplete] watchdog STOP');
     GUI.timeout_remove('autocomplete_builder_watchdog');
 };
 
 CliAutoComplete.builderStart = function() {
-    console.log('[CliAutoComplete] builderStart called, state:', this.builder.state, 'cliActive:', CONFIGURATOR.cliActive, 'cliValid:', CONFIGURATOR.cliValid);
     // Defensive guard: do not start if we are not in an active CLI session.
     // The watchdog guard is the primary safeguard; this is a belt-and-braces check.
     if (!CONFIGURATOR.cliActive || !CONFIGURATOR.cliValid) {
-        console.log('[CliAutoComplete] builderStart: not in active CLI session, aborting');
         return;
     }
     if (this.builder.state == 'reset') {
@@ -164,12 +151,10 @@ CliAutoComplete.builderParseLine = function(line) {
             this._builderWatchdogStop();
 
             if (!this.configEnabled) {
-                  console.log('[CliAutoComplete] builder finished, but disabled - cancelling');
-                  // disabled while we were building
-                  this.writeToOutput('Cancelled!<br># ');
-                  this.cleanup();
-              } else {
-                  console.log('[CliAutoComplete] builder FINISHED SUCCESSFULLY - state: reset -> done');
+                // disabled while we were building
+                this.writeToOutput('Cancelled!<br># ');
+                this.cleanup();
+            } else {
                 cache.settings.sort();
                 cache.commands.sort();
                 cache.feature.sort();

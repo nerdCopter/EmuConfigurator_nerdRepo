@@ -316,14 +316,16 @@ TABS.cli.initialize = function (callback, nwGui) {
         // give input element user focus
         textarea.focus();
 
-        // Load and wire up Advanced CLI AutoComplete checkbox
+        // Load and wire up Advanced CLI AutoComplete checkbox.
+        // The change handler is attached AFTER setting the initial prop to
+        // prevent switchery's init from triggering it and writing false to storage.
         ConfigStorage.get('cliAutoCompleteEnabled', function(obj) {
-            let enabled = obj.cliAutoCompleteEnabled !== false; // default to true if not stored
+            let enabled = obj.cliAutoCompleteEnabled !== false; // default true if never stored
             const checkbox = $('input[name="cliAutoCompleteCheckbox"]');
             checkbox.prop('checked', enabled);
             CliAutoComplete.setEnabled(enabled);
-            
-            // Wire up checkbox change event
+
+            // Attach change handler only after initial state is set.
             checkbox.on('change', function() {
                 let checked = $(this).prop('checked');
                 ConfigStorage.set({ 'cliAutoCompleteEnabled': checked });
@@ -512,43 +514,36 @@ TABS.cli.send = function (line, callback) {
 };
 
 TABS.cli.cleanup = function (callback) {
-    console.log('[cli.cleanup] START - cliValid:', CONFIGURATOR.cliValid, 'cliActive:', CONFIGURATOR.cliActive, 'connectionValid:', CONFIGURATOR.connectionValid);
     if (TABS.cli.GUI.snippetPreviewWindow) {
         TABS.cli.GUI.snippetPreviewWindow.destroy();
         TABS.cli.GUI.snippetPreviewWindow = null;
     }
     if (!(CONFIGURATOR.connectionValid && CONFIGURATOR.cliValid && CONFIGURATOR.cliActive)) {
-        console.log('[cli.cleanup] not in active CLI state, returning early');
-        if (callback) {
-            callback();
-        }
-
+        if (callback) { callback(); }
         return;
     }
-    console.log('[cli.cleanup] sending exit command to FC');
-    this.send(getCliCommand('exit\r', this.cliBuffer), function (writeInfo) {
-        console.log('[cli.cleanup] exit written, clearing cliActive/cliValid and calling MSP.callbacks_cleanup()');
-        // Clear CLI flags immediately so incoming serial bytes route to
-        // MSP.read() rather than TABS.cli.read().
-        CONFIGURATOR.cliActive = false;
-        CONFIGURATOR.cliValid = false;
 
-        // Flush any stale MSP retransmit timers (setInterval in msp.js
-        // send_message) that were pending before CLI was entered.
-        // Without this they keep firing serial.send() every 1s, competing
-        // with the next tab's legitimate MSP polls.
-        MSP.callbacks_cleanup();
+    // Clear CLI flags synchronously so bytes received during FC reboot go to
+    // MSP.read() rather than TABS.cli.read().
+    CONFIGURATOR.cliActive = false;
+    CONFIGURATOR.cliValid = false;
 
-        // Give the FC ~500ms to finish processing 'exit' and leave CLI mode
-        // before the next tab starts sending MSP requests. Without this delay,
-        // the FC may still be in a transitional state and return malformed
-        // responses, causing CRC errors and MSP parser corruption.
-        setTimeout(function () {
-            console.log('[cli.cleanup] 500ms delay complete, invoking tab switch callback');
-            if (callback) { callback(); }
-        }, 500);
-    });
-
+    // Detach autocomplete before exit bytes fly.
     CliAutoComplete.cleanup();
     $(CliAutoComplete).off();
+
+    // Flush stale MSP retransmit timers accumulated while in CLI mode.
+    MSP.callbacks_cleanup();
+
+    // 'exit' always triggers cliReboot() in firmware -> systemReset() -> USB
+    // disconnect + re-enumerate.  A fixed timeout races this window and causes
+    // MSP request timeouts on the next tab.  Instead we store the tab-switch
+    // callback so finishOpen() in serial_backend can fire it exactly once
+    // after the full MSP handshake of the new connection completes.  This also
+    // prevents a double tab-init that would occur if both our poll AND
+    // selectDefaultTabWhenConnected both tried to initialize the target tab.
+    GUI.pendingAfterReconnect = callback;
+
+    this.send(getCliCommand('exit\r', this.cliBuffer), function () {
+    });
 };
