@@ -107,9 +107,10 @@ jobs:
         # Linux: .deb, .rpm (native package managers), plus .zip (portable)
 
       - name: Restructure .zip Artifacts (flatten OS folders)
-        if: runner.os != 'Windows'
-        # Windows ZIPs from Electron Forge use backslash path separators which Git Bash
-        # unzip cannot handle. Windows portable ZIPs are uploaded as-is (app folder inside).
+        if: runner.os == 'Linux'
+        # macOS ZIPs are handled by the macOS-specific step below (preserves .app bundle).
+        # Windows ZIPs use backslash path separators which Git Bash unzip cannot handle.
+        # Windows portable ZIPs are uploaded as-is (app folder inside).
         shell: bash
         run: |
           set -euo pipefail
@@ -401,13 +402,10 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
-            ./Artifacts/EmuConfigurator-windows-msi-*/*.msi
-            ./Artifacts/EmuConfigurator-windows-zip-*/*.zip
-            ./Artifacts/EmuConfigurator-macos-arm64-zip/*.zip
-            ./Artifacts/EmuConfigurator-macos-x86_64-zip/*.zip
-            ./Artifacts/EmuConfigurator-linux-deb/*.deb
-            ./Artifacts/EmuConfigurator-linux-rpm/*.rpm
-            ./Artifacts/EmuConfigurator-linux-zip/*.zip
+            ./Artifacts/**/EmuConfigurator-*.msi
+            ./Artifacts/**/EmuConfigurator-*.zip
+            ./Artifacts/**/EmuConfigurator-*.deb
+            ./Artifacts/**/EmuConfigurator-*.rpm
           draft: true
           prerelease: ${{ contains(github.ref, 'rc') }}
 
