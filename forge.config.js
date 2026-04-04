@@ -72,6 +72,8 @@ module.exports = {
         // Requires WiX Toolset v3, pre-installed on GitHub Actions windows-latest.
         certificateFile: process.env.WINDOWS_CERT_FILE,
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+        // Use the Windows .ico for the Start Menu shortcut and installer icon
+        icon: path.resolve(__dirname, 'assets/windows/emu_installer.ico'),
       },
     },
     {
