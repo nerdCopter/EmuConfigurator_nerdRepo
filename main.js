@@ -320,6 +320,9 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
           console.error('main.js: serial-send write error:', err.message);
           resolve({ bytesSent: 0, error: err.message });
         } else {
+          // Keep drain() — without it, writes interleave and corrupt the serial stream.
+          // The post-CLI slowdown is caused by other factors (CliAutoComplete watchdog,
+          // stale MSP retransmit timers, missing FC settling delay), not drain() itself.
           _serialPort.drain((drainErr) => {
             if (settled) return;
             if (drainErr) {
