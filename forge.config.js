@@ -76,19 +76,6 @@ module.exports = {
       },
     },
     {
-      name: '@electron-forge/maker-appx',
-      platforms: ['win32'],
-      config: {
-        // AppX: Windows App Package for sideloading or Microsoft Store.
-        // publisher must match cert CN if signing; use a self-signed cert for sideloading.
-        publisher: 'CN=nerdCopter',
-        publisherDisplayName: 'nerdCopter',
-        identityName: 'nerdCopter.EmuConfigurator',
-        // Assets directory with required AppX-sized icons (44x44, 150x150, etc.)
-        // Forge will use defaults if not provided.
-      },
-    },
-    {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin', 'linux', 'win32'],
       // Portable ZIP for all platforms: extract and run, no installer needed.
