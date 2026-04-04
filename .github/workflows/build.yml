@@ -280,7 +280,7 @@ jobs:
           # Move every artifact to the root of its maker output directory.
           # Electron Forge nests output at <maker>/[platform/][arch]/file — we want <maker>/file.
           # On non-Windows the zip restructure step already handled out/make/zip.
-          for dir in out/make/zip out/make/wix out/make/deb out/make/rpm; do
+          for dir in out/make/zip out/make/wix out/make/appx out/make/deb out/make/rpm; do
             [ -d "$dir" ] || continue
             find "$dir" -mindepth 2 -type f | while IFS= read -r f; do
               dest="$dir/$(basename "$f")"
@@ -376,6 +376,16 @@ jobs:
           path: out/make/wix/*.msi
           retention-days: 20
 
+      # Upload Windows .appx (sideload / Microsoft Store)
+      - name: Upload Artifact (windows .appx)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-windows-appx-${{ matrix.arch }}
+          path: out/make/appx/*.appx
+          if-no-files-found: warn
+          retention-days: 20
+
       # Upload Windows .zip (portable)
       - name: Upload Artifact (windows .zip)
         if: matrix.os == 'windows-latest'
@@ -410,6 +420,7 @@ jobs:
           name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
             ./Artifacts/**/EmuConfigurator-*.msi
+            ./Artifacts/**/EmuConfigurator-*.appx
             ./Artifacts/**/EmuConfigurator-*.zip
             ./Artifacts/**/EmuConfigurator-*.deb
             ./Artifacts/**/EmuConfigurator-*.rpm

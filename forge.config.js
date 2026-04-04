@@ -67,11 +67,25 @@ module.exports = {
       name: '@electron-forge/maker-wix',
       platforms: ['win32'],
       config: {
-        // WiX MSI: installs to Program Files, proper Add/Remove Programs, clean uninstall.
-        // No auto-launch during install/uninstall (unlike Squirrel.Windows).
-        // Requires WiX Toolset v3, pre-installed on GitHub Actions windows-latest.
+        // exe: the name of the executable inside the packaged app folder.
+        // Must match executableName in packagerConfig so the shortcut works.
+        exe: 'emuflight-configurator',
+        icon: path.resolve(__dirname, 'assets/windows/emu_installer.ico'),
         certificateFile: process.env.WINDOWS_CERT_FILE,
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
+      },
+    },
+    {
+      name: '@electron-forge/maker-appx',
+      platforms: ['win32'],
+      config: {
+        // AppX: Windows App Package for sideloading or Microsoft Store.
+        // publisher must match cert CN if signing; use a self-signed cert for sideloading.
+        publisher: 'CN=nerdCopter',
+        publisherDisplayName: 'nerdCopter',
+        identityName: 'nerdCopter.EmuConfigurator',
+        // Assets directory with required AppX-sized icons (44x44, 150x150, etc.)
+        // Forge will use defaults if not provided.
       },
     },
     {
