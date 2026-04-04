@@ -314,9 +314,9 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
     try {
       _serialPort.write(buf, (err) => {
         if (settled) return;
-        clearTimeout(timeoutId);
         if (err) {
           settled = true;
+          clearTimeout(timeoutId);
           console.error('main.js: serial-send write error:', err.message);
           resolve({ bytesSent: 0, error: err.message });
         } else {
@@ -324,10 +324,12 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
             if (settled) return;
             if (drainErr) {
               settled = true;
+              clearTimeout(timeoutId);
               console.error('main.js: serial-send drain error:', drainErr.message);
               resolve({ bytesSent: 0, error: drainErr.message });
             } else {
               settled = true;
+              clearTimeout(timeoutId);
               resolve({ bytesSent: buf.length });
             }
           });
