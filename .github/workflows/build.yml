@@ -218,7 +218,7 @@ jobs:
 
           for zipfile in "${zipfiles[@]}"; do
             orig_name=$(basename "$zipfile")
-            version=$(echo "$orig_name" | grep -oP '\d+\.\d+\.\d+' || echo '0.0.0')
+            version=$(echo "$orig_name" | sed -E 's/.*([0-9]+\.[0-9]+\.[0-9]+).*/\1/' || echo '0.0.0')
             OUTPUT_ZIP="$ZIP_DIR/EmuConfigurator-darwin-${ARCH_NAME}-${version}.zip"
 
             echo "Processing: $zipfile -> $OUTPUT_ZIP"
