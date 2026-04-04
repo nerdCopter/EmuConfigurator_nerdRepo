@@ -3,16 +3,27 @@ const path = require('path');
 const fs = require('fs');
 
 // Register signal handlers at the very top to catch Ctrl+C/SIGTERM before anything else.
-// In dev mode (yarn dev), these ensure the process exits immediately without leaving
+// In dev mode (yarn dev), these ensure the process exits without leaving
 // zombie processes that hold stale single-instance lock files.
 process.on('SIGINT', () => {
-  console.log('SIGINT received, exiting immediately...');
-  process.exit(0);
+  console.log('SIGINT received, quitting...');
+  if (app) {
+    app.quit();
+    // Fallback: force-exit after 2s if app.quit() does not terminate the process
+    setTimeout(() => process.exit(0), 2000).unref();
+  } else {
+    process.exit(0);
+  }
 });
 
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, exiting immediately...');
-  process.exit(0);
+  console.log('SIGTERM received, quitting...');
+  if (app) {
+    app.quit();
+    setTimeout(() => process.exit(0), 2000).unref();
+  } else {
+    process.exit(0);
+  }
 });
 
 // Fallback: if the process is about to exit for any reason, log it
