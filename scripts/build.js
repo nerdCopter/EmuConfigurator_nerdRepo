@@ -91,6 +91,25 @@ function build() {
     console.warn('[build] WARNING: jBox.min.css not found at', jboxSrc);
   }
 
+  // Copy jquery and jquery-ui to dist/js/libraries/ so receiver_msp.html
+  // can reference them via ../js/libraries/ instead of ../node_modules/.
+  // node_modules is not included in the dist/ tree.
+  console.log('[build] Copying jquery → dist/js/libraries/');
+  const libDir = path.join(DIST, 'js', 'libraries');
+  fse.ensureDirSync(libDir);
+  const jquerySrc = path.join(ROOT, 'node_modules', 'jquery', 'dist', 'jquery.min.js');
+  if (fs.existsSync(jquerySrc)) {
+    fse.copyFileSync(jquerySrc, path.join(libDir, 'jquery.min.js'));
+  } else {
+    console.warn('[build] WARNING: jquery.min.js not found at', jquerySrc);
+  }
+  const jqueryUiSrc = path.join(ROOT, 'node_modules', 'jquery-ui-npm', 'jquery-ui.min.js');
+  if (fs.existsSync(jqueryUiSrc)) {
+    fse.copyFileSync(jqueryUiSrc, path.join(libDir, 'jquery-ui.min.js'));
+  } else {
+    console.warn('[build] WARNING: jquery-ui.min.js not found at', jqueryUiSrc);
+  }
+
   // manifest.json → dist/manifest.json
   fse.copyFileSync(path.join(ROOT, 'manifest.json'), path.join(DIST, 'manifest.json'));
 
