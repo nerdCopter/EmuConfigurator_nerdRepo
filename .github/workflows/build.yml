@@ -216,10 +216,7 @@ jobs:
           fi
 
           for zipfile in "${zipfiles[@]}"; do
-            # Derive output zip name: replace EmuConfigurator-darwin-{arch} with EmuConfigurator-{ARCH_NAME}
             orig_name=$(basename "$zipfile")
-            out_name="${orig_name/EmuConfigurator-darwin-*/EmuConfigurator-${ARCH_NAME}-${orig_name##*-}}"
-            # Simpler: just derive version from orig filename
             version=$(echo "$orig_name" | grep -oP '\d+\.\d+\.\d+' || echo '0.0.0')
             OUTPUT_ZIP="$ZIP_DIR/EmuConfigurator-darwin-${ARCH_NAME}-${version}.zip"
 
