@@ -59,6 +59,10 @@ CliAutoComplete.initialize = function($textarea, sendLine, writeToOutput) {
 };
 
 CliAutoComplete.cleanup = function() {
+    // Stop the watchdog FIRST so it cannot fire after cleanup and call
+    // builderStart() again, which would send CLI sentinel bytes to the
+    // serial port after cliActive is false, poisoning the MSP stream.
+    this._builderWatchdogStop();
     this.$textarea.textcomplete('destroy');
     this.builder.state = 'reset';
     this.builder.numFails = 0;
@@ -70,6 +74,14 @@ CliAutoComplete._builderWatchdogTouch = function() {
     this._builderWatchdogStop();
 
     GUI.timeout_add('autocomplete_builder_watchdog', function() {
+        // Do not retry if we are no longer in an active CLI session.
+        // Without this guard the watchdog sends CLI sentinel bytes to the
+        // serial port after the tab has been closed, corrupting the MSP stream.
+        if (!CONFIGURATOR.cliActive || !CONFIGURATOR.cliValid) {
+            self.builder.state = 'reset';
+            self.builder.numFails = 0;
+            return;
+        }
         if (self.builder.numFails++) {
             self.builder.state = 'fail';
             self.writeToOutput('Failed!<br># ');
@@ -89,6 +101,12 @@ CliAutoComplete._builderWatchdogStop = function() {
 CliAutoComplete.builderStart = function() {
     console.log('CliAutoComplete.builderStart called and running...');
     GUI.log('CliAutoComplete.builderStart called and running...');
+    // Defensive guard: do not start if we are not in an active CLI session.
+    // The watchdog guard is the primary safeguard; this is a belt-and-braces check.
+    if (!CONFIGURATOR.cliActive || !CONFIGURATOR.cliValid) {
+        console.log('CliAutoComplete.builderStart: not in active CLI session, aborting');
+        return;
+    }
     if (this.builder.state == 'reset') {
         this.cache = {
             commands: [],
