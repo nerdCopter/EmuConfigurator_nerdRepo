@@ -316,6 +316,21 @@ TABS.cli.initialize = function (callback, nwGui) {
         // give input element user focus
         textarea.focus();
 
+        // Load and wire up Advanced CLI AutoComplete checkbox
+        ConfigStorage.get('cliAutoCompleteEnabled', function(obj) {
+            let enabled = obj.cliAutoCompleteEnabled !== false; // default to true if not stored
+            const checkbox = $('input[name="cliAutoCompleteCheckbox"]');
+            checkbox.prop('checked', enabled);
+            CliAutoComplete.setEnabled(enabled);
+            
+            // Wire up checkbox change event
+            checkbox.on('change', function() {
+                let checked = $(this).prop('checked');
+                ConfigStorage.set({ 'cliAutoCompleteEnabled': checked });
+                CliAutoComplete.setEnabled(checked);
+            });
+        });
+
         GUI.timeout_add('enter_cli', function enter_cli() {
             // Enter CLI mode
             var bufferOut = new ArrayBuffer(1);

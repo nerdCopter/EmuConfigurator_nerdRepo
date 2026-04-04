@@ -12,14 +12,14 @@ var CliAutoComplete = {
 };
 
 CliAutoComplete.isEnabled = function() {
-    // Should suppress non-CLI output when:
-    // 1. We're still building the CLI cache, OR
-    // 2. We've finished building and have valid CLI data (state='done')
-    // Do NOT suppress when state='reset' (cleanup state) or 'fail' (error state)
+    // Enable autocomplete when:
+    // 1. We're building the CLI cache, OR
+    // 2. Config is enabled AND we have valid CLI data (state='done') AND not failed
     return this.isBuilding() || (this.configEnabled && CONFIG.flightControllerIdentifier == "EMUF" && this.builder.state == 'done');
 };
 
 CliAutoComplete.isBuilding = function() {
+    // Suppress output (building state) when state is NOT reset/done/fail
     return this.builder.state != 'reset' && this.builder.state != 'done' && this.builder.state != 'fail';
 };
 
