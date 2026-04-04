@@ -373,6 +373,9 @@ const chromeUsb = {
                     } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
                         // Handle Node.js Buffer serialization
                         result.data = new Uint8Array(result.data.data).buffer;
+                    } else if (ArrayBuffer.isView(result.data)) {
+                        // Handle typed-array views (Uint8Array, DataView, etc.) from IPC
+                        result.data = result.data.buffer.slice(result.data.byteOffset, result.data.byteOffset + result.data.byteLength);
                     } else if (!(result.data instanceof ArrayBuffer)) {
                         result.data = new Uint8Array(0).buffer;
                     }
@@ -397,6 +400,9 @@ const chromeUsb = {
                         result.data = new Uint8Array(result.data).buffer;
                     } else if (typeof result.data === 'object' && result.data.type === 'Buffer') {
                         result.data = new Uint8Array(result.data.data).buffer;
+                    } else if (ArrayBuffer.isView(result.data)) {
+                        // Handle typed-array views (Uint8Array, DataView, etc.) from IPC
+                        result.data = result.data.buffer.slice(result.data.byteOffset, result.data.byteOffset + result.data.byteLength);
                     } else if (!(result.data instanceof ArrayBuffer)) {
                         result.data = new Uint8Array(0).buffer;
                     }
