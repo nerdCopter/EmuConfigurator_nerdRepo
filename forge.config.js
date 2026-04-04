@@ -19,7 +19,19 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: path.resolve(__dirname, 'assets/osx/app-icon'),
+    // Platform-specific icons: Electron Forge uses icon for executable, installer, etc.
+    icon: (() => {
+      switch (process.platform) {
+        case 'win32':
+          return path.resolve(__dirname, 'assets/windows/emu_installer');
+        case 'darwin':
+          return path.resolve(__dirname, 'assets/osx/app-icon');
+        case 'linux':
+          return path.resolve(__dirname, 'assets/linux/icon/emu_icon_128');
+        default:
+          return path.resolve(__dirname, 'assets/osx/app-icon');
+      }
+    })(),
     // Specify architecture: defaults to current platform arch, override with EMUCFG_ARCH env var
     // Valid values: x64, ia32 (for Windows), x64, arm64 (for macOS), x64, arm64 (for Linux)
     arch: process.env.EMUCFG_ARCH || undefined,
