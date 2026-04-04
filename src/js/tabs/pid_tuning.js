@@ -2916,7 +2916,12 @@ TABS.pid_tuning.initialize = function(callback) {
                     GUI.log(i18n.getMessage('pidTuningEepromSaved'));
                     //MSP 1.51 Experimental - Preset Dynamic_Filter toggle
                     if (dynamicFilterWasModded) {
-                        $('a.refresh').click(); //refresh UI (show dynamic filter fields)
+                        // Defer outside the Bluebird promise handler to avoid
+                        // "promise created in handler but not returned" warning.
+                        // $('a.refresh').click() synchronously triggers initialize
+                        // which calls MSP.promise() – those promises must not be
+                        // created inside an outer .then() callback.
+                        setTimeout(function() { $('a.refresh').click(); }, 0);
                     }
                     //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
                 }).then(function() {
