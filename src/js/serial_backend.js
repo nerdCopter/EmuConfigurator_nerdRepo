@@ -428,6 +428,14 @@ function onClosed(result) {
     CONFIGURATOR.connectionValid = false;
     CONFIGURATOR.cliValid = false;
     CONFIGURATOR.cliActive = false;
+
+    // Clean up any active CLI state (e.g., if device was unplugged during CLI tab edit)
+    // Without this, CliAutoComplete.builder.state remains in building state and
+    // isBuilding() returns true even after disconnect.
+    if (typeof CliAutoComplete !== 'undefined') {
+        console.log('[serial_backend] onClosed() - calling CliAutoComplete.cleanup()');
+        CliAutoComplete.cleanup();
+    }
 }
 
 function read_serial(info) {

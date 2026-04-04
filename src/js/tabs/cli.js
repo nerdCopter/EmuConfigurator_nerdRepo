@@ -497,18 +497,22 @@ TABS.cli.send = function (line, callback) {
 };
 
 TABS.cli.cleanup = function (callback) {
+    console.log('[cli.cleanup] START - cliValid:', CONFIGURATOR.cliValid, 'cliActive:', CONFIGURATOR.cliActive, 'connectionValid:', CONFIGURATOR.connectionValid);
     if (TABS.cli.GUI.snippetPreviewWindow) {
         TABS.cli.GUI.snippetPreviewWindow.destroy();
         TABS.cli.GUI.snippetPreviewWindow = null;
     }
     if (!(CONFIGURATOR.connectionValid && CONFIGURATOR.cliValid && CONFIGURATOR.cliActive)) {
+        console.log('[cli.cleanup] not in active CLI state, returning early');
         if (callback) {
             callback();
         }
 
         return;
     }
+    console.log('[cli.cleanup] sending exit command to FC');
     this.send(getCliCommand('exit\r', this.cliBuffer), function (writeInfo) {
+        console.log('[cli.cleanup] exit written, clearing cliActive/cliValid and calling MSP.callbacks_cleanup()');
         // Clear CLI flags immediately so incoming serial bytes route to
         // MSP.read() rather than TABS.cli.read().
         CONFIGURATOR.cliActive = false;
@@ -525,6 +529,7 @@ TABS.cli.cleanup = function (callback) {
         // the FC may still be in a transitional state and return malformed
         // responses, causing CRC errors and MSP parser corruption.
         setTimeout(function () {
+            console.log('[cli.cleanup] 500ms delay complete, invoking tab switch callback');
             if (callback) { callback(); }
         }, 500);
     });
