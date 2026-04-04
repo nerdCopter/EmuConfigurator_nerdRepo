@@ -803,8 +803,16 @@ function mixerCalcMain() {
                     const motor = motors[highlightedMotor];
                     motor.direction = 1 - motor.direction;
                     if (motor.direction === 1) {
+                        motor.image.loaded = false;
+                        motor.image.broken = false;
+                        motor.image.onload = (function(img) { return function() { img.loaded = true; }; })(motor.image);
+                        motor.image.onerror = (function(img) { return function() { img.broken = true; }; })(motor.image);
                         motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-cw.png';
                     } else {
+                        motor.image.loaded = false;
+                        motor.image.broken = false;
+                        motor.image.onload = (function(img) { return function() { img.loaded = true; }; })(motor.image);
+                        motor.image.onerror = (function(img) { return function() { img.broken = true; }; })(motor.image);
                         motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png';
                     }
                 }
@@ -981,6 +989,12 @@ function mixerCalcMain() {
     }
     TABS.mixercalc.cleanup = function (callback) {
         run = false;
+        // Cancel any pending debounced reparse so doReparse() does not run
+        // after the tab DOM is gone (would throw on $('#inputs').val()).
+        if (reparseTimer) {
+            clearTimeout(reparseTimer);
+            reparseTimer = null;
+        }
         if (callback) {
             callback();
         }
