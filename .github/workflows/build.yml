@@ -193,7 +193,7 @@ jobs:
 
           echo "[OK] All .zip files restructured (OS folders removed)"
 
-      - name: "Restructure .zip Artifacts (macOS: .app at root)"
+      - name: "Extract macOS .app from Forge zip"
         if: startsWith(matrix.os, 'macos')
         shell: bash
         env:
@@ -205,20 +205,19 @@ jobs:
           ARCH_NAME="${APP_SUFFIX#macos-}"
           APP_NAME="EmuConfigurator-${ARCH_NAME}.app"
 
+          # Forge output: zip/darwin/{arch}/EmuConfigurator-darwin-{arch}-{ver}.zip
+          # which contains either the .app directly, or Contents/ (stripped), or a nested zip
           shopt -s nullglob
-          zipfiles=( "$ZIP_DIR"/*/*/*.zip )
+          zipfiles=( "$ZIP_DIR"/*/*/*.zip "$ZIP_DIR"/*.zip )
           shopt -u nullglob
 
           if [ ${#zipfiles[@]} -eq 0 ]; then
-            echo "[WARN] No .zip files found in $ZIP_DIR - skipping macOS restructure"
+            echo "[WARN] No .zip files found in $ZIP_DIR - skipping macOS extract"
             exit 0
           fi
 
           for zipfile in "${zipfiles[@]}"; do
-            basename=$(basename "$zipfile")
             tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
-            output_zip="$ZIP_DIR/$basename.tmp"
-
             echo "Processing: $zipfile"
 
             if ! unzip -q "$zipfile" -d "$tmpdir"; then
@@ -227,50 +226,40 @@ jobs:
               exit 1
             fi
 
+            # Handle nested zip (Forge zip-inside-zip)
             nested_zip=$(find "$tmpdir" -type f -name '*.zip' | head -n1 || true)
             if [ -n "$nested_zip" ]; then
-              nested_tmp=$(mktemp -d) || { echo "[FAIL] mktemp failed"; rm -rf "$tmpdir"; exit 1; }
-              if ! unzip -q "$nested_zip" -d "$nested_tmp"; then
-                echo "[FAIL] unzip failed for nested zip $nested_zip"
-                rm -rf "$tmpdir" "$nested_tmp"
-                exit 1
-              fi
-              rm -f "$nested_zip"
-              rm -rf "$tmpdir"/*
-              mv "$nested_tmp"/* "$tmpdir" || true
-              rm -rf "$nested_tmp"
+              nested_tmp=$(mktemp -d)
+              unzip -q "$nested_zip" -d "$nested_tmp"
+              rm -rf "$tmpdir"
+              tmpdir="$nested_tmp"
             fi
 
+            # Find .app bundle
             app_bundle=$(find "$tmpdir" -maxdepth 4 -type d -name '*.app' | head -n1 || true)
             if [ -z "$app_bundle" ]; then
-              contents_dir=$(find "$tmpdir" -maxdepth 4 -type d -name Contents | head -n1 || true)
+              # Forge stripped the .app wrapper; Contents/ is bare
+              contents_dir=$(find "$tmpdir" -maxdepth 4 -type d -name 'Contents' | head -n1 || true)
               if [ -z "$contents_dir" ]; then
-                echo "[FAIL] no .app bundle or Contents directory found in $tmpdir for $zipfile"
-                rm -rf "$tmpdir"
-                exit 1
+                echo "[FAIL] no .app or Contents/ found in $zipfile"
+                rm -rf "$tmpdir"; exit 1
               fi
-              mkdir -p "$tmpdir/$APP_NAME"
-              mv "$contents_dir" "$tmpdir/$APP_NAME/"
-              app_bundle="$tmpdir/$APP_NAME"
+              app_bundle="$(dirname "$contents_dir")"
             fi
 
-            if [ "$(basename "$app_bundle")" != "$APP_NAME" ]; then
-              final_dir=$(mktemp -d)
-              mv "$app_bundle" "$final_dir/$APP_NAME"
-              app_bundle="$final_dir/$APP_NAME"
-            fi
-
-            (cd "$(dirname "$app_bundle")" && zip -r -q "$output_zip" "$(basename "$app_bundle")")
-            mv -f "$output_zip" "$ZIP_DIR/$basename"
-
-            if [ -f "$zipfile" ]; then
-              rm -f "$zipfile"
-            fi
-            rm -rf "$tmpdir" || { echo "[WARN] failed to remove tmpdir $tmpdir"; }
-            echo "[OK] Restructured: $basename (.app at root)"
+            # Rename to arch-specific .app and place at ZIP_DIR root (as a directory, not re-zipped)
+            dest="$ZIP_DIR/$APP_NAME"
+            rm -rf "$dest"
+            mv "$app_bundle" "$dest"
+            rm -rf "$tmpdir"
+            # Remove the source zip (replaced by the extracted .app directory)
+            rm -f "$zipfile"
+            echo "[OK] Extracted: $APP_NAME"
           done
 
-          echo "[OK] All macOS .zip files restructured (.app at root)"
+          # Remove leftover empty platform/arch subdirectories
+          find "$ZIP_DIR" -mindepth 1 -type d -empty -delete 2>/dev/null || true
+          echo "[OK] macOS .app bundles extracted to $ZIP_DIR"
 
       - name: Flatten Artifacts for Upload
         shell: bash
@@ -292,18 +281,24 @@ jobs:
       - name: Rename Windows MSI artifacts
         if: matrix.os == 'windows-latest'
         shell: bash
+        env:
+          EMUCFG_ARCH: ${{ matrix.arch }}
         run: |
           set -euo pipefail
+          PKG_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo '0.0.0')
           for src in out/make/wix/*.msi; do
             [ -f "$src" ] || continue
             filename=$(basename "$src")
-            if [[ "$filename" =~ win32-(x64|ia32)-(.*)\.msi$ ]]; then
+            if [[ "$filename" =~ win32-(x64|ia32)-(.+)\.msi$ ]]; then
               arch="${BASH_REMATCH[1]}"
               version="${BASH_REMATCH[2]}"
-              dest="$(dirname "$src")/EmuConfigurator-${arch}-${version}.msi"
-              mv -f "$src" "$dest"
-              echo "[OK] Renamed $filename -> $(basename "$dest")"
+            else
+              arch="$EMUCFG_ARCH"
+              version="$PKG_VERSION"
             fi
+            dest="$(dirname "$src")/EmuConfigurator-${arch}-${version}.msi"
+            mv -f "$src" "$dest"
+            echo "[OK] Renamed $filename -> $(basename "$dest")"
           done
 
       - name: Validate Artifacts Exist
@@ -342,22 +337,22 @@ jobs:
           path: out/make/zip/*.zip
           retention-days: 20
 
-      # Upload macOS ARM64 .zip
-      - name: Upload Artifact (macos arm64 .zip)
+      # Upload macOS ARM64 .app (directory; upload-artifact wraps it once → artifact.zip → .app/)
+      - name: Upload Artifact (macos arm64 .app)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-macos-arm64-zip
-          path: out/make/zip/*.zip
+          name: EmuConfigurator-macos-arm64
+          path: out/make/zip/EmuConfigurator-arm64.app
           retention-days: 20
 
-      # Upload macOS x86_64 .zip
-      - name: Upload Artifact (macos x86_64 .zip)
+      # Upload macOS x86_64 .app (directory; upload-artifact wraps it once → artifact.zip → .app/)
+      - name: Upload Artifact (macos x86_64 .app)
         if: matrix.os == 'macos-26-intel'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-macos-x86_64-zip
-          path: out/make/zip/*.zip
+          name: EmuConfigurator-macos-x86_64
+          path: out/make/zip/EmuConfigurator-x86_64.app
           retention-days: 20
 
       # Upload Windows .msi (WiX installer)
@@ -365,7 +360,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-windows-msi-${{ matrix.artifact-suffix }}
+          name: EmuConfigurator-windows-msi-${{ matrix.arch }}
           path: out/make/wix/*.msi
           retention-days: 20
 
@@ -374,7 +369,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: EmuConfigurator-windows-zip-${{ matrix.artifact-suffix }}
+          name: EmuConfigurator-windows-zip-${{ matrix.arch }}
           path: out/make/zip/*.zip
           retention-days: 20
 
