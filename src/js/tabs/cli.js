@@ -509,16 +509,17 @@ TABS.cli.cleanup = function (callback) {
         return;
     }
     this.send(getCliCommand('exit\r', this.cliBuffer), function (writeInfo) {
-        // we could handle this "nicely", but this will do for now
-        // (another approach is however much more complicated):
-        // we can setup an interval asking for data lets say every 200ms, when data arrives, callback will be triggered and tab switched
-        // we could probably implement this someday
+        // Clear CLI flags before invoking callback so that any serial bytes
+        // arriving after the tab switch are routed to MSP.read() and not
+        // to TABS.cli.read().  Previously cliActive/cliValid were cleared
+        // AFTER callback(), leaving a window where incoming bytes were
+        // misrouted, causing MSP parser corruption and slowdowns.
+        CONFIGURATOR.cliActive = false;
+        CONFIGURATOR.cliValid = false;
+
         if (callback) {
             callback();
         }
-
-        CONFIGURATOR.cliActive = false;
-        CONFIGURATOR.cliValid = false;
     });
 
     CliAutoComplete.cleanup();
