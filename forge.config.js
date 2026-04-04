@@ -67,10 +67,8 @@ module.exports = {
       name: '@electron-forge/maker-wix',
       platforms: ['win32'],
       config: {
-        // exe: the name of the executable inside the packaged app folder.
-        // Must match executableName in packagerConfig so the shortcut works.
         exe: 'emuflight-configurator',
-        icon: path.resolve(__dirname, 'assets/windows/emu_installer.ico'),
+        icon: './assets/windows/emu_installer.ico',
         certificateFile: process.env.WINDOWS_CERT_FILE,
         certificatePassword: process.env.WINDOWS_CERT_PASSWORD,
       },
@@ -85,8 +83,8 @@ module.exports = {
       platforms: ['linux'],
       config: {
         options: {
-          maintainer: 'nerdCopter',
-          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+          maintainer: 'EmuFlight',
+          homepage: 'https://github.com/EmuFlight/EmuConfigurator',
         },
       },
     },
@@ -95,7 +93,7 @@ module.exports = {
       platforms: ['linux'],
       config: {
         options: {
-          homepage: 'https://github.com/nerdCopter/EmuConfigurator_nerdRepo',
+          homepage: 'https://github.com/EmuFlight/EmuConfigurator',
         },
       },
     },
