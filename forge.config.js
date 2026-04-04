@@ -11,7 +11,11 @@ const buildMode = process.env.EMUCFG_BUILD_MODE || 'release';
 if (process.env.NODE_ENV !== 'production') {
   process.on('SIGINT', () => {
     console.log('[forge.config.js] SIGINT received, killing Electron processes...');
-    spawn('killall', ['electron'], { stdio: 'inherit' });
+    if (process.platform === 'win32') {
+      spawn('taskkill', ['/F', '/IM', 'electron.exe'], { stdio: 'inherit' });
+    } else {
+      spawn('killall', ['electron'], { stdio: 'inherit' });
+    }
     process.exit(0);
   });
 }
