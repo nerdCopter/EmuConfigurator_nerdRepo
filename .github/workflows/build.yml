@@ -204,11 +204,11 @@ jobs:
           ZIP_DIR="$ROOT_DIR/out/make/zip"
           ARCH_NAME="${APP_SUFFIX#macos-}"
           APP_NAME="EmuConfigurator-${ARCH_NAME}.app"
+          FINAL_DEST="$ZIP_DIR/$APP_NAME"
 
           # Forge output: zip/darwin/{arch}/EmuConfigurator-darwin-{arch}-{ver}.zip
-          # which contains either the .app directly, or Contents/ (stripped), or a nested zip
           shopt -s nullglob
-          zipfiles=( "$ZIP_DIR"/*/*/*.zip "$ZIP_DIR"/*.zip )
+          zipfiles=( "$ZIP_DIR"/*/*/*.zip )
           shopt -u nullglob
 
           if [ ${#zipfiles[@]} -eq 0 ]; then
@@ -217,16 +217,16 @@ jobs:
           fi
 
           for zipfile in "${zipfiles[@]}"; do
-            tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
             echo "Processing: $zipfile"
+            tmpdir=$(mktemp -d) || { echo "[FAIL] mktemp failed"; exit 1; }
 
+            # Extract outer zip
             if ! unzip -q "$zipfile" -d "$tmpdir"; then
               echo "[FAIL] unzip failed for $zipfile"
-              rm -rf "$tmpdir"
-              exit 1
+              rm -rf "$tmpdir"; exit 1
             fi
 
-            # Handle nested zip (Forge zip-inside-zip)
+            # Handle nested zip (Forge sometimes wraps in another zip)
             nested_zip=$(find "$tmpdir" -type f -name '*.zip' | head -n1 || true)
             if [ -n "$nested_zip" ]; then
               nested_tmp=$(mktemp -d)
@@ -235,31 +235,37 @@ jobs:
               tmpdir="$nested_tmp"
             fi
 
-            # Find .app bundle
-            app_bundle=$(find "$tmpdir" -maxdepth 4 -type d -name '*.app' | head -n1 || true)
+            # Find .app bundle (most common case)
+            app_bundle=$(find "$tmpdir" -type d -name '*.app' | head -n1 || true)
             if [ -z "$app_bundle" ]; then
-              # Forge stripped the .app wrapper; Contents/ is bare
-              contents_dir=$(find "$tmpdir" -maxdepth 4 -type d -name 'Contents' | head -n1 || true)
-              if [ -z "$contents_dir" ]; then
+              # Fallback: if only Contents/ exists, reconstruct .app
+              contents_dir=$(find "$tmpdir" -type d -name 'Contents' | head -n1 || true)
+              if [ -n "$contents_dir" ]; then
+                app_bundle="$(dirname "$contents_dir")"
+              else
                 echo "[FAIL] no .app or Contents/ found in $zipfile"
                 rm -rf "$tmpdir"; exit 1
               fi
-              app_bundle="$(dirname "$contents_dir")"
             fi
 
-            # Rename to arch-specific .app and place at ZIP_DIR root (as a directory, not re-zipped)
-            dest="$ZIP_DIR/$APP_NAME"
-            rm -rf "$dest"
-            mv "$app_bundle" "$dest"
+            # Move .app to final destination (absolute path, no relative issues)
+            rm -rf "$FINAL_DEST"
+            cp -r "$app_bundle" "$FINAL_DEST"
             rm -rf "$tmpdir"
-            # Remove the source zip (replaced by the extracted .app directory)
             rm -f "$zipfile"
-            echo "[OK] Extracted: $APP_NAME"
+            echo "[OK] Extracted .app to $FINAL_DEST"
           done
 
-          # Remove leftover empty platform/arch subdirectories
+          # Clean empty subdirs
           find "$ZIP_DIR" -mindepth 1 -type d -empty -delete 2>/dev/null || true
-          echo "[OK] macOS .app bundles extracted to $ZIP_DIR"
+          
+          # Verify output exists
+          if [ -d "$FINAL_DEST" ]; then
+            echo "[OK] $APP_NAME exists and ready for upload"
+          else
+            echo "[FAIL] $APP_NAME not found after extraction"
+            exit 1
+          fi
 
       - name: Flatten Artifacts for Upload
         shell: bash
