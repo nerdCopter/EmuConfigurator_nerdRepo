@@ -8,6 +8,7 @@ TABS.cli = {
     GUI: {
         snippetPreviewWindow: null,
     },
+    _pendingAfterReconnectTimeout: null, // Watchdog timeout for pending CLI exit callback cleanup
 };
 
 function removePromptHash(promptText) {
@@ -539,6 +540,20 @@ TABS.cli.cleanup = function (callback) {
     // prevents a double tab-init that would occur if both our poll AND
     // selectDefaultTabWhenConnected both tried to initialize the target tab.
     GUI.pendingAfterReconnect = callback;
+
+    // Watchdog timeout: if FC crashes/fails to re-enumerate and finishOpen()
+    // never fires, clear the pending callback after 5 seconds to prevent it
+    // from persisting across an unrelated future connection
+    if (TABS.cli._pendingAfterReconnectTimeout) {
+        clearTimeout(TABS.cli._pendingAfterReconnectTimeout);
+    }
+    TABS.cli._pendingAfterReconnectTimeout = setTimeout(function () {
+        if (GUI.pendingAfterReconnect === callback) {
+            GUI.pendingAfterReconnect = null;
+            console.log('[cli.cleanup] watchdog cleared stale pendingAfterReconnect callback');
+        }
+        TABS.cli._pendingAfterReconnectTimeout = null;
+    }, 5000);
 
     this.send(getCliCommand('exit\r', this.cliBuffer), function () {
     });

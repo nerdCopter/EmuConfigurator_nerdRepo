@@ -332,6 +332,11 @@ function finishOpen() {
     if (GUI.pendingAfterReconnect) {
         var pending = GUI.pendingAfterReconnect;
         GUI.pendingAfterReconnect = null;
+        // Clear the cli.cleanup watchdog timeout since the callback is being invoked
+        if (typeof TABS !== 'undefined' && TABS.cli && TABS.cli._pendingAfterReconnectTimeout) {
+            clearTimeout(TABS.cli._pendingAfterReconnectTimeout);
+            TABS.cli._pendingAfterReconnectTimeout = null;
+        }
         console.log('[finishOpen] invoking pending CLI exit tab-switch callback');
         GUI.timeout_add('cli_exit_tab_switch', pending, 200);
     } else {
@@ -443,6 +448,11 @@ function onClosed(result) {
 
     // Clear any pending callback from CLI exit to prevent it firing for a later unrelated reconnect
     GUI.pendingAfterReconnect = null;
+    // Also clear the cli.cleanup watchdog timeout
+    if (typeof TABS !== 'undefined' && TABS.cli && TABS.cli._pendingAfterReconnectTimeout) {
+        clearTimeout(TABS.cli._pendingAfterReconnectTimeout);
+        TABS.cli._pendingAfterReconnectTimeout = null;
+    }
 
     // Clean up any active CLI state (e.g., if device was unplugged during CLI tab edit)
     // Without this, CliAutoComplete.builder.state remains in building state and
