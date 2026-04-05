@@ -948,11 +948,11 @@ function mixerCalcMain() {
         canvas.addEventListener('mousemove', function(evt) {
             onMouseMove(canvas, evt);
         }, false);
-        canvas.addEventListener('mousedown', function(evt) {
-            onMouseDown(canvas, evt);
+        canvas.addEventListener('mousedown', function() {
+            onMouseDown();
         }, false);
-        canvas.addEventListener('mouseup', function(evt) {
-            onMouseUp(canvas, evt);
+        canvas.addEventListener('mouseup', function() {
+            onMouseUp();
         }, false);
         canvas.addEventListener('keyup', function(evt) {
             onKeyUp(canvas, evt);
