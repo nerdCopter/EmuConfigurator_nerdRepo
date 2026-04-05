@@ -763,15 +763,6 @@ ipcMain.handle('dialog:choose-entry', async (event, options) => {
   return { canceled: true };
 });
 
-// IPC: write text content to file (single-shot, replaces truncate+write)
-ipcMain.handle('dialog:write-text-file', async (event, filePath, text) => {
-  const dir = path.dirname(filePath);
-  await fs.promises.mkdir(dir, { recursive: true });
-  await fs.promises.writeFile(filePath, text, 'utf8');
-  console.log(`Saved ${text.length} chars to ${filePath}`);
-  return text.length;
-});
-
 // IPC: write binary content to file (preserves binary data)
 // position: byte offset to write at; null means append (legacy) or create (isFirstWrite)
 ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, isFirstWrite = true, position = null) => {
@@ -798,12 +789,6 @@ ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, is
     console.log(`[BBL] Downloading blackbox log to: ${filePath}`);
   }
   return buffer.length;
-});
-
-// IPC: read file as binary buffer
-ipcMain.handle('file-read-binary', async (event, filePath) => {
-  const data = await fs.promises.readFile(filePath);
-  return data;
 });
 
 // IPC: read file as UTF-8 text (used by fileEntry.file() in preload chromeFileSystem shim)
@@ -842,36 +827,6 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
     return size;
   } catch (e) {
     console.error(`Truncate failed for ${filePath}:`, e.message);
-    throw e;
-  }
-});
-
-// IPC: write to file (compatibility handler)
-ipcMain.handle('dialog:write-file', async (event, filePath, data) => {
-  try {
-    if (typeof filePath !== 'string' || filePath.length === 0) {
-      throw new Error('Invalid filePath');
-    }
-
-    if (data === undefined || data === null) {
-      throw new Error('No data provided');
-    }
-
-    const dir = path.dirname(filePath);
-    await fs.promises.mkdir(dir, { recursive: true });
-
-    const buffer = Array.isArray(data)
-      ? Buffer.from(data)
-      : Buffer.isBuffer(data)
-        ? data
-        : typeof data === 'string'
-          ? Buffer.from(data, 'utf8')
-          : Buffer.from(JSON.stringify(data), 'utf8');
-
-    await fs.promises.writeFile(filePath, buffer);
-    return buffer.length;
-  } catch (e) {
-    console.error(`dialog:write-file failed for ${filePath}:`, e.message);
     throw e;
   }
 });
