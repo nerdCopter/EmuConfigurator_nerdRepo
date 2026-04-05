@@ -45,13 +45,14 @@ jobs:
       buildtag: ${{ steps.build-info.outputs.tag }}
       shortsha: ${{ steps.build-info.outputs.sha }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
       - name: Clean Output Directories
         shell: bash
         run: |
           rm -rf out dist
           echo "[OK] Cleaned out/ and dist/ directories"
-      - name: Checkout
-        uses: actions/checkout@v6
 
       - name: Build Info
         id: build-info
