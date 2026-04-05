@@ -2984,6 +2984,9 @@ TABS.pid_tuning.initRatesPreview = function() {
         this.model.dispose();
     }
 
+    // Reset the clock to prevent getDelta() from accumulating time spent off-tab
+    this.clock = null;
+
     this.keepRendering = true;
     this.model = new Model($('.rates_preview'), $('.rates_preview canvas'));
     this.renderModelBound = this.renderModel.bind(this);
