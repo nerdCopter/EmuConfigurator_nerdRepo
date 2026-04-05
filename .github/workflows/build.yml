@@ -410,7 +410,6 @@ jobs:
           name: "EmuConfigurator ${{ github.ref_name }}"
           files: |
             ./Artifacts/**/EmuConfigurator-*.msi
-            ./Artifacts/**/EmuConfigurator-*.appx
             ./Artifacts/**/EmuConfigurator-*.zip
             ./Artifacts/**/EmuConfigurator-*.deb
             ./Artifacts/**/EmuConfigurator-*.rpm
