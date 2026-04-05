@@ -203,13 +203,6 @@ jobs:
           ARCH_NAME="${APP_SUFFIX#macos-}"
           APP_NAME="EmuConfigurator-${ARCH_NAME}.app"
 
-          # Cleanup trap: ensure tmpdir and nested_tmp are removed on exit or error
-          cleanup_tmp() {
-            [ -n "${tmpdir:-}" ] && [ -d "$tmpdir" ] && rm -rf "$tmpdir"
-            [ -n "${nested_tmp:-}" ] && [ -d "$nested_tmp" ] && rm -rf "$nested_tmp"
-          }
-          trap cleanup_tmp EXIT
-
           # Forge output: zip/darwin/{arch}/EmuConfigurator-darwin-{arch}-{ver}.zip
           shopt -s nullglob
           zipfiles=( "$ZIP_DIR"/*/*/*.zip )
