@@ -446,10 +446,14 @@ function onClosed(result) {
     CONFIGURATOR.cliValid = false;
     CONFIGURATOR.cliActive = false;
 
-    // Clear any pending callback from CLI exit to prevent it firing for a later unrelated reconnect
-    GUI.pendingAfterReconnect = null;
-    // Also clear the cli.cleanup watchdog timeout
-    if (typeof TABS !== 'undefined' && TABS.cli && TABS.cli._pendingAfterReconnectTimeout) {
+    // Clear any pending callback from CLI exit ONLY if it's not a callable pending callback.
+    // If it IS a function, it's likely from a CLI reboot cycle and should be preserved
+    // through this disconnect so finishOpen() can consume it on the next connection.
+    if (typeof GUI.pendingAfterReconnect !== 'function') {
+        GUI.pendingAfterReconnect = null;
+    }
+    // Also clear the cli.cleanup watchdog timeout only if we're clearing the callback
+    if (typeof GUI.pendingAfterReconnect !== 'function' && typeof TABS !== 'undefined' && TABS.cli && TABS.cli._pendingAfterReconnectTimeout) {
         clearTimeout(TABS.cli._pendingAfterReconnectTimeout);
         TABS.cli._pendingAfterReconnectTimeout = null;
     }
