@@ -921,16 +921,20 @@ function createWindow() {
   });
   
   // Capture renderer console output and kill app on error
-  // Levels: 0=verbose, 1=info, 2=warning, 3=error
+  // Electron 41+ uses string levels: 'verbose', 'info', 'warning', 'error'
   // Default (dev): show warnings+errors only. Set VERBOSE=1 to show all.
-  // Uses Event<WebContentsConsoleMessageEventParams> object (Electron v41+)
+  // Uses Event<WebContentsConsoleMessageEventParams> object
   win.webContents.on('console-message', (event) => {
-    const { level, message, line, sourceId } = event;
+    const { level, message, lineNumber, sourceId } = event;
     if (message) {
+      // Map string level to numeric priority for comparison
+      const levelMap = { 'verbose': 0, 'info': 1, 'warning': 2, 'error': 3 };
+      const numericLevel = levelMap[level] !== undefined ? levelMap[level] : (typeof level === 'number' ? level : 1);
+      
       const verbose = process.env.VERBOSE === '1';
-      if (verbose || level >= 2) {
-        const tag = level >= 3 ? '[Renderer ERROR]' : level >= 2 ? '[Renderer WARN]' : '[Renderer]';
-        console.log(`${tag} ${message} (${sourceId || ''}:${line || ''})`);
+      if (verbose || numericLevel >= 2) {
+        const tag = numericLevel >= 3 ? '[Renderer ERROR]' : numericLevel >= 2 ? '[Renderer WARN]' : '[Renderer]';
+        console.log(`${tag} ${message} (${sourceId || ''}:${lineNumber || ''})`);
       }
       const trimmedMessage = message.trim();
       const undefinedRefPattern = /^[A-Za-z_$][\w$]* is not defined$/;
@@ -939,8 +943,8 @@ function createWindow() {
         sourceId.includes('/src/') ||
         sourceId.endsWith('main.html')
       );
-      if (level >= 3 && undefinedRefPattern.test(trimmedMessage) && isAppSource) {
-        console.error(`Renderer ReferenceError detected: ${trimmedMessage} (${sourceId || ''}:${line || ''})`);
+      if (numericLevel >= 3 && undefinedRefPattern.test(trimmedMessage) && isAppSource) {
+        console.error(`Renderer ReferenceError detected: ${trimmedMessage} (${sourceId || ''}:${lineNumber || ''})`);
       }
     }
   });
