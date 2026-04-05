@@ -181,16 +181,23 @@ function mixerCalcMain() {
         }
     }
 
+    function setMotorImageSrc(motor, srcPath) {
+        if (!motor || !motor.image) { return; }
+        motor.image.loaded = false;
+        motor.image.broken = false;
+        motor.image.onload = (function(img) { return function() { img.loaded = true; }; })(motor.image);
+        motor.image.onerror = (function(img) { return function() { img.broken = true; }; })(motor.image);
+        motor.image.src = srcPath;
+    }
+
     function reverseAllMotors() {
         for (let i = 0; i < motors.length; i++) {
             const motor = motors[parseInt(i)];
             motor.direction = 1 - motor.direction;
-            if (motor.image) {
-                if (motor.direction === 1) {
-                    motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-cw.png';
-                } else {
-                    motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png';
-                }
+            if (motor.direction === 1) {
+                setMotorImageSrc(motor, MIXERCALC_ASSET_PATH + 'emu-prop-cw.png');
+            } else {
+                setMotorImageSrc(motor, MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png');
             }
         }
     }
@@ -803,17 +810,9 @@ function mixerCalcMain() {
                     const motor = motors[highlightedMotor];
                     motor.direction = 1 - motor.direction;
                     if (motor.direction === 1) {
-                        motor.image.loaded = false;
-                        motor.image.broken = false;
-                        motor.image.onload = (function(img) { return function() { img.loaded = true; }; })(motor.image);
-                        motor.image.onerror = (function(img) { return function() { img.broken = true; }; })(motor.image);
-                        motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-cw.png';
+                        setMotorImageSrc(motor, MIXERCALC_ASSET_PATH + 'emu-prop-cw.png');
                     } else {
-                        motor.image.loaded = false;
-                        motor.image.broken = false;
-                        motor.image.onload = (function(img) { return function() { img.loaded = true; }; })(motor.image);
-                        motor.image.onerror = (function(img) { return function() { img.broken = true; }; })(motor.image);
-                        motor.image.src = MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png';
+                        setMotorImageSrc(motor, MIXERCALC_ASSET_PATH + 'emu-prop-ccw.png');
                     }
                 }
                 break;

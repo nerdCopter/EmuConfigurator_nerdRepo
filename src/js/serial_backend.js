@@ -719,16 +719,19 @@ function reinitialiseConnection(originatorTab, callback) {
         var poll = setInterval(function () {
             if (connectionTimestamp !== prevTs && CONFIGURATOR.connectionValid) {
                 clearInterval(poll);
-                if (callback) { callback(); }
+                // Successful reconnect: callback(true)
+                if (callback) { callback(true); }
             } else if (++attempts > 100) { // 10 s hard timeout
                 clearInterval(poll);
-                if (callback) { callback(); }
+                // Timeout: callback(false)
+                if (callback) { callback(false); }
             }
         }, 100);
     } else {
         GUI.timeout_add('waiting_for_bootup', function waiting_for_bootup() {
+            // Non-VCP board: assume success after delay
             if (callback) {
-                callback();
+                callback(true);
             }
 
             MSP.send_message(MSPCodes.MSP_STATUS, false, false, function() {

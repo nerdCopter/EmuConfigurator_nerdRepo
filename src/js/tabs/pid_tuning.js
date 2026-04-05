@@ -2918,10 +2918,13 @@ TABS.pid_tuning.initialize = function(callback) {
                     if (dynamicFilterWasModded) {
                         // Defer outside the Bluebird promise handler to avoid
                         // "promise created in handler but not returned" warning.
-                        // $('a.refresh').click() synchronously triggers initialize
-                        // which calls MSP.promise() – those promises must not be
-                        // created inside an outer .then() callback.
-                        setTimeout(function() { $('a.refresh').click(); }, 0);
+                        // Call refresh() directly instead of triggering DOM click
+                        // to avoid tight coupling with UI elements.
+                        setTimeout(function() { 
+                            self.refresh(function() {
+                                GUI.log(i18n.getMessage('pidTuningDataRefreshed'));
+                            });
+                        }, 0);
                     }
                     //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
                 }).then(function() {
