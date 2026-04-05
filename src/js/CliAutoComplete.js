@@ -68,7 +68,9 @@ CliAutoComplete.cleanup = function() {
     // builderStart() again, which would send CLI sentinel bytes to the
     // serial port after cliActive is false, poisoning the MSP stream.
     this._builderWatchdogStop();
-    this.$textarea.textcomplete('destroy');
+    if (this.$textarea) {
+        this.$textarea.textcomplete('destroy');
+    }
     this.builder.state = 'reset';
     this.builder.numFails = 0;
 };
