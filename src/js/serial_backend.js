@@ -441,6 +441,9 @@ function onClosed(result) {
     CONFIGURATOR.cliValid = false;
     CONFIGURATOR.cliActive = false;
 
+    // Clear any pending callback from CLI exit to prevent it firing for a later unrelated reconnect
+    GUI.pendingAfterReconnect = null;
+
     // Clean up any active CLI state (e.g., if device was unplugged during CLI tab edit)
     // Without this, CliAutoComplete.builder.state remains in building state and
     // isBuilding() returns true even after disconnect.
