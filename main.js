@@ -1031,7 +1031,7 @@ function tryAcquireSingleInstanceLock() {
   return false;
 }
 
-tryAcquireSingleInstanceLock();
+const hasSingleInstanceLock = tryAcquireSingleInstanceLock();
 
 // Best-effort cleanup of hardware connections before the process exits.
 // The OS will reclaim handles anyway, but explicit cleanup avoids libusb/serialport
