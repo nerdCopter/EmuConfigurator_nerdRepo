@@ -286,8 +286,7 @@ TABS.cli.initialize = function (callback, nwGui) {
                 event.preventDefault(); // prevent the adding of new line
 
                 if (CliAutoComplete.isBuilding()) {
-                    console.log('CliAutoComplete.isBuilding()=true ignoring input');
-                    return; // silently ignore commands if autocomplete is still building
+
                 }
 
                 var out_string = textarea.val();
@@ -379,7 +378,6 @@ function writeToOutput(text) {
 function writeLineToOutput(text) {
     if (CliAutoComplete.isBuilding()) {
         CliAutoComplete.builderParseLine(text);
-        console.log('CliAutoComplete.isBuilding()=true suppressing output');
         return; // suppress output if in building state
     }
 
@@ -483,9 +481,7 @@ TABS.cli.read = function (readInfo) {
 
         if (CliAutoComplete.isEnabled() && !CliAutoComplete.isBuilding()) {
             // start building autoComplete
-            console.log('CliAutoComplete.builderStart() command calling...');
             CliAutoComplete.builderStart();
-            console.log('CliAutoComplete.builderStart() command finished');
         }
     }
 
