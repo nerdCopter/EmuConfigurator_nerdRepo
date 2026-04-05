@@ -387,6 +387,12 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     const socket = new net.Socket();
     _tcpSockets.set(socketId, socket);
     socket.setNoDelay(true);
+    
+    // Connection timeout: 10 seconds
+    const timeoutMs = 10000;
+    let timeoutId = null;
+    let resolved = false;
+    
     socket.on('data', (data) => {
       safeSendToRenderer(event.sender, 'tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     });
@@ -398,13 +404,36 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
       _tcpSockets.delete(socketId);
       safeSendToRenderer(event.sender, 'tcp-close', socketId);
     });
+    
     const connectionErrorHandler = () => {
-      resolve(-102); // CONNECTION_REFUSED
+      if (!resolved) {
+        resolved = true;
+        if (timeoutId) clearTimeout(timeoutId);
+        resolve(-102); // CONNECTION_REFUSED
+      }
     };
+    
+    const handleConnectionTimeout = () => {
+      if (!resolved) {
+        resolved = true;
+        socket.removeListener('error', connectionErrorHandler);
+        socket.destroy();
+        _tcpSockets.delete(socketId);
+        console.error(`main.js: tcp socket ${socketId} connection timeout (${host}:${port})`);
+        resolve(-103); // CONNECTION_TIMEOUT
+      }
+    };
+    
     socket.once('error', connectionErrorHandler);
+    timeoutId = setTimeout(handleConnectionTimeout, timeoutMs);
+    
     socket.connect(port, host, () => {
-      socket.removeListener('error', connectionErrorHandler);
-      resolve(0);
+      if (!resolved) {
+        resolved = true;
+        if (timeoutId) clearTimeout(timeoutId);
+        socket.removeListener('error', connectionErrorHandler);
+        resolve(0);
+      }
     });
   });
 });
