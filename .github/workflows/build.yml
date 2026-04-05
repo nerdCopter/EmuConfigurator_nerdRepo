@@ -276,7 +276,7 @@ jobs:
       - name: Flatten Artifacts for Upload
         shell: bash
         run: |
-          set -uo pipefail
+          set -euo pipefail
           # Move every artifact to the root of its maker output directory.
           # Electron Forge nests output at <maker>/[platform/][arch]/file — we want <maker>/file.
           # On non-Windows the zip restructure step already handled out/make/zip.
