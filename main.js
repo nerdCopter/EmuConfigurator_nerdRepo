@@ -172,21 +172,18 @@ function setupMenu(buildMode) {
         {
           label: 'EmuFlight Documentation',
           click: async () => {
-            const { shell } = require('electron');
             await shell.openExternal('https://github.com/emuflight/EmuFlight/wiki');
           }
         },
         {
           label: 'EmuFlight GitHub',
           click: async () => {
-            const { shell } = require('electron');
             await shell.openExternal('https://github.com/emuflight');
           }
         },
         {
           label: 'EmuFlight Discord',
           click: async () => {
-            const { shell } = require('electron');
             await shell.openExternal('https://discord.gg/BWqgBg3');
           }
         }
@@ -905,7 +902,6 @@ function createWindow() {
   win.webContents.setWindowOpenHandler(({ url }) => {
     // Open external links in the system default browser
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      const { shell } = require('electron');
       shell.openExternal(url);
       return { action: 'deny' }; // Prevent Electron from opening its own window
     }
@@ -933,7 +929,6 @@ function createWindow() {
     const appPath = 'file://' + path.join(__dirname, 'dist');
     if (!url.startsWith(appPath) && (url.startsWith('http://') || url.startsWith('https://'))) {
       event.preventDefault();
-      const { shell } = require('electron');
       shell.openExternal(url);
     }
   });
