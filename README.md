@@ -85,7 +85,7 @@ sudo usermod -aG dialout $USER
 
 Create `/etc/udev/rules.d/49-stm32dfu.rules`:
 
-```
+```text
 SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", \
 MODE="0664", GROUP="plugdev"
 ```

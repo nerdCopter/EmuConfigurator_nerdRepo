@@ -1052,6 +1052,9 @@ async function cleanupConnectionsBeforeQuit() {
       };
 
       try {
+        // DFU_CLRSTATUS (USB class request): bmRequestType=0x21, bRequest=0x00,
+        // wValue=0, wIndex=0, wLength=0 — clears DFU status bits and returns
+        // the device to dfuIDLE so it can be safely closed.
         device.controlTransfer(0x21, 0x00, 0, 0, 0, () => {
           closeDevice();
         });
