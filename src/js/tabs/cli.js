@@ -319,16 +319,17 @@ TABS.cli.initialize = function (callback, nwGui) {
         // Load and wire up Advanced CLI AutoComplete checkbox.
         // The change handler is attached AFTER setting the initial prop to
         // prevent switchery's init from triggering it and writing false to storage.
-        ConfigStorage.get('cliAutoCompleteEnabled', function(obj) {
-            let enabled = obj.cliAutoCompleteEnabled !== false; // default true if never stored
+        ConfigStorage.get('cliAutoComplete', function(obj) {
+            let enabled = obj.cliAutoComplete !== false; // default true if never stored
             const checkbox = $('input[name="cliAutoCompleteCheckbox"]');
             checkbox.prop('checked', enabled);
             CliAutoComplete.setEnabled(enabled);
 
-            // Attach change handler only after initial state is set.
-            checkbox.on('change', function() {
+            // Remove any existing handler before binding to prevent duplicates
+            // when the CLI tab is visited multiple times in one session.
+            checkbox.off('change').on('change', function() {
                 let checked = $(this).prop('checked');
-                ConfigStorage.set({ 'cliAutoCompleteEnabled': checked });
+                ConfigStorage.set({ 'cliAutoComplete': checked });
                 CliAutoComplete.setEnabled(checked);
             });
         });
@@ -515,19 +516,19 @@ TABS.cli.cleanup = function (callback) {
         TABS.cli.GUI.snippetPreviewWindow.destroy();
         TABS.cli.GUI.snippetPreviewWindow = null;
     }
-    if (!(CONFIGURATOR.connectionValid && CONFIGURATOR.cliValid && CONFIGURATOR.cliActive)) {
+
+    // Always clear CLI state and detach autocomplete, regardless of
+    // connection status, so flags and listeners are never left dirty.
+    const shouldSendExit = CONFIGURATOR.connectionValid && CONFIGURATOR.cliValid && CONFIGURATOR.cliActive;
+    CONFIGURATOR.cliActive = false;
+    CONFIGURATOR.cliValid = false;
+    CliAutoComplete.cleanup();
+    $(CliAutoComplete).off();
+
+    if (!shouldSendExit) {
         if (callback) { callback(); }
         return;
     }
-
-    // Clear CLI flags synchronously so bytes received during FC reboot go to
-    // MSP.read() rather than TABS.cli.read().
-    CONFIGURATOR.cliActive = false;
-    CONFIGURATOR.cliValid = false;
-
-    // Detach autocomplete before exit bytes fly.
-    CliAutoComplete.cleanup();
-    $(CliAutoComplete).off();
 
     // Flush stale MSP retransmit timers accumulated while in CLI mode.
     MSP.callbacks_cleanup();
