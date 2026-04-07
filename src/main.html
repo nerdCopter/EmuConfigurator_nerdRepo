@@ -149,8 +149,10 @@
             window.Promise = require('bluebird');
             console.log('[OK] bluebird Promise loaded');
         } catch(e) {
-            console.error('ERROR: Failed to load bluebird:', e.message);
-            console.log('Falling back to native Promise (some features may not work)');
+            // Bluebird is a hard dependency — its .reduce() and .map() APIs are
+            // used throughout (cli.js:108 and others). Falling back to native
+            // Promise causes silent runtime failures; fail fast instead.
+            throw e;
         }
 
         console.log('[OK] npm packages loaded via require()');
@@ -309,7 +311,7 @@
                 <div id="cliAutoCompleteMode" align="center">
                     <label>
                         <input name="cliAutoCompleteCheckbox" class="togglesmall" type="checkbox"/>
-                        <span>Advanced CLI AutoComplete</span>
+                        <span i18n="cliAutoComplete"></span>
                     </label>
                 </div>
             </div>
