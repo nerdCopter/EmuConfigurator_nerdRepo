@@ -323,24 +323,6 @@ TABS.cli.initialize = function (callback, nwGui) {
         // give input element user focus
         textarea.focus();
 
-        // Load and wire up Advanced CLI AutoComplete checkbox.
-        // The change handler is attached AFTER setting the initial prop to
-        // prevent switchery's init from triggering it and writing false to storage.
-        ConfigStorage.get('cliAutoComplete', function(obj) {
-            let enabled = obj.cliAutoComplete !== false; // default true if never stored
-            const checkbox = $('input[name="cliAutoCompleteCheckbox"]');
-            checkbox.prop('checked', enabled);
-            CliAutoComplete.setEnabled(enabled);
-
-            // Remove any existing handler before binding to prevent duplicates
-            // when the CLI tab is visited multiple times in one session.
-            checkbox.off('change').on('change', function() {
-                let checked = $(this).prop('checked');
-                ConfigStorage.set({ 'cliAutoComplete': checked });
-                CliAutoComplete.setEnabled(checked);
-            });
-        });
-
         GUI.timeout_add('enter_cli', function enter_cli() {
             // Enter CLI mode
             var bufferOut = new ArrayBuffer(1);
