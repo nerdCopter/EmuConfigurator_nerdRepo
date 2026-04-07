@@ -69,7 +69,7 @@ brew install macos-alias   # One-time install
 yarn make                   # Builds both .zip and .dmg
 ```
 
-DMG is skipped in CI because `macos-alias` (native module) doesn't 
+DMG is skipped in CI because `macos-alias` (native module) doesn't
 cross-compile reliably. ZIP is portable and sufficient for most use cases.
 
 ### Platform Notes

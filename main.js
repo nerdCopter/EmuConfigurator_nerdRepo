@@ -373,12 +373,12 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     const socket = new net.Socket();
     _tcpSockets.set(socketId, socket);
     socket.setNoDelay(true);
-    
+
     // Connection timeout: 10 seconds
     const timeoutMs = 10000;
     let timeoutId = null;
     let resolved = false;
-    
+
     socket.on('data', (data) => {
       safeSendToRenderer(event.sender, 'tcp-data', socketId, data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
     });
@@ -390,7 +390,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
       _tcpSockets.delete(socketId);
       safeSendToRenderer(event.sender, 'tcp-close', socketId);
     });
-    
+
     const connectionErrorHandler = () => {
       if (!resolved) {
         resolved = true;
@@ -398,7 +398,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
         resolve(-102); // CONNECTION_REFUSED
       }
     };
-    
+
     const handleConnectionTimeout = () => {
       if (!resolved) {
         resolved = true;
@@ -409,10 +409,10 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
         resolve(-103); // CONNECTION_TIMEOUT
       }
     };
-    
+
     socket.once('error', connectionErrorHandler);
     timeoutId = setTimeout(handleConnectionTimeout, timeoutMs);
-    
+
     socket.connect(port, host, () => {
       if (!resolved) {
         resolved = true;
@@ -757,7 +757,7 @@ const { dialog } = require('electron');
 // IPC: show save file dialog
 ipcMain.handle('dialog:choose-entry', async (event, options) => {
   const { type, suggestedName, accepts } = options;
-  
+
   if (type === 'saveFile') {
     const filters = accepts ? accepts.map(a => ({ name: a.description, extensions: a.extensions })) : [];
     return await dialog.showSaveDialog({
@@ -867,10 +867,10 @@ function createWindow() {
     },
     icon: windowIconPath,
   });
-  
+
   // Enforce minimum window size multiple ways for cross-platform compatibility
   win.setMinimumSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
-  
+
   // Active enforcement: if window size falls below minimum after any resize, restore it
   win.on('resize', () => {
     const [width, height] = win.getSize();
@@ -878,7 +878,7 @@ function createWindow() {
       win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
     }
   });
-  
+
   // Also prevent moves that would resize
   win.on('moved', () => {
     const [width, height] = win.getSize();
@@ -886,9 +886,9 @@ function createWindow() {
       win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
     }
   });
-  
+
   win.loadFile(path.join(__dirname, 'dist', 'main.html'));
-  
+
   // Reapply after window is fully loaded (some platforms need this)
   win.webContents.on('did-finish-load', () => {
     win.setMinimumSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT);
@@ -897,7 +897,7 @@ function createWindow() {
       win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
     }
   });
-  
+
   // Intercept new window requests (e.g., target="_blank" links) and open in system browser
   win.webContents.setWindowOpenHandler(({ url }) => {
     // Open external links in the system default browser
@@ -907,11 +907,11 @@ function createWindow() {
     }
     return { action: 'allow' };
   });
-  
+
   if (buildMode === 'dev') {
     win.webContents.openDevTools();
   }
-  
+
   // Setup context menu for right-click (cut/copy/paste/select all)
   win.webContents.on('context-menu', (_event, _params) => {
     const contextMenu = Menu.buildFromTemplate([
@@ -923,7 +923,7 @@ function createWindow() {
     ]);
     contextMenu.popup(win);
   });
-  
+
   // Intercept navigation to external URLs and open them in system browser
   win.webContents.on('will-navigate', (event, url) => {
     const appPath = 'file://' + path.join(__dirname, 'dist');
@@ -932,7 +932,7 @@ function createWindow() {
       shell.openExternal(url);
     }
   });
-  
+
   // Capture renderer console output and kill app on error
   // Electron 41+ uses string levels: 'verbose', 'info', 'warning', 'error'
   // Default (dev): show warnings+errors only. Set VERBOSE=1 to show all.
@@ -943,7 +943,7 @@ function createWindow() {
       // Map string level to numeric priority for comparison
       const levelMap = { 'verbose': 0, 'info': 1, 'warning': 2, 'error': 3 };
       const numericLevel = levelMap[level] !== undefined ? levelMap[level] : (typeof level === 'number' ? level : 1);
-      
+
       const verbose = process.env.VERBOSE === '1';
       if (verbose || numericLevel >= 2) {
         const tag = numericLevel >= 3 ? '[Renderer ERROR]' : numericLevel >= 2 ? '[Renderer WARN]' : '[Renderer]';
@@ -982,7 +982,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 function tryAcquireSingleInstanceLock() {
   const lockAcquired = app.requestSingleInstanceLock();
-  
+
   if (lockAcquired) {
     app.on('second-instance', () => {
       if (mainWindow) {

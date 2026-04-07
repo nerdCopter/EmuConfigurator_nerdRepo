@@ -10,7 +10,7 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
     var tabFile = './tabs/' + staticTabName + '.html';
 
     $('#content').html('<div id="tab-static"><div id="tab-static-contents"></div></div>');
-    
+
     // Load mixercalc assets and script dynamically when tab is opened
     var loadAndInitialize = function() {
         $('#tab-static-contents').load(tabFile, function (responseText, textStatus, xhr) {
@@ -31,7 +31,7 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
             GUI.content_ready(callback);
         });
     };
-    
+
     // For mixercalc, load assets first
     if (staticTabName === 'mixercalc') {
         // Load CSS

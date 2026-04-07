@@ -54,7 +54,7 @@ var MSP = {
     listeners:                  [],
 
     JUMBO_FRAME_SIZE_LIMIT:     255,
-    
+
     read: function (readInfo) {
         var data = new Uint8Array(readInfo.data);
 
@@ -232,7 +232,7 @@ var MSP = {
         }
     },
     clearListeners: function() {
-        this.listeners = [];  
+        this.listeners = [];
     },
     crc8_dvb_s2: function(crc, ch) {
         crc ^= ch;
