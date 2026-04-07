@@ -13,7 +13,13 @@ TABS.staticTab.initialize = function (staticTabName, callback) {
     
     // Load mixercalc assets and script dynamically when tab is opened
     var loadAndInitialize = function() {
-        $('#tab-static-contents').load(tabFile, function () {
+        $('#tab-static-contents').load(tabFile, function (responseText, textStatus, xhr) {
+            if (textStatus === 'error') {
+                console.error('staticTab: Failed to load', tabFile, '— status:', xhr.status, xhr.statusText);
+                $('#tab-static-contents').html('<p style="color:red;">Error: could not load tab file (' + tabFile + ')</p>');
+                return;
+            }
+
             // translate to user-selected language
             i18n.localizePage();
 
