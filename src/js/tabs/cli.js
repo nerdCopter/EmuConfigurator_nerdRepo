@@ -93,7 +93,7 @@ TABS.cli.initialize = function (callback, nwGui) {
     if (GUI.active_tab != 'cli') {
         GUI.active_tab = 'cli';
     }
-    
+
     self.outputHistory = "";
     self.cliBuffer = "";
 
@@ -112,6 +112,13 @@ TABS.cli.initialize = function (callback, nwGui) {
                     line = line.trim();
                     if (line.toLowerCase().startsWith('profile')) {
                         processingDelay = self.profileSwitchDelayMs;
+                    }
+                    // Skip empty vtx conditions: the firmware dumps `vtx N 0 0 0 0 900 900`
+                    // for unconfigured slots, but its own cliVtx() rejects them as
+                    // "Empty vtx line" when replayed (900/900 = step 0,0 = all-zero struct).
+                    if (/^vtx\s+\d+\s+0\s+0\s+0\s+0\s+900\s+900\s*$/i.test(line)) {
+                        resolve(0);
+                        return;
                     }
                     const isLastCommand = outputArray.length === index + 1;
                     if (isLastCommand && self.cliBuffer) {
@@ -200,7 +207,7 @@ TABS.cli.initialize = function (callback, nwGui) {
         } else {
             $('.tab-cli .copy').hide();
         }
-        
+
         $('.tab-cli .load').click(function() {
             var accepts = [
                 {
@@ -218,7 +225,7 @@ TABS.cli.initialize = function (callback, nwGui) {
                     console.log('No file selected');
                     return;
                 }
-                
+
                 let previewArea = $("#snippetpreviewcontent textarea#preview");
 
                 function executeSnippet() {
@@ -238,7 +245,7 @@ TABS.cli.initialize = function (callback, nwGui) {
                             isolateScroll: false,
                             title: i18n.getMessage("cliConfirmSnippetDialogTitle"),
                             content: $('#snippetpreviewcontent'),
-                            onCreated: () =>  
+                            onCreated: () =>
                                 $("#snippetpreviewcontent a.confirm").click(() => executeSnippet())
                             ,
                         });
@@ -249,7 +256,7 @@ TABS.cli.initialize = function (callback, nwGui) {
 
                 entry.file((file) => {
                     let reader = new FileReader();
-                    reader.onload = 
+                    reader.onload =
                         () => previewCommands(reader.result);
                     reader.onerror = () => console.error(reader.error);
                     reader.readAsText(file);
