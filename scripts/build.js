@@ -85,10 +85,16 @@ function build() {
   const jboxSrc = path.join(ROOT, 'node_modules', 'jbox', 'dist', 'jBox.min.css');
   const jboxDst = path.join(DIST, 'css', 'jBox.min.css');
   if (fs.existsSync(jboxSrc)) {
-    fse.ensureDirSync(path.dirname(jboxDst));
-    fse.copyFileSync(jboxSrc, jboxDst);
+    try {
+      fse.ensureDirSync(path.dirname(jboxDst));
+      fse.copyFileSync(jboxSrc, jboxDst);
+    } catch (e) {
+      console.error('[build] ERROR: Failed to copy jBox.min.css:', e.message);
+      process.exit(1);
+    }
   } else {
-    console.warn('[build] WARNING: jBox.min.css not found at', jboxSrc);
+    console.error('[build] ERROR: jBox.min.css not found at', jboxSrc);
+    process.exit(1);
   }
 
   // Copy jquery and jquery-ui to dist/js/libraries/ so receiver_msp.html
@@ -99,15 +105,27 @@ function build() {
   fse.ensureDirSync(libDir);
   const jquerySrc = path.join(ROOT, 'node_modules', 'jquery', 'dist', 'jquery.min.js');
   if (fs.existsSync(jquerySrc)) {
-    fse.copyFileSync(jquerySrc, path.join(libDir, 'jquery.min.js'));
+    try {
+      fse.copyFileSync(jquerySrc, path.join(libDir, 'jquery.min.js'));
+    } catch (e) {
+      console.error('[build] ERROR: Failed to copy jquery.min.js:', e.message);
+      process.exit(1);
+    }
   } else {
-    console.warn('[build] WARNING: jquery.min.js not found at', jquerySrc);
+    console.error('[build] ERROR: jquery.min.js not found at', jquerySrc);
+    process.exit(1);
   }
   const jqueryUiSrc = path.join(ROOT, 'node_modules', 'jquery-ui-npm', 'jquery-ui.min.js');
   if (fs.existsSync(jqueryUiSrc)) {
-    fse.copyFileSync(jqueryUiSrc, path.join(libDir, 'jquery-ui.min.js'));
+    try {
+      fse.copyFileSync(jqueryUiSrc, path.join(libDir, 'jquery-ui.min.js'));
+    } catch (e) {
+      console.error('[build] ERROR: Failed to copy jquery-ui.min.js:', e.message);
+      process.exit(1);
+    }
   } else {
-    console.warn('[build] WARNING: jquery-ui.min.js not found at', jqueryUiSrc);
+    console.error('[build] ERROR: jquery-ui.min.js not found at', jqueryUiSrc);
+    process.exit(1);
   }
 
   // manifest.json → dist/manifest.json
