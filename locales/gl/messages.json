@@ -3290,5 +3290,14 @@
     },
     "cliAutoComplete": {
         "message": "AutoCompletar CLI Avanzado"
+    },
+    "tabMixerCalc": {
+        "message": "Calculadora de Mestura de Motores"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Política de Privacidade"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Configuración de Sensación"
     }
 }

@@ -3237,5 +3237,14 @@
     },
     "cliAutoComplete": {
         "message": "Napredno CLI samodovršavanje"
+    },
+    "tabMixerCalc": {
+        "message": "Kalkulator Mešanja Motora"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Politika Privatnosti"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Postavke Osjećaja"
     }
 }

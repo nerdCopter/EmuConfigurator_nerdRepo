@@ -3185,5 +3185,14 @@
     },
     "flashTab": {
         "message": "Uppdatera firmware"
+    },
+    "tabMixerCalc": {
+        "message": "Motormixxkalkylator"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Integritetspolicy"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Känslinställningar"
     }
 }

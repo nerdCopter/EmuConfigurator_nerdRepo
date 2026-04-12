@@ -2437,5 +2437,14 @@
     },
     "modeCameraChangeMode": {
         "message": "MODE DE CANVI DE CÀMERA"
+    },
+    "tabMixerCalc": {
+        "message": "Calculadora de Barreja de Motors"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Política de Privacitat"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Configuració de Sensació"
     }
 }

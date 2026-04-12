@@ -3322,5 +3322,14 @@
     },
     "flashTab": {
         "message": "Actualizar Firmware"
+    },
+    "tabMixerCalc": {
+        "message": "Calculadora de Mezcla de Motores"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Política de Privacidad"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Configuración de Sensación"
     }
 }

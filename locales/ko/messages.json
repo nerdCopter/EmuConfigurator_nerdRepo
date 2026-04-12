@@ -3541,5 +3541,14 @@
     },
     "flashTab": {
         "message": "펌웨어</br>업데이트"
+    },
+    "tabMixerCalc": {
+        "message": "모터 믹스 계산기"
+    },
+    "tabPrivacyPolicy": {
+        "message": "개인정보보호정책"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "느낌 설정"
     }
 }

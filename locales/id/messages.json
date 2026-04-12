@@ -2853,5 +2853,14 @@
     },
     "flashTab": {
         "message": "Perbarui firmware"
+    },
+    "tabMixerCalc": {
+        "message": "Kalkulator Pencampur Motor"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Kebijakan Privasi"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Pengaturan Sensasi"
     }
 }

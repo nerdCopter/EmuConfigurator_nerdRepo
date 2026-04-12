@@ -3564,5 +3564,14 @@
     },
     "flashTab": {
         "message": "更新固件"
+    },
+    "tabMixerCalc": {
+        "message": "电机混合计算器"
+    },
+    "tabPrivacyPolicy": {
+        "message": "隐私政策"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "手感设置"
     }
 }

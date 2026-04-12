@@ -3448,5 +3448,14 @@
     },
     "flashTab": {
         "message": "Обновить прошивку"
+    },
+    "tabMixerCalc": {
+        "message": "Калькулятор Микширования Моторов"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Политика Конфиденциальности"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Параметры Ощущения"
     }
 }

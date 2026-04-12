@@ -3459,5 +3459,14 @@
     },
     "flashTab": {
         "message": "ファームウェアをアップデート"
+    },
+    "tabMixerCalc": {
+        "message": "モーターミックス計算機"
+    },
+    "tabPrivacyPolicy": {
+        "message": "プライバシーポリシー"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "フィール設定"
     }
 }

@@ -3130,5 +3130,14 @@
     },
     "flashTab": {
         "message": "Firmware aktualisieren"
+    },
+    "tabMixerCalc": {
+        "message": "Motorenmischrechner"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Datenschutzrichtlinie"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Fluggefühl-Einstellungen"
     }
 }

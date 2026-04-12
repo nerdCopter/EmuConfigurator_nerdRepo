@@ -3417,5 +3417,14 @@
     },
     "flashTab": {
         "message": "Programmatūras atjaunināšana"
+    },
+    "tabMixerCalc": {
+        "message": "Motoru Maisīšanas Kalkulators"
+    },
+    "tabPrivacyPolicy": {
+        "message": "Privātuma Politika"
+    },
+    "pidTuningSubTabFeel": {
+        "message": "Jūtas Iestatījumi"
     }
 }
