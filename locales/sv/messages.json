@@ -3194,5 +3194,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Känslinställningar"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Inställningar för Rateprofile"
+    },
+    "tabVtx": {
+        "message": "Analogt VTX"
+    },
+    "vtxHelp": {
+        "message": "Här kan du konfigurera värdena för din videoöverföring om flygkontrollern och VTX stöder det. Ställ in värdena manuellt eller klicka på diagramfrekvenerna och spara."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Uppmärksamhet:</span> Piloter som driver en analog VTX måste följa myndigheternas föreskrifter. En amatörradiolicense kan krävas."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Andra saker att tänka på: Locked, Unlocked, Race-Mode, Free-Mode bör alla ställas in av VTX-hårdvaran. EmuFlight har ingen åtkomst till detta."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Ställ in det hur du vill, du kommer ändå bara att se linjer och statisk"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Enbart CLI-inställningar inkluderar 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' och 'VTX-Power-on-a-Switch'. Konfigurera dem efter behov i CLI."
     }
 }

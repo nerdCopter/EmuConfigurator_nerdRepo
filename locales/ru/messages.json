@@ -3457,5 +3457,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Параметры Ощущения"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Параметры Rateprofile"
+    },
+    "tabVtx": {
+        "message": "Аналоговый VTX"
+    },
+    "vtxHelp": {
+        "message": "Здесь вы можете настроить значения для вашего видеопередатчика, если контроллер полёта и VTX это поддерживают. Установите значения вручную или щелкните на частоты диаграммы и сохраните."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Внимание:</span> Пилоты, управляющие аналоговым VTX, должны соблюдать государственные нормативные акты. Может потребоваться лицензия радиолюбителя."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Другие вещи, которые следует учитывать: Locked, Unlocked, Race-Mode, Free-Mode должны быть установлены оборудованием VTX. EmuFlight не имеет доступа к этому."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Установите как хотите, вы всё равно ничего не увидите кроме линий и помех"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Параметры только CLI включают 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' и 'VTX-Power-on-a-Switch'. Настройте их по мере необходимости в CLI."
     }
 }

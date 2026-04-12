@@ -1075,7 +1075,7 @@
         "message": "Opcións de PID"
     },
     "pidTuningSubTabRates": {
-        "message": "Configuración do perfil de taxa"
+        "message": "Configuración de Rateprofile"
     },
     "pidTuningSubTabFilter": {
         "message": "Opcións de filtros"
@@ -3299,5 +3299,23 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Configuración de Sensación"
+    },
+    "tabVtx": {
+        "message": "VTX Analóxico"
+    },
+    "vtxHelp": {
+        "message": "Aquí podes configurar os valores do teu Transmisor de Vídeo se o controlador de voo e o VTX o soportan. Establece os valores manualmente ou fai clic nas frecuencias do gráfico e garda."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Atención:</span> Os pilotos que operan un VTX analóxico deben cumprir coas regulacións gobernamentais. Pode ser precisa unha licenza de radioafición."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Outras cousas a considerar: Locked, Unlocked, Race-Mode, Free-Mode deben ser establecidas pola hardware do VTX. EmuFlight non ten acceso a isto."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Configúrao como queiras, non verás nada máis que liñas e estática de todas formas"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Os parámetros só CLI inclúen 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' e 'VTX-Power-on-a-Switch'. Configúraos segundo sexa necesario en CLI."
     }
 }

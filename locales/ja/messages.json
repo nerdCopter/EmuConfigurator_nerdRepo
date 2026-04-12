@@ -3468,5 +3468,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "フィール設定"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Rateprofile設定"
+    },
+    "tabVtx": {
+        "message": "アナログVTX"
+    },
+    "vtxHelp": {
+        "message": "ここでは、フライトコントローラーとVTXがサポートしている場合、ビデオトランスミッターの値を設定できます。値を手動で設定するか、チャート周波数をクリックして保存してください。"
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">注意:</span> アナログVTXを運用するパイロットは、政府の規制に従う必要があります。アマチュア無線ライセンスが必要な場合があります。"
+    },
+    "vtxMessageHardwareModes": {
+        "message": "その他の考慮事項: Locked、Unlocked、Race-Mode、Free-Modeはすべてハードウェアのサポートを必要とします。EmuFlightはこれにアクセスできません。"
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "好きなように設定してください。どうせ線とスタティックしか見えません"
+    },
+    "vtxMessageNonMSP": {
+        "message": "CLIのみの設定には'vtx_low_power_disarm'、'vtx_pit_mode_freq'、'vtx_halfduplex'、'VTX-Power-on-a-Switch'が含まれます。必要に応じてCLIで設定してください。"
     }
 }

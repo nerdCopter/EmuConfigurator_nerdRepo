@@ -3426,5 +3426,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Jūtas Iestatījumi"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Rateprofile iestatījumi"
+    },
+    "tabVtx": {
+        "message": "Analogais VTX"
+    },
+    "vtxHelp": {
+        "message": "Šeit varat konfigurēt jūsu Video raidītāja vērtības, ja lidojuma kontroleris un VTX to atbalsta. Iestatiet vērtības manuāli vai noklikšķiniet uz diagrammas frekvencēm un saglabājiet."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Uzmanību:</span> Piloti, kuri baro analogo VTX, ir jāpiegriežas valdības noteikumiem. Var būt nepieciešama radioamatieru licence."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Citas lietas, kas jāņem vērā: Locked, Unlocked, Race-Mode, Free-Mode visus jāiestata ar VTX aparatūru. EmuFlight tam nav piekļuves."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Iestatiet, kā vēlaties, jūs tikvien redzēsiet tikai līnijas un trokšņus"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Tikai CLI iestatījumi ietver 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' un 'VTX-Power-on-a-Switch'. Konfigurējiet tos pēc nepieciešamības CLI."
     }
 }

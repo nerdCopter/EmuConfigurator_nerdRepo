@@ -3089,5 +3089,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Impostazioni di Sensazione"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Impostazioni Rateprofile"
+    },
+    "tabVtx": {
+        "message": "VTX Analogico"
+    },
+    "vtxHelp": {
+        "message": "Qui puoi configurare i valori per il tuo Trasmettitore Video se il controller di volo e il VTX lo supportano. Imposta i valori manualmente o fai clic sulle frequenze del grafico e salva."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Attenzione:</span> I piloti che gestiscono un VTX analogico devono conformarsi alle normative governative. Una licenza di radioamatorismo potrebbe essere richiesta."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Altri aspetti da considerare: Locked, Unlocked, Race-Mode, Free-Mode dovrebbero tutti essere impostati dall'hardware VTX. EmuFlight non ha accesso a questo."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Configuralo come preferisci, comunque non vedrai niente se non linee e statica"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Le impostazioni solo CLI includono 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' e 'VTX-Power-on-a-Switch'. Configurale come necessario in CLI."
     }
 }

@@ -3573,5 +3573,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "手感设置"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Rateprofile设置"
+    },
+    "tabVtx": {
+        "message": "模拟VTX"
+    },
+    "vtxHelp": {
+        "message": "在这里，如果飞行控制器和VTX支持，你可以配置你的视频发射机的值。手动设置值，或点击图表频率然后保存。"
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">注意：</span>运营模拟VTX的飞行员必须遵守政府规定。可能需要业余无线电执照。"
+    },
+    "vtxMessageHardwareModes": {
+        "message": "其他需要考虑的事项：Locked、Unlocked、Race-Mode、Free-Mode应全部由VTX硬件设置。EmuFlight无权访问此项。"
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "按你喜欢的方式设置，你无论如何都只会看到线条和静态"
+    },
+    "vtxMessageNonMSP": {
+        "message": "仅CLI设置包括'vtx_low_power_disarm'、'vtx_pit_mode_freq'、'vtx_halfduplex'和'VTX-Power-on-a-Switch'。根据需要在CLI中配置它们。"
     }
 }

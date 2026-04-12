@@ -1015,7 +1015,7 @@
         "message": "PID Einstellungen"
     },
     "pidTuningSubTabRates": {
-        "message": "Drehratenprofil Einstellungen"
+        "message": "Rateprofile-Einstellungen"
     },
     "pidTuningSubTabFilter": {
         "message": "Filter Einstellungen"
@@ -3139,5 +3139,23 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Fluggefühl-Einstellungen"
+    },
+    "tabVtx": {
+        "message": "Analoges VTX"
+    },
+    "vtxHelp": {
+        "message": "Hier können Sie die Werte für Ihren Videosender konfigurieren, wenn der Flight Controller und der VTX dies unterstützen. Stellen Sie die Werte manuell ein oder klicken Sie auf die Diagrammfrequenzen und speichern Sie."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Achtung:</span> Piloten, die ein analoges VTX betreiben, müssen die behördlichen Vorschriften einhalten. Ein Amateurfunkzeugnis kann erforderlich sein."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Andere zu berücksichtigende Dinge: Locked, Unlocked, Race-Mode, Free-Mode sollten alle von der VTX-Hardware eingestellt werden. EmuFlight hat keinen Zugriff darauf."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Stellen Sie es wie gewünscht ein, Sie sehen sowieso nur Linien und Statik"
+    },
+    "vtxMessageNonMSP": {
+        "message": "CLI-exklusive Einstellungen umfassen 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' und 'VTX-Power-on-a-Switch'. Konfigurieren Sie diese nach Bedarf in der CLI."
     }
 }

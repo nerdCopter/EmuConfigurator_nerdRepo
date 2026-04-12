@@ -3550,5 +3550,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "느낌 설정"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Rateprofile 설정"
+    },
+    "tabVtx": {
+        "message": "아날로그 VTX"
+    },
+    "vtxHelp": {
+        "message": "여기에서 비행 제어기와 VTX가 지원하는 경우 비디오 송신기의 값을 구성할 수 있습니다. 값을 수동으로 설정하거나 차트 빈도를 클릭한 후 저장하십시오."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">주의:</span> 아날로그 VTX를 운영하는 조종사는 정부 규정을 준수해야 합니다. 아마추어 무선 라이선스가 필요할 수 있습니다."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "고려할 기타 사항: Locked, Unlocked, Race-Mode, Free-Mode는 모두 VTX 하드웨어로 설정해야 합니다. EmuFlight은 이에 대한 액세스 권한이 없습니다."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "원하는 대로 설정하세요. 어쨌든 선과 정적만 보일 겁니다"
+    },
+    "vtxMessageNonMSP": {
+        "message": "CLI 전용 설정에는 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex', 'VTX-Power-on-a-Switch'가 포함됩니다. 필요에 따라 CLI에서 구성하십시오."
     }
 }

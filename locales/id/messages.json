@@ -2862,5 +2862,26 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Pengaturan Sensasi"
+    },
+    "pidTuningSubTabRates": {
+        "message": "Pengaturan Rateprofile"
+    },
+    "tabVtx": {
+        "message": "VTX Analog"
+    },
+    "vtxHelp": {
+        "message": "Di sini Anda dapat mengonfigurasi nilai untuk Pemancar Video Anda jika pengontrol penerbangan dan VTX mendukungnya. Atur nilai secara manual atau klik frekuensi bagan lalu simpan."
+    },
+    "vtxMessageRequiresHAM": {
+        "message": "<span class=\"message-negative\">Perhatian:</span> Pilot yang mengoperasikan VTX analog harus mematuhi peraturan pemerintah. Lisensi radio amatir mungkin diperlukan."
+    },
+    "vtxMessageHardwareModes": {
+        "message": "Hal-hal lain yang perlu dipertimbangkan: Locked, Unlocked, Race-Mode, Free-Mode semuanya harus diatur oleh perangkat keras VTX. EmuFlight tidak memiliki akses ke ini."
+    },
+    "vtxMessageAnalogFunny": {
+        "message": "Atur sesuka Anda, Anda tidak akan melihat apa pun selain garis dan statis bagaimanapun"
+    },
+    "vtxMessageNonMSP": {
+        "message": "Pengaturan CLI-saja termasuk 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' dan 'VTX-Power-on-a-Switch'. Konfigurasikan sesuai kebutuhan di CLI."
     }
 }
