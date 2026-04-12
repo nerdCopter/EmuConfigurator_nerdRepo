@@ -3257,7 +3257,7 @@
         "message": "Ovdje možete konfigurirati vrijednosti za vaš Video Transmiter ako ga kontroler leta i VTX podržavaju. Postavite vrijednosti ručno ili kliknite na frekvencije grafikona pa spremite."
     },
     "vtxMessageRequiresHAM": {
-        "message": "<span class=\"message-negative\">Pažnja:</span> Piloti koji koriste analogni VTX moraju se pridržavati vladanih propisa. Dozvola radioamaterskog dozvola može biti potrebna."
+        "message": "<span class=\"message-negative\">Pažnja:</span> Piloti koji koriste analogni VTX moraju se pridržavati državnih propisa. Radioamaterska dozvola može biti potrebna."
     },
     "vtxMessageHardwareModes": {
         "message": "Ostale stvari koje trebate uzeti u obzir: Locked, Unlocked, Race-Mode, Free-Mode trebali bi biti postavljeni pomoću VTX sklopovlja. EmuFlight nema pristupa tome."
