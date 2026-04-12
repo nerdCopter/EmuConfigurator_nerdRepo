@@ -92,7 +92,7 @@
         "message": "未検証バージョンの更新通知を表示"
     },
     "configuratorUpdateNotice": {
-        "message": "お使いの<b>Emuflight Configurator</b>は旧バージョンです。<br>Version <b>$1</b> が利用可能です。<a href=\"$2\" target=\"_blank\">リリースページ</a>から修正・機能向上した最新版をダウンロードしてインストールして下さい。<br>注: 更新する前にConfiguratorを閉じて下さい。"
+        "message": "お使いの<b>Emuflight Configurator</b>は旧バージョンです。<br>Version <b>$1</b> が利用可能です。<a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">リリースページ</a>から修正・機能向上した最新版をダウンロードしてインストールして下さい。<br>注: 更新する前にConfiguratorを閉じて下さい。"
     },
     "configuratorUpdateWebsite": {
         "message": "リリースサイトに移動"
@@ -420,7 +420,7 @@
         "message": "Emuflight wiki はすばらしい情報リソースを<a href=\"https://github.com/betaflight/betafli<a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">ght/wiki\" target=\"_blank\">こちら</a>で検索・確認することができます。"
     },
     "defaultDocumentation2": {
-        "message": "ファームウェア リリースノートは、GitHub リリースページの<a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">こちら</a>で確認いただけます。"
+        "message": "ファームウェア リリースノートは、GitHub リリースページの<a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">こちら</a>で確認いただけます。"
     },
     "defaultSupportHead": {
         "message": "サポート"
@@ -1580,16 +1580,16 @@
         "message": "16進数 0〜9、A〜F"
     },
     "transponderHelp1": {
-        "message": "ここにトランスポンダーコードを設定します。注: レースタイミングシステムでは有効なコードのみが認識されます。有効なトランスポンダーコードは、 <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a> から入手できます。"
+        "message": "ここにトランスポンダーコードを設定します。注: レースタイミングシステムでは有効なコードのみが認識されます。有効なトランスポンダーコードは、 <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a> から入手できます。"
     },
     "transponderHelp2": {
-        "message": "詳細については <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer サイト</a> をご覧下さい。"
+        "message": "詳細については <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer サイト</a> をご覧下さい。"
     },
     "transponderDataHelp3": {
         "message": "ERLT ID 0～63 を選択します。"
     },
     "transponderHelp3": {
-        "message": "詳細については <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer site</a> をご覧下さい。"
+        "message": "詳細については <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer site</a> をご覧下さい。"
     },
     "transponderButtonSave": {
         "message": "保存"
@@ -2105,7 +2105,7 @@
         "message": "<strong>リカバリー / 通信ロスト</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "FCボードとの通信が切断された場合は、次の手順に従って通信を復元して下さい: <ul><li>電源をオフします。</li><li>[再起動シーケンスなし] を有効にし [チップメモリの完全消去] を有効にします。</li><li>BOOTピンをジャンパするか、またはBOOTボタンを押し続けます。</li><li>電源をオンします。 (正しく行われればアクティビティLEDは点滅しません) </li><li>必要に応じて、全てのSTM32ドライバとZadigをインストールします。 (Emuflightマニュアルの [<a href=\"https://github.com/EmuFlight/EmuFlight/wiki\"target=\"_blank\">USB Flashing</a>] 章を参照) </li><li>Configuratorを閉じ、全てのChromeアプリケーションを終了し、Configuratorを再起動します。</li><li>FCのBOOTボタン1つだけであれば、BOOTボタンを放して下さい。</li><li>正常なファームウェアをフラッシュして下さい。 (FCのマニュアルで指定されている場合は手動で伝送速度を調整して下さい) </li><li>電源をオフします。</li><li>BOOTピンのジャンパを取り外します。</li><li>電源をオンします。 (アクティビティLEDが点滅するはずです) </li><li>再度、通常通り接続して下さい。</li></ul>"
+        "message": "FCボードとの通信が切断された場合は、次の手順に従って通信を復元して下さい: <ul><li>電源をオフします。</li><li>[再起動シーケンスなし] を有効にし [チップメモリの完全消去] を有効にします。</li><li>BOOTピンをジャンパするか、またはBOOTボタンを押し続けます。</li><li>電源をオンします。 (正しく行われればアクティビティLEDは点滅しません) </li><li>必要に応じて、全てのSTM32ドライバとZadigをインストールします。 (Emuflightマニュアルの [<a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a>] 章を参照) </li><li>Configuratorを閉じ、全てのChromeアプリケーションを終了し、Configuratorを再起動します。</li><li>FCのBOOTボタン1つだけであれば、BOOTボタンを放して下さい。</li><li>正常なファームウェアをフラッシュして下さい。 (FCのマニュアルで指定されている場合は手動で伝送速度を調整して下さい) </li><li>電源をオフします。</li><li>BOOTピンのジャンパを取り外します。</li><li>電源をオンします。 (アクティビティLEDが点滅するはずです) </li><li>再度、通常通り接続して下さい。</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "ファームウェアが読込まれていません"
@@ -2834,7 +2834,7 @@
         "message": "お使いのフライトコントローラはBetaFlight OSDに対応していないようです。"
     },
     "osdSetupUnsupportedNote2": {
-        "message": "いくつかのフライトコントローラにはオンボード<a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a>があり、これを<a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>で設定および書込みができますが、MinimOSDはこのインターフェイスでは設定できません。"
+        "message": "いくつかのフライトコントローラにはオンボード<a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a>があり、これを<a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target=\"_blank\" rel=\"noopener noreferrer\">scarab-osd</a>で設定および書込みができますが、MinimOSDはこのインターフェイスでは設定できません。"
     },
     "osdSetupProfilesTitle": {
         "message": "OSDプロファイル番号",

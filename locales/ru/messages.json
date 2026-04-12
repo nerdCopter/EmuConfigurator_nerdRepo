@@ -112,7 +112,7 @@
         "message": "Показывать уведомления о появлении нестабильных версий конфигуратора"
     },
     "configuratorUpdateNotice": {
-        "message": "Вы используете устаревшую версию <b>Emuflight конфигуратора</b>.<br>Новая версия <b>$1</b> доступна для скачивания, пожалуйста, посетите <a href=\"$2\" target=\"_blank\">страницу с релизами</a> для загрузки и установки самой последней версии с исправлениями и улучшениями.<br>Пожалуйста, закройте окно конфигуратора перед обновлением."
+        "message": "Вы используете устаревшую версию <b>Emuflight конфигуратора</b>.<br>Новая версия <b>$1</b> доступна для скачивания, пожалуйста, посетите <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">страницу с релизами</a> для загрузки и установки самой последней версии с исправлениями и улучшениями.<br>Пожалуйста, закройте окно конфигуратора перед обновлением."
     },
     "configuratorUpdateWebsite": {
         "message": "Перейти на сайт с релизами"
@@ -434,10 +434,10 @@
         "message": "Emuflight документация доступна в release notes и на wiki (на сайте Github).<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki - это отличный источник информации, который можно найти <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">здесь</a>."
+        "message": "Emuflight wiki - это отличный источник информации, который можно найти <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">здесь</a>."
     },
     "defaultDocumentation2": {
-        "message": "Информацию о новых прошивках можно почитать на Github в разделе releases <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">здесь</a>."
+        "message": "Информацию о новых прошивках можно почитать на Github в разделе releases <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">здесь</a>."
     },
     "defaultSupportHead": {
         "message": "Нужна помощь?"
@@ -1561,7 +1561,7 @@
         "message": "Только хексдецимальные цифры, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Настройте ваш транспондер здесь. Внимание: Только правильные коды будут приняты системой регистрации времени гонки. Правильные коды транспондера могут быть получены из <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>."
+        "message": "Настройте ваш транспондер здесь. Внимание: Только правильные коды будут приняты системой регистрации времени гонки. Правильные коды транспондера могут быть получены из <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>."
     },
     "transponderHelp2": {
         "message": "Для получения дополнительной информации посетите <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">сайт aRCiTimer</a>"
@@ -2089,7 +2089,7 @@
         "message": "<strong>Потеря связи / Восстановление связи</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Если возникла потеря связи с вашим устройством, то следуйте следующим шагам, чтобы восстановить связь:<ul><li>Отключите питание</li><li>Включите \"No reboot sequence\", включите \"Полное стирание чипа\".</li><li>Замкните контакты \"BOOT\" или удерживайте кнопку BOOT.</li><li>Включите питание (светодиод НЕ будет мигать, если всё сделано правильно).</li><li>Установите STM32 драйвера и Zadig, если это необходимо (см. раздел <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\"target=\"_blank\">USB Flashing</a> в инструкции Emuflight).</li><li>Закройте конфигуратор, закройте все Chrome приложения и завершите все chrome процессы, перезапустите конфигуратор.</li><li>Отпустите кнопку \"BOOT\", если она есть.</li><li>Залейте нужную прошивку (укажите ручной битрейт, если он указан в инструкции вашего полётного контроллера).</li><li>Отключите питание</li><li>Разомкните контакты \"BOOT\".</li><li>Включите питание (светодиод должен мигать).</li><li>Пробуйте подключиться.</li></ul>"
+        "message": "Если возникла потеря связи с вашим устройством, то следуйте следующим шагам, чтобы восстановить связь:<ul><li>Отключите питание</li><li>Включите \"No reboot sequence\", включите \"Полное стирание чипа\".</li><li>Замкните контакты \"BOOT\" или удерживайте кнопку BOOT.</li><li>Включите питание (светодиод НЕ будет мигать, если всё сделано правильно).</li><li>Установите STM32 драйвера и Zadig, если это необходимо (см. раздел <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> в инструкции Emuflight).</li><li>Закройте конфигуратор, закройте все Chrome приложения и завершите все chrome процессы, перезапустите конфигуратор.</li><li>Отпустите кнопку \"BOOT\", если она есть.</li><li>Залейте нужную прошивку (укажите ручной битрейт, если он указан в инструкции вашего полётного контроллера).</li><li>Отключите питание</li><li>Разомкните контакты \"BOOT\".</li><li>Включите питание (светодиод должен мигать).</li><li>Пробуйте подключиться.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "Прошивка не загружена"
@@ -2821,7 +2821,7 @@
         "message": "Ваш полётный контроллер не отвечает на команды OSD. Возможно, это означает, что в него не встроен Emuflight OSD."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Обратите внимание, что некоторые полётные контроллеры имеют встроенный <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a>, который можно прошить и сконфигурировать при помощи <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, однако после этого MinimOSD невозможно будет сконфигурировать в этом интерфейсе."
+        "message": "Обратите внимание, что некоторые полётные контроллеры имеют встроенный <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a>, который можно прошить и сконфигурировать при помощи <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target=\"_blank\" rel=\"noopener noreferrer\">scarab-osd</a>, однако после этого MinimOSD невозможно будет сконфигурировать в этом интерфейсе."
     },
     "osdSetupProfilesTitle": {
         "message": "Номер профиля OSD",

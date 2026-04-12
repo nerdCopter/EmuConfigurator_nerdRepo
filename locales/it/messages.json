@@ -92,7 +92,7 @@
         "message": "Mostra notifiche per versioni beta del configuratore"
     },
     "configuratorUpdateNotice": {
-        "message": "Stai usando una versione obsoleta di <b>Emuflight Configurator</b>. <br>La versione <b>$1</b> è disponibile online, visita <a href=\"$2\" target=\"_blank\">la pagina dei rilasci</a> per scaricare e installare l'ultima versione.<br> Perfavore chiudi l'applicazione prima di aggiornare."
+        "message": "Stai usando una versione obsoleta di <b>Emuflight Configurator</b>. <br>La versione <b>$1</b> è disponibile online, visita <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">la pagina dei rilasci</a> per scaricare e installare l'ultima versione.<br> Perfavore chiudi l'applicazione prima di aggiornare."
     },
     "configuratorUpdateWebsite": {
         "message": "Visita la pagina degli aggiornamenti"
@@ -393,10 +393,10 @@
         "message": "La documentazione Emuflight è disponibile nelle note di versione e wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki è una grande risorsa in cui trovare informazioni, la trovi <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">QUI</a>."
+        "message": "Emuflight wiki è una grande risorsa in cui trovare informazioni, la trovi <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">QUI</a>."
     },
     "defaultDocumentation2": {
-        "message": "Le informazioni relative alla release del firmware possono essere trovate sulla pagina GitHub delle nuove versioni, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">QUI</a>."
+        "message": "Le informazioni relative alla release del firmware possono essere trovate sulla pagina GitHub delle nuove versioni, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">QUI</a>."
     },
     "defaultSupportHead": {
         "message": "Supporto"

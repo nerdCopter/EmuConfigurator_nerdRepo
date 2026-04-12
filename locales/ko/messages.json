@@ -92,7 +92,7 @@
         "message": "컨피규레이터의 불안정 버전의 업데이트 정보 보기"
     },
     "configuratorUpdateNotice": {
-        "message": "<b>베타플라이트 컨피규레이터</b>의 오래된 버전을 사용중입니다.<br>버전 <b>$1</b>이 온라인상 적용가능합니다. 오류수정과 개선된 최신 버전을 다운로드 및 설치하기 위해서 <a href=\"$2\" target=\"_blank\">릴리즈 페이지</a>를 방문하세요.<br>업데이트 하기 전에 컨피규레이터 창을 닫으십시오."
+        "message": "<b>베타플라이트 컨피규레이터</b>의 오래된 버전을 사용중입니다.<br>버전 <b>$1</b>이 온라인상 적용가능합니다. 오류수정과 개선된 최신 버전을 다운로드 및 설치하기 위해서 <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">릴리즈 페이지</a>를 방문하세요.<br>업데이트 하기 전에 컨피규레이터 창을 닫으십시오."
     },
     "configuratorUpdateWebsite": {
         "message": "릴리즈 웹사이트로 가기"
@@ -420,10 +420,10 @@
         "message": "베타플라이트 문서는 릴리즈 노트와 위키에 적용됩니다.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "베타플라이트 위키는 정보를 얻을 수 있는 훌륭한 자료입니다, 그것은 <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">여기서</a> 찾으실 수 있습니다."
+        "message": "베타플라이트 위키는 정보를 얻을 수 있는 훌륭한 자료입니다, 그것은 <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">여기서</a> 찾으실 수 있습니다."
     },
     "defaultDocumentation2": {
-        "message": "펌웨어에 대한 릴리즈 노트는 <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">GitHub 릴리즈 페이지</a>에서 구독하실 수 있습니다."
+        "message": "펌웨어에 대한 릴리즈 노트는 <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub 릴리즈 페이지</a>에서 구독하실 수 있습니다."
     },
     "defaultSupportHead": {
         "message": "지원"
@@ -2153,7 +2153,7 @@
         "message": "<strong>통신 복구 / 손실</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "보드와의 통신이 끊어진 경우 다음 단계에 따라 통신을 복구하십시오: <ul><li>전원을 끄십시오.</li><li>'재부팅 절차 없음', '칩 전부 삭제'를 활성화 하십시오.</li><li>부트 핀을 점프하거나 부트 버튼을 누르고 계십시오.</li><li>전원을 켜십시오.(제대로 완료되면 작동 중인 LED가 깜박거리지 않습니다)</li><li>필요한 경우 STM32 드라이버와 Zadig를 설치하십시오. (베타플라이트 매뉴얼의 <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\"target=\"_blank\">>USB 플래싱</a> 섹션을 보십시오.)</li><li>컨피규레이터를 닫고, 모든 실행 중인 크롬 인스턴트, 크롬 앱을 닫으십시오. 컨피규레이터를 다시 시작하십시오.</li><li>FC에 BOOT 버튼이 있으면 해제하십시오.</li><li>올바른 펌웨어로 플래시 하십시오. (당신의 FC 매뉴얼에 명시된 경우 수동 전송 속도를 사용하여).</li><li>전원을 끄십시오.</li><li>BOOT 점퍼를 제거하십시오.</li><li>전원을 켜십시오. (작동 중인 LED가 깜박입니다.).</li><li>정상적으로 연결하십시오.</li></ul>"
+        "message": "보드와의 통신이 끊어진 경우 다음 단계에 따라 통신을 복구하십시오: <ul><li>전원을 끄십시오.</li><li>'자동 재시작 안 함', '칩 전체 삭제'를 활성화 하십시오.</li><li>부트 핀을 점프하거나 부트 버튼을 누르고 계십시오.</li><li>전원을 켜십시오.(제대로 완료되면 작동 중인 LED가 깜박거리지 않습니다)</li><li>필요한 경우 STM32 드라이버와 Zadig를 설치하십시오. (베타플라이트 매뉴얼의 <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB 플래싱</a> 섹션을 보십시오.)</li><li>컨피규레이터를 닫고, 모든 실행 중인 크롬 인스턴트, 크롬 앱을 닫으십시오. 컨피규레이터를 다시 시작하십시오.</li><li>FC에 BOOT 버튼이 있으면 해제하십시오.</li><li>올바른 펌웨어로 플래시 하십시오. (당신의 FC 매뉴얼에 명시된 경우 수동 전송 속도를 사용하여).</li><li>전원을 끄십시오.</li><li>BOOT 점퍼를 제거하십시오.</li><li>전원을 켜십시오. (작동 중인 LED가 깜박입니다.).</li><li>정상적으로 연결하십시오.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "펌웨어가 로드되지 않았습니다."
