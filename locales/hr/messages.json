@@ -93,7 +93,7 @@
         "message": "Prikaži obavijesti o ažuriranjima za nestabilne verzije konfiguratora"
     },
     "configuratorUpdateNotice": {
-        "message": "Koristite zastarjelu verziju <b>Emuflight konfiguratora</b>.<br>Verzija <b>$1</b> je dostupna online, molimo posjetite <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">stranicu</a> da biste preuzeli i instalirali najnoviju verziju.<br>Molimo zatvorite konfigurator prije ažuriranja."
+        "message": "Koristite zastarjelu verziju <b>Emuflight konfiguratora</b>.<br>Verzija <b>$1</b> je dostupna online, molimo posjetite <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">stranicu</a> da biste preuzeli i instalirali najnoviju verziju.<br>Molimo zatvorite konfigurator prije ažuriranja."
     },
     "configuratorUpdateWebsite": {
         "message": "Idi na stranicu s izdanjima"
@@ -394,7 +394,7 @@
         "message": "Dobrodošli u <strong>Emuflight - Konfigurator</strong>, alat dizajniran pojednostavljenju ažuriranja, konfiguriranja i ugađanja postavki vašeg kontrolera leta."
     },
     "defaultWelcomeText": {
-        "message": "Razvoj EmuFlight -a je u velikom toku. Neke funkcije korisničkog sučelja mogu biti nedovršene ili je nekim funkcijama firmvera moguće pristupiti samo putem CLI -ja. <br> <br> Izvorni kod i izdanja EmuFlight -a nalaze se na <a href=\"https://github.com/emuflight/EmuFlight \" title=\"github.com/emuflight/EmuFlight \" target=\"_blank\"> GitHub </a>. <br/> <br/> Helio/Strix IMUF može se prebaciti putem <a href=\"https://github.com/emuflight/Nemesis/releases/tag/imuf-flasher-0.1.0\" target=\"_blank\"> IMUF Flasher Tool </a> ili preuzeto sa <a href = \" https://github.com/emuflight/imu-f/releases\" target=\"_blank\"> IMUF izdanja </a> spremište. <br/> <br/> EmuFlight BlackBox dnevnici mogu se čitati pomoću vilice BBE dostupne sa ovog <a href=\"https://github.com/emuflight/EmuFlight-Blackbox-Explorer/releases \" target=\"_blank \"> Spremište EmuFlight-BlackBox-Explorer </a>. <br/> <br/> Najnovije <a href=\"https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers\" title=\"http://www.silabs.com\" target=\"_blank\"> Upravljački programi CP210x</a>. <br/> Najnovije <a href=\" https://www.st.com/en/development-tools/stsw-stm32102.html\" title=\"http://www.st.com\" target=\"_blank\"> STM USB VCP upravljački programi</a >. <br/> Najnovije <a href=\"http://zadig.akeo.ie/\" title=\"http://zadig.akeo.ie\"target=\"_blank\">Zadig</a>. <br/> "
+        "message": "Razvoj EmuFlight -a je u velikom toku. Neke funkcije korisničkog sučelja mogu biti nedovršene ili je nekim funkcijama firmvera moguće pristupiti samo putem CLI -ja. <br> <br> Izvorni kod i izdanja EmuFlight -a nalaze se na <a href=\"https://github.com/emuflight/EmuFlight \" title=\"github.com/emuflight/EmuFlight \" target=\"_blank\" rel=\"noopener noreferrer\"> GitHub </a>. <br/> <br/> Helio/Strix IMUF može se prebaciti putem <a href=\"https://github.com/emuflight/Nemesis/releases/tag/imuf-flasher-0.1.0\" target=\"_blank\" rel=\"noopener noreferrer\"> IMUF Flasher Tool </a> ili preuzeto sa <a href = \" https://github.com/emuflight/imu-f/releases\" target=\"_blank\" rel=\"noopener noreferrer\"> IMUF izdanja </a> spremište. <br/> <br/> EmuFlight BlackBox dnevnici mogu se čitati pomoću vilice BBE dostupne sa ovog <a href=\"https://github.com/emuflight/EmuFlight-Blackbox-Explorer/releases \" target=\"_blank \"> Spremište EmuFlight-BlackBox-Explorer </a>. <br/> <br/> Najnovije <a href=\"https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers\" title=\"http://www.silabs.com\" target=\"_blank\" rel=\"noopener noreferrer\"> Upravljački programi CP210x</a>. <br/> Najnovije <a href=\" https://www.st.com/en/development-tools/stsw-stm32102.html\" title=\"http://www.st.com\" target=\"_blank\" rel=\"noopener noreferrer\"> STM USB VCP upravljački programi</a >. <br/> Najnovije <a href=\"http://zadig.akeo.ie/\" title=\"http://zadig.akeo.ie\" target=\"_blank\" rel=\"noopener noreferrer\">Zadig</a>. <br/> "
     },
     "defaultContributingHead": {
         "message": "Pridonošenje"
@@ -409,10 +409,10 @@
         "message": "Emuflight dokumentacija je dostupna u napomenama izdanja i na Emuflight wikiju.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki je odličan izvor informacija, može se naći <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">ovdje</a>."
+        "message": "Emuflight wiki je odličan izvor informacija, može se naći <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">ovdje</a>."
     },
     "defaultDocumentation2": {
-        "message": "Napomene izdanja za firmware možete pročitati na GitHubu <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">ovdje</a>."
+        "message": "Napomene izdanja za firmware možete pročitati na GitHubu <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">ovdje</a>."
     },
     "defaultSupportHead": {
         "message": "Podrška"
@@ -1509,16 +1509,16 @@
         "message": "Samo heksadekadske znamenke, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Ovdje konfigurirajte kod transpondera. Napomena: Samo ispravni kodovi će biti prepoznati u sustavu praćenja vremena. Ispravne kodove možete pronaći na <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>."
+        "message": "Ovdje konfigurirajte kod transpondera. Napomena: Samo ispravni kodovi će biti prepoznati u sustavu praćenja vremena. Ispravne kodove možete pronaći na <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>."
     },
     "transponderHelp2": {
-        "message": "Za više informacija posjetite stranicu <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer</a>"
+        "message": "Za više informacija posjetite stranicu <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer</a>"
     },
     "transponderDataHelp3": {
         "message": "Odaberi ERLT ID 0-63"
     },
     "transponderHelp3": {
-        "message": "Za više informacija posjetite stranicu <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer</a>"
+        "message": "Za više informacija posjetite stranicu <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer</a>"
     },
     "transponderButtonSave": {
         "message": "Spremi"
@@ -1983,7 +1983,7 @@
         "message": "<strong>Oporavljanje / Izgubljena komunikacija</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Ako ste izgubili komunikaciju s pločom, pratite ove korake kako biste ponovno uspostavili komunikaciju <ul><li>Isključite sve</li><li>Omogučite 'Bez sekvence ponovnog pokretanja</li><li>Prespojite BOOT pinove ili držite BOOT tipku</li><li>Uključite (LED lampica aktivnosti ne bi trebala treptati).</li><li>Instalirajte sve STM32 drivere i Zadig ako je potrebno (pogledajte <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">'USB Flashing'</a> poglavlje u Emuflight uputstvima).</li><li>Zatvorite konfigurator, sve Chrome prozore, sve Chrome aplikacije i ponovno pokrenite konfigurator</li><li>Pustite BOOT tipku ako ju vaš FC ima.</li><li>Ažurirajte kontroler ispravnim firmwareom (koristeći ručno postavljen baud rate ako kontroler tako zahtjeva) </li><li>Isključite sve.</li><li>Uklonite BOOT prespojnicu</li><li>Uključite (LED lampica aktivnosti bi trebala treperiti).</li><li>Normalno se povežite.</li></ul>"
+        "message": "Ako ste izgubili komunikaciju s pločom, pratite ove korake kako biste ponovno uspostavili komunikaciju <ul><li>Isključite sve</li><li>Omogučite 'Bez sekvence ponovnog pokretanja</li><li>Prespojite BOOT pinove ili držite BOOT tipku</li><li>Uključite (LED lampica aktivnosti ne bi trebala treptati).</li><li>Instalirajte sve STM32 drivere i Zadig ako je potrebno (pogledajte <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">'USB Flashing'</a> poglavlje u Emuflight uputstvima).</li><li>Zatvorite konfigurator, sve Chrome prozore, sve Chrome aplikacije i ponovno pokrenite konfigurator</li><li>Pustite BOOT tipku ako ju vaš FC ima.</li><li>Ažurirajte kontroler ispravnim firmwareom (koristeći ručno postavljen baud rate ako kontroler tako zahtjeva) </li><li>Isključite sve.</li><li>Uklonite BOOT prespojnicu</li><li>Uključite (LED lampica aktivnosti bi trebala treperiti).</li><li>Normalno se povežite.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "Firmware nije učitan"
@@ -2594,7 +2594,7 @@
         "message": "Kontroler leta ne odgovara na OSD komande. Ovo vjerojatno znači da nema integrirani Emuflight OSD."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Neki kontroleri leta imaju onboard <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a> koji može biti ažuriran i konfiguriran s <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, svejedno, MinimOSD ne može biti konfiguriran kroz ovo sučelje."
+        "message": "Neki kontroleri leta imaju onboard <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> koji može biti ažuriran i konfiguriran s <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, svejedno, MinimOSD ne može biti konfiguriran kroz ovo sučelje."
     },
     "osdSetupProfilesTitle": {
         "message": "Broj profila OSD-a",

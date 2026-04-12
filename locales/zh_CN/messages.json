@@ -112,7 +112,7 @@
         "message": "显示测试版本的配置程序更新提示"
     },
     "configuratorUpdateNotice": {
-        "message": "你正在使用旧版本的 <b> Emuflight地面站 </b>。<br> 版本<b>$1</b>已经在网上发布。请到 <a href=\"$2\" target=\"_blank\">发布页面</a>下载安装最新的地面站，<br>更新之前请关闭地面站."
+        "message": "你正在使用旧版本的 <b> Emuflight地面站 </b>。<br> 版本<b>$1</b>已经在网上发布。请到 <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">发布页面</a>下载安装最新的地面站，<br>更新之前请关闭地面站."
     },
     "configuratorUpdateWebsite": {
         "message": "打开版本发布网站"
@@ -452,10 +452,10 @@
         "message": "Emuflight的文档和发布说明可以在wiki里面找到。<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "学习Emuflight最好的资源是使用Emuflight wiki，它在 <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">这里</a> 。"
+        "message": "学习Emuflight最好的资源是使用Emuflight wiki，它在 <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">这里</a> 。"
     },
     "defaultDocumentation2": {
-        "message": "最新发布版本的信息可以在 <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">这里</a> 找到。"
+        "message": "最新发布版本的信息可以在 <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">这里</a> 找到。"
     },
     "defaultSupportHead": {
         "message": "支持"
@@ -1633,16 +1633,16 @@
         "message": "仅十六进制 数字，0-9， A-F"
     },
     "transponderHelp1": {
-        "message": "在此配置你的比赛收发器编号。注意：只有有效的编号才会被系统接受。有效的编号可以在这里获得：<a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>。"
+        "message": "在此配置你的比赛收发器编号。注意：只有有效的编号才会被系统接受。有效的编号可以在这里获得：<a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>。"
     },
     "transponderHelp2": {
-        "message": "更多信息请访问 <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer site</a>"
+        "message": "更多信息请访问 <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer site</a>"
     },
     "transponderDataHelp3": {
         "message": "选择 ERLT ID 0-63"
     },
     "transponderHelp3": {
-        "message": "更多信息请访问 <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer site</a>"
+        "message": "更多信息请访问 <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer site</a>"
     },
     "transponderButtonSave": {
         "message": "保存"
@@ -2164,7 +2164,7 @@
         "message": "<strong> 恢复/丢失通信 </strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "如果飞控板失去通信，你可以按照以下的几个步骤来恢复：<ul><li>关闭电源</li><li>打开'无重启序列'，打开‘擦除整个芯片‘选项。</li><li>短接BOOT引脚，或者按住BOOT 按键。</li><li>上电(如果操作正确，飞控的“活动”灯不会闪烁)。</li><li>如果需要请安装STM32 驱动和Zadig(参阅Emuflight手册<a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> 部分 ).</li><li>关闭Befaflight软件，关闭所有Chrome应用，然后重新启动Emuflight。</li><li>释放BOOT按键（如有）。</li><li>烧写正确的固件(参照飞控厂商制定的波特率)。</li><li>断电。</li><li>移除BOOT引脚的短接。</li><li>上电(飞控“活动”灯应该会闪烁).</li><li>正常连接。</li></ul>"
+        "message": "如果飞控板失去通信，你可以按照以下的几个步骤来恢复：<ul><li>关闭电源</li><li>打开'无重启序列'，打开‘擦除整个芯片‘选项。</li><li>短接BOOT引脚，或者按住BOOT 按键。</li><li>上电(如果操作正确，飞控的“活动”灯不会闪烁)。</li><li>如果需要请安装STM32 驱动和Zadig(参阅Emuflight手册<a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">USB Flashing</a> 部分 ).</li><li>关闭Befaflight软件，关闭所有Chrome应用，然后重新启动Emuflight。</li><li>释放BOOT按键（如有）。</li><li>烧写正确的固件(参照飞控厂商制定的波特率)。</li><li>断电。</li><li>移除BOOT引脚的短接。</li><li>上电(飞控“活动”灯应该会闪烁).</li><li>正常连接。</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "没有加载固件"
@@ -2930,7 +2930,7 @@
         "message": "飞控对 OSD 命令无反应，有可能飞控不带 OSD 功能。"
     },
     "osdSetupUnsupportedNote2": {
-        "message": "注意，有的飞控带有 <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a> ，可以通过<a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>来烧录和设置，但是这样的飞控不能通过此页面来设置参数。"
+        "message": "注意，有的飞控带有 <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> ，可以通过<a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>来烧录和设置，但是这样的飞控不能通过此页面来设置参数。"
     },
     "osdSetupProfilesTitle": {
         "message": "OSD 配置文件编号",

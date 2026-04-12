@@ -86,7 +86,7 @@
         "message": "Montrer les notifications de mise à jour des versions instables du configurateur"
     },
     "configuratorUpdateNotice": {
-        "message": "Vous utilisez une version dépassée du <b>Configurateur Emuflight</b>.<br>La version <b>$1</b> est disponible en ligne, rendez-vous <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">à la page \"version\" </a> pour télécharger et installer la dernière version pourvue de corrections et optimisations.<br>Svp, fermez le configurateur avant la mise à jour."
+        "message": "Vous utilisez une version dépassée du <b>Configurateur Emuflight</b>.<br>La version <b>$1</b> est disponible en ligne, rendez-vous <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">à la page \"version\" </a> pour télécharger et installer la dernière version pourvue de corrections et optimisations.<br>Svp, fermez le configurateur avant la mise à jour."
     },
     "configuratorUpdateWebsite": {
         "message": "Aller sur le site de publication"
@@ -393,10 +393,10 @@
         "message": "La documentation Emuflight est disponible en manuel et en wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Le Wiki de Emuflight est une bonne source d'information, celle-ci est disponible <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">ici</a>."
+        "message": "Le Wiki de Emuflight est une bonne source d'information, celle-ci est disponible <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">ici</a>."
     },
     "defaultDocumentation2": {
-        "message": "Les notes de version de microprogramme peuvent être lues sur la page des versions GitHub, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">ici</a>."
+        "message": "Les notes de version de microprogramme peuvent être lues sur la page des versions GitHub, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">ici</a>."
     },
     "defaultSupportSubline1": {
         "message": "Sources"
@@ -1463,16 +1463,16 @@
         "message": "Chiffres hexadécimaux uniquement, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Configurez votre code transpondeur ici. Remarque: Seuls les codes valides seront reconnus par les systèmes de chronométrage de course. Les codes de transpondeur valides peuvent être obtenus auprès de <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\"> Seriously Pro </a>."
+        "message": "Configurez votre code transpondeur ici. Remarque: Seuls les codes valides seront reconnus par les systèmes de chronométrage de course. Les codes de transpondeur valides peuvent être obtenus auprès de <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\"> Seriously Pro </a>."
     },
     "transponderHelp2": {
-        "message": "Pour plus d'informations, rendez vous sur le site <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer site</a>"
+        "message": "Pour plus d'informations, rendez vous sur le site <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer site</a>"
     },
     "transponderDataHelp3": {
         "message": "Choisissez l'ID du ERLT 0-63"
     },
     "transponderHelp3": {
-        "message": "Pour plus d'informations, rendez-vous sur le site <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer</a>"
+        "message": "Pour plus d'informations, rendez-vous sur le site <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer</a>"
     },
     "transponderButtonSave": {
         "message": "Enregistrer "
@@ -1901,7 +1901,7 @@
         "message": "<strong>Récupération / Communication coupée</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Si vous avez perdu la communication avec votre carte essayez ces procédures: <ul><li>Débranchez</li><li> Activez 'Séquence sans redémarrage', Activez 'Effacement complet de la puce '.</li><li>shuntez les bornes BOOT ou maintenez le bouton BOOT.</li><li>Re branchez (La LED d'activités ne devrait pas s'allumer).</li><li>Installez les drivers STM32 drivers et Zadig si nécessaire (voir <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a> section of Emuflight manual).</li><li>Fermez le configurateur, Fermez toutes les instances de Chrome, Fermez toutes les applications Chrome, Redémarrez le Configurateur.</li><li>Relachez le bouton BOOT.</li><li>Flashez avec le bon firmware (en utilisant le bon baudrate).</li><li>Déconnectez.</li><li>Supprimez le shunt sur le BOOT.</li><li>Re branchez (La LED d'activités devrait flasher).</li><li>Connectez normalement.</li></ul>"
+        "message": "Si vous avez perdu la communication avec votre carte essayez ces procédures: <ul><li>Débranchez</li><li> Activez 'Séquence sans redémarrage', Activez 'Effacement complet de la puce '.</li><li>shuntez les bornes BOOT ou maintenez le bouton BOOT.</li><li>Re branchez (La LED d'activités ne devrait pas s'allumer).</li><li>Installez les drivers STM32 drivers et Zadig si nécessaire (voir <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">USB Flashing</a> section of Emuflight manual).</li><li>Fermez le configurateur, Fermez toutes les instances de Chrome, Fermez toutes les applications Chrome, Redémarrez le Configurateur.</li><li>Relachez le bouton BOOT.</li><li>Flashez avec le bon firmware (en utilisant le bon baudrate).</li><li>Déconnectez.</li><li>Supprimez le shunt sur le BOOT.</li><li>Re branchez (La LED d'activités devrait flasher).</li><li>Connectez normalement.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "Microprogramme non chargé"
@@ -2553,7 +2553,7 @@
         "message": "Votre contrôleur de vol ne répond pas aux commandes OSD. L'OSD intégré n'est probablement pas celui de Emuflight."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Note certaines FC ont un  <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD intégré</a> qui peut être configuré et flashé avec <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, le MinimOSD ne peut pas être configuré avec cette interface."
+        "message": "Note certaines FC ont un  <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD intégré</a> qui peut être configuré et flashé avec <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, le MinimOSD ne peut pas être configuré avec cette interface."
     },
     "osdSetupProfilesTitle": {
         "message": "Numéro de profil OSD",
