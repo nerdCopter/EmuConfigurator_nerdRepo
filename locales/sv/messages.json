@@ -80,7 +80,7 @@
         "message": "Visa uppdateringsnotifieringar för icke-stabila versioner av konfiguratorn"
     },
     "configuratorUpdateNotice": {
-        "message": "Du använder en utdaterad version av <b>Emuflight-konfiguratorn</b>.<br>Version <b>$1</b> är tillgänglig online, besök <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">utgivningssidan</a> för att ladda ner senaste versionen med korrigeringar och förbättringar.<br>Stäng konfigurator-fönstret innan uppdateringen."
+        "message": "Du använder en utdaterad version av <b>Emuflight-konfiguratorn</b>.<br>Version <b>$1</b> är tillgänglig online, besök <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">utgivningssidan</a> för att ladda ner senaste versionen med korrigeringar och förbättringar.<br>Stäng konfigurator-fönstret innan uppdateringen."
     },
     "configuratorUpdateWebsite": {
         "message": "Gå till utgivningssidan"
@@ -399,10 +399,10 @@
         "message": "Emuflight-dokumentation finns i versionskommentarerna och wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki är en utmärkt informationskälla, den kan hittas <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">här</a>."
+        "message": "Emuflight wiki är en utmärkt informationskälla, den kan hittas <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">här</a>."
     },
     "defaultDocumentation2": {
-        "message": "Utgåvenoteringarna för firmware kan läsas på GitHubs utgåvesida, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\"> här</a>."
+        "message": "Utgåvenoteringarna för firmware kan läsas på GitHubs utgåvesida, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\"> här</a>."
     },
     "defaultSupportSubline1": {
         "message": "Supportkällor"
@@ -1970,7 +1970,7 @@
         "message": "<strong>Återställning / tappad kommunikation</strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Om du har tappat kommunikationen med ditt styrkort, följ dessa steg för att återställa kommunikationen: <ul><li>Stäng av strömmen</li><li>Aktivera 'Ingen omstartssekvens', aktivera 'Fullständing chip-radering'.</li><li>Bygla BOOT-pinnarna eller håll in BOOT-knappen.</li><li>Slå på strömmen (aktivitets-LED:en kommer INTE att blinka om utfört korrekt).</li><li>Installera alla STM32-drivrutiner och Zadig om det krävs (se <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">USB Flashing</a>-sektionen i Emuflight-manualen).</li><li>Stäng Configurator, Stäng alla öppna instanser av Chrome, stäng alla Chrome-appar, starta om Configurator.</li><li>Släpp BOOT-knappen om din flygkontroller har en sådan.</li><li>Uppdatera med korrekt firmware (använd manuell baudhastighet om en sådan specificeras i flygkontrollerns manual).</li><li>Stäng av strömmen.</li><li>Ta bort BOOT-byglingen.</li><li>Slå på strömmen (aktivitets-LED:en ska blinka).</li><li>Anslut på vanligt sätt.</li></ul>"
+        "message": "Om du har tappat kommunikationen med ditt styrkort, följ dessa steg för att återställa kommunikationen: <ul><li>Stäng av strömmen</li><li>Aktivera 'Ingen omstartssekvens', aktivera 'Fullständing chip-radering'.</li><li>Bygla BOOT-pinnarna eller håll in BOOT-knappen.</li><li>Slå på strömmen (aktivitets-LED:en kommer INTE att blinka om utfört korrekt).</li><li>Installera alla STM32-drivrutiner och Zadig om det krävs (se <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">USB Flashing</a>-sektionen i Emuflight-manualen).</li><li>Stäng Configurator, Stäng alla öppna instanser av Chrome, stäng alla Chrome-appar, starta om Configurator.</li><li>Släpp BOOT-knappen om din flygkontroller har en sådan.</li><li>Uppdatera med korrekt firmware (använd manuell baudhastighet om en sådan specificeras i flygkontrollerns manual).</li><li>Stäng av strömmen.</li><li>Ta bort BOOT-byglingen.</li><li>Slå på strömmen (aktivitets-LED:en ska blinka).</li><li>Anslut på vanligt sätt.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "Firmware ej laddad"
@@ -2572,7 +2572,7 @@
         "message": "Din flygkontroller svarar inte på OSD-kommandon. Detta innebär förmodligen att den inte har en integrerad BetaFlight-OSD."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Notera att vissa flygkontrollers har en inbyggd <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> som kan flashas och konfigureras med <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, dock kan MinimOSD inte konfigureras via detta gränssnitt."
+        "message": "Notera att vissa flygkontrollers har en inbyggd <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> som kan flashas och konfigureras med <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" rel=\"noopener noreferrer\" target='_blank'>scarab-osd</a>, dock kan MinimOSD inte konfigureras via detta gränssnitt."
     },
     "osdSetupProfilesTitle": {
         "message": "OSD-profilnummer",
