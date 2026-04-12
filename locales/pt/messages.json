@@ -51,7 +51,7 @@
         "message": "Modo avançado"
     },
     "expertModeDescription": {
-        "message": "Mostrar versões não liberadas e potencialmente instáveis"
+        "message": "Ativa ajustes avançados e acesso a funções experimentais. Apenas para especialistas - potencialmente danoso!"
     },
     "permanentExpertMode": {
         "message": "Sempre usar o modo avançado"

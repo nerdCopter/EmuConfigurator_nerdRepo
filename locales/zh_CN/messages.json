@@ -1864,7 +1864,7 @@
         "message": "调试"
     },
     "cliInfo": {
-        "message": "<strong>注意：</strong>退出CLI菜单或者点击断开连接将自动向飞控<strong></strong>发送“<strong>退出</strong>”指令。在最新的固件中这将使飞控<strong>重启</strong>并且未保存的设置将会<strong>丢失</strong>。<p><strong><span class=\"message-negative\">警告：</span></strong>CLI中的某些命令可能导致电机输出引脚发出随机指令。如果连接电池，这有可能导致电机旋转。因此，强烈建议<strong>在CLI中输入命令之前确保未连接电池</strong>。"
+        "message": "<strong>注意：</strong>退出CLI菜单或者点击断开连接将自动向飞控发送“<strong>退出</strong>”指令。在最新的固件中这将使飞控<strong>重启</strong>并且未保存的设置将会<strong>丢失</strong>。<p><strong><span class=\"message-negative\">警告：</span></strong>CLI中的某些命令可能导致电机输出引脚发出随机指令。如果连接电池，这有可能导致电机旋转。因此，强烈建议<strong>在CLI中输入命令之前确保未连接电池</strong>。"
     },
     "cliInputPlaceholder": {
         "message": "在这里输入命令"
