@@ -2467,5 +2467,11 @@
     },
     "vtxMessageNonMSP": {
         "message": "Els paràmetres només CLI inclouen 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' i 'VTX-Power-on-a-Switch'. Configura'ls segons sigui necessari al CLI."
+    },
+    "expertModeDescription": {
+        "message": "Habilita ajustos avançats i funcions experimentals. Només per a experts - potencialment destructiu!"
+    },
+    "vtxFrequencyChannel": {
+        "message": "Freqüència del VTX"
     }
 }
