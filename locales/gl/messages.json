@@ -138,7 +138,7 @@
         "message": "Mostrar notificacións de actualizacións para versións inestables do configurador"
     },
     "configuratorUpdateNotice": {
-        "message": "Está a usar unha versión desactualizada do <b>Configurador Emuflight</b>.<br>A versión <b>$1</b> está dispoñible en liña, visite <a href=\"$2\" target=\"_blank\">a páxina de lanzamento</a> para descargar e instalar a última versión con correccións e melloras. Por favor pecha a xanela do configurador antes de actualizar."
+        "message": "Está a usar unha versión desactualizada do <b>Configurador Emuflight</b>.<br>A versión <b>$1</b> está dispoñible en liña, visite <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">a páxina de lanzamento</a> para descargar e instalar a última versión con correccións e melloras. Por favor pecha a xanela do configurador antes de actualizar."
     },
     "configuratorUpdateWebsite": {
         "message": "Ir a web de descargas"
@@ -457,10 +457,10 @@
         "message": "A documentación de Emuflight está dispoñible nas notas da versión e na wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "O Wiki de Emuflight ten unha gran cantidade de información e pode atoparse <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">aquí</a>."
+        "message": "O Wiki de Emuflight ten unha gran cantidade de información e pode atoparse <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">aquí</a>."
     },
     "defaultDocumentation2": {
-        "message": "As notas da versión do firmware poden ser lidas na páxina de GitHub, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">aquí</a>."
+        "message": "As notas da versión do firmware poden ser lidas na páxina de GitHub, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">aquí</a>."
     },
     "defaultSupportHead": {
         "message": "Soporte"
@@ -1560,16 +1560,16 @@
         "message": "Só díxitos hexadecimais, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Configure o seu código de transpondedor aquí. Nota: Os sistemas de medición de tempos en carreira so recoñecerán códigos válidos. Pode obter códigos válidos de transpondedor en <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>."
+        "message": "Configure o seu código de transpondedor aquí. Nota: Os sistemas de medición de tempos en carreira so recoñecerán códigos válidos. Pode obter códigos válidos de transpondedor en <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>."
     },
     "transponderHelp2": {
-        "message": "Para obter máis información, por favor, visite <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer</a>"
+        "message": "Para obter máis información, por favor, visite <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer</a>"
     },
     "transponderDataHelp3": {
         "message": "Elexir ERLT ID 0-63"
     },
     "transponderHelp3": {
-        "message": "Para obter mais información, por favor, visita <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer</a>"
+        "message": "Para obter mais información, por favor, visita <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer</a>"
     },
     "transponderButtonSave": {
         "message": "Gardar"
@@ -2016,7 +2016,7 @@
         "message": "<strong> Recuperación / comunicación perdida </strong>"
     },
     "firmwareFlasherRecoveryText": {
-        "message": "Se perde a conexión coa súa controladora siga estes pasos para reestabrecer a comunicación: <ul><li>Apagar</li><li>Activar 'non reiniciar', Activar 'Borrado completo do chip'.</li><li>Puenté os pins de BOOT ou manteña pulsado o botón BOOT.</li><li>Encenda(o LED de actividade NON parpadeará se se fai correctamente).</li><li>Instale tódolos drivers para STM32 e Zadig en caso de ser necesario (consulte a sección <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\"target=\"_blank\">Flasheo USB</a> do manual de Emuflight).</li><li>Peche o configurador, peche tódalas instancias de chrome, peche tódalas aplicacións de Chrome, Reinicie o Configurador.</li><li>Solte o botón se a súa controladora ten un.</li><li>Cargue o firmware correcto empregando unha velocidade de transmisión manual (se está especificada no manual da controladora)</li><li>Apagar.</li><li>Elimine o puenteo dos pins de BOOT</li><li>Encenda (o LED de actividad debería de parpadear).</li><li>Conecte con normalidade.</li></ul>"
+        "message": "Se perde a conexión coa súa controladora siga estes pasos para reestabrecer a comunicación: <ul><li>Apagar</li><li>Activar 'non reiniciar', Activar 'Borrado completo do chip'.</li><li>Puenté os pins de BOOT ou manteña pulsado o botón BOOT.</li><li>Encenda(o LED de actividade NON parpadeará se se fai correctamente).</li><li>Instale tódolos drivers para STM32 e Zadig en caso de ser necesario (consulte a sección <a href=\"https://github.com/EmuFlight/EmuFlight/wiki\"target=\"_blank\" rel=\"noopener noreferrer\">Flasheo USB</a> do manual de Emuflight).</li><li>Peche o configurador, peche tódalas instancias de chrome, peche tódalas aplicacións de Chrome, Reinicie o Configurador.</li><li>Solte o botón se a súa controladora ten un.</li><li>Cargue o firmware correcto empregando unha velocidade de transmisión manual (se está especificada no manual da controladora)</li><li>Apagar.</li><li>Elimine o puenteo dos pins de BOOT</li><li>Encenda (o LED de actividad debería de parpadear).</li><li>Conecte con normalidade.</li></ul>"
     },
     "firmwareFlasherFirmwareNotLoaded": {
         "message": "Firmware non cargado"
@@ -2644,7 +2644,7 @@
         "message": "O controlador de voo non responde aos comandos OSD. Isto probablemente significa que non ten un OSD integrado de BetaFlight."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Observe que algunhas placas controladoras teñen integrado un <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a> que pode ser flasheado e configurado con <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, de calquera maneira o MinimOSD non pode ser configurado a través deste interfaz."
+        "message": "Observe que algunhas placas controladoras teñen integrado un <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> que pode ser flasheado e configurado con <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, de calquera maneira o MinimOSD non pode ser configurado a través deste interfaz."
     },
     "osdSetupProfilesTitle": {
         "message": "Número Perfil OSD",

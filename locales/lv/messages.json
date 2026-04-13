@@ -100,7 +100,7 @@
         "message": "Rādīt atjauninājumu paziņojumus priekš konfiguratora nestabilajām versijām"
     },
     "configuratorUpdateNotice": {
-        "message": "Jūs lietojat novecojušu <b>Emuflight Konfiguratora</b> versiju.<br>Versija <b>$1</b> ir pieejama, lūdzu apmeklējiet <a href=\"$2\" target=\"_blank\">relīžu lapu</a>, lai lejupielādētu un uzstādītu jaunāko versiju ar labojumiem un uzlabojumiem.<br>Lūdzu aizveriet konfiguratora logu pirms atjaunināšanās."
+        "message": "Jūs lietojat novecojušu <b>Emuflight Konfiguratora</b> versiju.<br>Versija <b>$1</b> ir pieejama, lūdzu apmeklējiet <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">relīžu lapu</a>, lai lejupielādētu un uzstādītu jaunāko versiju ar labojumiem un uzlabojumiem.<br>Lūdzu aizveriet konfiguratora logu pirms atjaunināšanās."
     },
     "configuratorUpdateWebsite": {
         "message": "Dodieties uz relīzes vietni"
@@ -422,10 +422,10 @@
         "message": "Emuflight dokumentācija ir pieejama relīzes dokumentācijā un wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki ir lielisks informācijas avots, to var atrast <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\">šeit</a>."
+        "message": "Emuflight wiki ir lielisks informācijas avots, to var atrast <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">šeit</a>."
     },
     "defaultDocumentation2": {
-        "message": "Programmatūras relīzes dokumentācija ir pieejama GitHub relīžu lapā <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\">šeit</a>."
+        "message": "Programmatūras relīzes dokumentācija ir pieejama GitHub relīžu lapā <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">šeit</a>."
     },
     "defaultSupportHead": {
         "message": "Atbalsts"
@@ -1576,16 +1576,16 @@
         "message": "Tikai heksadecimālie cipari, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Konfigurējiet jūsu transpondera kodu šeit. Piezīme: Tikai derīgs kods tiks atpazīts sacensību taimera sistēmā. Derīgi transpondera kodi var tikt aizgūti no šejienes <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>."
+        "message": "Konfigurējiet jūsu transpondera kodu šeit. Piezīme: Tikai derīgs kods tiks atpazīts sacensību taimera sistēmā. Derīgi transpondera kodi var tikt aizgūti no šejienes <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>."
     },
     "transponderHelp2": {
-        "message": "Vairāk informācijas <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer vietnē</a>"
+        "message": "Vairāk informācijas <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer vietnē</a>"
     },
     "transponderDataHelp3": {
         "message": "Izvēlēties ERLT ID 0-63"
     },
     "transponderHelp3": {
-        "message": "Vairāk informācijai apmeklējiet <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer vietni</a>"
+        "message": "Vairāk informācijai apmeklējiet <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer vietni</a>"
     },
     "transponderButtonSave": {
         "message": "Saglabāt"
@@ -2786,7 +2786,7 @@
         "message": "Jūsu lidojuma kontrolieris neatbild uz OSD komandām. Visdrīzāk tas nozīmē to, ka tam nav integrēta BetaFlight OSD."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Ņemiet vēra to ka dažiem lidojuma kontrolieriem uz plates ir <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a>, kas var būt saprogrammēts un konfigurēts ar <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, toties MinimOSD nevar nokonfigurēt caur šo interfeisu."
+        "message": "Ņemiet vēra to ka dažiem lidojuma kontrolieriem uz plates ir <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a>, kas var būt saprogrammēts un konfigurēts ar <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>, toties MinimOSD nevar nokonfigurēt caur šo interfeisu."
     },
     "osdSetupProfilesTitle": {
         "message": "OSD Profila numurs",

@@ -1619,16 +1619,16 @@
         "message": "16 진수 만, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "여기서 트랜스폰더 코드를 환경설정하십시오. 노트: 유효한 코드만 레이스 타이밍 시스템에 의해 인식됩니다. 유효한 트랜스폰더 코드는 <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>에서 얻을 수 있습니다."
+        "message": "여기서 트랜스폰더 코드를 환경설정하십시오. 노트: 유효한 코드만 레이스 타이밍 시스템에 의해 인식됩니다. 유효한 트랜스폰더 코드는 <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>에서 얻을 수 있습니다."
     },
     "transponderHelp2": {
-        "message": "자세한 내용은 <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\"> aRCiTimer 사이트</a>를 방문하십시오."
+        "message": "자세한 내용은 <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\"> aRCiTimer 사이트</a>를 방문하십시오."
     },
     "transponderDataHelp3": {
         "message": "ERLT ID 0-63 선택"
     },
     "transponderHelp3": {
-        "message": "자세한 내용은 <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer 사이트</a>를 방문하십시오."
+        "message": "자세한 내용은 <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer 사이트</a>를 방문하십시오."
     },
     "transponderButtonSave": {
         "message": "저장"
@@ -2907,7 +2907,7 @@
         "message": "비행 컨트롤러가 OSD 명령에 응답하지 않습니다. 이는 통합된 BetaFlight OSD가 없다는 것을 의미합니다."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "일부 비행 컨트롤러는 온보드 <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a>를 가지고 있습니다. 이는 <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>를 통해 플래시하고 설정할 수 있습니다. 그러나 MinimOSD는 이 인터페이스를 통해서 설정할수 없습니다."
+        "message": "일부 비행 컨트롤러는 온보드 <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a>를 가지고 있습니다. 이는 <a href=\"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target='_blank'>scarab-osd</a>를 통해 플래시하고 설정할 수 있습니다. 그러나 MinimOSD는 이 인터페이스를 통해서 설정할수 없습니다."
     },
     "osdSetupProfilesTitle": {
         "message": "OSD 프로파일 번호",
