@@ -2472,6 +2472,6 @@
         "message": "Habilita ajustos avançats i funcions experimentals. Només per a experts - potencialment destructiu!"
     },
     "vtxFrequencyChannel": {
-        "message": "Freqüència del VTX"
+        "message": "Freqüència VTX (MHz)"
     }
 }
