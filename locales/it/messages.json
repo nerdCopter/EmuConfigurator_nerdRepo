@@ -92,7 +92,7 @@
         "message": "Mostra notifiche per versioni beta del configuratore"
     },
     "configuratorUpdateNotice": {
-        "message": "Stai usando una versione obsoleta di <b>Emuflight Configurator</b>. <br>La versione <b>$1</b> è disponibile online, visita <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\">la pagina dei rilasci</a> per scaricare e installare l'ultima versione.<br> Perfavore chiudi l'applicazione prima di aggiornare."
+        "message": "Stai usando una versione obsoleta di <b>Emuflight Configurator</b>. <br>La versione <b>$1</b> è disponibile online, visita <a href=\"$2\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">la pagina dei rilasci</a> per scaricare e installare l'ultima versione.<br> Perfavore chiudi l'applicazione prima di aggiornare."
     },
     "configuratorUpdateWebsite": {
         "message": "Visita la pagina degli aggiornamenti"
@@ -393,10 +393,10 @@
         "message": "La documentazione Emuflight è disponibile nelle note di versione e wiki.<br /><br />"
     },
     "defaultDocumentation1": {
-        "message": "Emuflight wiki è una grande risorsa in cui trovare informazioni, la trovi <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\">QUI</a>."
+        "message": "Emuflight wiki è una grande risorsa in cui trovare informazioni, la trovi <a href=\"https://github.com/emuflight/EmuFlight/wiki\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">QUI</a>."
     },
     "defaultDocumentation2": {
-        "message": "Le informazioni relative alla release del firmware possono essere trovate sulla pagina GitHub delle nuove versioni, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\">QUI</a>."
+        "message": "Le informazioni relative alla release del firmware possono essere trovate sulla pagina GitHub delle nuove versioni, <a href=\"https://github.com/Emuflight/EmuFlight/releases\" target=\"_blank\" rel=\"noopener noreferrer\" rel=\"noopener noreferrer\">QUI</a>."
     },
     "defaultSupportHead": {
         "message": "Supporto"
@@ -1403,16 +1403,16 @@
         "message": "Solo cifre esadecimali, 0-9, A-F"
     },
     "transponderHelp1": {
-        "message": "Configura qui il codice del tuo transponder. Nota: solo i codici validi saranno riconosciuti dai sistemi di tracciatura tempo in gara. Codici transponder validi si possono ottenere da <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\">Seriously Pro</a>."
+        "message": "Configura qui il codice del tuo transponder. Nota: solo i codici validi saranno riconosciuti dai sistemi di tracciatura tempo in gara. Codici transponder validi si possono ottenere da <a href=\"http://seriouslypro.com/transponder-codes\" target=\"_blank\" rel=\"noopener noreferrer\">Seriously Pro</a>."
     },
     "transponderHelp2": {
-        "message": "Per maggiori informazioni visita <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\">aRCiTimer site</a>"
+        "message": "Per maggiori informazioni visita <a href=\"http://www.arcitimer.com/\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">aRCiTimer site</a>"
     },
     "transponderDataHelp3": {
         "message": "Scegli ID ERLT 0-63"
     },
     "transponderHelp3": {
-        "message": "Per maggiori informazioni visita <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\">EasyRaceLapTimer site</a>"
+        "message": "Per maggiori informazioni visita <a href=\"https://github.com/polyvision/EasyRaceLapTimer\" title=\"aRCiTimer\" target=\"_blank\" rel=\"noopener noreferrer\">EasyRaceLapTimer site</a>"
     },
     "transponderButtonSave": {
         "message": "salva"
@@ -2542,7 +2542,7 @@
         "message": "Il tuo controllore di volo non risponde ai comandi OSD. Questo probabilmente significa che non ha un OSD BetaFlight integrato."
     },
     "osdSetupUnsupportedNote2": {
-        "message": "Tieni presente che alcuni controllori di volo hanno un <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\">MinimOSD</a> integrato che può essere visualizzato e configurato con <a href = \"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target=\"_blank\"> scarab-osd </a>, tuttavia il MinimOSD non può essere configurato tramite questa interfaccia."
+        "message": "Tieni presente che alcuni controllori di volo hanno un <a href=\"https://www.youtube.com/watch?v=ikKH_6SQ-Tk\" target=\"_blank\" rel=\"noopener noreferrer\">MinimOSD</a> integrato che può essere visualizzato e configurato con <a href = \"https://github.com/ShikOfTheRa/scarab-osd/releases/latest\" target=\"_blank\" rel=\"noopener noreferrer\"> scarab-osd </a>, tuttavia il MinimOSD non può essere configurato tramite questa interfaccia."
     },
     "osdSetupElementsTitle": {
         "message": "Elementi"
