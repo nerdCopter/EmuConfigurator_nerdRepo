@@ -3110,5 +3110,8 @@
     },
     "vtxMessageNonMSP": {
         "message": "Le impostazioni solo CLI includono 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' e 'VTX-Power-on-a-Switch'. Configurale come necessario in CLI."
+    },
+    "tabSetup": {
+        "message": "Impostazioni"
     }
 }
