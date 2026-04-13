@@ -3447,11 +3447,5 @@
     },
     "vtxMessageNonMSP": {
         "message": "Tikai CLI iestatījumi ietver 'vtx_low_power_disarm', 'vtx_pit_mode_freq', 'vtx_halfduplex' un 'VTX-Power-on-a-Switch'. Konfigurējiet tos pēc nepieciešamības CLI."
-    },
-    "tabFailsafe": {
-        "message": "Failsafe"
-    },
-    "osdWarningTextFailsafe": {
-        "message": "Failsafe"
     }
 }
