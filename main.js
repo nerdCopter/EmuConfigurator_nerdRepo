@@ -965,7 +965,35 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  // Re-apply zoom level when DevTools closes (Electron resets zoom on DevTools open/close)
+  function applySavedZoom(win) {
+    const currentZoom = win.webContents.getZoomLevel();
+    const targetZoom = loadConfig().zoomLevel;
+    const clampedZoom = Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, targetZoom));
+    if (currentZoom !== clampedZoom) {
+      win.webContents.setZoomLevel(clampedZoom);
+    }
+  }
+
+  // Re-apply saved zoom when DevTools opens/closes (Electron/Chromium can reset zoom on DevTools operations)
+  win.webContents.on('devtools-opened', () => {
+    setTimeout(() => {
+      if (!win.isDestroyed()) {
+        applySavedZoom(win);
+      }
+    }, 150);
+  });
+
+  win.webContents.on('devtools-closed', () => {
+    setTimeout(() => {
+      if (!win.isDestroyed()) {
+        applySavedZoom(win);
+      }
+    }, 150);
+  });
+
+  // Handle zoom keyboard shortcuts via before-input-event so numpad keys and no-shift
+  // variants work reliably. event.preventDefault() suppresses the menu role accelerator
+  // so only this handler fires for keyboard-triggered zoom changes.
   win.webContents.on('before-input-event', (event, input) => {
     // F12 or Ctrl+Shift+I opens/closes DevTools; re-apply zoom persistently
     if ((input.key === 'F12') || 

@@ -7,6 +7,14 @@ TABS.firmware_flasher = {
 };
 
 TABS.firmware_flasher.initialize = function (callback) {
+    function extractTarget(filename) {
+        var targetFromFilenameExpression = /EmuFlight_([\d.]+)?_?(\w+)(\-.*)?\.(.*)/;
+        var match = targetFromFilenameExpression.exec(filename);
+        if (match) {
+            return match[2];
+        }
+        return filename.split('.')[0];
+    }
     var self = this;
 
     if (GUI.active_tab != 'firmware_flasher') {
