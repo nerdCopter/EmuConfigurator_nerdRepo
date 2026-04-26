@@ -397,7 +397,15 @@ TABS.firmware_flasher.initialize = function (callback) {
                                     if (parsed_hex) {
                                         self.enableFlashing(true);
 
-                                        self.flashingMessage(i18n.getMessage('firmwareFlasherFirmwareLocalLoaded', parsed_hex.bytes_total), self.FLASH_MESSAGE_TYPES.NEUTRAL);
+                                        var filename = path.split(/[/\\]/).pop();
+                                        var target = extractTarget(filename);
+                                        self.flashingMessage(target + ' (' + parsed_hex.bytes_total + ' bytes)', self.FLASH_MESSAGE_TYPES.NEUTRAL);
+                                        // Reset online selects to placeholder; no trigger to preserve loaded firmware state
+                                        $('select[name="board"]').val('0');
+                                        $('select[name="firmware_version"]').empty()
+                                            .append($('<option value="0">' + i18n.getMessage('firmwareFlasherOptionLabelSelectFirmwareVersion') + '</option>'));
+                                        // Hide release info since we're now using local firmware
+                                        $('div.release_info').slideUp();
                                     } else {
                                         self.flashingMessage('firmwareFlasherHexCorrupted', self.FLASH_MESSAGE_TYPES.INVALID);
                                     }
