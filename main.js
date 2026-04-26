@@ -30,6 +30,7 @@ process.on('SIGTERM', () => {
 process.on('exit', (code) => {
   console.log(`[main.js] Process exiting with code ${code}`);
 });
+// Set app user model ID on Windows for proper taskbar integration and icon displayif (process.platform === 'win32') {  app.setAppUserModelId('EmuConfigurator');}
 
 let mainWindow = null;
 
