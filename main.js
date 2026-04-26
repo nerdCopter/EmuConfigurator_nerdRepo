@@ -188,6 +188,8 @@ const PREFERRED_WINDOW_HEIGHT = 1080;
 const CONFIG_DIR = path.join(app.getPath('userData'), 'config');
 const ZOOM_CONFIG_FILE = path.join(CONFIG_DIR, 'zoom.json');
 const DEFAULT_ZOOM_LEVEL = 0; // Ctrl+0 actual size
+const MIN_ZOOM_LEVEL = -9;
+const MAX_ZOOM_LEVEL = 9;
 
 // Ensure config directory exists
 function ensureConfigDir() {
@@ -920,6 +922,16 @@ function createWindow() {
     if (width < MIN_WINDOW_WIDTH || height < MIN_WINDOW_HEIGHT) {
       win.setSize(Math.max(width, MIN_WINDOW_WIDTH), Math.max(height, MIN_WINDOW_HEIGHT));
     }
+    // Re-apply saved zoom: Chromium can silently reset zoom level when window resizes
+    if (_resizeZoomTimer) clearTimeout(_resizeZoomTimer);
+    _resizeZoomTimer = setTimeout(() => {
+      if (!win.isDestroyed()) {
+        const savedZoom = Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, loadConfig().zoomLevel));
+        if (win.webContents.getZoomLevel() !== savedZoom) {
+          win.webContents.setZoomLevel(savedZoom);
+        }
+      }
+    }, 150);
   });
 
   // Also prevent moves that would resize
@@ -941,14 +953,18 @@ function createWindow() {
     }
     
     // Load saved zoom level or use default (Ctrl+0 actual size)
-    const savedZoom = loadZoomLevel();
+    const savedZoom = Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, loadConfig().zoomLevel));
     win.webContents.setZoomLevel(savedZoom);
   });
   
   // Save zoom level when it changes (e.g., Ctrl+Plus, Ctrl+Minus, Ctrl+0)
   win.webContents.on('zoom-changed', (event, direction) => {
     const newLevel = win.webContents.getZoomLevel();
-    saveZoomLevel(newLevel);
+    const clampedLevel = Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, newLevel));
+    if (newLevel !== clampedLevel) {
+      win.webContents.setZoomLevel(clampedLevel);
+    }
+    saveConfig({ zoomLevel: clampedLevel });
   });
 
   // Intercept new window requests (e.g., target="_blank" links) and open in system browser
@@ -965,15 +981,42 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  // Re-apply zoom level when DevTools closes (Electron resets zoom on DevTools open/close)
+  // Re-apply saved zoom when DevTools opens/closes (Electron/Chromium can reset zoom on DevTools operations)
+  win.webContents.on('devtools-opened', () => {
+    setTimeout(() => {
+      if (!win.isDestroyed()) {
+        win.webContents.setZoomLevel(Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, loadConfig().zoomLevel)));
+      }
+    }, 150);
+  });
+
+  win.webContents.on('devtools-closed', () => {
+    if (!win.isDestroyed()) {
+      win.webContents.setZoomLevel(Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, loadConfig().zoomLevel)));
+    }
+  });
+
+  // Handle zoom keyboard shortcuts via before-input-event so numpad keys and no-shift
+  // variants work reliably. event.preventDefault() suppresses the menu role accelerator
+  // so only this handler fires for keyboard-triggered zoom changes.
   win.webContents.on('before-input-event', (event, input) => {
-    // F12 or Ctrl+Shift+I opens/closes DevTools; re-apply zoom persistently
-    if ((input.key === 'F12') || 
-        (input.control && input.shift && input.key.toLowerCase() === 'i')) {
-      setTimeout(() => {
-        const savedZoom = loadZoomLevel();
-        win.webContents.setZoomLevel(savedZoom); // Reapply zoom after DevTools toggle
-      }, 100);
+    if (input.type !== 'keyDown' || !input.control || input.shift || input.alt) return;
+    const code = input.code;
+    if (code === 'Equal' || code === 'NumpadAdd') {
+      event.preventDefault();
+      const level = Math.min(MAX_ZOOM_LEVEL, win.webContents.getZoomLevel() + 1);
+      win.webContents.setZoomLevel(level);
+      saveConfig({ zoomLevel: level });
+    } else if (code === 'Minus' || code === 'NumpadSubtract') {
+      event.preventDefault();
+      const level = Math.max(MIN_ZOOM_LEVEL, win.webContents.getZoomLevel() - 1);
+      win.webContents.setZoomLevel(level);
+      saveConfig({ zoomLevel: level });
+    } else if (code === 'Digit0' || code === 'Numpad0') {
+      event.preventDefault();
+      const level = Math.max(MIN_ZOOM_LEVEL, Math.min(MAX_ZOOM_LEVEL, DEFAULT_ZOOM_LEVEL));
+      win.webContents.setZoomLevel(level);
+      saveConfig({ zoomLevel: level });
     }
   });
 
