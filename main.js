@@ -199,24 +199,14 @@ function ensureConfigDir() {
 // Load zoom level from config file
 function loadZoomLevel() {
   try {
-    if (fs.existsSync(ZOOM_CONFIG_FILE)) {
-      const data = fs.readFileSync(ZOOM_CONFIG_FILE, 'utf8');
-      const config = JSON.parse(data);
-      return typeof config.zoomLevel === 'number' ? config.zoomLevel : DEFAULT_ZOOM_LEVEL;
-    }
-  } catch (e) {
-    console.error('Failed to load zoom config:', e);
-  }
-  return DEFAULT_ZOOM_LEVEL;
-}
-
-// Save zoom level to config file
-function saveZoomLevel(level) {
+// Save config to file, merging with existing
+function saveConfig(patch) {
   try {
     ensureConfigDir();
-    fs.writeFileSync(ZOOM_CONFIG_FILE, JSON.stringify({ zoomLevel: level }, null, 2));
+    cachedConfig = { ...loadConfig(), ...patch };
+    fs.writeFileSync(APP_CONFIG_FILE, JSON.stringify(cachedConfig, null, 2));
   } catch (e) {
-    console.error('Failed to save zoom config:', e);
+    console.error('Failed to save app config:', e);
   }
 }
 
