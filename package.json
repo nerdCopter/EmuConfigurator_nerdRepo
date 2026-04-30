@@ -12,6 +12,7 @@
   "main": "main.js",
   "default_locale": "en",
   "scripts": {
+    "setup:hooks": "node .github/scripts/setup-hooks.js",
     "dev": "node scripts/build.js && cross-env NODE_ENV=development NODE_NO_WARNINGS=1 electron-forge start",
     "debug": "yarn dev",
     "dev:verbose": "node scripts/build.js && cross-env NODE_ENV=development electron-forge start",
