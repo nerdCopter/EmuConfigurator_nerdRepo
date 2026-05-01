@@ -135,7 +135,7 @@ PortHandler.check = function () {
                 if (GUI.active_tab != 'firmware_flasher') {
                     GUI.timeout_add('auto-connect_timeout', function () {
                         $('div#port-picker a.connect').click();
-                    }, 100); // timeout so bus have time to initialize after being detected by the system
+                    }, 1000); // delay allows slow-boot boards (e.g. F7 MCUs) to reach MSP-ready before connect attempt
                 }
             }
 

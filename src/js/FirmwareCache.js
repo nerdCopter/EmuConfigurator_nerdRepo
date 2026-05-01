@@ -53,10 +53,18 @@ let FirmwareCache = (function () {
          */
         function load(callback) {
             chrome.storage.local.get(CACHEKEY, obj => {
-                let entries = typeof obj === "object" && obj.hasOwnProperty(CACHEKEY)
+                let raw = typeof obj === "object" && obj.hasOwnProperty(CACHEKEY)
                     ? obj[CACHEKEY]
                     : [];
-                callback(entries);
+                // Self-heal: if stored value is not a valid array, the journal is
+                // corrupt (e.g. stale V8 code cache, schema mismatch, truncated write).
+                // Clear the key and start fresh rather than operating with broken state.
+                if (!Array.isArray(raw)) {
+                    console.warn("Firmware cache journal is corrupt (expected Array, got " + typeof raw + "); clearing.");
+                    chrome.storage.local.remove(CACHEKEY);
+                    raw = [];
+                }
+                callback(raw);
             });
         }
 
