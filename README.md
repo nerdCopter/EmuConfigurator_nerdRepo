@@ -46,6 +46,27 @@ Download the installer for your platform from the [Releases](https://github.com/
 | `yarn package:debug` | Build an unpacked debug package |
 | `yarn commands` | Show the available project commands |
 | `yarn lint` | Run ESLint |
+| `yarn setup:hooks` | Install git pre-commit hook (enforces lint checks) |
+
+### Git Hooks
+
+EmuConfigurator enforces code quality with automatic git commit hooks. Before each commit, `yarn lint` runs automatically — commits with lint **errors** are blocked (warnings OK).
+
+**Setup (first time):**
+
+```bash
+yarn setup:hooks
+```
+
+This works on **all platforms** (Windows, macOS, Linux).
+
+**After setup:**
+- Commits are checked automatically
+- Lint errors block commits
+- Run `yarn lint -- --fix` to auto-fix issues
+- Use `git commit --no-verify` to bypass (emergency only)
+
+See [`.github/GIT-HOOKS.md`](.github/GIT-HOOKS.md) for detailed docs.
 
 ### Build Output
 
