@@ -134,7 +134,18 @@ PortHandler.check = function () {
                 // we need firmware flasher protection over here
                 if (GUI.active_tab != 'firmware_flasher') {
                     GUI.timeout_add('auto-connect_timeout', function () {
-                        $('div#port-picker a.connect').click();
+                        // Re-validate state: 1s may have passed and conditions can change.
+                        var connectBtn = $('div#port-picker a.connect');
+                        var selectedPort = $('div#port-picker #port').val();
+                        var stateValid = GUI.auto_connect
+                            && !GUI.connected_to
+                            && !GUI.connecting_to
+                            && GUI.active_tab != 'firmware_flasher'
+                            && connectBtn.length > 0
+                            && selectedPort && selectedPort !== '0';
+                        if (stateValid) {
+                            connectBtn.click();
+                        }
                     }, 1000); // delay allows slow-boot boards (e.g. F7 MCUs) to reach MSP-ready before connect attempt
                 }
             }

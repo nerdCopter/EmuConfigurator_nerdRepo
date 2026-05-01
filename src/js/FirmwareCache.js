@@ -62,7 +62,21 @@ let FirmwareCache = (function () {
                 if (!Array.isArray(raw)) {
                     console.warn("Firmware cache journal is corrupt (expected Array, got " + typeof raw + "); clearing.");
                     chrome.storage.local.remove(CACHEKEY);
-                    raw = [];
+                    callback([]);
+                    return;
+                }
+                // Per-entry shape validation: each entry must be { key: string, value: true }
+                // as produced by LRUMap.toJSON(). A single malformed entry means the whole
+                // journal is untrustworthy — clear and rebuild from scratch.
+                const isValidEntry = e => typeof e === "object" && e !== null
+                    && typeof e.key === "string" && e.key.length > 0
+                    && e.value === true;
+                const corrupt = raw.some(e => !isValidEntry(e));
+                if (corrupt) {
+                    console.warn("Firmware cache journal contains malformed entries; clearing.");
+                    chrome.storage.local.remove(CACHEKEY);
+                    callback([]);
+                    return;
                 }
                 callback(raw);
             });
