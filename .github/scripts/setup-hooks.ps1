@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSCommandPath))
 Set-Location $ProjectRoot
 
-Write-Host "[INFO] Setting up git pre-commit hook..." -ForegroundColor Green
+Write-Output "[INFO] Setting up git pre-commit hook..."
 
 # Copy hook script to .git/hooks
 $HooksDir = ".git\hooks"
@@ -21,10 +21,10 @@ if (Test-Path $HookDest) {
   $Timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
   $BackupPath = "$HookDest.bak.$Timestamp"
   Copy-Item -Path $HookDest -Destination $BackupPath -Force
-  Write-Host "[INFO] Backed up existing hook to $(Split-Path -Leaf $BackupPath)" -ForegroundColor Yellow
+  Write-Output "[INFO] Backed up existing hook to $(Split-Path -Leaf $BackupPath)"
 }
 
 Copy-Item -Path $HookSource -Destination $HookDest -Force
 
-Write-Host "[OK] Hook installed at .git\hooks\pre-commit" -ForegroundColor Green
-Write-Host "[INFO] Testing the hook on your next commit..." -ForegroundColor Yellow
+Write-Output "[OK] Hook installed at .git\hooks\pre-commit"
+Write-Output "[INFO] Testing the hook on your next commit..."

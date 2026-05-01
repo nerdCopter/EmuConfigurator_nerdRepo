@@ -19,7 +19,7 @@ if [ -f "$HOOK_DEST" ]; then
   TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
   BACKUP_PATH="${HOOK_DEST}.bak.${TIMESTAMP}"
   cp "$HOOK_DEST" "$BACKUP_PATH"
-  echo "[INFO] Backed up existing hook to $(basename $BACKUP_PATH)"
+  echo "[INFO] Backed up existing hook to $(basename "$BACKUP_PATH")"
 fi
 
 cp "$HOOK_SOURCE" "$HOOK_DEST"
