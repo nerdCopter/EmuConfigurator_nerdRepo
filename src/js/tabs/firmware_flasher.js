@@ -123,8 +123,8 @@ TABS.firmware_flasher.initialize = function (callback) {
             TABS.firmware_flasher.releases = builds;
 
             chrome.storage.local.get('selected_board', function (result) {
-                if (result.selected_board) {
-                    var boardBuilds = builds[result.selected_board]
+                if (typeof result.selected_board === 'string' && result.selected_board) {
+                    var boardBuilds = builds[result.selected_board];
                     $('select[name="board"]').val(boardBuilds ? result.selected_board : 0).trigger('change');
                 }
             });
@@ -223,8 +223,8 @@ TABS.firmware_flasher.initialize = function (callback) {
                 TABS.firmware_flasher.releases = releases;
 
                 chrome.storage.local.get('selected_board', function (result) {
-                    if (result.selected_board) {
-                        var boardReleases = releases[result.selected_board]
+                    if (typeof result.selected_board === 'string' && result.selected_board) {
+                        var boardReleases = releases[result.selected_board];
                         $('select[name="board"]').val(boardReleases ? result.selected_board : 0).trigger('change');
                     }
                 });

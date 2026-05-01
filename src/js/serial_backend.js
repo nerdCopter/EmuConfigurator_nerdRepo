@@ -205,14 +205,15 @@ function onOpen(openInfo) {
 
         serial.onReceive.addListener(read_serial);
 
-        // disconnect after 10 seconds with error if we don't get IDENT data
+        // disconnect after 15 seconds with error if we don't get IDENT data;
+        // extended from 10s to give slow-boot boards (e.g. STM32F7 with long gyro cal) time to become MSP-ready
         GUI.timeout_add('connecting', function () {
             if (!CONFIGURATOR.connectionValid) {
                 GUI.log(i18n.getMessage('noConfigurationReceived'));
 
                 $('div.connect_controls a.connect').click(); // disconnect
             }
-        }, 10000);
+        }, 15000);
 
         FC.resetState();
         MSP.listen(update_packet_error);
