@@ -23,6 +23,14 @@ try {
   const hookSource = path.join(projectRoot, '.github', 'scripts', 'pre-commit-hook.sh');
   const hookDest = path.join(hooksDir, 'pre-commit');
   
+  // Back up existing hook if it exists and is not our source
+  if (fs.existsSync(hookDest)) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+    const backupPath = `${hookDest}.bak.${timestamp}`;
+    fs.copyFileSync(hookDest, backupPath);
+    console.log(`[INFO] Backed up existing hook to ${path.basename(backupPath)}`);
+  }
+  
   const hookContent = fs.readFileSync(hookSource, 'utf8');
   fs.writeFileSync(hookDest, hookContent);
   

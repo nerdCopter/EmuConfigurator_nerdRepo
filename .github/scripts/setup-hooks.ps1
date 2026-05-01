@@ -13,7 +13,18 @@ if (-not (Test-Path $HooksDir)) {
   New-Item -ItemType Directory -Force -Path $HooksDir | Out-Null
 }
 
-Copy-Item -Path ".github\scripts\pre-commit-hook.sh" -Destination "$HooksDir\pre-commit" -Force
+$HookSource = ".github\scripts\pre-commit-hook.sh"
+$HookDest = "$HooksDir\pre-commit"
+
+# Back up existing hook if it exists
+if (Test-Path $HookDest) {
+  $Timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+  $BackupPath = "$HookDest.bak.$Timestamp"
+  Copy-Item -Path $HookDest -Destination $BackupPath -Force
+  Write-Host "[INFO] Backed up existing hook to $(Split-Path -Leaf $BackupPath)" -ForegroundColor Yellow
+}
+
+Copy-Item -Path $HookSource -Destination $HookDest -Force
 
 Write-Host "[OK] Hook installed at .git\hooks\pre-commit" -ForegroundColor Green
 Write-Host "[INFO] Testing the hook on your next commit..." -ForegroundColor Yellow
