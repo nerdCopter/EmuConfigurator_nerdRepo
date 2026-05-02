@@ -1007,6 +1007,12 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                     checkUpdate3dControls();
                     break;
 
+                case 'RSSI_ADC':
+                    if (FEATURE_CONFIG.features.isEnabled('RSSI_ADC')) {
+                        GUI.log(i18n.getMessage('configurationRssiAdcDisablesChannel'));
+                    }
+                    break;
+
                 default:
                     break;
             }
