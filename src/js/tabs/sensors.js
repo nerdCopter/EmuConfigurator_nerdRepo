@@ -445,19 +445,24 @@ TABS.sensors.initialize = function (callback) {
 
                     $('.tab-sensors select[name="debug_refresh_rate"]').val(result.sensor_settings.rates.debug);
 
-                    // start polling data by triggering refresh rate change event
-                    $('.tab-sensors .rate select:first').change();
-                } else {
-                    // start polling immediatly (as there is no configuration saved in the storage)
-                    $('.tab-sensors .rate select:first').change();
                 }
+                // Delay polling start to allow the FC to settle after reconnect.
+                // Immediate high-frequency MSP polling on a fresh VCP connection
+                // can overflow the firmware TX ring buffer, causing watchdog timeout
+                // and unexpected disconnect. This 300ms delay mitigates the issue.
+                setTimeout(function () {
+                    $('.tab-sensors .rate select:first').change();
+                }, 300);
             });
         });
 
-        // status data pulled via separate timer with static speed
-        GUI.interval_add('status_pull', function status_pull() {
-            MSP.send_message(MSPCodes.MSP_STATUS);
-        }, 250, true);
+        // status data pulled via separate timer with static speed.
+        // Delayed 300ms for the same FC settling reason as the sensor polling above.
+        setTimeout(function () {
+            GUI.interval_add('status_pull', function status_pull() {
+                MSP.send_message(MSPCodes.MSP_STATUS);
+            }, 250, true);
+        }, 300);
 
         GUI.content_ready(callback);
     });
