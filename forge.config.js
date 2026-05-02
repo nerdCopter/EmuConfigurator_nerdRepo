@@ -5,6 +5,9 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
 const buildMode = process.env.EMUCFG_BUILD_MODE || 'release';
 
+// Linux icon path constant for makers (deb, rpm)
+const LINUX_ICON = path.resolve(__dirname, 'assets/linux/icon/emu_icon_128.png');
+
 // Handle graceful shutdown in development mode
 // When yarn dev receives Ctrl+C, exit cleanly.
 // The Electron process will be terminated automatically when this parent exits.
@@ -80,7 +83,7 @@ module.exports = {
         options: {
           maintainer: 'EmuFlight',
           homepage: 'https://github.com/EmuFlight/EmuConfigurator',
-          icon: path.resolve(__dirname, 'assets/linux/icon/emu_icon_128.png'),
+          icon: LINUX_ICON,
         },
       },
     },
@@ -90,7 +93,7 @@ module.exports = {
       config: {
         options: {
           homepage: 'https://github.com/EmuFlight/EmuConfigurator',
-          icon: path.resolve(__dirname, 'assets/linux/icon/emu_icon_128.png'),
+          icon: LINUX_ICON,
         },
       },
     },
