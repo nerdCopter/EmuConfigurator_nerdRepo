@@ -1751,6 +1751,12 @@
     "receiverRssiChannelDisabledOption": {
         "message": "Disabled"
     },
+    "receiverRssiAdcDisabled": {
+        "message": "RSSI_ADC feature <span class=\"message-positive\">disabled</span> automatically — RSSI channel requires it to be off"
+    },
+    "configurationRssiAdcDisablesChannel": {
+        "message": "RSSI_ADC enabled — RSSI Channel selection in the Receiver tab will be <span class=\"message-negative\">disabled</span> on save"
+    },
     "receiverRefreshRateTitle": {
         "message": "Graph refresh rate"
     },

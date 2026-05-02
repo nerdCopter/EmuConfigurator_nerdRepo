@@ -257,10 +257,24 @@ TABS.receiver.initialize = function (callback) {
             // catch rssi aux
             RSSI_CONFIG.channel = parseInt($('select[name="rssi_channel"]').val());
 
+            // If a channel is selected and RSSI_ADC feature is enabled, the firmware's
+            // validateAndFixConfig() will force rssi_channel back to 0 on boot.
+            // Automatically disable RSSI_ADC so the channel value is preserved.
+            var rssiAdcCleared = false;
+            if (RSSI_CONFIG.channel > 0 && FEATURE_CONFIG.features.isEnabled('RSSI_ADC')) {
+                var RSSI_ADC_FEATURE_BIT = 15;
+                FEATURE_CONFIG.features.setMask(bit_clear(FEATURE_CONFIG.features.getMask(), RSSI_ADC_FEATURE_BIT));
+                rssiAdcCleared = true;
+                GUI.log(i18n.getMessage('receiverRssiAdcDisabled'));
+            }
 
             if (semver.gte(CONFIG.apiVersion, "1.20.0")) {
                 RX_CONFIG.rcInterpolation = parseInt($('select[name="rcInterpolation-select"]').val());
                 RX_CONFIG.rcInterpolationInterval = parseInt($('input[name="rcInterpolationInterval-number"]').val());
+            }
+
+            function save_feature_config() {
+                MSP.send_message(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG), false, save_rssi_config);
             }
 
             function save_rssi_config() {
@@ -291,7 +305,8 @@ TABS.receiver.initialize = function (callback) {
                 });
             }
 
-            MSP.send_message(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP), false, save_rssi_config);
+            var first_save_callback = rssiAdcCleared ? save_feature_config : save_rssi_config;
+            MSP.send_message(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP), false, first_save_callback);
         });
 
         $("a.sticks").click(function() {
