@@ -173,7 +173,17 @@ PortHandler.check = function () {
         GUI.updateManualPortVisibility();
 
         //moved from main.js
-        $('.connect_b a.connect').removeClass('disabled');
+        // Enable connect button only when real serial ports are present, or when
+        // the user has manually selected the manual-entry option. While connected
+        // or connecting, leave the button state to the connect/disconnect flow.
+        if (!GUI.connected_to && !GUI.connecting_to) {
+            var isManualSelected = $('div#port-picker #port option:selected').data('isManual');
+            if (current_ports.length > 0 || isManualSelected) {
+                $('.connect_b a.connect').removeClass('disabled');
+            } else {
+                $('.connect_b a.connect').addClass('disabled');
+            }
+        }
         $('.firmware_b a.flash').removeClass('disabled');
 
         setTimeout(function () {
