@@ -996,6 +996,12 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   }
 });
 
+ipcMain.handle('zoom-step', (_event, delta) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    applyZoom(mainWindow, _currentZoom + (delta > 0 ? 1 : -1));
+  }
+});
+
 function createWindow() {
   const buildMode = getBuildMode();
   setupMenu(buildMode);
@@ -1135,6 +1141,24 @@ function createWindow() {
     if (_devtoolsZoomTimer) clearTimeout(_devtoolsZoomTimer);
     _devtoolsZoomTimer = setTimeout(() => {
       applyZoom(win, _currentZoom);
+      const dtWC = win.webContents.devToolsWebContents;
+      if (!dtWC || dtWC.isDestroyed()) return;
+      // Ctrl+/-/0 keyboard zoom inside DevTools panel (mirrors app keyboard shortcuts)
+      dtWC.on('before-input-event', (event, input) => {
+        if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) return;
+        if (dtWC.isDestroyed()) return;
+        const code = input.code;
+        if (code === 'Equal' || code === 'NumpadAdd') {
+          event.preventDefault();
+          dtWC.setZoomLevel(Math.min(MAX_ZOOM_LEVEL, dtWC.getZoomLevel() + 1));
+        } else if (code === 'Minus' || code === 'NumpadSubtract') {
+          event.preventDefault();
+          dtWC.setZoomLevel(Math.max(MIN_ZOOM_LEVEL, dtWC.getZoomLevel() - 1));
+        } else if (code === 'Digit0' || code === 'Numpad0') {
+          event.preventDefault();
+          dtWC.setZoomLevel(DEFAULT_ZOOM_LEVEL);
+        }
+      });
     }, 150);
   });
 
