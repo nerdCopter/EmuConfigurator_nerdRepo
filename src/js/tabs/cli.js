@@ -107,7 +107,15 @@ TABS.cli.initialize = function (callback, nwGui) {
         var outputArray = out_string.split("\n");
         Promise.reduce(outputArray, function(delay, line, index) {
             return new Promise(function (resolve) {
-                GUI.timeout_add('CLI_send_slowly', function () {
+                // Use native setTimeout instead of GUI.timeout_add so this chain
+                // is not killed by GUI.timeout_kill_all() on a transient disconnect
+                // (e.g. FC second-reboot after flash). The cliActive guard below
+                // aborts the chain cleanly if the CLI session actually ends.
+                setTimeout(function () {
+                    if (!CONFIGURATOR.cliActive) {
+                        resolve(0);
+                        return;
+                    }
                     var processingDelay = self.lineDelayMs;
                     line = line.trim();
                     if (line.toLowerCase().startsWith('profile')) {
@@ -120,7 +128,7 @@ TABS.cli.initialize = function (callback, nwGui) {
                     self.sendLine(line, function () {
                         resolve(processingDelay);
                     });
-                }, delay)
+                }, delay);
             })
         }, 0);
 }
