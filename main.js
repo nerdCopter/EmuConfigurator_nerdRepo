@@ -370,11 +370,13 @@ ipcMain.handle('serial-list-ports', async () => {
   try {
     const { SerialPort } = require('serialport');
     const ports = await SerialPort.list();
-    return ports.map(p => p.path);
+    return ports
+      .filter(p => !/^\/dev\/ttyS\d+$/.test(p.path || ''))  // exclude bare hardware UARTs
+      .map(p => p.path);
   } catch (e) {
     console.error('main.js: serialport list failed, trying fs fallback:', e.message);
     try {
-      const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM|S)\d+$/.test(f));
+      const entries = fs.readdirSync('/dev').filter(f => /^tty(USB|ACM)\d+$/.test(f));
       return entries.map(f => '/dev/' + f);
     } catch (fsErr) {
       return [];
