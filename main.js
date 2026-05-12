@@ -1050,6 +1050,8 @@ function createWindow() {
   // Active enforcement: if window size falls below minimum after any resize, restore it
   let _resizeZoomTimer = null;
   let _devtoolsZoomTimer = null; // shared between devtools-opened/closed to prevent timer leaks
+  let _dtInputHandler = null;   // stored so devtools-closed can removeListener and prevent stacking
+  let _dtWCRef = null;
   const debouncedZoomReapply = () => {
     if (_resizeZoomTimer) clearTimeout(_resizeZoomTimer);
     _resizeZoomTimer = setTimeout(() => {
@@ -1143,8 +1145,9 @@ function createWindow() {
       applyZoom(win, _currentZoom);
       const dtWC = win.webContents.devToolsWebContents;
       if (!dtWC || dtWC.isDestroyed()) return;
-      // Ctrl+/-/0 keyboard zoom inside DevTools panel (mirrors app keyboard shortcuts)
-      dtWC.on('before-input-event', (event, input) => {
+      if (_dtInputHandler) return; // already registered; avoid stacking on reopen
+      _dtWCRef = dtWC;
+      _dtInputHandler = (event, input) => {
         if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) return;
         if (dtWC.isDestroyed()) return;
         const code = input.code;
@@ -1158,11 +1161,17 @@ function createWindow() {
           event.preventDefault();
           dtWC.setZoomLevel(DEFAULT_ZOOM_LEVEL);
         }
-      });
+      };
+      dtWC.on('before-input-event', _dtInputHandler);
     }, 150);
   });
 
   win.webContents.on('devtools-closed', () => {
+    if (_dtWCRef && _dtInputHandler) {
+      _dtWCRef.removeListener('before-input-event', _dtInputHandler);
+      _dtInputHandler = null;
+      _dtWCRef = null;
+    }
     if (_devtoolsZoomTimer) clearTimeout(_devtoolsZoomTimer);
     _devtoolsZoomTimer = setTimeout(() => {
       applyZoom(win, _currentZoom);
