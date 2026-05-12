@@ -177,8 +177,11 @@ PortHandler.check = function () {
         // the user has manually selected the manual-entry option. While connected
         // or connecting, leave the button state to the connect/disconnect flow.
         if (!GUI.connected_to && !GUI.connecting_to) {
+            // Manual option is always present in the dropdown, so check that the
+            // user has actually typed a port path before treating it as connectable.
             var isManualSelected = $('div#port-picker #port option:selected').data('isManual');
-            if (current_ports.length > 0 || isManualSelected) {
+            var manualPortEntered = isManualSelected && $('#port-override').val().trim().length > 0;
+            if (current_ports.length > 0 || manualPortEntered) {
                 $('.connect_b a.connect').removeClass('disabled');
             } else {
                 $('.connect_b a.connect').addClass('disabled');
