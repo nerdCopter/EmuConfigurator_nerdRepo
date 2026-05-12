@@ -599,3 +599,10 @@ if (typeof window.chrome === 'undefined' || !window.chrome.fileSystem) {
         fileSystem: chromeFileSystem,
     });
 }
+
+// Ctrl+mousewheel zoom: intercept before Chromium's own fractional zoom kicks in
+window.addEventListener('wheel', function (event) {
+    if (!(event.ctrlKey || event.metaKey) || event.deltaY === 0) return;
+    event.preventDefault();
+    ipcRenderer.invoke('zoom-step', event.deltaY < 0 ? 1 : -1);
+}, { passive: false, capture: true });

@@ -996,6 +996,12 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
   }
 });
 
+ipcMain.handle('zoom-step', (_event, delta) => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    applyZoom(mainWindow, _currentZoom + (delta > 0 ? 1 : -1));
+  }
+});
+
 function createWindow() {
   const buildMode = getBuildMode();
   setupMenu(buildMode);
