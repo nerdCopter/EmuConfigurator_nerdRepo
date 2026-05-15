@@ -2986,9 +2986,6 @@
     "pidTuningAngleLowHelp": {
         "message": "Low Angle Error settings are used when PID-error is minimal during normal flight."
     },
-    "pidTuningAngleITermNAHelp": {
-        "message": "I-term for stable mode is not yet exposed via MSP. This field will become active in a future firmware update."
-    },
     "pidTuningAngleFeedForward": {
         "message": "Angle Feed-Forward"
     },
