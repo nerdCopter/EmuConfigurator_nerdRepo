@@ -1323,7 +1323,10 @@
         "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span>  You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires <span class=\"message-positive\">$2</span>."
     },
     "pidTuningSubTabPid": {
-        "message": "PID Settings"
+        "message": "Acro PIDs"
+    },
+    "pidTuningSubTabStable": {
+        "message": "Stable PIDs"
     },
     "pidTuningSubTabRates": {
         "message": "Rateprofile Settings"
@@ -2982,6 +2985,9 @@
     },
     "pidTuningAngleLowHelp": {
         "message": "Low Angle Error settings are used when PID-error is minimal during normal flight."
+    },
+    "pidTuningAngleITermNAHelp": {
+        "message": "I-term for stable mode is not yet exposed via MSP. This field will become active in a future firmware update."
     },
     "pidTuningAngleFeedForward": {
         "message": "Angle Feed-Forward"

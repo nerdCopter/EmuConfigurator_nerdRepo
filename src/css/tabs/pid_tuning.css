@@ -140,10 +140,16 @@
 }
 
 .tab-pid_tuning #pid_accel table th {
-    width: 33%;
+    width: auto;
 }
 
 .tab-pid_tuning #pid_accel table td {
+    width: auto;
+}
+
+/* Equal-width columns for the 3-column OLDANGLEUI and angleLimit tables */
+.tab-pid_tuning #pid_accel table td.third,
+.tab-pid_tuning #pid_accel table th.third {
     width: 33%;
 }
 

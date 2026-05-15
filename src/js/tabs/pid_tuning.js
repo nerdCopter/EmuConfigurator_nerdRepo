@@ -1679,7 +1679,7 @@ TABS.pid_tuning.initialize = function(callback) {
         //end MSP 1.51
 
         function activateSubtab(subtabName) {
-            const names = ['pid', 'rates', 'filter','feel'];
+            const names = ['pid', 'stable', 'rates', 'filter', 'feel'];
             if (!names.includes(subtabName)) {
                 console.debug('Invalid subtab name: "' + subtabName + '"');
                 return;
@@ -1698,6 +1698,8 @@ TABS.pid_tuning.initialize = function(callback) {
         activateSubtab(self.activeSubtab);
 
         $('.tab-pid_tuning .tab_container .pid').on('click', () => activateSubtab('pid'));
+
+        $('.tab-pid_tuning .tab_container .stable').on('click', () => activateSubtab('stable'));
 
         $('.tab-pid_tuning .tab_container .rates').on('click', () => activateSubtab('rates'));
 
