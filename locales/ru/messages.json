@@ -1031,9 +1031,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Менять PID-контроллер запрещено, но его можно поменять в командной строке.</span>  Ваша прошивка поддерживает конфигуратор версии <span class=\"message-negative\">$1</span>, а этот функционал требует версию прошивки <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningShowAllPids": {
-        "message": "Показать все PID-ы"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Скрыть ненужные PID-ы"
     },

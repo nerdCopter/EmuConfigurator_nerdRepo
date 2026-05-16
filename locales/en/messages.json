@@ -1337,9 +1337,6 @@
     "pidTuningSubTabFeel": {
         "message": "Feel Settings"
     },
-    "pidTuningShowAllPids": {
-        "message": "Show all PIDs"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Hide unused PIDs"
     },

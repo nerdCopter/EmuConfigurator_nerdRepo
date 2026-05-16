@@ -1040,9 +1040,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Mijenjanje postavki PID kontrolera onemogućeno - možete ih mijenjati kroz CLI.</span> Firmware koji koristite ima API verziju<span class=\"message-negative\">$1</span>, ali ova mogućnost zahtijeva verziju <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningShowAllPids": {
-        "message": "Prikaži sve PIDove"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Sakrij nekorištene PIDove"
     },

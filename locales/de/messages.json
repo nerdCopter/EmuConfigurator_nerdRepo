@@ -1002,9 +1002,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires requires <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningShowAllPids": {
-        "message": "Zeige alle PIDs"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Verstecke ungenutzt PIDs"
     },

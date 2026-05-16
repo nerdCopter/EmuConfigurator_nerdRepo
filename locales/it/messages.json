@@ -935,9 +935,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">la modifica del controllore dei PID è disabilitata - puoi modificarli tramite CLI.</span> hai un Firmware con versione delle API <span class=\"message-negative\">$1</span>, ma questa funzionalità richiede <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningShowAllPids": {
-        "message": "mostra tutti i PID"
-    },
     "pidTuningHideUnusedPids": {
         "message": "nascondi PID non utilizzati"
     },
