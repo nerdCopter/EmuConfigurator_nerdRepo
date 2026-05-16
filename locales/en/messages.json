@@ -1329,7 +1329,7 @@
         "message": "Stable PIDs"
     },
     "pidTuningSubTabRates": {
-        "message": "Rateprofile Settings"
+        "message": "Rate Settings"
     },
     "pidTuningSubTabFilter": {
         "message": "Filter Settings"
