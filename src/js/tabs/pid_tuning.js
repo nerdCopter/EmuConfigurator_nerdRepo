@@ -1649,7 +1649,7 @@ TABS.pid_tuning.initialize = function(callback) {
                 console.debug('Invalid subtab name: "' + subtabName + '"');
                 return;
             }
-            for (name of names) {
+            for (const name of names) {
                 const el = $('.tab-pid_tuning .subtab-' + name);
                 el[name == subtabName ? 'show' : 'hide']();
             }
