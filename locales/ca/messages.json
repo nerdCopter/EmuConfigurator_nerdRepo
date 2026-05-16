@@ -841,12 +841,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Canviant el controlador PID a deshabilitat - ho pots canviar pel CLI.</span> Tens un firmware amb versió API <span class=\"message-negative\">$1</span>, però aquesta funcionalitat requereix <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "Configuració de PIDs"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Configuració de Filtres"
-    },
     "pidTuningShowAllPids": {
         "message": "Mostra tots els PIDs"
     },

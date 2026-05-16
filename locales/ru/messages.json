@@ -163,7 +163,6 @@
     "tabServos": {
         "message": "Сервоприводы"
     },
-
     "tabTransponder": {
         "message": "Транспондер гонки"
     },
@@ -1031,12 +1030,6 @@
     },
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Менять PID-контроллер запрещено, но его можно поменять в командной строке.</span>  Ваша прошивка поддерживает конфигуратор версии <span class=\"message-negative\">$1</span>, а этот функционал требует версию прошивки <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningSubTabPid": {
-        "message": "PID-настройки"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Настройки фильтров"
     },
     "pidTuningShowAllPids": {
         "message": "Показать все PID-ы"
@@ -3184,7 +3177,6 @@
     "osdWarningRcSmoothingFailure": {
         "message": "Предупреждает когда инициализация RC не работает (нарушена)"
     },
-
     "osdWarningFailsafe": {
         "message": "Предупреждает когда происходит failsafe"
     },

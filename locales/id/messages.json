@@ -887,12 +887,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Perubahan PID dinonaktifkan - anda bisa mengubahnya melalui CLI.</span> Anda mempunyai firmware dengan versi API <span class = \"message-negative\">$1</span>, namun Fungsi ini memerlukan <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "Pengaturan PID"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Pengaturan Filter"
-    },
     "pidTuningShowAllPids": {
         "message": "Tampilkan semua PID"
     },
@@ -2230,7 +2224,6 @@
     "powerVoltageHead": {
         "message": "Meteran Tegangan"
     },
-
     "powerVoltageId10": {
         "message": "Baterai"
     },
