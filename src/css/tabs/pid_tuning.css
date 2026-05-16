@@ -1006,10 +1006,11 @@
 
 .tab-pid_tuning .pid_titlebar .name-helpicon-flex {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     justify-content: space-around;
 }
 
 .tab-pid_tuning .pid_titlebar .name-helpicon-flex .helpicon {
     margin-right: 0;
+    flex-shrink: 0;
 }
