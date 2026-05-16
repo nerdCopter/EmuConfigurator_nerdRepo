@@ -1043,15 +1043,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">PID制御の変更が無効 - CLIにより変更できます。</span> このファームウェアはAPIバージョン<span class=\"message-negative\">$1</span>ですが、この機能には<span class=\"message-positive\">$2</span>が必要です。"
     },
-    "pidTuningSubTabPid": {
-        "message": "PID設定"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "フィルター設定"
-    },
-    "pidTuningShowAllPids": {
-        "message": "全PID値の表示"
-    },
     "pidTuningHideUnusedPids": {
         "message": "未使用なPID値 非表示"
     },

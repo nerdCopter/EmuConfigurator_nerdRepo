@@ -1061,15 +1061,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">PID kontroliera maiņa ir atslēgta  - jūs to varat nomainīt iekš CLI.</span>  Jums ir programmatūra ar API versiju <span class=\"message-negative\">$1</span>, bet šai funkcionalitātei nepieciešama <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "PID Iestatījumi"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Filtra Iestatījumi"
-    },
-    "pidTuningShowAllPids": {
-        "message": "Parādīt visus PIDus"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Paslēpt neizmantotos PID"
     },

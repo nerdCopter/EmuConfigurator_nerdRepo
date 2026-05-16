@@ -1004,18 +1004,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Changement de contrôleur PID désactivé - mais possible en CLI.</span> Votre microprogramme dispose de l'API version <span class=\"message-negative\">$1</span>, cette fonctionnalité nécessite la version <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "Réglages PID"
-    },
-    "pidTuningSubTabRates": {
-        "message": "Paramètres Rates du profil"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Réglages filtres"
-    },
-    "pidTuningShowAllPids": {
-        "message": "Montrer tous les PIDs"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Cacher les PIDs non utilisés"
     },

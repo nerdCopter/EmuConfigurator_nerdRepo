@@ -1031,15 +1031,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Alterações no controlador PID desabilitado - você pode mudar isso na Linha de comandos (CLI).</span>  Seu firmware está com a API versão <span class=\"message-negative\">$1</span>, mas esta funcionalidade requer a versão <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "Configurar PID"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Configurar Filtro"
-    },
-    "pidTuningShowAllPids": {
-        "message": "Exibir todos PIDs"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Esconder PIDs não utilizados"
     },

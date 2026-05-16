@@ -1037,15 +1037,6 @@
     "pidTuningUpgradeFirmwareToChangePidController": {
         "message": "<span class=\"message-negative\">Inte möjligt att ändra PID-kontroller - du kan ändra den via CLI.</span>  Din firmware har API-version <span class=\"message-negative\">$1</span>, men denna funktion kräver <span class=\"message-positive\">$2</span>."
     },
-    "pidTuningSubTabPid": {
-        "message": "PID-inställningar"
-    },
-    "pidTuningSubTabFilter": {
-        "message": "Filter-inställningar"
-    },
-    "pidTuningShowAllPids": {
-        "message": "Visa alla PIDs"
-    },
     "pidTuningHideUnusedPids": {
         "message": "Dölj PIDs som inte används"
     },

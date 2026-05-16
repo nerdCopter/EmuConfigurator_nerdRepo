@@ -7,7 +7,6 @@
 
 TABS.pid_tuning = {
     RATE_PROFILE_MASK: 128,
-    showAllPids: false,
     updating: true,
     dirty: false,
     currentProfile: null,
@@ -290,7 +289,6 @@ TABS.pid_tuning.initialize = function(callback) {
 
         $('.NEWANGLEUI').hide();
         $('.OLDANGLEUI').hide();
-        //$('#showAllPids').hide(); //remove the useless button
         if ( semver.gte(CONFIG.apiVersion, "1.24.0") ) {
             $('.pid_tuning input[name="angleLimit"]').val(ADVANCED_TUNING.levelAngleLimit);
             $('.angleLimit').show();
@@ -1510,39 +1508,6 @@ TABS.pid_tuning.initialize = function(callback) {
         });
     }
 
-    function hideUnusedPids() {
-        // Hide all optional elements
-        //$('.pid_optional tr').hide(); // Hide all rows
-        //$('.pid_optional table').hide(); // Hide tables
-        $('.pid_optional').hide(); // Hide general div
-
-        if (!have_sensor(CONFIG.activeSensors, 'acc')) {
-            $('#pid_accel').hide();
-        }
-
-        var hideSensorPid = function(element, sensorReady) {
-            var isVisible = element.is(":visible");
-            if (!isVisible || !sensorReady) {
-                element.hide();
-                isVisible = false;
-            }
-
-            return isVisible;
-        }
-
-        var isVisibleBaroMagGps = false;
-
-        isVisibleBaroMagGps |= hideSensorPid($('#pid_baro'), have_sensor(CONFIG.activeSensors, 'baro') || have_sensor(CONFIG.activeSensors, 'sonar'));
-
-        isVisibleBaroMagGps |= hideSensorPid($('#pid_mag'), have_sensor(CONFIG.activeSensors, 'mag'));
-
-        isVisibleBaroMagGps |= hideSensorPid($('#pid_gps'), have_sensor(CONFIG.activeSensors, 'GPS'));
-
-        if (!isVisibleBaroMagGps) {
-            $('#pid_baro_mag_gps').hide();
-        }
-    }
-
     function drawAxes(curveContext, width, height) {
         curveContext.strokeStyle = '#000000';
         curveContext.lineWidth = 4;
@@ -1679,12 +1644,12 @@ TABS.pid_tuning.initialize = function(callback) {
         //end MSP 1.51
 
         function activateSubtab(subtabName) {
-            const names = ['pid', 'rates', 'filter','feel'];
+            const names = ['pid', 'stable', 'rates', 'filter', 'feel'];
             if (!names.includes(subtabName)) {
                 console.debug('Invalid subtab name: "' + subtabName + '"');
                 return;
             }
-            for (name of names) {
+            for (const name of names) {
                 const el = $('.tab-pid_tuning .subtab-' + name);
                 el[name == subtabName ? 'show' : 'hide']();
             }
@@ -1698,6 +1663,8 @@ TABS.pid_tuning.initialize = function(callback) {
         activateSubtab(self.activeSubtab);
 
         $('.tab-pid_tuning .tab_container .pid').on('click', () => activateSubtab('pid'));
+
+        $('.tab-pid_tuning .tab_container .stable').on('click', () => activateSubtab('stable'));
 
         $('.tab-pid_tuning .tab_container .rates').on('click', () => activateSubtab('rates'));
 
@@ -1785,25 +1752,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
         populatePresetsSelector(selectPresetValues);
 
-        var showAllButton = $('#showAllPids');
-
-        function updatePidDisplay() {
-            if (!self.showAllPids) {
-                hideUnusedPids();
-                showAllButton.text(i18n.getMessage("pidTuningShowAllPids"));
-            } else {
-                showAllPids();
-                showAllButton.text(i18n.getMessage("pidTuningHideUnusedPids"));
-            }
-        }
-
         showAllPids();
-        updatePidDisplay();
-
-        showAllButton.on('click', function() {
-            self.showAllPids = !self.showAllPids;
-            updatePidDisplay();
-        });
 
         $('#resetProfile').on('click', function() {
             resetProfile();

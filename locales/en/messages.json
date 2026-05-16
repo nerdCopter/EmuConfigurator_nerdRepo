@@ -1323,19 +1323,19 @@
         "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span>  You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires <span class=\"message-positive\">$2</span>."
     },
     "pidTuningSubTabPid": {
-        "message": "PID Settings"
+        "message": "Acro PIDs"
+    },
+    "pidTuningSubTabStable": {
+        "message": "Stable PIDs"
     },
     "pidTuningSubTabRates": {
-        "message": "Rateprofile Settings"
+        "message": "Rate Settings"
     },
     "pidTuningSubTabFilter": {
         "message": "Filter Settings"
     },
     "pidTuningSubTabFeel": {
         "message": "Feel Settings"
-    },
-    "pidTuningShowAllPids": {
-        "message": "Show all PIDs"
     },
     "pidTuningHideUnusedPids": {
         "message": "Hide unused PIDs"
@@ -2948,7 +2948,7 @@
         "message": "Keeps the craft from jumping up at the end of yaws. Higher number gives more damping at the end of yaw moves (works like old yaw D, which was not a real D like on other axis)"
     },
     "pidTuningLevel": {
-        "message": "Angle/Horizon/NFE"
+        "message": "Angle / Horizon / NFE / RTH"
     },
     "pidTuningStrength": {
         "message": "Strength"
@@ -2972,16 +2972,16 @@
         "message": "Maximum angle allowed in Angle Mode."
     },
     "pidTuningAngleHigh": {
-        "message": "High Angle Error"
+        "message": "Roll/Pitch High"
     },
     "pidTuningAngleHighHelp": {
-        "message": "High Angle Error settings deal with crash recovery and quick stick movement.  This will be the P used as high PID-error occurs for example at the moment of crashing."
+        "message": "High angle-error PIDs — active during crash recovery and fast stick movement when angle error is large."
     },
     "pidTuningAngleLow": {
-        "message": "Low Angle Error"
+        "message": "Roll/Pitch Low"
     },
     "pidTuningAngleLowHelp": {
-        "message": "Low Angle Error settings are used when PID-error is minimal during normal flight."
+        "message": "Low angle-error PIDs — active during normal stable flight when angle error is small."
     },
     "pidTuningAngleFeedForward": {
         "message": "Angle Feed-Forward"
