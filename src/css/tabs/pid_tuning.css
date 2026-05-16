@@ -166,12 +166,6 @@
     width: 33%;
 }
 
-/* Visual separator between PID rows and mode-setting rows in the same table */
-.tab-pid_tuning .subtab-stable tr.pid_section_sep td {
-    padding-top: 8px;
-    border-top: 1px solid var(--subtleAccent);
-}
-
 .tab-pid_tuning table.compensation tr {
     height: 30px;
     border-bottom: 1px solid var(--subtleAccent);
