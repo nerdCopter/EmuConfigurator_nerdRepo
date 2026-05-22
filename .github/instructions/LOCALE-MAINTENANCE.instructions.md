@@ -25,7 +25,7 @@ Before beginning any translation work:
 - **Zero-Breakage Mandate**: Never remove, modify, or strip functional metadata (HTML tags, CSS classes, `$1` variables, `{{variableName}}` handlebars) unless the English source itself has changed.
 - **KEY PROTECTION (CRITICAL):** NEVER translate, modify, or customize key names. Keys must be **identical** in all locales. If you change a key name, the app BREAKS.
 - **Acronym/Industry Standard Protection**: Single-word technical acronyms (PID, OSD, VTX) must remain in English to maintain documentation consistency across flight control platforms (BetaFlight/EmuFlight/iNav).
-- **Inheritance vs. Accuracy**: While short terms should inherit when identical to English, core UI labels (Connect, Save, Reboot) and status messages (Port Opened, Arming Enabled) **MUST** be authentically translated to ensure a localized user experience.
+- **Inheritance vs. Accuracy**: While short terms should inherit when identical to English, core UI labels (Connect, Save, Reboot) and status messages (Port Opened, Arming Enabled) **MUST** be authentically translated when they appear as UI action button labels; when they appear in technical documentation or comments, keep them in English (see [TRANSLATION-TERMINOLOGY.instructions.md](TRANSLATION-TERMINOLOGY.instructions.md) Preservation Strategy §5).
 
 #### Validation Commands:
 ```bash
