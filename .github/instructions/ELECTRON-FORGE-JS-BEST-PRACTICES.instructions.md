@@ -1,6 +1,6 @@
 ---
 name: Electron Forge JS Best Practices
-applyTo: '**/*.{js,html,css,json,yml,md}'
+applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 ---
 
 # Electron/Forge JavaScript Project Best Practices
@@ -31,6 +31,7 @@ applyTo: '**/*.{js,html,css,json,yml,md}'
 - For binary file operations, use `Buffer.from()` and `Uint8Array` conversions to avoid data corruption.
 - Document IPC channel names in comments; prefix with feature name (e.g., `dialog:*`, `file-*`).
 - In preload scripts, wrap IPC calls with error handling; provide clear fallback behavior if IPC fails.
+- Never exclude `src/support` or preload scripts from the build; they are essential for security, polyfills, and IPC. Always verify `dist/support/preload.js` exists after build.
 
 ## 3. **JavaScript & jQuery**
 - Use **strict mode** (`'use strict';`) in all JS files.
@@ -52,11 +53,13 @@ applyTo: '**/*.{js,html,css,json,yml,md}'
 - Regularly audit dependencies for security and compatibility.
 - Prefer CDN or local copies for browser-side libraries (e.g., jQuery, D3, Three.js).
 - Remove unused libraries from `libraries/` and `package.json`.
-- **Node.js:** Use latest stable LTS version (currently Node 24.x). Update CI workflows when new LTS is released.
+- **Node.js:** Use the latest stable LTS version per the [Node.js release schedule](https://nodejs.org/en/about/previous-releases). Update CI workflows when a new LTS is released.
 
 ## 5. **Electron Security**
-- Never enable `nodeIntegration` in renderer unless absolutely required.
-- Use `contextIsolation: true` in all BrowserWindow configs.
+- **Current State (Legacy Exception):** `main.js` currently uses `nodeIntegration: true` and `contextIsolation: false` for historical compatibility with legacy `require()` calls in renderer HTML scripts. Do not replicate this for new windows or features.
+- **Migration Target:** Move all Node/Electron logic to preload scripts, then restore `nodeIntegration: false` and `contextIsolation: true`.
+- Never enable `nodeIntegration` for new `BrowserWindow` instances or new renderer contexts.
+- Use `contextIsolation: true` for any new `BrowserWindow` configs.
 - Validate all IPC messages and sanitize user input.
 - Never expose sensitive Node APIs to the renderer.
 
@@ -67,6 +70,7 @@ applyTo: '**/*.{js,html,css,json,yml,md}'
 - Use `karma` for browser-based unit tests; keep tests in `test/`.
 - Prefer test-driven bugfixes: add a test for every bug found.
 - Run all tests and lints before every commit.
+- When changing i18n or asset paths, always test with Electron's `file://` protocol, not just in a web browser.
 
 ## 7. **Documentation & Instructions**
 - Keep all project instructions in `.github/instructions/` with clear `applyTo:` patterns.
@@ -92,12 +96,7 @@ applyTo: '**/*.{js,html,css,json,yml,md}'
 - Remove legacy code only after confirming no active users depend on it.
 - Clearly mark deprecated features and provide migration paths.
 
-## 11. **Session Lessons & Migration Notes**
-
-- If legacy code requires `nodeIntegration: true` in the renderer (for `require()` in HTML), document this as a temporary exception. Add a migration note: **move all Node/Electron logic to preload scripts and restore `nodeIntegration: false` as soon as feasible.**
-- Never exclude `src/support` or preload scripts from the build. Preload scripts are essential for Electron security, polyfills, and IPC. Always verify `dist/support/preload.js` exists after build.
-- When changing i18n or asset paths, always test with Electron's `file://` protocol, not just in a web browser.
-- For dialog sizing, standardize modal dimensions and make all dialogs responsive (see handoff doc for details).
+## 11. **Implementation Notes & Known Exceptions**
 
 ### Chrome API Polyfills (preload.js)
 - When shimming Chrome APIs (e.g., `chrome.fileSystem`, `chrome.storage`), build complete, stateful entry/writer objects that match the Chrome API contract.

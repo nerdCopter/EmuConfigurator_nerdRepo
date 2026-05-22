@@ -125,8 +125,6 @@ The project uses `pidTuningSubTab*` keys for PID tuning sub-tab labels. Non-Engl
 
 ## Phase 2: Translation Rules
 
-## Phase 2: Translation Rules
-
 ### 2.0 CRITICAL: Preserve Key Names Exactly
 
 **This is THE most important rule. Violating it breaks the entire application.**
@@ -159,7 +157,7 @@ EOF
 - PID control terms: `PID`, `P-Term`, `I-Term`, `D-Term`, `iTerm Relax`, `i-Decay`, `Setpoint`, `Deadband`
 - Axis terms: `Roll`, `Pitch`, `Yaw`, `RP`, `RY`, `PY`
 - Sensors: `gyro`, `accel`, `baro`, `mag`, `GPS`, `IMU`, `OSD`
-- Protocols: `DShot`, `Multishot`, `Oneshot`, `ProShot1000`, `CRSF`, `UART`, `SPI`, `I2C`
+- Protocols: `DSHOT`, `Multishot`, `Oneshot`, `ProShot1000`, `CRSF`, `UART`, `SPI`, `I2C`
 - Features: `Feathered PIDs`, `Direct Yaw Feed Forward`, `RC Smoothing`, `Anti Gravity`
 - Firmware names: `BetaFlight`, `EmuFlight`, `iNav`
 
@@ -394,17 +392,18 @@ Don't translate explanatory text if it references code or configuration:
 
 ## Phase 3: Translation Rules - What NOT TO DO
 
-### 3.1 Dangerous Mor CSS classes | UI rendering breaks/style loss | `"<span class=\"pos\">OK</span>"` → `"OK"` ❌ |
+### 3.1 Dangerous Modifications
+
+| What NOT to do | Consequence | Example |
+|---|---|---|
+| Remove CSS classes | UI rendering breaks/style loss | `"<span class=\"pos\">OK</span>"` → `"OK"` ❌ |
 | Change key names | Code can't find translation | `"pidRate"` → `"ratePid"` ❌ |
 | Break escape sequences | JSON parse error | `"path\\to\\file"` → `"path\to\file"` ❌ |
 | Add unescaped quotes | JSON syntax error | `"He said "hello""` ❌ Use `\"` instead |
-| Strip Handlebars | Dynamic data display fails | `"User: {{name}}"` → `"User: "` ❌
+| Strip Handlebars | Dynamic data display fails | `"User: {{name}}"` → `"User: "` ❌ |
 | Remove/translate `$t(...)` variable refs | Missing translation lookup | `"$t(pidTuningRate.message)"` → `"Frequenza PID"` ❌ |
 | Alter `$1`, `$2` placeholders | Runtime parameter errors | `"Speed: $1"` → `"Velocità: "` (missing $1) ❌ |
 | Remove HTML tags | UI rendering breaks | `"<span>warning</span>"` → `"warning"` ❌ |
-| Change key names | Code can't find translation | `"pidRate"` → `"ratePid"` ❌ |
-| Break escape sequences | JSON parse error | `"path\\to\\file"` → `"path\to\file"` ❌ |
-| Add unescaped quotes | JSON syntax error | `"He said "hello""` ❌ Use `\"` instead |
 | Remove newlines in multiline text | Message display corrupts | `"Line1\nLine2"` → `"Line1 Line2"` ❌ |
 
 ### 3.2 Common Translation Pitfalls
@@ -687,7 +686,7 @@ grep -o '\$t([^)]*\.message)' locales/XX/messages.json | \
 | `$t(...)`  | ✓ YES | `"$t(pidRate.message)"` → keep as-is |
 | `$1`, `$2` | ✓ YES | `"Speed: $1"` → translate around, keep `$1` |
 | HTML tags | ✓ YES | `<span>`, `<strong>`, `<a>` → all untouched |
-| Technical terms | ✓ YES | `PID`, `DShot`, `Gyro` → preserve per TERMINOLOGY guide |
+| Technical terms | ✓ YES | `PID`, `DSHOT`, `Gyro` → preserve per TERMINOLOGY guide |
 | Escaped chars | ✓ YES | `\"`, `\\`, `\n` → keep escape sequences |
 | Key names | ✓ YES | `"pidRate":` → don't change |
 | Descriptions | ✓ YES | `"description":` field → don't translate |

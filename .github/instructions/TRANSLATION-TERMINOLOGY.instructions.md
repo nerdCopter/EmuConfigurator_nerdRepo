@@ -29,7 +29,7 @@ The following terms have been cross-referenced and standardized across official 
 **Critical Standardization Decision:** DSHOT
 - **All caps form: `DSHOT`** (official de facto standard per blck.mn spec, INAV docs, Betaflight wiki)
 - **NOT:** `DShot`, `Dshot`, `d-shot`, `D-shot`, `dShot`
-- **Rationale:** All-caps form survives translation intact and prevents translator ambiguity — see [DSHOT Capitalization Executive Summary](DSHOT%20Capitalization%20Executive%20Summary.md) for full analysis
+- **Rationale:** All-caps form survives translation intact and prevents translator ambiguity
 
 **Confirmed from Official Documentation:**
 - EmuFlight Wiki: Features use exact spelling "Feathered PIDs", "i-Decay", "iTerm Relax", "Direct Yaw Feed Forward"
@@ -103,7 +103,7 @@ The following terms have been cross-referenced and standardized across official 
 **Always in English:**
 - `Motor(s)` (may keep to distinguish from "engine" in Romance languages)
 - `ESC` (Electronic Speed Controller)
-- `DSHOT` (protocol; **all caps, no variations** — not "DShot", "Dshot", or "d-shot") — see [DSHOT Capitalization Executive Summary](DSHOT%20Capitalization%20Executive%20Summary.md)
+- `DSHOT` (protocol; **all caps, no variations** — not "DShot", "Dshot", or "d-shot")
 - `ProShot1000` (ESC protocol variant)
 - `KISS` (ESC protocol name)
 - `Multishot`
@@ -148,12 +148,12 @@ The following terms have been cross-referenced and standardized across official 
 - `SBUS`
 - `Spektrum`
 - `FrSky`
-- `FutureBA`
+- `Futaba`
 - `Tuning`
 - `Profile`
-- `Enable` / `Disable`
-- `Reset`
-- `Reboot` / `Restart`
+- `Enable` / `Disable` _(keep English in technical documentation; **translate** as UI action button labels — see Preservation Strategy §5)_
+- `Reset` _(keep English in technical documentation; **translate** as UI action button labels — see Preservation Strategy §5)_
+- `Reboot` / `Restart` _(keep English in technical documentation; **translate** as UI action button labels — see Preservation Strategy §5)_
 - `Boot`
 - `Erase`
 - `Flash` (verb: to program firmware)
@@ -161,7 +161,7 @@ The following terms have been cross-referenced and standardized across official 
 - `Scale`
 - `Threshold`
 - `Value`
-- `Default`
+- `Default` _(keep English in technical documentation; **translate** as UI action button labels — see Preservation Strategy §5)_
 
 ## Category 7: Functional Features
 
@@ -230,8 +230,6 @@ The following terms have been cross-referenced and standardized across official 
 All three projects expect users to understand these English technical terms, making preservation critical for cross-project compatibility and user familiarity.
 
 ## DSHOT Capitalization — Executive Summary
-
-Full analysis: [DSHOT Capitalization Executive Summary](DSHOT%20Capitalization%20Executive%20Summary.md)
 
 **Rule:** Always use `DSHOT` (all caps, no hyphens)
 - **Rationale:** Aligns with de facto spec standard, improves i18n consistency, prevents translator re-capitalization errors
