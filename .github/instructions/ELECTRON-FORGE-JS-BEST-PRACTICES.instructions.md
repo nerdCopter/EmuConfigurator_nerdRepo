@@ -1,5 +1,6 @@
 ---
 name: Electron Forge JS Best Practices
+description: Best-practices guide for Electron Forge, JavaScript, jQuery, and Yarn in EmuConfigurator
 applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 ---
 
@@ -53,6 +54,8 @@ applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 
 ## 4. **3rd Party Dependencies & Yarn**
 - Use **yarn** for all dependency management; never mix with npm.
+- Use **Yarn 1.x (Classic)** only — Yarn 2+/Berry is incompatible with this project's configuration.
+- Commit `yarn.lock` to version control; it ensures reproducible installs across all environments.
 - Pin dependency versions in `package.json` for reproducible builds.
 - Regularly audit dependencies for security and compatibility.
 - Prefer CDN or local copies for browser-side libraries (e.g., jQuery, D3, Three.js).

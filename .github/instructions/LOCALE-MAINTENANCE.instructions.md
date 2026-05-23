@@ -72,7 +72,7 @@ Stale key    → shows old/wrong translation ✗ (blocks fallback)
 
 ### Dead key purging
 
-When a feature is removed from the UI (toggle removed, tab renamed, etc.), remove the corresponding i18n key from **all 16 locale files** — including English. Dead keys in non-English files continue to show stale content for users; dead keys in English are wasted bytes.
+When a feature is removed from the UI (toggle removed, tab renamed, etc.), remove the corresponding i18n key from **all locale files under `locales/`** — including English. Dead keys in non-English files continue to show stale content for users; dead keys in English are wasted bytes.
 
 ```bash
 # Find which locales have a key
@@ -119,6 +119,33 @@ The project uses `pidTuningSubTab*` keys for PID tuning sub-tab labels. Non-Engl
 
 // ✗ WRONG - translated key name
 "pestanaAjustePID": { "message": "..." }  // Key must stay "tabPidTuning"
+```
+
+---
+
+## Phase 1d: i18next Plural Forms (Awareness Stub)
+
+**Current Status:** No locale files in this project currently use i18next plural-form keys. This stub documents the convention so future contributors handle plural keys correctly if they are ever introduced.
+
+### Convention Overview
+i18next uses suffix-based plural keys. Suffixes depend on the i18next version and language:
+
+| Suffix | i18next v2 | i18next v3+ (Plurals v4) |
+|--------|------------|--------------------------|
+| Singular | `key` | `key_one` |
+| Plural | `key_plural` | `key_other` |
+| Zero (special) | `key_0` | `key_zero` |
+
+### Rules If Plural Keys Are Introduced
+1. **Add plural keys to English only first** — same rule as any new key (see Phase 1b).
+2. **Non-English locales may omit plural variants** — i18next falls back to the base key or English.
+3. **Languages with complex plural rules** (Polish, Arabic, etc.) require additional suffixes; consult the [i18next pluralization docs](https://www.i18next.com/translation-function/plurals) for the correct suffix set for each target language.
+4. **Fallback applies to each variant independently** — a missing `key_plural` in a non-English locale falls back to English `key_plural`, not to `key`.
+
+### Current State Verification
+```bash
+# Verify no plural keys currently exist (expected: no output)
+grep -E '"[a-zA-Z]+(_plural|_one|_other|_zero|_two|_few|_many)":' locales/en/messages.json
 ```
 
 ---
@@ -579,6 +606,9 @@ Before staging and committing locale changes:
 - [ ] **No Restricted Keys Present**: Verified no keys marked `"description": "Don't translate!!!"` have propagated
 - [ ] **No Trailing Spaces**: `grep '" $' locales/XX/messages.json` should be empty
 - [ ] **Escape Sequences Correct**: Backslashes are `\\`, quotes are `\"` (not for apostrophes)
+- [ ] **4-Space Indentation**: File uses 4-space indentation — match when adding keys
+- [ ] **Key Order Preserved**: Keys follow the same insertion order as `locales/en/messages.json`
+- [ ] **Consider automating**: Add a pre-commit hook or CI step for JSON validity and DSHOT checks
 
 ---
 
