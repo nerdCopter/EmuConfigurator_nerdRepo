@@ -5,6 +5,10 @@ applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 
 # Electron/Forge JavaScript Project Best Practices
 
+> **Scope note:** The `applyTo` pattern `*.{json,yml,md}` intentionally covers root-level config files only
+> (`package.json`, `forge.config.js`, `*.yml`, root `README.md`). It does not match `locales/**/*.json`
+> or other deeply nested files; those are governed by `LOCALE-MAINTENANCE.instructions.md`.
+
 ## 1. **General Principles**
 - Use **semver** for all API and protocol versioning; always check `CONFIG.apiVersion` for feature gating.
 - Prefer **feature detection** (e.g., `commCapabilities` flags) over static board or hardware lists.
@@ -29,7 +33,7 @@ applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 - Define all `ipcMain.handle()` handlers in `main.js` grouped by feature (file dialogs, file I/O, system calls).
 - Use async/await in IPC handlers; always handle errors and don't suppress them.
 - For binary file operations, use `Buffer.from()` and `Uint8Array` conversions to avoid data corruption.
-- Document IPC channel names in comments; prefix with feature name (e.g., `dialog:*`, `file-*`).
+- Document IPC channel names in comments; prefix with feature name (e.g., `dialog:*`, `file:*`).
 - In preload scripts, wrap IPC calls with error handling; provide clear fallback behavior if IPC fails.
 - Never exclude `src/support` or preload scripts from the build; they are essential for security, polyfills, and IPC. Always verify `dist/support/preload.js` exists after build.
 
@@ -81,7 +85,8 @@ applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 ## 8. **UI/UX**
 - Use CSS classes for all styling; never use inline styles.
 - Prefer CSS variables for theme/color management.
-- Keep dialogs and modals compact and accessible (max-height, padding, ARIA attributes).
+- Keep dialogs and modals compact: use `max-height`, `overflow-y: auto`, and consistent padding.
+- Use ARIA attributes (`role`, `aria-label`, `aria-describedby`) for accessibility.
 - Use i18n for all user-facing strings; never hardcode UI text.
 - **Flex label+icon containers:** For column-header rows that contain a text label and a tooltip helpicon in a flex container, use `flex-flow: row nowrap` (not `row wrap`) and add `flex-shrink: 0` on the icon element. Without these, the icon wraps to a new line when the window is narrow.
 
@@ -106,9 +111,9 @@ applyTo: 'src/**/*.{js,html,css}, *.{json,yml,md}, .github/**/*.md'
 - Document which Chrome APIs are shimmed and why (e.g., "Betaflight uses chrome.fileSystem for firmware flashing, which Electron doesn't provide natively").
 
 ### ESLint Configuration
-- The `no-unused-vars` rule should use a custom pattern to ignore browser-script globals (add all global config objects to eslintrc's `globals` section as `readonly`).
+- Declare browser-script globals in the `globals` section of `.eslintrc.json` as `readonly` so ESLint knows those identifiers are defined externally (this is separate from `no-unused-vars` pattern matching).
+- Use `varsIgnorePattern` in the `no-unused-vars` rule to suppress warnings for CONSTANT_CASE or special variables (e.g., `isDev`, `checked`).
 - Use `argsIgnorePattern: "^_"` to allow underscore-prefixed unused parameters in API-contract functions (e.g., jQuery callbacks).
-- Use `varsIgnorePattern` to ignore CONSTANT_CASE and special variables (e.g., `isDev`, `checked`).
 - Never suppress ESLint warnings with inline comments unless the warning is a false positive; instead, fix the code or update the configuration.
 
 ### File Operations & Binary Data

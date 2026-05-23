@@ -1,5 +1,5 @@
 ---
-name: EmuFlight/BetaFlight/iNav Translation Terminology Guide
+name: EmuFlight/Betaflight/iNav Translation Terminology Guide
 description: Reference for terms that should remain in English across all non-English locales
 applyTo: "locales/**/*.json"
 ---
@@ -22,9 +22,9 @@ When translating EmuFlight messages and UI labels, certain technical terms and a
 4. **No-Translate Keys**: Any key with `"description": "Don't translate!!!"` must be removed from target files.
 5. **Authentic Action UI**: Core UI action labels (Connect, Save, Reboot, Disconnect) and primary settings (Expert Mode, Language Selection) **must** be localized authentically in the target language to ensure the functional interface is user-friendly, even if the English label is short.
 
-## Research Validation (Updated April 12, 2026)
+## Research Validation (Updated 2026-04-12)
 
-The following terms have been cross-referenced and standardized across official BetaFlight, EmuFlight, and iNav documentation:
+The following terms have been cross-referenced and standardized across official Betaflight, EmuFlight, and iNav documentation:
 
 **Critical Standardization Decision:** DSHOT
 - **All caps form: `DSHOT`** (official de facto standard per blck.mn spec, INAV docs, Betaflight wiki)
@@ -115,10 +115,9 @@ The following terms have been cross-referenced and standardized across official 
 ## Category 5: Firmware & Configuration Terms
 
 **Always in English:**
-- `BetaFlight` / `Betaflight`
-- `EmuFlight` / `Emuflight`
+- `Betaflight`
+- `EmuFlight`
 - `iNav` / `Inav`
-- `ArduPilot`
 - `Cleanflight` (historical reference)
 - `Target` (hardware target/board)
 - `Firmware`
@@ -141,7 +140,8 @@ The following terms have been cross-referenced and standardized across official 
 - `Rate` / `Rates`
 - `RC` (Radio Control)
 - `TX` / `RX` (Transmitter/Receiver)
-- `Crossfire` / `Tracer` (protocol names)
+- `Crossfire` (TBS Crossfire — long-range RC link protocol)
+- `Tracer` (TBS Tracer — long-range RC link protocol, distinct from Crossfire)
 - `S-BUS` / `S.BUS`
 - `CRSF`
 - `PPM`
@@ -163,7 +163,7 @@ The following terms have been cross-referenced and standardized across official 
 - `Value`
 - `Default` _(keep English in technical documentation; **translate** as UI action button labels — see Preservation Strategy §5)_
 
-## Category 7: Functional Features
+## Category 7: RC/Filter/Loop Terms
 
 **Always in English:**
 - `RC Smoothing`
@@ -184,9 +184,9 @@ The following terms have been cross-referenced and standardized across official 
    - ✓ `"RP (仅增量)"` — Good
    - ✗ `"汇总RP"` — Confusing; keep RP as-is
 3. **Context Translation:** Translate verbs, prepositions, and descriptive text around the English terms
-4. **Consistency:** Always use the same English term the same way across all messages (e.g., always "D-Term", not "DTerms")
-5. **Vendor Names:** Keep vendor/brand/protocol names exactly as specified in official documentation (e.g., `BetaFlight`, not `Betaflight`)
-6. **UI Field Disambiguation (NEW - 2026-04-13):** When translating related UI fields that could be confused, use context-specific clarification:
+4. **Consistency:** Always use the same English term the same way across all messages (e.g., always "D-Term", not "D Term" or "d-term")
+5. **Vendor Names:** Keep vendor/brand/protocol names exactly as specified in official documentation (e.g., `Betaflight`, not `BetaFlight` or `betaflight`)
+6. **UI Field Disambiguation:** When translating related UI fields that could be confused, use context-specific clarification:
    - Add units or type indicators: `"Freqüència VTX (MHz)"` vs `"Canal"` (clearly distinguishes frequency from channel number)
    - Use distinct terminology even for similar concepts: `"Impostacions"` (Setup) vs `"Configuració"` (Configuration)
    - Include parenthetical context when needed: `"nom (tipus)"` pattern disambiguates related fields
@@ -207,7 +207,7 @@ The following terms have been cross-referenced and standardized across official 
 ```json
 {
     "osdSetupUnsupportedNote2": {
-        "message": "Tingueu en compte que alguns controladors de vol ja venen amb <a href=\"...\">MinimOSD</a> integrat que es pot activar i configurar amb <a href=\"...\">scarab-osd</a>..."
+        "message": "Tingueu en compte que alguns controladors de vol ja venen amb <a href=\"https://example.com\">MinimOSD</a> integrat que es pot activar i configurar amb <a href=\"https://example.com\">scarab-osd</a>..."
     }
 }
 ```
@@ -223,9 +223,9 @@ The following terms have been cross-referenced and standardized across official 
 
 ## Firmware Documentation Context
 
-- **BetaFlight**: Primary flight control firmware; uses consistent terminology across all documentation
-- **EmuFlight**: Fork of BetaFlight with extended features; maintains compatibility with BetaFlight terminology
-- **iNav**: Navigation-focused firmware; shares much PID/control terminology with BetaFlight
+- **Betaflight**: Primary flight control firmware; uses consistent terminology across all documentation
+- **EmuFlight**: Fork of Betaflight with extended features; maintains compatibility with Betaflight terminology
+- **iNav**: Navigation-focused firmware; shares much PID/control terminology with Betaflight
 
 All three projects expect users to understand these English technical terms, making preservation critical for cross-project compatibility and user familiarity.
 
@@ -233,13 +233,13 @@ All three projects expect users to understand these English technical terms, mak
 
 **Rule:** Always use `DSHOT` (all caps, no hyphens)
 - **Rationale:** Aligns with de facto spec standard, improves i18n consistency, prevents translator re-capitalization errors
-- **Exceptions:** None — this is UNI-VERSAL across all locales
+- **Exceptions:** None — this is UNIVERSAL across all locales
 - **Encoding:** Replace any variation (`dshot`, `DShot`, `d-shot`, etc.) with `DSHOT` in any locale
 
 ## Future Validation
 
 When adding new translations:
-1. Cross-reference BetaFlight Wiki: https://github.com/betaflight/betaflight/wiki
+1. Cross-reference Betaflight Wiki: https://github.com/betaflight/betaflight/wiki
 2. Check EmuFlight Documentation: https://github.com/EmuFlight/EmuFlight/wiki
 3. Review iNav Docs: https://github.com/iNavFlight/inav/wiki
 4. Verify terms against official ESC/hardware documentation

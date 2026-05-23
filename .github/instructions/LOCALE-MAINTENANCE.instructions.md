@@ -24,7 +24,7 @@ Before beginning any translation work:
 - **Structural Metadata Awareness**: Always identify the context of a string before script-based cleanup. Messages aren't just text; they are combined with HTML, CSS classes, and variables.
 - **Zero-Breakage Mandate**: Never remove, modify, or strip functional metadata (HTML tags, CSS classes, `$1` variables, `{{variableName}}` handlebars) unless the English source itself has changed.
 - **KEY PROTECTION (CRITICAL):** NEVER translate, modify, or customize key names. Keys must be **identical** in all locales. If you change a key name, the app BREAKS.
-- **Acronym/Industry Standard Protection**: Single-word technical acronyms (PID, OSD, VTX) must remain in English to maintain documentation consistency across flight control platforms (BetaFlight/EmuFlight/iNav).
+- **Acronym/Industry Standard Protection**: Single-word technical acronyms (PID, OSD, VTX) must remain in English to maintain documentation consistency across flight control platforms (Betaflight/EmuFlight/iNav).
 - **Inheritance vs. Accuracy**: While short terms should inherit when identical to English, core UI labels (Connect, Save, Reboot) and status messages (Port Opened, Arming Enabled) **MUST** be authentically translated when they appear as UI action button labels; when they appear in technical documentation or comments, keep them in English (see [TRANSLATION-TERMINOLOGY.instructions.md](TRANSLATION-TERMINOLOGY.instructions.md) Preservation Strategy §5).
 
 #### Validation Commands:
@@ -49,7 +49,7 @@ grep -n '" $' locales/en/messages.json
 # Unescaped backslashes (should be \\, not \)
 grep -n '[^\\]\\[^"]' locales/en/messages.json
 
-# Missing HTML closing tags
+# Count HTML tags (verify balance manually)
 grep -o '<[a-z]*[^>]*>' locales/en/messages.json | sort | uniq -c
 ```
 
@@ -149,7 +149,7 @@ else:
 EOF
 ```
 
-### 2.1 Preserve Key Names Exactly
+### 2.1 Preserve Non-Translatable Value Elements
 
 **DO NOT translate or modify:**
 
@@ -159,7 +159,7 @@ EOF
 - Sensors: `gyro`, `accel`, `baro`, `mag`, `GPS`, `IMU`, `OSD`
 - Protocols: `DSHOT`, `Multishot`, `Oneshot`, `ProShot1000`, `CRSF`, `UART`, `SPI`, `I2C`
 - Features: `Feathered PIDs`, `Direct Yaw Feed Forward`, `RC Smoothing`, `Anti Gravity`
-- Firmware names: `BetaFlight`, `EmuFlight`, `iNav`
+- Firmware names: `Betaflight`, `EmuFlight`, `iNav`
 
 Example:
 ```json
@@ -390,7 +390,7 @@ Don't translate explanatory text if it references code or configuration:
 
 ---
 
-## Phase 3: Translation Rules - What NOT TO DO
+## Phase 3: Prohibited Modifications
 
 ### 3.1 Dangerous Modifications
 
@@ -424,10 +424,9 @@ Don't translate explanatory text if it references code or configuration:
 
 #### B. HTML Tag Misalignment
 ```json
-// WRONG - tag closed on wrong word
-"message": "Status <strong>OK</strong> sistema"
+// WRONG - tag wraps wrong word
+"message": "Status OK <strong>sistema</strong>"
 // Should be: "Status <strong>OK</strong> sistema"
-// NOT: "Status OK <strong>sistema</strong>"
 ```
 
 #### C. Interpolation Variable Loss
@@ -450,7 +449,7 @@ Don't translate explanatory text if it references code or configuration:
 "key2": { "message": "Giroscopio (Gyro)" }  // Same term everywhere
 ```
 
-#### E. UI Field Disambiguation (NEW — 2026-04-13)
+#### E. UI Field Disambiguation
 When translating related but distinct UI fields, ensure each has a **unique, context-specific label** that communicates its distinct purpose:
 
 ```json
@@ -509,7 +508,7 @@ For each key requiring translation:
 5. **Preserve:** `"description"` fields unchanged (translator notes)
 6. **Validate:** Check for JSON syntax errors after each group
 
-### Step 4: Consistency Audit (NEW — 2026-04-12)
+### Step 4: Consistency Audit
 Before full validation, perform targeted consistency checks:
 
 ```bash
@@ -522,7 +521,7 @@ grep -i failsafe locales/${TARGET_LOCALE}/messages.json | head -5
 # Review: should use same term across all failsafe keys
 
 # 3. Formality (Germanic languages)
-grep -E '(Sie|du) ' locales/${TARGET_LOCALE}/messages.json | cut -d: -f1 | sort -u
+grep -E '\b(Sie|du)\b' locales/${TARGET_LOCALE}/messages.json | cut -d: -f1 | sort -u
 # Review: should see only Sie OR du, not both
 
 # 4. Apostrophes (Romance languages)
@@ -543,7 +542,7 @@ python3 -c "import json; en=len(json.load(open('locales/en/messages.json'))); tg
 tail -c 1 locales/${TARGET_LOCALE}/messages.json | wc -l  # Should be: 1
 ```
 
-### Step 5: Verify No Broken References
+### Step 6: Verify No Broken References
 ```bash
 # Check for orphaned $t(...) references
 grep -o '\$t([^)]*\.message)' locales/${TARGET_LOCALE}/messages.json | sort -u > /tmp/refs.txt
@@ -560,7 +559,7 @@ comm -23 /tmp/ref_keys.txt /tmp/keys.txt  # Should be empty
 
 Before staging and committing locale changes:
 
-**Critical Checks (New 2026-04-12):**
+**Critical Checks:**
 - [ ] **DSHOT Always All-Caps** ✓: `grep -i dshot` should output only `DSHOT`, never `DShot`, `dshot`, `d-shot`
 - [ ] **Terminology Consistency** ✓: Related keys use same terms (e.g., all failsafe keys use consistent terminology)
 - [ ] **Formality Consistency** ✓: Germanic languages (DE, SV, etc.) use consistent formal/informal address
@@ -598,13 +597,13 @@ git commit -m "translate(i18n): add Spanish (es) locale translations
 ### Verification Before Push
 ```bash
 # Show diff
-git diff locales/es/messages.json | head -100
+git diff locales/${TARGET_LOCALE}/messages.json | head -100
 
 # Verify only message values changed, not keys
-git diff locales/es/messages.json | grep '^-    "[a-z]' | wc -l  # Should be 0
+git diff locales/${TARGET_LOCALE}/messages.json | grep '^-    "[a-z]' | wc -l  # Should be 0
 
 # Check statistics
-git diff --stat locales/es/messages.json
+git diff --stat locales/${TARGET_LOCALE}/messages.json
 ```
 
 ---
@@ -624,8 +623,8 @@ git diff --stat locales/es/messages.json
 
 ### Code Search Validation
 ```bash
-# Confirm no new missing-key errors
-grep -i "missingKey\|missing-key" console.log  # Should be empty for new locale
+# Confirm no missing-key errors: open Developer Tools console (Ctrl+Shift+I) and filter for "missingKey"
+# (runtime check — not a shell command; should be empty for a complete translation)
 
 # Verify all $t() references exist as keys
 grep -o '\$t([^)]*\.message)' locales/XX/messages.json | \
@@ -681,19 +680,19 @@ grep -o '\$t([^)]*\.message)' locales/XX/messages.json | \
 
 ## Quick Reference
 
-| Element | Preserve? | Example |
-|---------|-----------|---------|
-| `$t(...)`  | ✓ YES | `"$t(pidRate.message)"` → keep as-is |
-| `$1`, `$2` | ✓ YES | `"Speed: $1"` → translate around, keep `$1` |
-| HTML tags | ✓ YES | `<span>`, `<strong>`, `<a>` → all untouched |
-| Technical terms | ✓ YES | `PID`, `DSHOT`, `Gyro` → preserve per TERMINOLOGY guide |
-| Escaped chars | ✓ YES | `\"`, `\\`, `\n` → keep escape sequences |
-| Key names | ✓ YES | `"pidRate":` → don't change |
-| Descriptions | ✓ YES | `"description":` field → don't translate |
-| Message values | ✗ NO | `"message":` → **TRANSLATE THIS** |
+| Element | Translate? | Example |
+|---------|-----------|------|
+| `$t(...)`  | ✗ NO | `"$t(pidRate.message)"` → keep as-is |
+| `$1`, `$2` | ✗ NO | `"Speed: $1"` → translate around, keep `$1` |
+| HTML tags | ✗ NO | `<span>`, `<strong>`, `<a>` → all untouched |
+| Technical terms | ✗ NO | `PID`, `DSHOT`, `Gyro` → preserve per TERMINOLOGY guide |
+| Escaped chars | ✗ NO | `\"`, `\\`, `\n` → keep escape sequences |
+| Key names | ✗ NO | `"pidRate":` → don't change |
+| Descriptions | ✗ NO | `"description":` field → don't translate |
+| Message values | ✓ YES | `"message":` → **TRANSLATE THIS** |
 | Forward slashes | ✗ NO | `https://...` → no escaping needed |
-| Apostrophes (contractions) | ✓ YES | `'` not `\"` (e.g., `nell'intervallo`) |
-| Compounds (Germanic) | ✓ YES | Joined not split (e.g., `Gasänderungen`) |
+| Apostrophes (contractions) | ✗ NO | `'` not `\"` (e.g., `nell'intervallo`) |
+| Compounds (Germanic) | ✗ NO | Joined not split (e.g., `Gasänderungen`) |
 
 ---
 
