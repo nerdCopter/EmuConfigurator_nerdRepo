@@ -82,6 +82,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                 self.initialize();
             } else {
                 GUI.log(i18n.getMessage('serialPortOpenFail'));
+                if (self.callback) self.callback();
             }
         });
     } else {
@@ -124,6 +125,7 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                                             } else {
                                                 GUI.connect_lock = false;
                                                 GUI.log(i18n.getMessage('serialPortOpenFail'));
+                                                if (self.callback) self.callback();
                                             }
                                         });
                                     }
@@ -133,12 +135,15 @@ STM32_protocol.prototype.connect = function (port, baud, hex, options, callback)
                             // Initial 500ms delay for the board to begin re-enumeration
                             setTimeout(pollForDFU, 500);
                         } else {
+                            console.log('STM32 - serial.disconnect failed after reboot command');
                             GUI.connect_lock = false;
+                            if (self.callback) self.callback();
                         }
                     });
                 });
             } else {
                 GUI.log(i18n.getMessage('serialPortOpenFail'));
+                if (self.callback) self.callback();
             }
         });
     }
