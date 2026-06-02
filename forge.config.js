@@ -59,7 +59,13 @@ module.exports = {
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
     },
   },
-  rebuildConfig: {},
+  rebuildConfig: {
+    // exe-icon-extractor is a Windows-only native module pulled in by maker-wix.
+    // Rebuilding it on Linux/macOS fails node-gyp; skip it on non-Windows.
+    ...(process.platform !== 'win32' ? {
+      ignoreModules: ['@bitdisaster/exe-icon-extractor'],
+    } : {}),
+  },
   makers: [
     {
       name: '@electron-forge/maker-wix',
