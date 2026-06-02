@@ -32,7 +32,7 @@ jobs:
         include:
           - os: ubuntu-24.04
             artifact-suffix: linux-x64
-          - os: macos-15
+          - os: macos-26
             artifact-suffix: macos-arm64
           - os: macos-26-intel
             artifact-suffix: macos-x86_64
