@@ -20,6 +20,7 @@ jobs:
     # Node.js 24.x "Krypton" - Active LTS (confirmed 2026-03-30)
     # https://nodejs.org/en/about/previous-releases
     # actions/checkout@v6, actions/setup-node@v6 (confirmed 2026-03-30)
+    # Runner versions pinned 2026-06-02; update intentionally when upgrading.
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
       COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
@@ -29,16 +30,16 @@ jobs:
         # Pure include-only matrix: each entry is an explicit standalone job.
         # Avoids GitHub Actions ambiguity when two includes share the same os value.
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             artifact-suffix: linux-x64
-          - os: macos-latest
+          - os: macos-15-arm64
             artifact-suffix: macos-arm64
           - os: macos-26-intel
             artifact-suffix: macos-x86_64
-          - os: windows-latest
+          - os: windows-2025
             artifact-suffix: windows-x64
             arch: x64
-          - os: windows-latest
+          - os: windows-2025
             artifact-suffix: windows-ia32
             arch: ia32
     outputs:
