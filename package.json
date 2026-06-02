@@ -5,6 +5,7 @@
   "version": "0.4.3",
   "max_msp": "1.54.0",
   "COMMENT": "MAX_MSP required!!!!",
+  "packageManager": "yarn@1.22.22",
   "engines": {
     "node": ">=24.0.0",
     "yarn": "1.22.x"
@@ -70,19 +71,19 @@
     "usb": "^2.17.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.11.1",
-    "@electron-forge/maker-deb": "^7.11.1",
-    "@electron-forge/maker-dmg": "^7.11.1",
-    "@electron-forge/maker-rpm": "^7.11.1",
-    "@electron-forge/maker-wix": "^7.11.1",
-    "@electron-forge/maker-zip": "^7.11.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.11.1",
-    "@electron-forge/plugin-fuses": "^7.11.1",
+    "@electron-forge/cli": "7.11.2",
+    "@electron-forge/maker-deb": "7.11.2",
+    "@electron-forge/maker-dmg": "7.11.2",
+    "@electron-forge/maker-rpm": "7.11.2",
+    "@electron-forge/maker-wix": "7.11.2",
+    "@electron-forge/maker-zip": "7.11.2",
+    "@electron-forge/plugin-auto-unpack-natives": "7.11.2",
+    "@electron-forge/plugin-fuses": "7.11.2",
     "@electron/fuses": "^1.0.0",
     "command-exists": "^1.2.9",
     "cross-env": "^7.0.3",
     "del": "^8.0.1",
-    "electron": "41.1.0",
+    "electron": "42.3.2",
     "eslint": "^8.57.0",
     "follow-redirects": "^1.16.0",
     "fs-extra": "^9.1.0",
@@ -95,5 +96,8 @@
   },
   "optionalDependencies": {
     "appdmg": "^0.6.6"
+  },
+  "resolutions": {
+    "yauzl": "3.3.2"
   }
 }
