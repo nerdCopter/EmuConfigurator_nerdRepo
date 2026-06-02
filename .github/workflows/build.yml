@@ -96,7 +96,6 @@ jobs:
         env:
           APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
           EMUCFG_ARCH: ${{ matrix.arch || '' }}
-          DEBUG: 'electron-packager'
           # For certificate-based signing, set these as GitHub secrets:
           # APPLE_SIGNING_IDENTITY: "Apple Distribution: [Team Name]"
           # APPLE_TEAM_ID: "XXXXXXXXXX"
@@ -112,8 +111,6 @@ jobs:
           else
             yarn run electron-forge make
           fi
-          echo "[DIAG] out/ contents after make:"
-          find out/ -maxdepth 4 -type f 2>/dev/null | head -20 || echo "  (no files or out/ missing)"
         # Packages built on each platform (architecture-specific for Windows):
         # macOS: .zip (portable, DMG skipped in CI - requires native macos-alias module)
         # Windows: .msi (WiX installer → Program Files, proper Add/Remove, no auto-launch) + .zip (portable)
