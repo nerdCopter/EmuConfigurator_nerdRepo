@@ -96,6 +96,7 @@ jobs:
         env:
           APPLE_SIGNING_ENTITLEMENTS: ./sign/entitlements.plist
           EMUCFG_ARCH: ${{ matrix.arch || '' }}
+          DEBUG: 'electron-packager'
           # For certificate-based signing, set these as GitHub secrets:
           # APPLE_SIGNING_IDENTITY: "Apple Distribution: [Team Name]"
           # APPLE_TEAM_ID: "XXXXXXXXXX"
