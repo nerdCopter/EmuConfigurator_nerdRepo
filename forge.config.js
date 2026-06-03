@@ -60,11 +60,18 @@ module.exports = {
     },
   },
   rebuildConfig: {
+    // On Linux, @electron/rebuild looks for `node.napi.node` prebuilts but usb@2.x
+    // ships `node.napi.glibc.node` (prebuildify libc-variant naming). The mismatch
+    // causes a source rebuild that references __pthread_cond_timedwait64, an internal
+    // glibc symbol not exported on Debian glibc 2.34+. Skip the rebuild so node-gyp-build
+    // falls through to the clean prebuilt at runtime. usb is NAPI so no ABI concern.
+    //
     // exe-icon-extractor is a Windows-only native module pulled in by maker-wix.
     // Rebuilding it on Linux/macOS fails node-gyp; skip it on non-Windows.
-    ...(process.platform !== 'win32' ? {
-      ignoreModules: ['@bitdisaster/exe-icon-extractor'],
-    } : {}),
+    ignoreModules: [
+      ...(process.platform !== 'win32' ? ['@bitdisaster/exe-icon-extractor'] : []),
+      ...(process.platform === 'linux' ? ['usb'] : []),
+    ],
   },
   makers: [
     {
