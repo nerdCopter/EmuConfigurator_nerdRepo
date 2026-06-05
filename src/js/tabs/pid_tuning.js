@@ -2384,7 +2384,8 @@ TABS.pid_tuning.initialize = function(callback) {
         function loadFilterTypeValues() {
             var filterTypeValues = [];
             filterTypeValues.push("PT1");
-            filterTypeValues.push("BIQUAD");
+            // fw >= 0.5.0: index 1 CLI string renamed BIQUAD -> SVF (SVF backport, EF PR #1245)
+            filterTypeValues.push(semver.gte(CONFIG.flightControllerVersion, "0.5.0") ? "SVF" : "BIQUAD");
             if (semver.lte(CONFIG.apiVersion, "1.41.0")) {
                 filterTypeValues.push("KALMAN");
             }
