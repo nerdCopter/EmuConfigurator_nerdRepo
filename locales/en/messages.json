@@ -2522,6 +2522,9 @@
     "firmwareFlasherOptionLabelBuildTypeReleaseCandidate": {
         "message": "Release And Release Candidate"
     },
+    "firmwareFlasherOptionLabelBuildTypePreReleaseMaster": {
+        "message": "Pre-Release Master"
+    },
     "firmwareFlasherOptionLabelSelectFirmware": {
         "message": "Choose a Firmware / Board"
     },

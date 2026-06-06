@@ -3,6 +3,7 @@
 TABS.firmware_flasher = {
     releases: null,
     releaseChecker: new ReleaseChecker('firmware', 'https://api.github.com/repos/emuflight/EmuFlight/releases'),
+    masterChecker: new ReleaseChecker('master', 'https://api.github.com/repos/emuflight/dev-master/releases'),
     localFileLoaded: false,
 };
 
@@ -130,7 +131,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             });
         }
 
-        function buildBoardOptions(releaseData, showDevReleases) {
+        function buildBoardOptions(releaseData, showDevReleases, skipVersionFilter) {
             if (!releaseData) {
                 $('select[name="board"]').empty().append('<option value="0">Offline</option>');
                 $('select[name="firmware_version"]').empty().append('<option value="0">Offline</option>');
@@ -149,7 +150,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         if ((!showDevReleases && release.prerelease) || !match) {
                             return;
                         }
-                        var target = match[2];
+                        var target = match[2].replace(/_Build_\d+_\w+$/i, '');
                         if($.inArray(target, unsortedTargets) == -1) {
                             unsortedTargets.push(target);
                         }
@@ -173,7 +174,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                             return;
                         }
 
-                        var target = match[2];
+                        var target = match[2].replace(/_Build_\d+_\w+$/i, '');
                         var format = match[4];
 
                         if (format != 'hex') {
@@ -183,10 +184,11 @@ TABS.firmware_flasher.initialize = function (callback) {
                         var date = new Date(release.published_at);
                         var formattedDate = ("0" + date.getDate()).slice(-2) + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 
+                        var displayVersion = (skipVersionFilter && match[1]) ? match[1] : version;
                         var descriptor = {
                             "releaseUrl": release.html_url,
-                            "name"      : version,
-                            "version"   : version,
+                            "name"      : displayVersion,
+                            "version"   : displayVersion,
                             "url"       : asset.browser_download_url,
                             "file"      : asset.name,
                             "target"    : target,
@@ -195,7 +197,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                         };
 
                         // DO NOT LIST FIRMWARE >= 1.0.0
-                        if (version > '0.9.9') {
+                        if (!skipVersionFilter && version > '0.9.9') {
                             console.log("Firmware release is > 0.9.9: [" + version + "]. Do not list it.");
                             return; //exit loop
                         }
@@ -239,6 +241,10 @@ TABS.firmware_flasher.initialize = function (callback) {
             {
                 tag: 'firmwareFlasherOptionLabelBuildTypeReleaseCandidate',
                 loader: () => self.releaseChecker.loadReleaseData(releaseData => buildBoardOptions(releaseData, true))
+            },
+            {
+                tag: 'firmwareFlasherOptionLabelBuildTypePreReleaseMaster',
+                loader: () => self.masterChecker.loadReleaseData(releaseData => buildBoardOptions(releaseData, true, true))
             }
         ];
 
@@ -263,6 +269,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             } else {
                 $('tr.build_type').hide();
                 $('tr.expert_mode').hide();
+                buildType_e.val(0).trigger('change');
             }
         }
 
@@ -589,9 +596,11 @@ TABS.firmware_flasher.initialize = function (callback) {
             });
         });
 
-        chrome.storage.local.get('selected_build_type', function (result) {
-            // ensure default build type is selected
-            buildType_e.val(result.selected_build_type || 0).trigger('change');
+        chrome.storage.local.get(['selected_build_type', 'show_development_releases'], function (result) {
+            // ensure default build type is selected, but only restore non-zero index when unstable releases are enabled
+            var showUnstable = !!result.show_development_releases;
+            var selectedBuildType = showUnstable ? (result.selected_build_type || 0) : 0;
+            buildType_e.val(selectedBuildType).trigger('change');
         });
 
         chrome.storage.local.get('no_reboot_sequence', function (result) {
