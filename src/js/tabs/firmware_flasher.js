@@ -596,9 +596,11 @@ TABS.firmware_flasher.initialize = function (callback) {
             });
         });
 
-        chrome.storage.local.get('selected_build_type', function (result) {
-            // ensure default build type is selected
-            buildType_e.val(result.selected_build_type || 0).trigger('change');
+        chrome.storage.local.get(['selected_build_type', 'show_development_releases'], function (result) {
+            // ensure default build type is selected, but only restore non-zero index when unstable releases are enabled
+            var showUnstable = !!result.show_development_releases;
+            var selectedBuildType = showUnstable ? (result.selected_build_type || 0) : 0;
+            buildType_e.val(selectedBuildType).trigger('change');
         });
 
         chrome.storage.local.get('no_reboot_sequence', function (result) {
