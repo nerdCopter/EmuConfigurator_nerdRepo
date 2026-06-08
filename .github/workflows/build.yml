@@ -1,12 +1,7 @@
 on:
   push:
     tags:
-      - 'v*'
-      - 'test-*'
-    branches:
-      - main
-      - master
-      - develop
+      - '*'
   pull_request:
     branches:
       - '*'
