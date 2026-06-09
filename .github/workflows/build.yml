@@ -320,6 +320,18 @@ jobs:
             echo "[OK] Renamed $filename -> $(basename "$dest")"
           done
 
+      - name: Rename Windows x64 zip (win32 -> win64)
+        if: startsWith(matrix.os, 'windows') && matrix.arch == 'x64'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for src in out/make/zip/EmuConfigurator-win32-x64-*.zip; do
+            [ -f "$src" ] || continue
+            dest="${src/win32/win64}"
+            mv -f "$src" "$dest"
+            echo "[OK] Renamed $(basename "$src") -> $(basename "$dest")"
+          done
+
       - name: Validate Artifacts Exist
         shell: bash
         run: |
