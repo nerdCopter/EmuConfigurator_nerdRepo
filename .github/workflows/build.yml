@@ -409,32 +409,17 @@ jobs:
           find ./Artifacts -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
           echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
 
-      - name: Extract and Flatten Artifacts
+      - name: Flatten Artifacts
         run: |
-          echo "### Contents BEFORE Extraction ###"
+          echo "### Flattening Artifacts ###"
+          # Find all desired files in subdirectories and move them to the root Artifacts directory
+          find ./Artifacts -mindepth 2 -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv -v {} ./Artifacts/ \;
+          
+          # Clean up empty subdirectories
+          find ./Artifacts -mindepth 1 -type d -empty -delete
+          
+          echo "### Contents of Artifacts after Flattening ###"
           ls -R ./Artifacts
-          
-          mkdir -p ./Artifacts/unzipped
-          
-          # Extract root zip containers
-          find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
-          
-          echo "### Contents AFTER Extraction ###"
-          ls -R ./Artifacts
-          
-          # Remove the root container zips so they aren't part of the final release
-          echo "### Removing Root Container Zips ###"
-          find ./Artifacts -maxdepth 1 -name "*.zip" -exec rm -v {} \;
-          
-          # Flatten contents (installers and portable zips) back to the main Artifacts directory
-          echo "### Flattening Contents ###"
-          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv -v {} ./Artifacts/ \;
-          
-          echo "### Contents AFTER Flattening ###"
-          ls -R ./Artifacts
-          
-          # Cleanup
-          rm -rf ./Artifacts/unzipped
 
       # Draft Dev-Unstable releases via ncipollo/release-action
       - name: Draft Release Dev-Unstable repo
