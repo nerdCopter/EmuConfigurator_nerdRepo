@@ -331,7 +331,7 @@ jobs:
 
       # Upload Linux .deb
       - name: Upload Artifact (linux .deb)
-        if: matrix.os == 'ubuntu-24.04'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-deb
@@ -340,7 +340,7 @@ jobs:
 
       # Upload Linux .rpm
       - name: Upload Artifact (linux .rpm)
-        if: matrix.os == 'ubuntu-24.04'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-rpm
@@ -349,7 +349,7 @@ jobs:
 
       # Upload Linux .zip
       - name: Upload Artifact (linux .zip)
-        if: matrix.os == 'ubuntu-24.04'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-zip
@@ -376,7 +376,7 @@ jobs:
 
       # Upload Windows .msi (WiX installer)
       - name: Upload Artifact (windows .msi)
-        if: matrix.os == 'windows-2025'
+        if: startsWith(matrix.os, 'windows')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-msi-${{ matrix.arch }}
@@ -385,7 +385,7 @@ jobs:
 
       # Upload Windows .zip (portable)
       - name: Upload Artifact (windows .zip)
-        if: matrix.os == 'windows-2025'
+        if: startsWith(matrix.os, 'windows')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-zip-${{ matrix.arch }}
