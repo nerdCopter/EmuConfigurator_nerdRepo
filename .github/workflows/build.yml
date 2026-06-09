@@ -392,8 +392,41 @@ jobs:
           path: out/make/zip/*.zip
           retention-days: 20
 
-  release:
+  extract-artifacts:
     needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./Artifacts
+
+      - name: Extract Zipped Artifacts
+        run: |
+          echo "### Contents BEFORE Extraction ###"
+          ls -R ./Artifacts
+          
+          # Create a directory to hold extracted contents
+          mkdir -p ./Artifacts/extracted
+          
+          # Extract all zips found in Artifacts
+          find ./Artifacts -type f -name "*.zip" -exec unzip -o {} -d ./Artifacts/extracted/ \;
+          
+          # Move installers to the main Artifacts dir (they should have been there, but this ensures it)
+          find ./Artifacts/extracted -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" \) -exec mv -v {} ./Artifacts/ \;
+          
+          echo "### Contents AFTER Extraction ###"
+          ls -R ./Artifacts
+
+      - name: Upload Extracted Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmuConfigurator-Extracted
+          path: ./Artifacts/
+          retention-days: 20
+
+  release:
+    needs: extract-artifacts
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
