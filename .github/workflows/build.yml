@@ -412,9 +412,9 @@ jobs:
       - name: Unzip Artifacts
         run: |
           echo "### Unzipping Artifacts ###"
-          find ./Artifacts -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
-          # Flatten the unzipped files to the main Artifacts directory
-          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" \) -exec mv {} ./Artifacts/ \;
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
+          # Flatten the unzipped files (including any nested zips) to the main Artifacts directory
+          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv {} ./Artifacts/ \;
 
       # Draft Dev-Unstable releases via ncipollo/release-action
       - name: Draft Release Dev-Unstable repo
