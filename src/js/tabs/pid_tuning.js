@@ -1687,13 +1687,9 @@ TABS.pid_tuning.initialize = function(callback) {
         }
 
         function loadRateProfilesList() {
-            var numberOfRateProfiles;
+            var numberOfRateProfiles = 6;
             if (semver.lt(CONFIG.apiVersion, "1.37.0")) {
                 numberOfRateProfiles = 3;
-            } else if (semver.gte(CONFIG.apiVersion, "1.55.0")) {
-                numberOfRateProfiles = CONFIG.numRateProfiles;
-            } else {
-                numberOfRateProfiles = 6;
             }
 
             var rateProfileElements = [];
