@@ -411,17 +411,27 @@ jobs:
 
       - name: Extract and Flatten Artifacts
         run: |
-          echo "### Extracting and Flattening Artifacts ###"
+          echo "### Contents BEFORE Extraction ###"
+          ls -R ./Artifacts
+          
           mkdir -p ./Artifacts/unzipped
           
           # Extract root zip containers
           find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
           
+          echo "### Contents AFTER Extraction ###"
+          ls -R ./Artifacts
+          
           # Remove the root container zips so they aren't part of the final release
-          find ./Artifacts -maxdepth 1 -name "*.zip" -exec rm {} \;
+          echo "### Removing Root Container Zips ###"
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec rm -v {} \;
           
           # Flatten contents (installers and portable zips) back to the main Artifacts directory
-          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv {} ./Artifacts/ \;
+          echo "### Flattening Contents ###"
+          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv -v {} ./Artifacts/ \;
+          
+          echo "### Contents AFTER Flattening ###"
+          ls -R ./Artifacts
           
           # Cleanup
           rm -rf ./Artifacts/unzipped
