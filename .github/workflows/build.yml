@@ -409,6 +409,13 @@ jobs:
           find ./Artifacts -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
           echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
 
+      - name: Unzip Artifacts
+        run: |
+          echo "### Unzipping Artifacts ###"
+          find ./Artifacts -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
+          # Flatten the unzipped files to the main Artifacts directory
+          find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" \) -exec mv {} ./Artifacts/ \;
+
       # Draft Dev-Unstable releases via ncipollo/release-action
       - name: Draft Release Dev-Unstable repo
         if: contains(github.ref, 'test') || contains(github.ref, 'unstab')
