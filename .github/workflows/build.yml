@@ -421,7 +421,7 @@ jobs:
           draft: true
           prerelease: true
           allowUpdates: true
-          overwrite: true
+          replacesArtifacts: true
           artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
           artifactContentType: raw
           name:  "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
@@ -453,7 +453,7 @@ jobs:
           draft: true
           prerelease: true
           allowUpdates: true
-          overwrite: true
+          replacesArtifacts: true
           artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
           artifactContentType: raw
           name:  "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
@@ -481,7 +481,7 @@ jobs:
           draft: true
           prerelease: true
           allowUpdates: true
-          overwrite: true
+          replacesArtifacts: true
           tag: ${{ github.ref_name }}
           artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
           artifactContentType: raw
