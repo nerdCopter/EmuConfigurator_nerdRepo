@@ -409,12 +409,22 @@ jobs:
           find ./Artifacts -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
           echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
 
-      - name: Unzip Artifacts
+      - name: Extract and Flatten Artifacts
         run: |
-          echo "### Unzipping Artifacts ###"
+          echo "### Extracting and Flattening Artifacts ###"
+          mkdir -p ./Artifacts/unzipped
+          
+          # Extract root zip containers
           find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
-          # Flatten the unzipped files (including any nested zips) to the main Artifacts directory
+          
+          # Remove the root container zips so they aren't part of the final release
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec rm {} \;
+          
+          # Flatten contents (installers and portable zips) back to the main Artifacts directory
           find ./Artifacts/unzipped -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv {} ./Artifacts/ \;
+          
+          # Cleanup
+          rm -rf ./Artifacts/unzipped
 
       # Draft Dev-Unstable releases via ncipollo/release-action
       - name: Draft Release Dev-Unstable repo
