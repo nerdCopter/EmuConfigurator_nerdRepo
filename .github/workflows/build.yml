@@ -411,9 +411,19 @@ jobs:
 
       - name: Flatten Artifacts
         run: |
+          echo "### Listing Zip Contents ###"
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -l {} \;
+          
           echo "### Flattening Artifacts ###"
-          # Find all desired files in subdirectories and move them to the root Artifacts directory
-          find ./Artifacts -mindepth 2 -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "*.zip" \) -exec mv -v {} ./Artifacts/ \;
+          mkdir -p ./Artifacts/unzipped
+          # Extract root zip containers
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec unzip -o {} -d ./Artifacts/unzipped/ \;
+          
+          # Remove the root container zips so they aren't part of the final release
+          find ./Artifacts -maxdepth 1 -name "*.zip" -exec rm -v {} \;
+          
+          # Flatten contents back to the main Artifacts directory
+          find ./Artifacts/unzipped -type f -exec mv -v {} ./Artifacts/ \;
           
           # Clean up empty subdirectories
           find ./Artifacts -mindepth 1 -type d -empty -delete
