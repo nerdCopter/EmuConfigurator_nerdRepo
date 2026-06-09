@@ -1675,11 +1675,9 @@ TABS.pid_tuning.initialize = function(callback) {
         //end MSP 1.51
 
         function loadProfilesList() {
-            var numberOfProfiles = 3;
-            if (semver.gte(CONFIG.apiVersion, "1.20.0") &&
-                CONFIG.numProfiles === 2) {
-                numberOfProfiles = 2;
-            }
+            var numberOfProfiles = semver.gte(CONFIG.apiVersion, "1.16.0")
+                ? CONFIG.numProfiles
+                : 3;
 
             var profileElements = [];
             for (var i = 0; i < numberOfProfiles; i++) {
@@ -1689,9 +1687,13 @@ TABS.pid_tuning.initialize = function(callback) {
         }
 
         function loadRateProfilesList() {
-            var numberOfRateProfiles = 6;
+            var numberOfRateProfiles;
             if (semver.lt(CONFIG.apiVersion, "1.37.0")) {
                 numberOfRateProfiles = 3;
+            } else if (semver.gte(CONFIG.apiVersion, "1.55.0")) {
+                numberOfRateProfiles = CONFIG.numRateProfiles;
+            } else {
+                numberOfRateProfiles = 6;
             }
 
             var rateProfileElements = [];

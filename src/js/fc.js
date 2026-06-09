@@ -93,6 +93,7 @@ var FC = {
             name:                             '',
             displayName:                      'JOE PILOT',
             numProfiles:                      3,
+            numRateProfiles:                  4,
             rateProfile:                      0,
             boardType:                        0,
             armingDisableCount:               0,
