@@ -417,19 +417,15 @@ jobs:
           repo: dev-unstable
           owner: emuflight
           token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ env.NOW }}-app"
+          tag: "${{ env.NOW }}-cfg"
           draft: true
           prerelease: true
           allowUpdates: true
-          artifacts: |
-            ./Artifacts/**/*.msi
-            ./Artifacts/**/*.zip
-            ./Artifacts/**/*.deb
-            ./Artifacts/**/*.rpm
+          artifacts: ./Artifacts/**/EmuConfigurator-*.*
           artifactContentType: raw
-          name:  "DEV-UNSTABLE APP / Build ${{ github.run_number }}"
+          name:  "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
           body: |
-            ## APP BUILD for TESTING
+            ## EmuConfigurator BUILD for TESTING
             ### Build ${{ github.run_number }}
             ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
             ### BuildTag: ${{ needs.build.outputs.buildtag }}
@@ -452,23 +448,18 @@ jobs:
           repo: dev-master
           owner: emuflight
           token: ${{ secrets.NC_PAT_EMUF }}
-          tag: "${{ env.NOW }}-app"
+          tag: "${{ env.NOW }}-cfg"
           draft: true
           prerelease: true
           allowUpdates: true
-          artifacts: |
-            ./Artifacts/**/*.msi
-            ./Artifacts/**/*.zip
-            ./Artifacts/**/*.deb
-            ./Artifacts/**/*.rpm
+          artifacts: ./Artifacts/**/EmuConfigurator-*.*
           artifactContentType: raw
-          name:  "DEV-MASTER APP / Build ${{ github.run_number }}"
+          name:  "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
           body: |
-            ## APP BUILD of MASTER
+            ## EmuConfigurator BUILD of MASTER
             ### Build ${{ github.run_number }}
             ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
             ### BuildTag: ${{ needs.build.outputs.buildtag }}
-            ### EmuConfigurator base plus committed code
             ### Feedback Welcome in EmuFlight's Discord or GitHub Discussions.
             <details><summary>Changes in this Build:</summary>
             <!-- require single blank line below -->
@@ -479,24 +470,35 @@ jobs:
             </details>
         continue-on-error: true
 
-      - name: Upload Release Assets
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Draft Releases on main Repo
+      - name: Draft Release Main Repo
+        if: contains(github.ref, 'releas')
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "EmuConfigurator ${{ github.ref_name }}"
-          files: |
-            ./Artifacts/**/EmuConfigurator-*.msi
-            ./Artifacts/**/EmuConfigurator-*.zip
-            ./Artifacts/**/EmuConfigurator-*.deb
-            ./Artifacts/**/EmuConfigurator-*.rpm
+          token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
-          prerelease: ${{ contains(github.ref, 'rc') }}
+          prerelease: true
+          allowUpdates: true
+          tag: ${{ github.ref_name }}
+          artifacts: ./Artifacts/**/EmuConfigurator-*.*
+          artifactContentType: raw
+          name:  "DRAFT / EmuConfigurator / GitHub Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            <details><summary>Changes in this Release:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: false
 
       - name: Release Failed Notification
-        if: failure() && startsWith(github.ref, 'refs/tags/v')
+        if: failure() && contains(github.ref, 'releas')
         run: |
           echo "[ERROR] Release upload failed for ${{ github.ref_name }}"
           exit 1
