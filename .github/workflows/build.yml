@@ -298,7 +298,7 @@ jobs:
           done
 
       - name: Rename Windows MSI artifacts
-        if: matrix.os == 'windows-latest'
+        if: startsWith(matrix.os, 'windows')
         shell: bash
         env:
           EMUCFG_ARCH: ${{ matrix.arch }}
@@ -320,6 +320,18 @@ jobs:
             echo "[OK] Renamed $filename -> $(basename "$dest")"
           done
 
+      - name: Rename Windows x64 zip (win32 -> win64)
+        if: startsWith(matrix.os, 'windows') && matrix.arch == 'x64'
+        shell: bash
+        run: |
+          set -euo pipefail
+          for src in out/make/zip/EmuConfigurator-win32-x64-*.zip; do
+            [ -f "$src" ] || continue
+            dest="${src/win32/win64}"
+            mv -f "$src" "$dest"
+            echo "[OK] Renamed $(basename "$src") -> $(basename "$dest")"
+          done
+
       - name: Validate Artifacts Exist
         shell: bash
         run: |
@@ -331,7 +343,7 @@ jobs:
 
       # Upload Linux .deb
       - name: Upload Artifact (linux .deb)
-        if: matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-deb
@@ -340,7 +352,7 @@ jobs:
 
       # Upload Linux .rpm
       - name: Upload Artifact (linux .rpm)
-        if: matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-rpm
@@ -349,7 +361,7 @@ jobs:
 
       # Upload Linux .zip
       - name: Upload Artifact (linux .zip)
-        if: matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'ubuntu')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-linux-zip
@@ -358,7 +370,7 @@ jobs:
 
       # Upload macOS ARM64 .zip (contains EmuConfigurator-arm64.app at root)
       - name: Upload Artifact (macos arm64 .app)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-26'
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-macos-arm64
@@ -376,7 +388,7 @@ jobs:
 
       # Upload Windows .msi (WiX installer)
       - name: Upload Artifact (windows .msi)
-        if: matrix.os == 'windows-latest'
+        if: startsWith(matrix.os, 'windows')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-msi-${{ matrix.arch }}
@@ -385,7 +397,7 @@ jobs:
 
       # Upload Windows .zip (portable)
       - name: Upload Artifact (windows .zip)
-        if: matrix.os == 'windows-latest'
+        if: startsWith(matrix.os, 'windows')
         uses: actions/upload-artifact@v4
         with:
           name: EmuConfigurator-windows-zip-${{ matrix.arch }}
@@ -395,7 +407,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
@@ -407,24 +419,101 @@ jobs:
         run: |
           echo "### Release Artifacts ###"
           find ./Artifacts -type f \( -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.zip" \) -exec ls -lh {} \;
+          echo "NOW=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
 
-      - name: Upload Release Assets
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Draft Dev-Unstable releases via ncipollo/release-action
+      - name: Draft Release Dev-Unstable repo
+        if: contains(github.ref, 'test') || contains(github.ref, 'unstab')
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "EmuConfigurator ${{ github.ref_name }}"
-          files: |
-            ./Artifacts/**/EmuConfigurator-*.msi
-            ./Artifacts/**/EmuConfigurator-*.zip
-            ./Artifacts/**/EmuConfigurator-*.deb
-            ./Artifacts/**/EmuConfigurator-*.rpm
+          repo: dev-unstable
+          owner: emuflight
+          token: ${{ secrets.NC_PAT_EMUF }}
+          tag: "${{ env.NOW }}-cfg"
           draft: true
-          prerelease: ${{ contains(github.ref, 'rc') }}
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
+          artifactContentType: raw
+          name:  "DEV-UNSTABLE EmuConfig / Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator BUILD for TESTING
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            ### EmuConfigurator base plus test code
+            ### What to Test/Feedback: (Feedback in EmuFlight's Discord or GitHub Discussions)
+            <details><summary>Changes in this Build:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: true
+
+      # Draft Dev-master releases via ncipollo/release-action
+      - name: Draft Release Dev-Master repo
+        if: contains(github.ref, 'master')
+        uses: ncipollo/release-action@v1
+        with:
+          repo: dev-master
+          owner: emuflight
+          token: ${{ secrets.NC_PAT_EMUF }}
+          tag: "${{ env.NOW }}-cfg"
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
+          artifactContentType: raw
+          name:  "DEV-MASTER EmuConfig / Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator BUILD of MASTER
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            ### Feedback Welcome in EmuFlight's Discord or GitHub Discussions.
+            <details><summary>Changes in this Build:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: true
+
+      # Draft Releases on main Repo
+      - name: Draft Release Main Repo
+        if: contains(github.ref, 'releas')
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: true
+          allowUpdates: true
+          replacesArtifacts: true
+          tag: ${{ github.ref_name }}
+          artifacts: ./Artifacts/**/*.msi, ./Artifacts/**/*.deb, ./Artifacts/**/*.rpm, ./Artifacts/**/*.zip
+          artifactContentType: raw
+          name:  "DRAFT / EmuConfigurator / GitHub Build ${{ github.run_number }}"
+          body: |
+            ## EmuConfigurator
+            ### Build ${{ github.run_number }}
+            ### Commit SHA: ${{ needs.build.outputs.shortsha }} (${{ github.sha }})
+            ### BuildTag: ${{ needs.build.outputs.buildtag }}
+            <details><summary>Changes in this Release:</summary>
+            <!-- require single blank line below -->
+
+            ```
+            [insert commit history here]
+            ```
+            </details>
+        continue-on-error: false
 
       - name: Release Failed Notification
-        if: failure()
+        if: failure() && contains(github.ref, 'releas')
         run: |
           echo "[ERROR] Release upload failed for ${{ github.ref_name }}"
           exit 1
