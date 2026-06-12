@@ -1021,6 +1021,7 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       preload: path.join(__dirname, 'dist', 'support', 'preload.js'),
+      backgroundThrottling: false, // keep flash/erase timers running at full rate when window is unfocused
     },
     icon: windowIconPath,
   });
