@@ -50,13 +50,9 @@ TABS.power.initialize = function (callback) {
         $('#content').load("./tabs/power.html", process_html);
     }
 
-    this.supported = semver.gte(CONFIG.apiVersion, "1.33.0");
+    this.supported = true;
 
-    if (!this.supported) {
-        load_html();
-    } else {
-        load_status();
-    }
+    load_status();
 
     function updateDisplay(voltageDataSource, currentDataSource) {
         // voltage meters
@@ -200,7 +196,7 @@ TABS.power.initialize = function (callback) {
         $('input[name="warningcellvoltage"]').val(BATTERY_CONFIG.vbatwarningcellvoltage);
         $('input[name="capacity"]').val(BATTERY_CONFIG.capacity);
 
-        var haveFc = (semver.lt(CONFIG.apiVersion, "1.35.0") || (CONFIG.boardType == 0 || CONFIG.boardType == 2));
+        var haveFc = (CONFIG.boardType == 0 || CONFIG.boardType == 2);
 
         var batteryMeterTypes = [
             i18n.getMessage('powerBatteryVoltageMeterTypeNone'),
@@ -227,9 +223,7 @@ TABS.power.initialize = function (callback) {
             currentMeterTypes.push(i18n.getMessage('powerBatteryCurrentMeterTypeVirtual'));
             currentMeterTypes.push(i18n.getMessage('powerBatteryCurrentMeterTypeEsc'));
 
-            if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-                currentMeterTypes.push(i18n.getMessage('powerBatteryCurrentMeterTypeMsp'));
-            }
+            currentMeterTypes.push(i18n.getMessage('powerBatteryCurrentMeterTypeMsp'));
         }
 
         var currentMeterType_e = $('select.currentmetersource');
@@ -440,19 +434,11 @@ TABS.power.initialize = function (callback) {
         }
 
         function save_voltage_config() {
-            if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-                mspHelper.sendVoltageConfig(save_amperage_config);
-            } else {
-                MSP.send_message(MSPCodes.MSP_SET_VOLTAGE_METER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_VOLTAGE_METER_CONFIG), false, save_amperage_config);
-            }
+            mspHelper.sendVoltageConfig(save_amperage_config);
         }
 
         function save_amperage_config() {
-            if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-                mspHelper.sendCurrentConfig(save_to_eeprom);
-            } else {
-                MSP.send_message(MSPCodes.MSP_SET_CURRENT_METER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_CURRENT_METER_CONFIG), false, save_to_eeprom);
-            }
+            mspHelper.sendCurrentConfig(save_to_eeprom);
         }
 
         function save_to_eeprom() {
