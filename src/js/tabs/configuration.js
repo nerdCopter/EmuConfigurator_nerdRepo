@@ -201,6 +201,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
 
         // Analog Beeper
         var destination = $('.beepers .beeper-configuration');
+        var beeper_e = $('.tab-configuration .beepers');
 
         BEEPER_CONFIG.beepers.generateElements(template, destination);
 
