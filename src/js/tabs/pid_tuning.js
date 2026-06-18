@@ -2219,7 +2219,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
         // Add a name to each row of PIDs if empty
         $('.pid_tuning tr').each(function() {
-            for (i = 0; i < PID_names.length; i++) {
+            for (var i = 0; i < PID_names.length; i++) {
                 if ($(this).hasClass(PID_names[i])) {
                     var firstColumn = $(this).find('td:first');
                     if (!firstColumn.text()) {
