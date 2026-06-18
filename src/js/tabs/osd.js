@@ -1584,28 +1584,26 @@ OSD.chooseFields = function () {
             F.ANTI_GRAVITY
         ]);
     }
-    if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
+    OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
+        F.G_FORCE,
+    ]);
+    if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
         OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
-            F.G_FORCE,
+            F.CRSF_SNR_VALUE,
+            F.CRSF_TX_POWER,
+            F.CRSF_RSSI_VALUE,
         ]);
-        if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
+        if (semver.gte(CONFIG.apiVersion, "1.50.0")) {
             OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
-                F.CRSF_SNR_VALUE,
-                F.CRSF_TX_POWER,
-                F.CRSF_RSSI_VALUE,
+                F.OSD_MAH_PERCENT,
             ]);
-            if (semver.gte(CONFIG.apiVersion, "1.50.0")) {
-                OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
-                    F.OSD_MAH_PERCENT,
-                ]);
-                //MSP 1.51
-                if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
-                OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
-                    F.GPS_PLUS,
-                ]);
-                }
-                //end MPS 1.51
+            //MSP 1.51
+            if (semver.gte(CONFIG.apiVersion, "1.51.0")) {
+            OSD.constants.DISPLAY_FIELDS = OSD.constants.DISPLAY_FIELDS.concat([
+                F.GPS_PLUS,
+            ]);
             }
+            //end MPS 1.51
         }
     }
 
