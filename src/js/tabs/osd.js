@@ -2808,7 +2808,7 @@ TABS.osd.initialize = function (callback) {
         // so the mcm URL never contains undefined.
         if (fontPresetsElement.val() === null) {
             const clarityOption = fontPresetsElement.find('option[value="clarity"]');
-            const fallback = clarityOption.length ? 'clarity' : fontPresetsElement.find('option').first().val();
+            const fallback = clarityOption.length ? 'clarity' : fontPresetsElement.find('option:not([disabled])').first().val();
             fontPresetsElement.val(fallback);
             FONT.data.loaded_font_file = fallback || FONT.data.loaded_font_file;
         }
