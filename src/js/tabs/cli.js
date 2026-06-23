@@ -404,9 +404,8 @@ TABS.cli.read = function (readInfo) {
         const currentChar = String.fromCharCode(data[i]);
 
         if (!CONFIGURATOR.cliValid) {
-            // try to catch part of valid CLI enter message
+            // Accumulate silently; MSP garbage before welcome message is not shown
             validateText += currentChar;
-            writeToOutput(currentChar);
             continue;
         }
 
@@ -466,6 +465,19 @@ TABS.cli.read = function (readInfo) {
     if (!CONFIGURATOR.cliValid && validateText.indexOf('CLI') !== -1) {
         GUI.log(i18n.getMessage('cliEnter'));
         CONFIGURATOR.cliValid = true;
+        // Display only from 'Entering CLI Mode' onwards; MSP garbage before it is discarded
+        const cliMsgStart = validateText.indexOf('Entering CLI');
+        if (cliMsgStart >= 0) {
+            const welcomeText = validateText.substring(cliMsgStart);
+            const lines = welcomeText.split(/\r?\n|\r/);
+            for (let j = 0; j < lines.length; j++) {
+                if (j < lines.length - 1) {
+                    writeLineToOutput(lines[j]);
+                } else if (lines[j].length > 0) {
+                    writeToOutput(lines[j]); // prompt line — no trailing <br>
+                }
+            }
+        }
         // begin output history with the prompt (last line of welcome message)
         // this is to match the content of the history with what the user sees on this tab
         const lastLine = validateText.split("\n").pop();
