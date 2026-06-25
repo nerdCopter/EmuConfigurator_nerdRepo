@@ -75,7 +75,10 @@ function getWindowIconPath() {
       // and packaged (.deb) modes.
       if (process.platform === 'linux') {
         const img = nativeImage.createFromPath(iconPath);
-        return img.isEmpty() ? undefined : img;
+        if (!img.isEmpty()) {
+          return img;
+        }
+        continue;
       }
       return iconPath;
     }
