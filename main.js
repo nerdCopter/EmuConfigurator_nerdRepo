@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, screen, shell, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, nativeImage, screen, shell, globalShortcut } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -68,6 +68,18 @@ function getWindowIconPath() {
   const candidates = iconCandidatesByPlatform[process.platform] || [];
   for (const iconPath of candidates) {
     if (fs.existsSync(iconPath)) {
+      // On Linux, BrowserWindow's icon option requires a real filesystem path;
+      // it cannot read from inside an asar archive. nativeImage.createFromPath()
+      // reads the PNG data into memory within Electron's process (asar-aware),
+      // so passing the nativeImage object to BrowserWindow works in both dev
+      // and packaged (.deb) modes.
+      if (process.platform === 'linux') {
+        const img = nativeImage.createFromPath(iconPath);
+        if (!img.isEmpty()) {
+          return img;
+        }
+        continue;
+      }
       return iconPath;
     }
   }

@@ -101,6 +101,13 @@ module.exports = {
           maintainer: 'EmuFlight',
           homepage: 'https://github.com/EmuFlight/EmuConfigurator',
           icon: LINUX_ICON,
+          // Debian lifecycle scripts: install/remove the icon from the hicolor XDG
+          // icon theme so desktop environments resolve Icon=emuflight-configurator
+          // by name (XFCE panel, GNOME, KDE). /usr/share/pixmaps is legacy only.
+          scripts: {
+            postinst: path.resolve(__dirname, 'scripts/deb-postinst.sh'),
+            prerm: path.resolve(__dirname, 'scripts/deb-prerm.sh'),
+          },
         },
       },
     },
