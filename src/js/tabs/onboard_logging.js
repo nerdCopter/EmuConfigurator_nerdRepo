@@ -35,13 +35,6 @@ TABS.onboard_logging.initialize = function (callback) {
         });
     }
     
-    function gcd(a, b) {
-        if (b === 0)
-            return a;
-        
-        return gcd(b, a % b);
-    }
-    
     function save_to_eeprom() {
         MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
     }
@@ -122,18 +115,16 @@ TABS.onboard_logging.initialize = function (callback) {
                 }
             }).change();
 
-            if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-                if ((SDCARD.supported && deviceSelect.val() == 2) || (DATAFLASH.supported && deviceSelect.val() == 1)) {
+            if ((SDCARD.supported && deviceSelect.val() == 2) || (DATAFLASH.supported && deviceSelect.val() == 1)) {
 
-                    $(".tab-onboard_logging")
-                        .toggleClass("msc-supported", true);
+                $(".tab-onboard_logging")
+                    .toggleClass("msc-supported", true);
 
-                    $('a.onboardLoggingRebootMsc').click(function () {
-                        var buffer = [];
-                        buffer.push(mspHelper.REBOOT_TYPES.MSC);                        
-                        MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
-                    });
-                }
+                $('a.onboardLoggingRebootMsc').click(function () {
+                    var buffer = [];
+                    buffer.push(mspHelper.REBOOT_TYPES.MSC);
+                    MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
+                });
             }
             
             update_html();
@@ -252,16 +243,14 @@ TABS.onboard_logging.initialize = function (callback) {
             .toggleClass("sdcard-initializing", SDCARD.state === MSP.SDCARD_STATE_CARD_INIT || SDCARD.state === MSP.SDCARD_STATE_FS_INIT)
             .toggleClass("sdcard-ready", SDCARD.state === MSP.SDCARD_STATE_READY);
 
-        if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-            var mscIsReady = dataflashPresent || (SDCARD.state === MSP.SDCARD_STATE_READY);
-            $(".tab-onboard_logging")
-                .toggleClass("msc-not-ready", !mscIsReady);
+        var mscIsReady = dataflashPresent || (SDCARD.state === MSP.SDCARD_STATE_READY);
+        $(".tab-onboard_logging")
+            .toggleClass("msc-not-ready", !mscIsReady);
 
-            if (!mscIsReady) {
-                $('a.onboardLoggingRebootMsc').addClass('disabled');
-            } else {
-                $('a.onboardLoggingRebootMsc').removeClass('disabled');
-            }
+        if (!mscIsReady) {
+            $('a.onboardLoggingRebootMsc').addClass('disabled');
+        } else {
+            $('a.onboardLoggingRebootMsc').removeClass('disabled');
         }
         
         var loggingStatus

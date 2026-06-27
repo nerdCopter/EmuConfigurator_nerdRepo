@@ -56,11 +56,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
     }
 
     function load_acc_trim() {
-        MSP.send_message(MSPCodes.MSP_ACC_TRIM, false, false, load_misc);
-    }
-
-    function load_misc() {
-        load_arming_config();
+        MSP.send_message(MSPCodes.MSP_ACC_TRIM, false, false, load_arming_config);
     }
 
     function load_arming_config() {
@@ -918,11 +914,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
 
             function save_beeper_config() {
-                MSP.send_message(MSPCodes.MSP_SET_BEEPER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BEEPER_CONFIG), false, save_misc);
-            }
-
-            function save_misc() {
-                save_mixer_config();
+                MSP.send_message(MSPCodes.MSP_SET_BEEPER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BEEPER_CONFIG), false, save_mixer_config);
             }
 
             function save_mixer_config() {

@@ -89,13 +89,8 @@ var RateCurve = function (useLegacyCurve) {
         var expoPower;
         var rcRateConstant;
 
-        if (semver.gte(CONFIG.apiVersion, "1.20.0")) {
-            expoPower = 3;
-            rcRateConstant = 200;
-        } else {
-            expoPower = 2;
-            rcRateConstant = 205.85;
-        }
+        expoPower = 3;
+        rcRateConstant = 200;
 
         if (rcExpo > 0) {
             rcCommandf =  rcCommandf * Math.pow(rcCommandfAbs, expoPower) * rcExpo + rcCommandf * (1-rcExpo);

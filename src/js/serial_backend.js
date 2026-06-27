@@ -155,8 +155,7 @@ function finishClose(finishedCallback) {
     // Reset various UI elements
     $('span.i2c-error').text(0);
     $('span.cycle-time').text(0);
-    if (semver.gte(CONFIG.apiVersion, "1.20.0"))
-        $('span.cpu-load').text('');
+    $('span.cpu-load').text('');
 
     // unlock port select & baud
     $('div#port-picker #port').prop('disabled', false);
@@ -247,16 +246,12 @@ function onOpen(openInfo) {
                                         connectionTimestamp = Date.now();
                                         GUI.log(i18n.getMessage('uniqueDeviceIdReceived', [uniqueDeviceIdentifier]));
 
-                                        if (semver.gte(CONFIG.apiVersion, "1.20.0")) {
-                                            MSP.send_message(MSPCodes.MSP_NAME, false, false, function () {
-                                                GUI.log(i18n.getMessage('craftNameReceived', [CONFIG.name]));
+                                        MSP.send_message(MSPCodes.MSP_NAME, false, false, function () {
+                                            GUI.log(i18n.getMessage('craftNameReceived', [CONFIG.name]));
 
-                                                CONFIG.armingDisabled = false;
-                                                mspHelper.setArmingEnabled(false, false, setRtc);
-                                            });
-                                        } else {
-                                            setRtc();
-                                        }
+                                            CONFIG.armingDisabled = false;
+                                            mspHelper.setArmingEnabled(false, false, setRtc);
+                                        });
                                     });
                                 });
                             });
@@ -309,19 +304,12 @@ function onOpen(openInfo) {
 }
 
 function setRtc() {
-    if (semver.gte(CONFIG.apiVersion, "1.37.0")) {
-        MSP.send_message(MSPCodes.MSP_SET_RTC, mspHelper.crunch(MSPCodes.MSP_SET_RTC), false, finishOpen);
-    } else {
-        finishOpen();
-    }
+    MSP.send_message(MSPCodes.MSP_SET_RTC, mspHelper.crunch(MSPCodes.MSP_SET_RTC), false, finishOpen);
 }
 
 function finishOpen() {
     CONFIGURATOR.connectionValid = true;
     GUI.allowedTabs = GUI.defaultAllowedFCTabsWhenConnected.slice();
-    if (semver.lt(CONFIG.apiVersion, "1.4.0")) {
-        GUI.allowedTabs.splice(GUI.allowedTabs.indexOf('led_strip'), 1);
-    }
 
     onConnect();
 
@@ -394,9 +382,7 @@ function onConnect() {
         $('#tabs ul.mode-connected').show();
 
         MSP.send_message(MSPCodes.MSP_FEATURE_CONFIG, false, false);
-        if (semver.gte(CONFIG.apiVersion, "1.33.0")) {
-            MSP.send_message(MSPCodes.MSP_BATTERY_CONFIG, false, false);
-        }
+        MSP.send_message(MSPCodes.MSP_BATTERY_CONFIG, false, false);
         MSP.send_message(MSPCodes.MSP_STATUS_EX, false, false);
         MSP.send_message(MSPCodes.MSP_DATAFLASH_SUMMARY, false, false);
 
@@ -554,11 +540,7 @@ function have_sensor(sensors_detected, sensor_code) {
         case 'sonar':
             return bit_check(sensors_detected, 4);
         case 'gyro':
-            if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-                return bit_check(sensors_detected, 5);
-            } else {
-                return true;
-            }
+            return bit_check(sensors_detected, 5);
     }
     return false;
 }
@@ -578,10 +560,7 @@ function update_live_status() {
 
     if (GUI.active_tab != 'cli') {
         MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false);
-        if (semver.gte(CONFIG.apiVersion, "1.32.0"))
-            MSP.send_message(MSPCodes.MSP_STATUS_EX, false, false);
-        else
-            MSP.send_message(MSPCodes.MSP_STATUS, false, false);
+        MSP.send_message(MSPCodes.MSP_STATUS_EX, false, false);
         MSP.send_message(MSPCodes.MSP_ANALOG, false, false);
     }
 

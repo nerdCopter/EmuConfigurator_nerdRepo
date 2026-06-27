@@ -21,98 +21,48 @@ var Features = function (config) {
         {bit: 17, group: 'other', name: 'DISPLAY', haveTip: true}
     ];
 
-    if (!semver.gte(config.apiVersion, "1.33.0")) {
-        features.push(
-            {bit: 19, group: 'other', name: 'BLACKBOX', haveTip: true}
-        );
-    }
+    features.push(
+        {bit: 20, group: 'other', name: 'CHANNEL_FORWARDING'}
+    );
 
-    if (semver.gte(config.apiVersion, "1.12.0")) {
-        features.push(
-            {bit: 20, group: 'other', name: 'CHANNEL_FORWARDING'}
-        );
-    }
-
-    if (semver.gte(CONFIG.apiVersion, "1.15.0") && !semver.gte(CONFIG.apiVersion, "1.36.0")) {
-        features.push(
-            {bit: 8, group: 'rxFailsafe', name: 'FAILSAFE', haveTip: true}
-        );
-    }
-
-    if (semver.gte(CONFIG.apiVersion, "1.16.0")) {
-        features.push(
-            {bit: 21, group: 'other', name: 'TRANSPONDER', haveTip: true}
-        );
-    }
+    features.push(
+        {bit: 21, group: 'other', name: 'TRANSPONDER', haveTip: true}
+    );
 
     if (config.flightControllerVersion !== '') {
-        if (semver.gte(CONFIG.apiVersion, "1.16.0")) {
+        features.push(
+            {bit: 22, group: 'other', name: 'AIRMODE'}
+        );
+
+        features.push(
+            {bit: 18, group: 'other', name: 'OSD'}
+        );
+
+        features.push(
+            {bit: 25, group: 'rxMode', mode: 'select', name: 'RX_SPI'},
+            {bit: 27, group: 'other', name: 'ESC_SENSOR'}
+        );
+
+        //quick & dirty 0.3.0
+        if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
             features.push(
-                {bit: 22, group: 'other', name: 'AIRMODE'}
+                {bit: 28, group: 'other', name: 'ANTI_GRAVITY'},
+                {bit: 29, group: 'other', name: 'DYNAMIC_FILTER'}
+            );
+        } else {
+            features.push(
+                {bit: 28, group: 'other', name: 'DYNAMIC_FILTER'}
             );
         }
 
-        if (semver.gte(CONFIG.apiVersion, "1.16.0")) {
-            if (semver.lt(CONFIG.apiVersion, "1.20.0")) {
-                features.push(
-                    {bit: 23, group: 'pidTuning', name: 'SUPEREXPO_RATES'}
-                );
-            } else if (!semver.gte(config.apiVersion, "1.33.0")) {
-                features.push(
-                    {bit: 23, group: 'other', name: 'SDCARD'}
-                );
-            }
-        }
-
-        if (semver.gte(CONFIG.apiVersion, "1.20.0")) {
+        if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
             features.push(
-                {bit: 18, group: 'other', name: 'OSD'}
+                { bit: 30, group: 'other', name: 'LEGACY_SA_SUPPORT', haveTip: true }
             );
-            if (!semver.gte(CONFIG.apiVersion, "1.35.0")) {
-              features.push(
-                {bit: 24, group: 'other', name: 'VTX'}
-              )
-            }
-        }
-
-        if (semver.gte(CONFIG.apiVersion, "1.31.0")) {
+        } else {
             features.push(
-                {bit: 25, group: 'rxMode', mode: 'select', name: 'RX_SPI'},
-                {bit: 27, group: 'other', name: 'ESC_SENSOR'}
+                { bit: 29, group: 'other', name: 'LEGACY_SA_SUPPORT', haveTip: true }
             );
-        }
-
-        if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-            //quick & dirty 0.3.0
-            if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
-                features.push(
-                    {bit: 28, group: 'other', name: 'ANTI_GRAVITY'},
-                    {bit: 29, group: 'other', name: 'DYNAMIC_FILTER'}
-                );
-            } else {
-                features.push(
-                    {bit: 28, group: 'other', name: 'DYNAMIC_FILTER'}
-                );
-            }
-        }
-
-        if (!semver.gte(CONFIG.apiVersion, "1.36.0")) {
-            features.push(
-                {bit: 1, group: 'batteryVoltage', name: 'VBAT'},
-                {bit: 11, group: 'batteryCurrent', name: 'CURRENT_METER'}
-            );
-        }
-        if (semver.gte(CONFIG.apiVersion, "1.39.0"))
-        {
-            if (semver.lt(CONFIG.apiVersion, "1.47.0")) {
-                features.push(
-                    { bit: 30, group: 'other', name: 'LEGACY_SA_SUPPORT', haveTip: true }
-                );
-            } else {
-                features.push(
-                    { bit: 29, group: 'other', name: 'LEGACY_SA_SUPPORT', haveTip: true }
-                );
-            }
         }
     }
 

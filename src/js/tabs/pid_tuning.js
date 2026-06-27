@@ -238,10 +238,6 @@ TABS.pid_tuning.initialize = function(callback) {
         } else {
             $('.dtermNotch').hide();
         }
-        var dtermSetpointTransitionNumberElement = $('input[name="dtermSetpointTransition-number"]');
-        dtermSetpointTransitionNumberElement.attr('min', 0.00);
-
-        dtermSetpointTransitionNumberElement.val(ADVANCED_TUNING.dtermSetpointTransition / 100);
 
         if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
             $('input[name="dtermBoost-number"]').val(ADVANCED_TUNING.dtermBoost);
@@ -1152,14 +1148,13 @@ TABS.pid_tuning.initialize = function(callback) {
             FILTER_CONFIG.dterm_lowpass_hz_yaw = parseInt($('.pid_filter input[name="dtermLowpassFrequencyYaw"]').val());
         }
 
-        ADVANCED_TUNING.vbatPidCompensation = $('input[id="vbatpidcompensation"]').is(':checked') ? 1 : 0;
+        if (semver.lt(CONFIG.apiVersion, "1.46.0")) {
+            ADVANCED_TUNING.vbatPidCompensation = $('input[id="vbatpidcompensation"]').is(':checked') ? 1 : 0;
+        }
 
-        ADVANCED_TUNING.dtermSetpointTransition = parseInt($('input[name="dtermSetpointTransition-number"]').val() * 100);
         //dBoost //save
         if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
             ADVANCED_TUNING.dtermBoost = parseInt($('input[name="dtermBoost-number"]').val());
-        } else {
-            ADVANCED_TUNING.dtermSetpointWeight = parseInt($('input[name="dtermSetpoint-number"]').val() * 100);
         }
 
         FILTER_CONFIG.gyro_notch_hz = parseInt($('.pid_filter input[name="gyroNotch1Frequency"]').val());
@@ -1635,12 +1630,12 @@ TABS.pid_tuning.initialize = function(callback) {
         $('.tab-pid_tuning select[name="profile"]').change(function() {
             self.currentProfile = parseInt($(this).val());
             self.updating = true;
-            $(this).prop('disabled', 'true');
+            $(this).prop('disabled', true);
             MSP.promise(MSPCodes.MSP_SELECT_SETTING, [self.currentProfile]).then(function() {
                 self.refresh(function() {
                     self.updating = false;
 
-                    $('.tab-pid_tuning select[name="profile"]').prop('disabled', 'false');
+                    $('.tab-pid_tuning select[name="profile"]').prop('disabled', false);
                     CONFIG.profile = self.currentProfile;
 
                     GUI.log(i18n.getMessage('pidTuningLoadedProfile', [self.currentProfile + 1]));
@@ -2187,34 +2182,17 @@ TABS.pid_tuning.initialize = function(callback) {
         $('.tab-pid_tuning select[name="rate_profile"]').change(function() {
             self.currentRateProfile = parseInt($(this).val());
             self.updating = true;
-            $(this).prop('disabled', 'true');
+            $(this).prop('disabled', true);
             MSP.promise(MSPCodes.MSP_SELECT_SETTING, [self.currentRateProfile + self.RATE_PROFILE_MASK]).then(function() {
                 self.refresh(function() {
                     self.updating = false;
 
-                    $('.tab-pid_tuning select[name="rate_profile"]').prop('disabled', 'false');
+                    $('.tab-pid_tuning select[name="rate_profile"]').prop('disabled', false);
                     CONFIG.rateProfile = self.currentRateProfile;
 
                     GUI.log(i18n.getMessage('pidTuningLoadedRateProfile', [self.currentRateProfile + 1]));
                 });
             });
-        });
-
-        var dtermTransitionNumberElement = $('input[name="dtermSetpointTransition-number"]');
-        var dtermTransitionWarningElement = $('#pid-tuning .dtermSetpointTransitionWarning');
-
-        function checkUpdateDtermTransitionWarning(value) {
-            if (value > 0 && value < 0.1) {
-                dtermTransitionWarningElement.show();
-            } else {
-                dtermTransitionWarningElement.hide();
-            }
-        }
-        checkUpdateDtermTransitionWarning(dtermTransitionNumberElement.val());
-
-        //Use 'input' event for coupled controls to allow synchronized update
-        dtermTransitionNumberElement.on('input', function() {
-            checkUpdateDtermTransitionWarning($(this).val());
         });
 
         // Add a name to each row of PIDs if empty
@@ -2850,7 +2828,6 @@ TABS.pid_tuning.checkRC = function() {
 
 TABS.pid_tuning.updatePidControllerParameters = function() {
     $('.pid_tuning .YAW_JUMP_PREVENTION').hide();
-    $('#pid-tuning .dtermSetpointTransition').hide();
     $('#pid-tuning .dtermSetpoint').hide();
     $('#pid-tuning .delta').hide();
 };

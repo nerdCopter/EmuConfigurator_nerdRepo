@@ -1946,16 +1946,7 @@ OSD.msp = {
         var warningCount = OSD.constants.WARNINGS.length;
         var warningFlags = view.readU16();
         for (var i = 0; i < warningCount; i++) {
-
-            // Known warning field
-            if (i < OSD.constants.WARNINGS.length) {
-                d.warnings.push($.extend(OSD.constants.WARNINGS[i], { enabled: (warningFlags & (1 << i)) != 0 }));
-
-            // Push Unknown Warning field
-            } else {
-                var warningNumber = i - OSD.constants.WARNINGS.length + 1;
-                d.warnings.push({name: 'UNKNOWN', text: ['osdWarningTextUnknown', warningNumber], desc: 'osdWarningUnknown', enabled: (warningFlags & (1 << i)) != 0 });
-            }
+            d.warnings.push($.extend(OSD.constants.WARNINGS[i], { enabled: (warningFlags & (1 << i)) != 0 }));
         }
 
         // OSD profiles

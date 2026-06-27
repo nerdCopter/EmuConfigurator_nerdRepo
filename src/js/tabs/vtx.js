@@ -43,14 +43,9 @@ TABS.vtx.initialize = function(callback) {
     if (GUI.active_tab != 'vtx') {
         GUI.active_tab = 'vtx';
     }
-    this.supported = semver.gte(CONFIG.apiVersion, "1.40.0"); //since EmuF 0.1.0 (BF 3.3.0)
-    if (!this.supported) {
-        //console.log('!this.supported');
-        load_html();
-    } else {
-        //console.log('read_vtx_config(load_html)');
-        read_vtx_config(load_html);
-    }
+    this.supported = true; //since EmuF 0.1.0 (BF 3.3.0), MSP 1.40+ always available
+    //console.log('read_vtx_config(load_html)');
+    read_vtx_config(load_html);
 
     function load_html() {
         $('#content').load("./tabs/vtx.html", process_html);
@@ -337,12 +332,10 @@ function dump_html_to_msp() {
     } else {  //band/channel
         VTX_CONFIG.vtx_band =      parseInt( $("#vtx_band").val() );
         VTX_CONFIG.vtx_channel =   parseInt( $("#vtx_channel").val() );
-        if (semver.gte(CONFIG.apiVersion, "1.40.0")) { //redundant
-            if (VTX_CONFIG.vtx_band > 0 || VTX_CONFIG.vtx_channel > 0) {
-                VTX_CONFIG.vtx_frequency = (VTX_CONFIG.vtx_band - 1) * 8 + (VTX_CONFIG.vtx_channel - 1);
-                //console.log('%c special old ass encoded freq: '+VTX_CONFIG.vtx_frequency, "color: magenta");
-            }
-        } // else some other semver option that does not yet exist
+        if (VTX_CONFIG.vtx_band > 0 || VTX_CONFIG.vtx_channel > 0) {
+            VTX_CONFIG.vtx_frequency = (VTX_CONFIG.vtx_band - 1) * 8 + (VTX_CONFIG.vtx_channel - 1);
+            //console.log('%c special old ass encoded freq: '+VTX_CONFIG.vtx_frequency, "color: magenta");
+        }
     }
 
     VTX_CONFIG.vtx_power = parseInt($("#vtx_power").val());
