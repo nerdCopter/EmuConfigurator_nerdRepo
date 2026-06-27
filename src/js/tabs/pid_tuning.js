@@ -36,9 +36,7 @@ TABS.pid_tuning.initialize = function(callback) {
 
     // requesting MSP_STATUS manually because it contains CONFIG.profile
     MSP.promise(MSPCodes.MSP_STATUS).then(function() {
-        if (semver.gte(CONFIG.apiVersion, CONFIGURATOR.pidControllerChangeMinApiVersion)) {
-            return MSP.promise(MSPCodes.MSP_PID_CONTROLLER);
-        }
+        return MSP.promise(MSPCodes.MSP_PID_CONTROLLER);
     }).then(function() {
         return MSP.promise(MSPCodes.MSP_PIDNAMES);
     }).then(function() {
@@ -2280,8 +2278,6 @@ TABS.pid_tuning.initialize = function(callback) {
         //end MSP 1.51
 
         pid_and_rc_to_form();
-
-        var pidController_e = $('select[name="controller"]');
 
         $('.tab-pid_tuning div.controller').hide();
 

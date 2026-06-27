@@ -663,10 +663,6 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 }
                 break;
 
-            case MSPCodes.MSP_SET_CHANNEL_FORWARDING:
-                console.log('Channel forwarding saved');
-                break;
-
             case MSPCodes.MSP_CF_SERIAL_CONFIG:
                 SERIAL_CONFIG.ports = [];
 
@@ -861,7 +857,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 //end MSP 1.51
 
                 FILTER_CONFIG.gyro_hardware_lpf = data.readU8();
-                let gyro_32khz_hardware_lpf = data.readU8();
+                FILTER_CONFIG.gyro_32khz_hardware_lpf = data.readU8();
 
                 if (semver.lt(CONFIG.apiVersion, "1.44.0")) {
                     FILTER_CONFIG.gyro_lowpass_hz = data.readU16();
@@ -1066,7 +1062,6 @@ MspHelper.prototype.process_data = function(dataHandler) {
             case MSPCodes.MSP_LED_STRIP_CONFIG:
                 LED_STRIP = [];
                 var ledDirectionLetters =       ['n', 'e', 's', 'w', 'u', 'd'];      // in LSB bit order
-                var ledFunctionLetters =        ['i', 'w', 'f', 'a', 't', 'r', 'c', 'g', 's', 'b', 'l']; // in LSB bit order
                 var ledBaseFunctionLetters =    ['c', 'f', 'a', 'l', 's', 'g', 'r']; // in LSB bit
                 var ledOverlayLetters =         ['t', 'o', 'b', 'v', 'i', 'w']; // in LSB bit
                 var ledCount = data.byteLength / 4;
@@ -1620,16 +1615,6 @@ MspHelper.prototype.crunch = function(code) {
             }
             break;
 
-        case MSPCodes.MSP_SET_CHANNEL_FORWARDING:
-            for (var i = 0; i < SERVO_CONFIG.length; i++) {
-                var out = SERVO_CONFIG[i].indexOfChannelToForward;
-                if (out == undefined) {
-                    out = 255; // Cleanflight defines "CHANNEL_FORWARDING_DISABLED" as "(uint8_t)0xFF"
-                }
-                buffer.push8(out);
-            }
-            break;
-
         case MSPCodes.MSP_SET_CF_SERIAL_CONFIG:
             for (var i = 0; i < SERIAL_CONFIG.ports.length; i++) {
                 var serialPort = SERIAL_CONFIG.ports[i];
@@ -1716,9 +1701,8 @@ MspHelper.prototype.crunch = function(code) {
             }
             //end MSP 1.51
 
-            let gyro_32khz_hardware_lpf_crunch = FILTER_CONFIG.gyro_32khz_hardware_lpf;
             buffer.push8(FILTER_CONFIG.gyro_hardware_lpf)
-                  .push8(gyro_32khz_hardware_lpf_crunch);
+                  .push8(FILTER_CONFIG.gyro_32khz_hardware_lpf);
 
             if (semver.lt(CONFIG.apiVersion, "1.44.0")) {
                 buffer.push16(FILTER_CONFIG.gyro_lowpass_hz)
@@ -2204,7 +2188,6 @@ MspHelper.prototype.sendLedStripConfig = function(onCompleteCallback) {
 
         var led = LED_STRIP[ledIndex];
         var ledDirectionLetters =        ['n', 'e', 's', 'w', 'u', 'd'];      // in LSB bit order
-        var ledFunctionLetters =         ['i', 'w', 'f', 'a', 't', 'r', 'c', 'g', 's', 'b', 'l']; // in LSB bit order
         var ledBaseFunctionLetters =     ['c', 'f', 'a', 'l', 's', 'g', 'r']; // in LSB bit
         var ledOverlayLetters =          ['t', 'o', 'b', 'v', 'i', 'w']; // in LSB bit
 
