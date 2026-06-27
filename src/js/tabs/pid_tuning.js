@@ -1153,6 +1153,8 @@ TABS.pid_tuning.initialize = function(callback) {
         //dBoost //save
         if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
             ADVANCED_TUNING.dtermBoost = parseInt($('input[name="dtermBoost-number"]').val());
+        } else {
+            ADVANCED_TUNING.dtermSetpointWeight = parseInt($('input[name="dtermSetpoint-number"]').val() * 100);
         }
 
         FILTER_CONFIG.gyro_notch_hz = parseInt($('.pid_filter input[name="gyroNotch1Frequency"]').val());
