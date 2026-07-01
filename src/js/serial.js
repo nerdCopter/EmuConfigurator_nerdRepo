@@ -128,6 +128,7 @@ var serial = {
                         case 'frame_error':
                         case 'parity_error':
                             GUI.log(i18n.getMessage('serialError' + inflection.camelize(info.error)));
+                            // falls through
                         case 'break': // This seems to be the error that is thrown under NW.js in Windows when the device reboots after typing 'exit' in CLI
                         case 'disconnected':
                         case 'device_lost':
