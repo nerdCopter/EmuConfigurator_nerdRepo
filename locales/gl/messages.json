@@ -1147,21 +1147,6 @@
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Con este parámetro, o termo Feedforward pode reducirse preto do centro dos sticks, o que resulta nun final máis suave dos flips e rolls.<br> O valor representa un punto de desvío do stick: 0 - stick centrado, 1 - deflexión completa. Cando o stick está por riba dese punto, Feedforward mantense constante no seu valor configurado. Cando o stick colócase por debaixo dese punto, Feedforward redúcese proporcionalmente, alcanzando 0 na posición central do stick.<br> O valor de 1 dá o efecto de alisado máximo, mentres que o valor de 0 mantén o Feedforward fixado no seu valor configurado en todo o intervalo de stick."
     },
-    "pidTuningDtermSetpointTransition": {
-        "message": "Transición de punto D"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "Peso do punto D"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Con este parámetro, o termo Feedforward pode reducirse preto do centro dos sticks, o que resulta nun final máis suave dos flips e rolls.<br> O valor representa un punto de desvío do stick: 0 - stick centrado, 1 - deflexión completa. Cando o stick está por riba dese punto, Feedforward mantense constante no seu valor configurado. Cando o stick colócase por debaixo dese punto, Feedforward redúcese proporcionalmente, alcanzando 0 na posición central do stick.<br> O valor de 1 dá o efecto de alisado máximo, mentres que o valor de 0 mantén o Feedforward fixado no seu valor configurado en todo o intervalo de stick."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "Este parámetro determina o efecto de aceleración de stick dentro do compoñente derivado.<br> Valor de 0 é igual ao antigo método de medición onde D só rastrexa o xiro, mentres que o valor de 1 é igual ao antigo método de rotación con igual xiro e relación de seguimento do stick.<br> Un valor baixo equivale a unha resposta de pau máis lenta / suave, mentres que un valor máis elevado proporciona máis resposta de aceleración de stick.<br> Recoméndase que a interpolación de RC estea habilitada con valores máis altos para evitar que os golpes de control fagan ruído."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong> $t(warningTitle.message):</strong> Desaconséllase moito o uso dunha transición de punto de consecuencia maior que 0 e inferior a 0,1. Se o fai, pode levar a inestabilidade e reducir a capacidade de resposta dos stick mentres atravesan o punto central.</span>"
-    },
     "pidTuningProportional": {
         "message": "Proporcional"
     },

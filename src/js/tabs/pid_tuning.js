@@ -12,9 +12,6 @@ TABS.pid_tuning = {
     currentProfile: null,
     currentRateProfile: null,
     currentRatesType: null,
-    SETPOINT_WEIGHT_RANGE_LOW: 2.55,
-    SETPOINT_WEIGHT_RANGE_HIGH: 20,
-    SETPOINT_WEIGHT_RANGE_LEGACY: 2.54,
     activeSubtab: 'pid'
 };
 
@@ -239,8 +236,6 @@ TABS.pid_tuning.initialize = function(callback) {
 
         if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
             $('input[name="dtermBoost-number"]').val(ADVANCED_TUNING.dtermBoost);
-        } else {
-            $('input[name="dtermSetpoint-number"]').val(ADVANCED_TUNING.dtermSetpointWeight / 100);
         }
 
         $('.pid_filter input[name="gyroNotch2Frequency"]').val(FILTER_CONFIG.gyro_notch2_hz);
@@ -1153,8 +1148,6 @@ TABS.pid_tuning.initialize = function(callback) {
         //dBoost //save
         if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
             ADVANCED_TUNING.dtermBoost = parseInt($('input[name="dtermBoost-number"]').val());
-        } else {
-            ADVANCED_TUNING.dtermSetpointWeight = parseInt($('input[name="dtermSetpoint-number"]').val() * 100);
         }
 
         FILTER_CONFIG.gyro_notch_hz = parseInt($('.pid_filter input[name="gyroNotch1Frequency"]').val());
@@ -2826,7 +2819,6 @@ TABS.pid_tuning.checkRC = function() {
 
 TABS.pid_tuning.updatePidControllerParameters = function() {
     $('.pid_tuning .YAW_JUMP_PREVENTION').hide();
-    $('#pid-tuning .dtermSetpoint').hide();
     $('#pid-tuning .delta').hide();
 };
 

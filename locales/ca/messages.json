@@ -871,9 +871,6 @@
     "receiverRcInterpolationInterval": {
         "message": "Interval d'Interpolació RC [ms]"
     },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Amb aquest paràmetre, D Setpoint Weight pot ser reduït al centre dels sticks, que resulta en flips i rolls més suaus.<br> El valor representa la desciació de l'stick: 0 - stick centrat, 1 - totalment desviat. Quan l'stick està per sobre d'aquest punt, Setpoint Weight es manté constant al valor configurat. Quan l'stick està per sota d'aquest punt, Setpoint Weight és reduït proporcionalment, arribant a 0 a la posició central de l'stick.<br> El valor 1 dona el màxim valor suavitzant, mentre el valor 0 manté el Setpoint Weight fixat añ valor configurat durant tot el recorregut de l'sctick."
-    },
     "pidTuningProportional": {
         "message": "Proporcional"
     },

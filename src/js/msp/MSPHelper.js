@@ -984,7 +984,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
                     ADVANCED_TUNING.dtermBoost = data.readU16();
                 } else {
-                    ADVANCED_TUNING.dtermSetpointWeight = data.readU16();
+                    data.readU16(); // reserved: firmware always sends 0 here pre-1.49.0 (slot reused for dtermBoost at MSP API 1.49)
                 }
                 ADVANCED_TUNING.itermRotation = data.readU8();
                 if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
@@ -1820,7 +1820,7 @@ MspHelper.prototype.crunch = function(code) {
             if (semver.gte(CONFIG.apiVersion, "1.49.0")) {
                 buffer.push16(ADVANCED_TUNING.dtermBoost);
             } else {
-                buffer.push16(ADVANCED_TUNING.dtermSetpointWeight);
+                buffer.push16(0); // reserved: firmware discards this slot pre-1.49.0 (slot reused for dtermBoost at MSP API 1.49)
             }
             buffer.push8(ADVANCED_TUNING.itermRotation);
             if (semver.gte(CONFIG.apiVersion, "1.49.0")) {

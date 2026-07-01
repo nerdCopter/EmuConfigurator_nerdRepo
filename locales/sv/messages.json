@@ -1144,21 +1144,6 @@
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Med denna parameter kan framkopplings-termen reduceras nära mitten av spakarna, vilket resulterar i jämnare avslut på flippar och rollar.<br> Värdet representerar en böjningspunkt: 0 - spaken centrerad, 1 - full böjning. När spaken är över denna punkt, hålls framkoppling konstant vid sitt konfigurerade värde. När spaken är under denna punkt, reduceras framkoppling proportionellt, och blir 0 vid spakens mittposition.<br> Värdet 1 ger maximal utjämningseffekt, medan värdet 0 håller framkoppling konstant vid sitt konfigurerade värde över hela spakens räckvidd."
     },
-    "pidTuningDtermSetpointTransition": {
-        "message": "D setpoint-övergång"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D setpoint-vikt"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Med denna parameter kan D setpoint-vikten reduceras nära mitten av spakarna, vilket resulterar i jämnare avslut på flippar och rollar.<br> Värdet representerar en böjningspunkt: 0 - spaken centrerad, 1 - full böjning. När spaken är över denna punkt, hålls setpoint-vikten konstant vid sitt konfigurerade värde. När spaken är under denna punkt, reduceras setpoint-vikten proportionellt, och blir 0 vid spakens mittposition.<br> Värdet 1 ger maximal utjämningseffekt, medan värdet 0 håller setpoint-vikten konstant vid sitt konfigurerade värde över hela spakens räckvidd."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "Denna parameter bestämmer spakens accelerationseffekt inom den derivativa komponenten.<br> Värdet 0 innebär en äldre mätbaserad metod där D endast följer gyron, och värdet 1 innebär en äldre felbaserad metod där gyro- och spakar följs likvärdigt.<br> Lägre värden innebär långsammare/jämnare spakrespons, och högre värden ger en mer accelererande spakrespons.<br> Observera att aktivering av RC-interpolering rekommenderas vid högre värden för att undvika att plötsliga ändringar orsakar brus."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> Användning av en D setpoint-övergång mellan 0 och 0.1 avråds bestämt. Det kan resultera i instabilitet och sämre spakrespons när spakarna korsar mittpunkten.</span>"
-    },
     "pidTuningProportional": {
         "message": "Proportionell"
     },
