@@ -783,9 +783,7 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
                 break;
             case "function-r":
             case "function-b":
-                if (semver.lt(CONFIG.apiVersion, "1.20.0"))
-                    return false;
-            break;
+                return true;
             default:
                 return true;
             break;
