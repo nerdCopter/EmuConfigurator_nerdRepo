@@ -222,7 +222,7 @@ TABS.receiver.initialize = function (callback) {
             RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
             RC_DEADBAND_CONFIG.yaw_deadband = parseInt($('.deadband input[name="yaw_deadband"]').val());
             RC_DEADBAND_CONFIG.deadband = parseInt($('.deadband input[name="deadband"]').val());
-            RC_DEADBAND_CONFIG.deadband3d_throttle = ($('.deadband input[name="3ddeadbandthrottle"]').val());
+            RC_DEADBAND_CONFIG.deadband3d_throttle = parseInt($('.deadband input[name="3ddeadbandthrottle"]').val());
 
             // catch rc map
             var RC_MAP_Letters = ['A', 'E', 'R', 'T', '1', '2', '3', '4'];
