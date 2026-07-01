@@ -181,5 +181,5 @@ TABS.servos.initialize = function (callback) {
 };
 
 TABS.servos.cleanup = function (callback) {
-    if (callback) callback();
+    if (callback) {callback();}
 };
