@@ -394,5 +394,5 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
 };
 
 TABS.failsafe.cleanup = function (callback) {
-    if (callback) {callback();}
+    if (callback) callback();
 };

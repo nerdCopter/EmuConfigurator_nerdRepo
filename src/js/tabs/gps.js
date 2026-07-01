@@ -165,5 +165,5 @@ TABS.gps.initialize = function (callback) {
 
  
 TABS.gps.cleanup = function (callback) {
-    if (callback) {callback();}
+    if (callback) callback();
 };

@@ -128,7 +128,7 @@ function initializeSerialBackend() {
             } else {
                 $('input.auto_connect, span.auto_connect').prop('title', i18n.getMessage('autoConnectDisabled'));
 
-                if (!GUI.connected_to && !GUI.connecting_to) {$('select#baud').prop('disabled', false);}
+                if (!GUI.connected_to && !GUI.connecting_to) $('select#baud').prop('disabled', false);
             }
 
             ConfigStorage.set({'auto_connect': GUI.auto_connect});
@@ -156,11 +156,11 @@ function finishClose(finishedCallback) {
     $('span.i2c-error').text(0);
     $('span.cycle-time').text(0);
     if (semver.gte(CONFIG.apiVersion, "1.20.0"))
-        {$('span.cpu-load').text('');}
+        $('span.cpu-load').text('');
 
     // unlock port select & baud
     $('div#port-picker #port').prop('disabled', false);
-    if (!GUI.auto_connect) {$('div#port-picker #baud').prop('disabled', false);}
+    if (!GUI.auto_connect) $('div#port-picker #baud').prop('disabled', false);
 
     // reset connect / disconnect button
     $('div.connect_controls a.connect').removeClass('active');
@@ -579,9 +579,9 @@ function update_live_status() {
     if (GUI.active_tab != 'cli') {
         MSP.send_message(MSPCodes.MSP_BOXNAMES, false, false);
         if (semver.gte(CONFIG.apiVersion, "1.32.0"))
-            {MSP.send_message(MSPCodes.MSP_STATUS_EX, false, false);}
+            MSP.send_message(MSPCodes.MSP_STATUS_EX, false, false);
         else
-            {MSP.send_message(MSPCodes.MSP_STATUS, false, false);}
+            MSP.send_message(MSPCodes.MSP_STATUS, false, false);
         MSP.send_message(MSPCodes.MSP_ANALOG, false, false);
     }
 
@@ -590,29 +590,29 @@ function update_live_status() {
     for (var i = 0; i < AUX_CONFIG.length; i++) {
        if (AUX_CONFIG[i] == 'ARM') {
                if (bit_check(CONFIG.mode, i))
-                       {$(".armedicon").css({
+                       $(".armedicon").css({
                                'background-image': 'url(images/icons/cf_icon_armed_active.svg)'
-                           });}
+                           });
                else
-                       {$(".armedicon").css({
+                       $(".armedicon").css({
                                'background-image': 'url(images/icons/cf_icon_armed_grey.svg)'
-                           });}
+                           });
        }
        if (AUX_CONFIG[i] == 'FAILSAFE') {
                if (bit_check(CONFIG.mode, i))
-                       {$(".failsafeicon").css({
+                       $(".failsafeicon").css({
                                'background-image': 'url(images/icons/cf_icon_failsafe_active.svg)'
-                           });}
+                           });
                else
-                       {$(".failsafeicon").css({
+                       $(".failsafeicon").css({
                                'background-image': 'url(images/icons/cf_icon_failsafe_grey.svg)'
-                           });}
+                           });
        }
     }
     if (ANALOG != undefined) {
     var nbCells = Math.floor(ANALOG.voltage / BATTERY_CONFIG.vbatmaxcellvoltage) + 1;
     if (ANALOG.voltage == 0)
-           {nbCells = 1;}
+           nbCells = 1;
 
        var min = BATTERY_CONFIG.vbatmincellvoltage * nbCells;
        var max = BATTERY_CONFIG.vbatmaxcellvoltage * nbCells;

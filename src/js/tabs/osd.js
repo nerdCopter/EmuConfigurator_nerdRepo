@@ -342,7 +342,7 @@ OSD.generateCraftName = function (osd_data) {
 OSD.generateDisplayName = function(osd_data) {
   var preview = 'DISPLAY_NAME';
   if (CONFIG.displayName != '')
-      {preview = CONFIG.displayName.toUpperCase();}
+      preview = CONFIG.displayName.toUpperCase();
   return preview;
 }
 
@@ -3037,5 +3037,5 @@ TABS.osd.cleanup = function (callback) {
     $(document).unbind('keypress');
     $(document).off('click', 'span.progressLabel a');
 
-    if (callback) {callback();}
+    if (callback) callback();
 };

@@ -225,7 +225,7 @@ LogoManager.replaceLogoInFont = function (img) {
         if (char.length < fieldSize) {
             var pad = this.constants.MCM_COLORMAP['default'].repeat(4);
             for (var i = 0, I = fieldSize - char.length; i < I; i++)
-                {char.push(pad);}
+                char.push(pad);
         }
         return char;
     };

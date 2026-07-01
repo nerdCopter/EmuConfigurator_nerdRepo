@@ -389,5 +389,5 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 };
 
 TABS.ports.cleanup = function (callback) {
-    if (callback) {callback();}
+    if (callback) callback();
 };

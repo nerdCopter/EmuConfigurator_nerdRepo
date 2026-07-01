@@ -92,7 +92,7 @@ function getWindowIconPath() {
 //   'dev-release'   - `yarn make:debug` sets EMUCFG_BUILD_MODE=dev-release → all menu items including toggle devtools
 //   'release'       - `yarn make` (default) → all menu items except toggle devtools (inspect only)
 function getBuildMode() {
-  if (process.env.NODE_ENV === 'development') {return 'dev';}
+  if (process.env.NODE_ENV === 'development') return 'dev';
   try {
     // electron-forge extraMetadata bakes buildMode into the packaged package.json
     return require('./package.json').buildMode || 'release';
@@ -130,7 +130,7 @@ function setupMenu(buildMode) {
           accelerator: 'CmdOrCtrl+0',
           click: () => {
             const w = BrowserWindow.getFocusedWindow();
-            if (w) {applyZoom(w, DEFAULT_ZOOM_LEVEL);}
+            if (w) applyZoom(w, DEFAULT_ZOOM_LEVEL);
           }
         },
         {
@@ -138,7 +138,7 @@ function setupMenu(buildMode) {
           accelerator: 'CmdOrCtrl+Plus',
           click: () => {
             const w = BrowserWindow.getFocusedWindow();
-            if (w) {applyZoom(w, _currentZoom + 1);}
+            if (w) applyZoom(w, _currentZoom + 1);
           }
         },
         {
@@ -146,7 +146,7 @@ function setupMenu(buildMode) {
           accelerator: 'CmdOrCtrl+-',
           click: () => {
             const w = BrowserWindow.getFocusedWindow();
-            if (w) {applyZoom(w, _currentZoom - 1);}
+            if (w) applyZoom(w, _currentZoom - 1);
           }
         },
         ...(showDevTools ? [
@@ -296,7 +296,7 @@ function saveConfig(patch) {
 // Apply and persist a zoom change: clamps, updates in-memory state, sets webContents level, saves to disk.
 // All zoom mutations must go through this function to keep _currentZoom consistent.
 function applyZoom(win, level) {
-  if (!win || win.isDestroyed() || !win.webContents) {return;}
+  if (!win || win.isDestroyed() || !win.webContents) return;
   const previous = _currentZoom;
   const clamped = clampZoom(level);
   _currentZoom = clamped;
@@ -402,7 +402,7 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
     const { SerialPort } = require('serialport');
     if (_serialPort && _serialPort.isOpen) {
       await new Promise((resolve) => _serialPort.close((err) => {
-        if (err) {console.warn('main.js: error closing previous port:', err.message);}
+        if (err) console.warn('main.js: error closing previous port:', err.message);
         resolve();
       }));
     }
@@ -425,8 +425,8 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
       // Attempt graceful recovery
       if (_serialPort && _serialPort.isOpen) {
         _serialPort.close((err) => {
-          if (err) {console.error('main.js: error closing serial port after error:', err.message);}
-          else {console.log('main.js: closed serial port after error');}
+          if (err) console.error('main.js: error closing serial port after error:', err.message);
+          else console.log('main.js: closed serial port after error');
         });
       }
     });
@@ -442,7 +442,7 @@ ipcMain.handle('serial-connect', async (event, portPath, options) => {
 
 // IPC: send data over serial port
 ipcMain.handle('serial-send', async (event, bufferData) => {
-  if (!_serialPort || !_serialPort.isOpen) {return { bytesSent: 0, error: 'not_connected' };}
+  if (!_serialPort || !_serialPort.isOpen) return { bytesSent: 0, error: 'not_connected' };
   const buf = Buffer.from(bufferData);
   return new Promise((resolve) => {
     let settled = false;
@@ -457,7 +457,7 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
 
     try {
       _serialPort.write(buf, (err) => {
-        if (settled) {return;}
+        if (settled) return;
         if (err) {
           settled = true;
           clearTimeout(timeoutId);
@@ -472,7 +472,7 @@ ipcMain.handle('serial-send', async (event, bufferData) => {
         }
       });
     } catch (e) {
-      if (settled) {return;}
+      if (settled) return;
       settled = true;
       clearTimeout(timeoutId);
       console.error('main.js: serial-send exception:', e.message);
@@ -541,7 +541,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     const connectionErrorHandler = () => {
       if (!resolved) {
         resolved = true;
-        if (timeoutId) {clearTimeout(timeoutId);}
+        if (timeoutId) clearTimeout(timeoutId);
         resolve(-102); // CONNECTION_REFUSED
       }
     };
@@ -563,7 +563,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
     socket.connect(port, host, () => {
       if (!resolved) {
         resolved = true;
-        if (timeoutId) {clearTimeout(timeoutId);}
+        if (timeoutId) clearTimeout(timeoutId);
         socket.removeListener('error', connectionErrorHandler);
         resolve(0);
       }
@@ -573,7 +573,7 @@ ipcMain.handle('tcp-connect', async (event, socketId, host, port) => {
 
 ipcMain.handle('tcp-send', async (event, socketId, data) => {
   const socket = _tcpSockets.get(socketId);
-  if (!socket || socket.destroyed) {return { resultCode: -100 };}
+  if (!socket || socket.destroyed) return { resultCode: -100 };
   return new Promise((resolve) => {
     socket.write(Buffer.from(data), (err) => {
       resolve(err ? { resultCode: -1 } : { resultCode: 0, bytesSent: data.length });
@@ -1052,7 +1052,7 @@ function createWindow() {
   // Zoom is preserved by the devtools-opened/devtools-closed handlers via _currentZoom.
   globalShortcut.unregister('F12');
   globalShortcut.register('F12', () => {
-    if (!win || win.isDestroyed() || !win.webContents) {return;}
+    if (!win || win.isDestroyed() || !win.webContents) return;
     if (win.webContents.isDevToolsOpened()) {
       win.webContents.closeDevTools();
     } else {
@@ -1064,7 +1064,7 @@ function createWindow() {
   let _resizeZoomTimer = null;
   let _devtoolsZoomTimer = null; // shared between devtools-opened/closed to prevent timer leaks
   const debouncedZoomReapply = () => {
-    if (_resizeZoomTimer) {clearTimeout(_resizeZoomTimer);}
+    if (_resizeZoomTimer) clearTimeout(_resizeZoomTimer);
     _resizeZoomTimer = setTimeout(() => {
       if (!win || win.isDestroyed() || !win.webContents) {
         _resizeZoomTimer = null;
@@ -1151,14 +1151,14 @@ function createWindow() {
   // Re-apply current zoom when DevTools opens/closes (Electron/Chromium can reset zoom on DevTools operations)
   // Both events share _devtoolsZoomTimer so rapid open/close doesn't leak multiple timers.
   win.webContents.on('devtools-opened', () => {
-    if (_devtoolsZoomTimer) {clearTimeout(_devtoolsZoomTimer);}
+    if (_devtoolsZoomTimer) clearTimeout(_devtoolsZoomTimer);
     _devtoolsZoomTimer = setTimeout(() => {
       applyZoom(win, _currentZoom);
     }, 150);
   });
 
   win.webContents.on('devtools-closed', () => {
-    if (_devtoolsZoomTimer) {clearTimeout(_devtoolsZoomTimer);}
+    if (_devtoolsZoomTimer) clearTimeout(_devtoolsZoomTimer);
     _devtoolsZoomTimer = setTimeout(() => {
       applyZoom(win, _currentZoom);
     }, 150);
@@ -1170,7 +1170,7 @@ function createWindow() {
   // Note: setZoomLevel() does NOT emit 'zoom-changed'; applyZoom() handles _currentZoom
   // update and saveConfig() directly so persistence and resize-recovery work correctly.
   win.webContents.on('before-input-event', (event, input) => {
-    if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) {return;}
+    if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) return;
     const code = input.code;
     if (code === 'Equal' || code === 'NumpadAdd') {
       // Accepts Ctrl+= and Ctrl++ (Shift+Equal) for zoom in

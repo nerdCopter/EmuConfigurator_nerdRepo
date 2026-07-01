@@ -70,7 +70,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
     }
     var crcError = dataHandler.crcError;
     if (!crcError) {
-        if (!dataHandler.unsupported) {switch (code) {
+        if (!dataHandler.unsupported) switch (code) {
             case MSPCodes.MSP_STATUS:
                 CONFIG.cycleTime = data.readU16();
                 CONFIG.i2cError = data.readU16();
@@ -628,10 +628,9 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 break;
             case MSPCodes.MSP_SET_VOLTAGE_METER_CONFIG:
                 console.log('Voltage config saved');
-                break;
             case MSPCodes.MSP_DEBUG:
                 for (var i = 0; i < 4; i++)
-                    {SENSOR_DATA.debug[i] = data.read16();}
+                    SENSOR_DATA.debug[i] = data.read16();
                 break;
             case MSPCodes.MSP_SET_MOTOR:
                 console.log('Motor Speeds Updated');
@@ -1613,7 +1612,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
 
             default:
                 console.log('Unknown code detected: ' + code);
-        }} else {
+        } else {
             console.log('FC reports unsupported message error: ' + code);
             switch (code) {
             case MSPCodes.MSP_SET_REBOOT:
@@ -1637,7 +1636,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
             dataHandler.callbacks.splice(i, 1);
             if (!crcError || callbackOnError) {
                 // fire callback
-                if (callback) {callback({'command': code, 'data': data, 'length': data.byteLength, 'crcError': crcError});}
+                if (callback) callback({'command': code, 'data': data, 'length': data.byteLength, 'crcError': crcError});
             }
         }
     }

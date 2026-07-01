@@ -999,7 +999,6 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                         checkUpdateCurrentControls();
                     }
 
-                    break;
                 case 'GPS':
                     checkUpdateGpsControls();
                     break;
@@ -1313,5 +1312,5 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
 };
 
 TABS.configuration.cleanup = function (callback) {
-    if (callback) {callback();}
+    if (callback) callback();
 };

@@ -466,7 +466,7 @@ TABS.auxiliary.initialize = function (callback) {
                 prevChannelsValues = RC_channels.slice(0); //clone array
             }
 
-            if (!prevChannelsValues || RC_channels.length === 0) {return fillPrevChannelsValues();}
+            if (!prevChannelsValues || RC_channels.length === 0) return fillPrevChannelsValues();
 
             var diff_array = RC_channels.map(function(currentValue, index) {
                 return Math.abs(prevChannelsValues[index] - currentValue);
@@ -477,7 +477,7 @@ TABS.auxiliary.initialize = function (callback) {
             }, 0);
 
             //minimum change to autoselect is 100
-            if (largest < 100) {return fillPrevChannelsValues();}
+            if (largest < 100) return fillPrevChannelsValues();
 
             var indexOfMaxValue = diff_array.indexOf(largest);
             if (indexOfMaxValue >= 4 && indexOfMaxValue != RSSI_channel - 1){ //set channel
@@ -515,5 +515,5 @@ TABS.auxiliary.initialize = function (callback) {
 };
 
 TABS.auxiliary.cleanup = function (callback) {
-    if (callback) {callback();}
+    if (callback) callback();
 };
