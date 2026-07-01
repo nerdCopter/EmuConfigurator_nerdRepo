@@ -196,7 +196,7 @@ TABS.power.initialize = function (callback) {
         $('input[name="warningcellvoltage"]').val(BATTERY_CONFIG.vbatwarningcellvoltage);
         $('input[name="capacity"]').val(BATTERY_CONFIG.capacity);
 
-        var haveFc = (CONFIG.boardType == 0 || CONFIG.boardType == 2);
+        var haveFc = (CONFIG.boardType === 0 || CONFIG.boardType === 2);
 
         var batteryMeterTypes = [
             i18n.getMessage('powerBatteryVoltageMeterTypeNone'),
