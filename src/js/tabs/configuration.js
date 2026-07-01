@@ -999,6 +999,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                         checkUpdateCurrentControls();
                     }
 
+                    break;
                 case 'GPS':
                     checkUpdateGpsControls();
                     break;
