@@ -61,7 +61,12 @@
   "rules": {
     "no-debugger": "warn",
     "no-unused-vars": ["warn", { "vars": "local", "argsIgnorePattern": "^_", "varsIgnorePattern": "^[A-Z_][A-Z0-9_]*$|^(isDev|checked)$" }],
-    "complexity": "warn"
+    "complexity": "warn",
+    "curly": "warn",
+    "eqeqeq": ["warn", "smart"],
+    "no-case-declarations": "warn",
+    "no-fallthrough": "warn",
+    "no-unreachable": "warn"
   },
   "ignorePatterns": [
     "dist/",

@@ -735,7 +735,7 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
                 break;
             case "function-r":
             case "function-b":
-            break;
+                return true;
             default:
                 return true;
             break;
