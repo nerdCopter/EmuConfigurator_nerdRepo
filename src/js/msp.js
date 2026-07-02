@@ -410,6 +410,7 @@ var MSP = {
     callbacks_cleanup: function (force) {
         for (var i = this.callbacks.length - 1; i >= 0; i--) {
             if (this.callbacks[i].protected && !force) {
+                console.log(`MSP: preserving in-flight request ${this.callbacks[i].code} through tab switch (save in progress)`);
                 continue;
             }
 
