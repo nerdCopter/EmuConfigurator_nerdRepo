@@ -301,6 +301,11 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         // update configuration based on current ui state
         SERIAL_CONFIG.ports = [];
 
+        // initial-config-only convenience: only trigger when a port function transitions
+        // from unset to set in this save; never overrides a user's later manual changes
+        let hdZeroFirstSet = false;
+        let gpsFirstSet = false;
+
         var ports_e = $('.tab-ports .portConfiguration').each(function (portConfiguration_e) {
 
             var portConfiguration_e = this;
@@ -314,8 +319,8 @@ TABS.ports.initialize = function (callback, scrollPosition) {
                 if ($(portConfiguration_e).find('select[name=function-peripherals]').val() === 'HDZERO_OSD') {
                     console.log('debug: peripheral: '+$(portConfiguration_e).find('select[name=function-peripherals]').val());
                     //set MSP toggle off
-                    $(portConfiguration_e).find('input:checkbox:checked').val(false);
-                    console.log('debug: setting msp toggle off: '+$(portConfiguration_e).find('input:checkbox:checked').val());
+                    $(portConfiguration_e).find('input:checkbox[value="MSP"]').prop('checked', false);
+                    console.log('debug: setting msp toggle off: '+$(portConfiguration_e).find('input:checkbox[value="MSP"]').prop('checked'));
                 }
             }
 
@@ -350,6 +355,14 @@ TABS.ports.initialize = function (callback, scrollPosition) {
                 functions.push(peripheralFunction);
             }
 
+            const oldFunctions = oldSerialPort.functions || [];
+            if (functions.indexOf('HDZERO_OSD') >= 0 && oldFunctions.indexOf('HDZERO_OSD') === -1) {
+                hdZeroFirstSet = true;
+            }
+            if (functions.indexOf('GPS') >= 0 && oldFunctions.indexOf('GPS') === -1) {
+                gpsFirstSet = true;
+            }
+
             var gpsBaudrate = $(portConfiguration_e).find('.gps_baudrate').val();
             if (gpsBaudrate === 'AUTO') {
                 gpsBaudrate = '57600';
@@ -371,7 +384,63 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             SERIAL_CONFIG.ports.push(serialPort);
         });
 
-        MSP.send_message(MSPCodes.MSP_SET_CF_SERIAL_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_CF_SERIAL_CONFIG), false, save_to_eeprom);
+        MSP.send_message(MSPCodes.MSP_SET_CF_SERIAL_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_CF_SERIAL_CONFIG), false, save_gps_feature);
+
+        // initial-config-only: first time a port is set to GPS, enable the GPS feature too
+        function save_gps_feature() {
+            if (gpsFirstSet && !FEATURE_CONFIG.features.isEnabled('GPS')) {
+                const gpsBit = FEATURE_CONFIG.features.findBitValueByName('GPS');
+                FEATURE_CONFIG.features.setMask(bit_set(FEATURE_CONFIG.features.getMask(), gpsBit));
+                MSP.send_message(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG), false, save_osd_video_format);
+            } else {
+                save_osd_video_format();
+            }
+        }
+
+        // initial-config-only: first time a port is set to MSP Display Port (HDZERO_OSD), switch OSD video format to HD
+        function save_osd_video_format() {
+            if (hdZeroFirstSet) {
+                // MSP.promise() never rejects, and switching tabs mid-save clears pending MSP
+                // callbacks without settling their promises (GUI.tab_switch_cleanup ->
+                // MSP.callbacks_cleanup). Without a bound, that would silently skip EEPROM
+                // write + reboot below. This watchdog guarantees save_to_eeprom() always runs.
+                let osdSaveSettled = false;
+                const osdSaveWatchdog = setTimeout(function () {
+                    if (!osdSaveSettled) {
+                        osdSaveSettled = true;
+                        console.error('Timed out auto-setting OSD video format to HD; continuing with save/reboot.');
+                        save_to_eeprom();
+                    }
+                }, 3000);
+
+                MSP.promise(MSPCodes.MSP_OSD_CONFIG)
+                    .then(function (info) {
+                        // OSD.chooseFields() needs OSD.ALL_DISPLAY_FIELDS, which is only populated
+                        // when the OSD tab has been opened (osd.js TABS.osd.initialize); ports.js
+                        // may save before that ever happens, so load it here if still missing.
+                        if (!OSD.ALL_DISPLAY_FIELDS) {
+                            OSD.loadDisplayFields();
+                        }
+                        OSD.chooseFields();
+                        OSD.msp.decode(info);
+                        OSD.data.video_system = OSD.constants.VIDEO_TYPES.indexOf('HD');
+                        return MSP.promise(MSPCodes.MSP_SET_OSD_CONFIG, OSD.msp.encodeOther());
+                    })
+                    .catch(function (e) {
+                        // never let this convenience feature block the actual save/reboot
+                        console.error('Failed to auto-set OSD video format to HD:', e);
+                    })
+                    .then(function () {
+                        clearTimeout(osdSaveWatchdog);
+                        if (!osdSaveSettled) {
+                            osdSaveSettled = true;
+                            save_to_eeprom();
+                        }
+                    });
+            } else {
+                save_to_eeprom();
+            }
+        }
 
         function save_to_eeprom() {
             MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, on_saved_handler);
