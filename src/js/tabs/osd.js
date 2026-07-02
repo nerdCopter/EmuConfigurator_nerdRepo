@@ -244,11 +244,11 @@ FONT.upload = function ($progress) {
 
             OSD.GUI.fontManager.close();
 
-            return MSP.promise(MSPCodes.MSP_SET_REBOOT);
-        })
-        .then(function (result) {
+            // fire-and-forget, matching every other tab's reboot dispatch: a reboot severs the
+            // connection before any ack can arrive, so waiting on a promise for it only produces
+            // an unhandled rejection once disconnect_cleanup() settles it.
+            MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
             MSP.endProtectedSave();
-            return result;
         })
         .catch(function (error) {
             MSP.endProtectedSave();
