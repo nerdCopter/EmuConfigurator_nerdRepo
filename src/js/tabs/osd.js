@@ -230,6 +230,9 @@ FONT.msp = {
 };
 
 FONT.upload = function ($progress) {
+    // protect this multi-step upload+reboot chain from being abandoned if the user switches
+    // tabs mid-upload; cleared once the chain settles (success or failure) below
+    MSP.saveInProgress = true;
     return Promise.mapSeries(FONT.data.characters, function (data, i) {
         $progress.val((i / FONT.data.characters.length) * 100);
         return MSP.promise(MSPCodes.MSP_OSD_CHAR_WRITE, FONT.msp.encode(i));
@@ -242,6 +245,14 @@ FONT.upload = function ($progress) {
             OSD.GUI.fontManager.close();
 
             return MSP.promise(MSPCodes.MSP_SET_REBOOT);
+        })
+        .then(function (result) {
+            MSP.saveInProgress = false;
+            return result;
+        })
+        .catch(function (error) {
+            MSP.saveInProgress = false;
+            throw error;
         });
 };
 
@@ -2892,7 +2903,16 @@ TABS.osd.initialize = function (callback) {
 
         $('a.save').click(function () {
             var self = this;
-            MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
+            // protect this save from being abandoned if the user switches tabs before the FC responds
+            MSP.saveInProgress = true;
+            MSP.promise(MSPCodes.MSP_EEPROM_WRITE)
+                .then(function () {
+                    MSP.saveInProgress = false;
+                })
+                .catch(function (error) {
+                    MSP.saveInProgress = false;
+                    console.error(error);
+                });
             GUI.log(i18n.getMessage('osdSettingsSaved'));
             var oldText = $(this).text();
             $(this).html(i18n.getMessage('osdButtonSaved'));

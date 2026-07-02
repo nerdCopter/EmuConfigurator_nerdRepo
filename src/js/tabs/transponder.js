@@ -293,12 +293,17 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
             $('a.save').click(function() {
                 let _this = this;
 
+                // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+                // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+                MSP.saveInProgress = true;
+
                 function save_transponder_data() {
                     MSP.send_message(MSPCodes.MSP_SET_TRANSPONDER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_TRANSPONDER_CONFIG), false, save_to_eeprom);
                 }
 
                 function save_to_eeprom() {
                     MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
+                        MSP.saveInProgress = false;
                         GUI.log(i18n.getMessage('transponderEepromSaved'));
                         if ( $(_this).hasClass('reboot') ) {
                             GUI.tab_switch_cleanup(function() {

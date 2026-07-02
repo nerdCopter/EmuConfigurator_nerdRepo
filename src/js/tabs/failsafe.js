@@ -308,6 +308,10 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
 
 
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            MSP.saveInProgress = true;
+
             // gather data that doesn't have automatic change event bound
 
             FEATURE_CONFIG.features.updateData($('input[name="FAILSAFE"]'));
@@ -370,6 +374,7 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
             }
 
             function reboot() {
+                MSP.saveInProgress = false;
                 GUI.log(i18n.getMessage('configurationEepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {

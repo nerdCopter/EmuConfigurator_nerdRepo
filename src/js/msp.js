@@ -50,6 +50,13 @@ var MSP = {
     packet_error:               0,
     unsupported:                0,
 
+    // Set true by a tab's save handler for the duration of its save chain (including EEPROM_WRITE
+    // and, for save-and-reboot flows, the reboot command). While true, any MSP request issued is
+    // marked protected and survives a tab switch instead of being abandoned by callbacks_cleanup().
+    // Tabs MUST reset this to false once their chain settles (success or failure) or disconnect_cleanup()
+    // will do it for them as a safety net.
+    saveInProgress:              false,
+
     last_received_timestamp:   null,
     listeners:                  [],
 
@@ -321,7 +328,7 @@ var MSP = {
             bufferOut = this.encode_message_v2(code, data);
         }
 
-        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError};
+        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError, 'protected': this.saveInProgress};
 
         var requestExists = false;
         for (var i = 0; i < MSP.callbacks.length; i++) {
@@ -353,31 +360,46 @@ var MSP = {
             });
         }
 
-        return true;
+        return obj;
     },
 
     /**
      * resolves: {command: code, data: data, length: message_length}
+     * rejects: Error, if the request is abandoned by callbacks_cleanup() (e.g. tab switch or disconnect
+     * before a response arrives) instead of being left to hang forever.
      */
     promise: function(code, data) {
       var self = this;
-      return new Promise(function(resolve) {
-        self.send_message(code, data, false, function(data) {
+      return new Promise(function(resolve, reject) {
+        var pending = self.send_message(code, data, false, function(data) {
           resolve(data);
         });
+        pending.reject = reject;
       });
     },
-    callbacks_cleanup: function () {
-        for (var i = 0; i < this.callbacks.length; i++) {
-            clearInterval(this.callbacks[i].timer);
-        }
+    // force=true (used by disconnect_cleanup) also clears protected/in-flight-save entries, since a real
+    // disconnect means nothing can complete regardless. Plain tab switches leave protected entries alone
+    // so an in-flight save (including EEPROM_WRITE) is not abandoned, per issue #623.
+    callbacks_cleanup: function (force) {
+        for (var i = this.callbacks.length - 1; i >= 0; i--) {
+            if (this.callbacks[i].protected && !force) {
+                continue;
+            }
 
-        this.callbacks = [];
+            clearInterval(this.callbacks[i].timer);
+
+            if (typeof this.callbacks[i].reject === 'function') {
+                this.callbacks[i].reject(new Error(`MSP request ${this.callbacks[i].code} aborted before a response arrived (tab switch or disconnect)`));
+            }
+
+            this.callbacks.splice(i, 1);
+        }
     },
     disconnect_cleanup: function () {
         this.state = 0; // reset packet state for "clean" initial entry (this is only required if user hot-disconnects)
         this.packet_error = 0; // reset CRC packet error counter for next session
+        this.saveInProgress = false; // any protected in-flight save is moot once the connection is gone
 
-        this.callbacks_cleanup();
+        this.callbacks_cleanup(true);
     }
 };

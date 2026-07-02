@@ -267,7 +267,11 @@ GUI_control.prototype.log = function (message) {
 // callback = code to run when cleanup is finished
 // default switch doesn't require callback to be set
 GUI_control.prototype.tab_switch_cleanup = function (callback) {
-    MSP.callbacks_cleanup(); // we don't care about any old data that might or might not arrive
+    // we don't care about any old (non-save) data that might or might not arrive, so it's dropped, and any
+    // MSP.promise() awaiting one of those requests is rejected instead of left hanging. Requests belonging
+    // to an in-flight save (MSP.saveInProgress) are left alone so the save completes instead of being
+    // abandoned by a tab switch (see issue #623).
+    MSP.callbacks_cleanup();
     GUI.interval_kill_all(); // all intervals (mostly data pulling) needs to be removed on tab switch
 
     if (this.active_tab && TABS[this.active_tab]) {
