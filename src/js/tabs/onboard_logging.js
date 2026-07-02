@@ -47,7 +47,7 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     function reboot() {
-        MSP.saveInProgress = false;
+        MSP.endProtectedSave();
         GUI.log(i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
@@ -107,7 +107,7 @@ TABS.onboard_logging.initialize = function (callback) {
                 $(".tab-onboard_logging a.save-settings").click(function() {
                     // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if
                     // the user switches tabs before the FC responds; cleared in reboot() above
-                    MSP.saveInProgress = true;
+                    MSP.beginProtectedSave();
 
                     if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
                         BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);

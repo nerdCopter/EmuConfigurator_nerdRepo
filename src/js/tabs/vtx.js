@@ -275,7 +275,7 @@ TABS.vtx.initialize = function(callback) {
         self.updating = true;
         // protect this save chain (through EEPROM_WRITE) from being abandoned if the
         // user switches tabs before the FC responds; cleared in save_completed() below
-        MSP.saveInProgress = true;
+        MSP.beginProtectedSave();
         dump_html_to_msp();
 
         //console.log('save_vtx(): type:'+VTX_CONFIG.vtx_type
@@ -301,7 +301,7 @@ TABS.vtx.initialize = function(callback) {
 
         function save_completed() {
             //console.log('enter save_completed()');
-            MSP.saveInProgress = false;
+            MSP.endProtectedSave();
             GUI.log(i18n.getMessage('configurationEepromSaved'));
             const oldText = $("#save_button").text();
             $("#save_button").html(i18n.getMessage('vtxButtonSaved'));

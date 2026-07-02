@@ -414,7 +414,7 @@ TABS.power.initialize = function (callback) {
         $('a.save').click(function () {
             // protect this save chain (through EEPROM_WRITE) from being abandoned if the
             // user switches tabs before the FC responds; cleared in save_completed() below
-            MSP.saveInProgress = true;
+            MSP.beginProtectedSave();
 
             for (var index = 0; index < VOLTAGE_METER_CONFIGS.length; index++) {
                 VOLTAGE_METER_CONFIGS[index].vbatscale = parseInt($('input[name="vbatscale-' + index + '"]').val());
@@ -464,7 +464,7 @@ TABS.power.initialize = function (callback) {
         }
 
         function save_completed() {
-            MSP.saveInProgress = false;
+            MSP.endProtectedSave();
             GUI.log(i18n.getMessage('configurationEepromSaved'));
 
             TABS.power.initialize();

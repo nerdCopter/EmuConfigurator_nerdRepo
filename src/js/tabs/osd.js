@@ -232,7 +232,7 @@ FONT.msp = {
 FONT.upload = function ($progress) {
     // protect this multi-step upload+reboot chain from being abandoned if the user switches
     // tabs mid-upload; cleared once the chain settles (success or failure) below
-    MSP.saveInProgress = true;
+    MSP.beginProtectedSave();
     return Promise.mapSeries(FONT.data.characters, function (data, i) {
         $progress.val((i / FONT.data.characters.length) * 100);
         return MSP.promise(MSPCodes.MSP_OSD_CHAR_WRITE, FONT.msp.encode(i));
@@ -247,11 +247,11 @@ FONT.upload = function ($progress) {
             return MSP.promise(MSPCodes.MSP_SET_REBOOT);
         })
         .then(function (result) {
-            MSP.saveInProgress = false;
+            MSP.endProtectedSave();
             return result;
         })
         .catch(function (error) {
-            MSP.saveInProgress = false;
+            MSP.endProtectedSave();
             throw error;
         });
 };
@@ -2904,13 +2904,13 @@ TABS.osd.initialize = function (callback) {
         $('a.save').click(function () {
             var self = this;
             // protect this save from being abandoned if the user switches tabs before the FC responds
-            MSP.saveInProgress = true;
+            MSP.beginProtectedSave();
             MSP.promise(MSPCodes.MSP_EEPROM_WRITE)
                 .then(function () {
-                    MSP.saveInProgress = false;
+                    MSP.endProtectedSave();
                 })
                 .catch(function (error) {
-                    MSP.saveInProgress = false;
+                    MSP.endProtectedSave();
                     console.error(error);
                 });
             GUI.log(i18n.getMessage('osdSettingsSaved'));

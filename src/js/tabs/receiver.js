@@ -239,7 +239,7 @@ TABS.receiver.initialize = function (callback) {
         $('a.update').click(function () {
             // protect this save chain (through EEPROM_WRITE) from being abandoned if the
             // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-            MSP.saveInProgress = true;
+            MSP.beginProtectedSave();
 
             if (semver.gte(CONFIG.apiVersion, "1.15.0")) {
                 RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
@@ -305,7 +305,7 @@ TABS.receiver.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    MSP.saveInProgress = false;
+                    MSP.endProtectedSave();
                     GUI.log(i18n.getMessage('receiverEepromSaved'));
                 });
             }

@@ -1066,7 +1066,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
         $('a.save').click(function () {
             // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
             // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-            MSP.saveInProgress = true;
+            MSP.beginProtectedSave();
 
             // gather data that doesn't have automatic change event bound
             BOARD_ALIGNMENT_CONFIG.roll = parseInt($('input[name="board_align_roll"]').val());
@@ -1297,7 +1297,7 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
 
             function reboot() {
-                MSP.saveInProgress = false;
+                MSP.endProtectedSave();
                 GUI.log(i18n.getMessage('configurationEepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {

@@ -50,12 +50,17 @@ var MSP = {
     packet_error:               0,
     unsupported:                0,
 
-    // Set true by a tab's save handler for the duration of its save chain (including EEPROM_WRITE
-    // and, for save-and-reboot flows, the reboot command). While true, any MSP request issued is
-    // marked protected and survives a tab switch instead of being abandoned by callbacks_cleanup().
-    // Tabs MUST reset this to false once their chain settles (success or failure) or disconnect_cleanup()
-    // will do it for them as a safety net.
+    // Set true via beginProtectedSave() by a tab's save handler for the duration of its save chain
+    // (including EEPROM_WRITE and, for save-and-reboot flows, the reboot command). While true, any
+    // MSP request issued is marked protected and survives a tab switch instead of being abandoned by
+    // callbacks_cleanup(). Tabs call endProtectedSave() once their chain settles (success or failure);
+    // if a chain stalls and never calls it (e.g. a plain callback that never fires), the watchdog timer
+    // armed by beginProtectedSave() clears it after saveWatchdogTimeoutMs so a single stuck save can't
+    // protect every other tab's unrelated requests from cleanup forever. disconnect_cleanup() also
+    // clears it immediately, since nothing can complete once the connection is gone.
     saveInProgress:              false,
+    saveWatchdogTimer:           null,
+    saveWatchdogTimeoutMs:       15000,
 
     last_received_timestamp:   null,
     listeners:                  [],
@@ -374,8 +379,30 @@ var MSP = {
         var pending = self.send_message(code, data, false, function(data) {
           resolve(data);
         });
+        if (!pending) {
+          reject(new Error(`MSP.promise: invalid code (${code})`));
+          return;
+        }
         pending.reject = reject;
       });
+    },
+    // Marks the start of a tab's save chain: requests issued while saveInProgress is true survive a
+    // tab switch instead of being abandoned (see callbacks_cleanup below). Arms a watchdog so a chain
+    // that never calls endProtectedSave() (e.g. a plain callback that never fires) can't leave every
+    // other tab's unrelated requests permanently protected.
+    beginProtectedSave: function (timeoutMs) {
+        this.saveInProgress = true;
+        clearTimeout(this.saveWatchdogTimer);
+        var self = this;
+        this.saveWatchdogTimer = setTimeout(function () {
+            console.log('MSP save watchdog: chain did not settle within ' + (timeoutMs || self.saveWatchdogTimeoutMs) + 'ms, clearing saveInProgress');
+            self.saveInProgress = false;
+        }, timeoutMs || this.saveWatchdogTimeoutMs);
+    },
+    endProtectedSave: function () {
+        clearTimeout(this.saveWatchdogTimer);
+        this.saveWatchdogTimer = null;
+        this.saveInProgress = false;
     },
     // force=true (used by disconnect_cleanup) also clears protected/in-flight-save entries, since a real
     // disconnect means nothing can complete regardless. Plain tab switches leave protected entries alone
@@ -398,7 +425,7 @@ var MSP = {
     disconnect_cleanup: function () {
         this.state = 0; // reset packet state for "clean" initial entry (this is only required if user hot-disconnects)
         this.packet_error = 0; // reset CRC packet error counter for next session
-        this.saveInProgress = false; // any protected in-flight save is moot once the connection is gone
+        this.endProtectedSave(); // any protected in-flight save is moot once the connection is gone
 
         this.callbacks_cleanup(true);
     }

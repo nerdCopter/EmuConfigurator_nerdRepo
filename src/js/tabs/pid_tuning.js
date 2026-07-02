@@ -2817,7 +2817,7 @@ TABS.pid_tuning.initialize = function(callback) {
             self.updating = true;
             // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
             // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-            MSP.saveInProgress = true;
+            MSP.beginProtectedSave();
             Promise.resolve(true)
                 .then(function() {
                     var promise;
@@ -2861,7 +2861,7 @@ TABS.pid_tuning.initialize = function(callback) {
                 }).then(function() {
                     return MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
                 }).then(function() {
-                    MSP.saveInProgress = false;
+                    MSP.endProtectedSave();
                     self.updating = false;
                     self.setDirty(false);
 
@@ -2889,7 +2889,7 @@ TABS.pid_tuning.initialize = function(callback) {
                         });
                     }
                 }).catch(function(error) {
-                    MSP.saveInProgress = false;
+                    MSP.endProtectedSave();
                     self.updating = false;
                     console.error(error);
                 });
