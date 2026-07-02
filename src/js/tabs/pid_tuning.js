@@ -2861,7 +2861,6 @@ TABS.pid_tuning.initialize = function(callback) {
                 }).then(function() {
                     return MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
                 }).then(function() {
-                    MSP.endProtectedSave();
                     self.updating = false;
                     self.setDirty(false);
 
@@ -2888,6 +2887,7 @@ TABS.pid_tuning.initialize = function(callback) {
                             reinitialiseConnection(self);
                         });
                     }
+                    MSP.endProtectedSave();
                 }).catch(function(error) {
                     MSP.endProtectedSave();
                     self.updating = false;
