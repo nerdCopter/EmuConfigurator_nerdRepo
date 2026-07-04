@@ -300,7 +300,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
    function on_save_handler() {
         // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
         // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-        MSP.beginProtectedSave();
+        var protectedSaveToken = MSP.beginProtectedSave();
 
         // update configuration based on current ui state
         SERIAL_CONFIG.ports = [];
@@ -382,7 +382,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
 
         function on_saved_handler() {
-            MSP.endProtectedSave();
+            MSP.endProtectedSave(protectedSaveToken);
 
             GUI.log(i18n.getMessage('configurationEepromSaved'));
 

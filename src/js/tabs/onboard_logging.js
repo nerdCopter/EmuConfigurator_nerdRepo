@@ -12,9 +12,10 @@ TABS.onboard_logging = {
     VCP_BLOCK_SIZE: 4096
 };
 TABS.onboard_logging.initialize = function (callback) {
-    var 
+    var
         self = this,
-        saveCancelled, eraseCancelled;
+        saveCancelled, eraseCancelled,
+        protectedSaveToken; // set by the save-settings click handler below, read by reboot()
 
     if (GUI.active_tab !== 'onboard_logging') {
         GUI.active_tab = 'onboard_logging';
@@ -47,7 +48,7 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     function reboot() {
-        MSP.endProtectedSave();
+        MSP.endProtectedSave(protectedSaveToken);
         GUI.log(i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
@@ -107,7 +108,7 @@ TABS.onboard_logging.initialize = function (callback) {
                 $(".tab-onboard_logging a.save-settings").click(function() {
                     // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if
                     // the user switches tabs before the FC responds; cleared in reboot() above
-                    MSP.beginProtectedSave();
+                    protectedSaveToken = MSP.beginProtectedSave();
 
                     if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
                         BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);

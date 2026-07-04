@@ -298,7 +298,7 @@ TABS.auxiliary.initialize = function (callback) {
         $('a.save').click(function () {
             // protect this save chain (through EEPROM_WRITE) from being abandoned if the
             // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-            MSP.beginProtectedSave();
+            var protectedSaveToken = MSP.beginProtectedSave();
 
             // update internal data structures based on current UI elements
             
@@ -384,7 +384,7 @@ TABS.auxiliary.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    MSP.endProtectedSave();
+                    MSP.endProtectedSave(protectedSaveToken);
                     GUI.log(i18n.getMessage('auxiliaryEepromSaved'));
                 });
             }

@@ -50,16 +50,19 @@ var MSP = {
     packet_error:               0,
     unsupported:                0,
 
-    // Set true via beginProtectedSave() by a tab's save handler for the duration of its save chain
-    // (including EEPROM_WRITE and, for save-and-reboot flows, the reboot command). While true, any
-    // MSP request issued is marked protected and survives a tab switch instead of being abandoned by
-    // callbacks_cleanup(). Tabs call endProtectedSave() once their chain settles (success or failure);
-    // if a chain stalls and never calls it (e.g. a plain callback that never fires), the watchdog timer
-    // armed by beginProtectedSave() clears it after saveWatchdogTimeoutMs so a single stuck save can't
-    // protect every other tab's unrelated requests from cleanup forever. disconnect_cleanup() also
-    // clears it immediately, since nothing can complete once the connection is gone.
-    saveInProgress:              false,
-    saveWatchdogTimer:           null,
+    // Reentrant save protection: beginProtectedSave() returns a token identifying one tab's save
+    // chain and increments activeSaveCount; requests issued while activeSaveCount > 0 are marked
+    // protected and survive a tab switch instead of being abandoned by callbacks_cleanup(). Tabs call
+    // endProtectedSave(token) once their chain settles (success or failure); if a chain stalls and
+    // never calls it (e.g. a plain callback that never fires), the watchdog armed for that token
+    // releases it after saveWatchdogTimeoutMs so one stuck save can't protect every other tab's
+    // unrelated requests forever. Using a per-token count instead of a single boolean means one save
+    // chain finishing (or timing out) can't prematurely end protection for a second, still-running
+    // save chain from another tab. disconnect_cleanup() releases every outstanding token immediately,
+    // since nothing can complete once the connection is gone.
+    activeSaveCount:             0,
+    saveWatchdogTimers:          {},
+    nextSaveToken:               1,
     saveWatchdogTimeoutMs:       15000,
 
     last_received_timestamp:   null,
@@ -333,7 +336,7 @@ var MSP = {
             bufferOut = this.encode_message_v2(code, data);
         }
 
-        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError, 'protected': this.saveInProgress};
+        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError, 'protected': this.activeSaveCount > 0};
 
         var requestExists = false;
         for (var i = 0; i < MSP.callbacks.length; i++) {
@@ -386,23 +389,33 @@ var MSP = {
         pending.reject = reject;
       });
     },
-    // Marks the start of a tab's save chain: requests issued while saveInProgress is true survive a
-    // tab switch instead of being abandoned (see callbacks_cleanup below). Arms a watchdog so a chain
-    // that never calls endProtectedSave() (e.g. a plain callback that never fires) can't leave every
-    // other tab's unrelated requests permanently protected.
+    // Marks the start of one tab's save chain: while activeSaveCount > 0, requests issued survive a
+    // tab switch instead of being abandoned (see callbacks_cleanup below). Returns a token that the
+    // caller MUST pass to endProtectedSave() once its chain settles (success or failure). Arms a
+    // watchdog scoped to that token so a chain that never calls endProtectedSave() (e.g. a plain
+    // callback that never fires) can't leave protection stuck on forever.
     beginProtectedSave: function (timeoutMs) {
-        this.saveInProgress = true;
-        clearTimeout(this.saveWatchdogTimer);
+        var token = this.nextSaveToken++;
+        this.activeSaveCount++;
         var self = this;
-        this.saveWatchdogTimer = setTimeout(function () {
-            console.log('MSP save watchdog: chain did not settle within ' + (timeoutMs || self.saveWatchdogTimeoutMs) + 'ms, clearing saveInProgress');
-            self.saveInProgress = false;
+        this.saveWatchdogTimers[token] = setTimeout(function () {
+            console.log('MSP save watchdog: save token ' + token + ' did not settle within ' + (timeoutMs || self.saveWatchdogTimeoutMs) + 'ms, releasing its protection');
+            self._releaseSaveToken(token);
         }, timeoutMs || this.saveWatchdogTimeoutMs);
+        return token;
     },
-    endProtectedSave: function () {
-        clearTimeout(this.saveWatchdogTimer);
-        this.saveWatchdogTimer = null;
-        this.saveInProgress = false;
+    endProtectedSave: function (token) {
+        this._releaseSaveToken(token);
+    },
+    // Shared by endProtectedSave() and the per-token watchdog; safe to call twice for the same token
+    // (e.g. if both the watchdog and a late endProtectedSave() fire) since the second call is a no-op.
+    _releaseSaveToken: function (token) {
+        if (!Object.prototype.hasOwnProperty.call(this.saveWatchdogTimers, token)) {
+            return;
+        }
+        clearTimeout(this.saveWatchdogTimers[token]);
+        delete this.saveWatchdogTimers[token];
+        this.activeSaveCount = Math.max(0, this.activeSaveCount - 1);
     },
     // force=true (used by disconnect_cleanup) also clears protected/in-flight-save entries, since a real
     // disconnect means nothing can complete regardless. Plain tab switches leave protected entries alone
@@ -426,7 +439,13 @@ var MSP = {
     disconnect_cleanup: function () {
         this.state = 0; // reset packet state for "clean" initial entry (this is only required if user hot-disconnects)
         this.packet_error = 0; // reset CRC packet error counter for next session
-        this.endProtectedSave(); // any protected in-flight save is moot once the connection is gone
+
+        // release every outstanding save token — any protected in-flight save is moot once the connection is gone
+        for (var token in this.saveWatchdogTimers) {
+            clearTimeout(this.saveWatchdogTimers[token]);
+        }
+        this.saveWatchdogTimers = {};
+        this.activeSaveCount = 0;
 
         this.callbacks_cleanup(true);
     }

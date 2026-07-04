@@ -232,7 +232,7 @@ FONT.msp = {
 FONT.upload = function ($progress) {
     // protect this multi-step upload+reboot chain from being abandoned if the user switches
     // tabs mid-upload; cleared once the chain settles (success or failure) below
-    MSP.beginProtectedSave();
+    var protectedSaveToken = MSP.beginProtectedSave();
     return Promise.mapSeries(FONT.data.characters, function (data, i) {
         $progress.val((i / FONT.data.characters.length) * 100);
         return MSP.promise(MSPCodes.MSP_OSD_CHAR_WRITE, FONT.msp.encode(i));
@@ -248,10 +248,10 @@ FONT.upload = function ($progress) {
             // connection before any ack can arrive, so waiting on a promise for it only produces
             // an unhandled rejection once disconnect_cleanup() settles it.
             MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
-            MSP.endProtectedSave();
+            MSP.endProtectedSave(protectedSaveToken);
         })
         .catch(function (error) {
-            MSP.endProtectedSave();
+            MSP.endProtectedSave(protectedSaveToken);
             throw error;
         });
 };
@@ -2904,13 +2904,13 @@ TABS.osd.initialize = function (callback) {
         $('a.save').click(function () {
             var self = this;
             // protect this save from being abandoned if the user switches tabs before the FC responds
-            MSP.beginProtectedSave();
+            var protectedSaveToken = MSP.beginProtectedSave();
             MSP.promise(MSPCodes.MSP_EEPROM_WRITE)
                 .then(function () {
-                    MSP.endProtectedSave();
+                    MSP.endProtectedSave(protectedSaveToken);
                 })
                 .catch(function (error) {
-                    MSP.endProtectedSave();
+                    MSP.endProtectedSave(protectedSaveToken);
                     console.error(error);
                 });
             GUI.log(i18n.getMessage('osdSettingsSaved'));

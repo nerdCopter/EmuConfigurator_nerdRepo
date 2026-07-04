@@ -6,6 +6,7 @@ TABS.power = {
 
 TABS.power.initialize = function (callback) {
     var self = this;
+    var protectedSaveToken; // set by the save handler below, read by save_completed()
 
     if (GUI.active_tab != 'power') {
         GUI.active_tab = 'power';
@@ -414,7 +415,7 @@ TABS.power.initialize = function (callback) {
         $('a.save').click(function () {
             // protect this save chain (through EEPROM_WRITE) from being abandoned if the
             // user switches tabs before the FC responds; cleared in save_completed() below
-            MSP.beginProtectedSave();
+            protectedSaveToken = MSP.beginProtectedSave();
 
             for (var index = 0; index < VOLTAGE_METER_CONFIGS.length; index++) {
                 VOLTAGE_METER_CONFIGS[index].vbatscale = parseInt($('input[name="vbatscale-' + index + '"]').val());
@@ -464,10 +465,14 @@ TABS.power.initialize = function (callback) {
         }
 
         function save_completed() {
-            MSP.endProtectedSave();
+            MSP.endProtectedSave(protectedSaveToken);
             GUI.log(i18n.getMessage('configurationEepromSaved'));
 
-            TABS.power.initialize();
+            // this callback survives a tab switch (protected save), so only refresh Power if
+            // it's still the tab the user is actually looking at
+            if (GUI.active_tab === 'power') {
+                TABS.power.initialize();
+            }
         }
 
         save_battery_config();

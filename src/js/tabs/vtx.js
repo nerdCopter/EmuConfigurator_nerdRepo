@@ -275,7 +275,7 @@ TABS.vtx.initialize = function(callback) {
         self.updating = true;
         // protect this save chain (through EEPROM_WRITE) from being abandoned if the
         // user switches tabs before the FC responds; cleared in save_completed() below
-        MSP.beginProtectedSave();
+        var protectedSaveToken = MSP.beginProtectedSave();
         dump_html_to_msp();
 
         //console.log('save_vtx(): type:'+VTX_CONFIG.vtx_type
@@ -301,7 +301,7 @@ TABS.vtx.initialize = function(callback) {
 
         function save_completed() {
             //console.log('enter save_completed()');
-            MSP.endProtectedSave();
+            MSP.endProtectedSave(protectedSaveToken);
             GUI.log(i18n.getMessage('configurationEepromSaved'));
             const oldText = $("#save_button").text();
             $("#save_button").html(i18n.getMessage('vtxButtonSaved'));
@@ -311,13 +311,19 @@ TABS.vtx.initialize = function(callback) {
                 clearTimeout(saveTimeout);
             }, 2000);
 
-            TABS.vtx.initialize();
+            // this callback survives a tab switch (protected save), so only refresh VTX if
+            // it's still the tab the user is actually looking at
+            if (GUI.active_tab === 'vtx') {
+                TABS.vtx.initialize();
+            }
 
             // if pitmode, then wait and refresh again (is 3000ms enough?)
             if (VTX_CONFIG.vtx_pit_mode) {
                 //console.log('pitmode true, pause and refresh again due to slow VTX setting');
                 let refreshTimeout = setTimeout(function() {
-                    TABS.vtx.initialize();
+                    if (GUI.active_tab === 'vtx') {
+                        TABS.vtx.initialize();
+                    }
                     clearTimeout(refreshTimeout);
                 }, 3000);
             }

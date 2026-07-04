@@ -295,7 +295,7 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
 
                 // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
                 // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
-                MSP.beginProtectedSave();
+                var protectedSaveToken = MSP.beginProtectedSave();
 
                 function save_transponder_data() {
                     MSP.send_message(MSPCodes.MSP_SET_TRANSPONDER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_TRANSPONDER_CONFIG), false, save_to_eeprom);
@@ -303,7 +303,7 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
 
                 function save_to_eeprom() {
                     MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
-                        MSP.endProtectedSave();
+                        MSP.endProtectedSave(protectedSaveToken);
                         GUI.log(i18n.getMessage('transponderEepromSaved'));
                         if ( $(_this).hasClass('reboot') ) {
                             GUI.tab_switch_cleanup(function() {
