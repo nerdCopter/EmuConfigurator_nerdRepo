@@ -234,6 +234,10 @@ FONT.upload = function ($progress) {
     // tabs mid-upload; cleared once the chain settles (success or failure) below
     var protectedSaveToken = MSP.beginProtectedSave();
     return Promise.mapSeries(FONT.data.characters, function (data, i) {
+        // a full upload (hundreds of characters) can legitimately run longer than one watchdog
+        // window, so refresh it on every character instead of racing a single fixed timeout
+        // against the whole loop — only a stalled character write should expire protection
+        MSP.touchProtectedSave(protectedSaveToken);
         $progress.val((i / FONT.data.characters.length) * 100);
         return MSP.promise(MSPCodes.MSP_OSD_CHAR_WRITE, FONT.msp.encode(i));
     })

@@ -397,15 +397,29 @@ var MSP = {
     beginProtectedSave: function (timeoutMs) {
         var token = this.nextSaveToken++;
         this.activeSaveCount++;
+        this._armSaveWatchdog(token, timeoutMs);
+        return token;
+    },
+    endProtectedSave: function (token) {
+        this._releaseSaveToken(token);
+    },
+    // Re-arms an existing token's watchdog without touching activeSaveCount, for a chain that legitimately
+    // runs longer than one watchdog window (e.g. many sequential requests in a loop) — call this between
+    // steps so only a stalled step expires protection, instead of the chain's total duration. No-op if the
+    // token was already released (e.g. by a disconnect).
+    touchProtectedSave: function (token, timeoutMs) {
+        if (!Object.prototype.hasOwnProperty.call(this.saveWatchdogTimers, token)) {
+            return;
+        }
+        clearTimeout(this.saveWatchdogTimers[token]);
+        this._armSaveWatchdog(token, timeoutMs);
+    },
+    _armSaveWatchdog: function (token, timeoutMs) {
         var self = this;
         this.saveWatchdogTimers[token] = setTimeout(function () {
             console.log('MSP save watchdog: save token ' + token + ' did not settle within ' + (timeoutMs || self.saveWatchdogTimeoutMs) + 'ms, releasing its protection');
             self._releaseSaveToken(token);
         }, timeoutMs || this.saveWatchdogTimeoutMs);
-        return token;
-    },
-    endProtectedSave: function (token) {
-        this._releaseSaveToken(token);
     },
     // Shared by endProtectedSave() and the per-token watchdog; safe to call twice for the same token
     // (e.g. if both the watchdog and a late endProtectedSave() fire) since the second call is a no-op.
