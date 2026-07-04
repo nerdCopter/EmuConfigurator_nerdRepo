@@ -963,7 +963,7 @@ ipcMain.handle('dialog:write-binary-file', async (event, filePath, byteArray, is
   }
   // Log only on first write (start); suppress per-chunk logs
   if (isFirstWrite) {
-    console.log(`[BBL] Downloading blackbox log to: ${filePath}`);
+    console.log(`[FILE] Writing to: ${filePath}`);
   }
   return buffer.length;
 });
@@ -1000,7 +1000,6 @@ ipcMain.handle('dialog:truncate-file', async (event, filePath, size) => {
         throw err;
       }
     }
-    console.log(`Truncated ${filePath} to ${size} bytes`);
     return size;
   } catch (e) {
     console.error(`Truncate failed for ${filePath}:`, e.message);
