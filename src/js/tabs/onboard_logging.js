@@ -14,8 +14,7 @@ TABS.onboard_logging = {
 TABS.onboard_logging.initialize = function (callback) {
     var
         self = this,
-        saveCancelled, eraseCancelled,
-        protectedSaveToken; // set by the save-settings click handler below, read by reboot()
+        saveCancelled, eraseCancelled;
 
     if (GUI.active_tab !== 'onboard_logging') {
         GUI.active_tab = 'onboard_logging';
@@ -43,12 +42,17 @@ TABS.onboard_logging.initialize = function (callback) {
         return gcd(b, a % b);
     }
     
-    function save_to_eeprom() {
-        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+    // token is threaded explicitly through this chain rather than a shared closure variable,
+    // so two overlapping clicks (before the first one's response arrives) each track their own
+    // protection instead of one click's completion releasing the other's still-in-flight token
+    function save_to_eeprom(token) {
+        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
+            reboot(token);
+        });
     }
 
-    function reboot() {
-        MSP.endProtectedSave(protectedSaveToken);
+    function reboot(token) {
+        MSP.endProtectedSave(token);
         GUI.log(i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
@@ -107,8 +111,10 @@ TABS.onboard_logging.initialize = function (callback) {
             if (BLACKBOX.supported) {
                 $(".tab-onboard_logging a.save-settings").click(function() {
                     // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if
-                    // the user switches tabs before the FC responds; cleared in reboot() above
-                    protectedSaveToken = MSP.beginProtectedSave();
+                    // the user switches tabs before the FC responds; cleared in reboot() above. Scoped
+                    // to this click's own closure (not a shared variable) so a second click before this
+                    // one settles can't overwrite the token this chain needs to release.
+                    var protectedSaveToken = MSP.beginProtectedSave();
 
                     if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
                         BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);
@@ -118,7 +124,9 @@ TABS.onboard_logging.initialize = function (callback) {
                         BLACKBOX.blackboxRateDenom = parseInt(rate[1], 10);
                     }
                     BLACKBOX.blackboxDevice = parseInt(deviceSelect.val(), 10);
-                    MSP.send_message(MSPCodes.MSP_SET_BLACKBOX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BLACKBOX_CONFIG), false, save_to_eeprom);
+                    MSP.send_message(MSPCodes.MSP_SET_BLACKBOX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BLACKBOX_CONFIG), false, function() {
+                        save_to_eeprom(protectedSaveToken);
+                    });
                 });
             }
             
