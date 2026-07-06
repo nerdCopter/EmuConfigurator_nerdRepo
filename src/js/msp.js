@@ -480,7 +480,11 @@ var MSP = {
 // disconnect_cleanup() above (tab switch or real disconnect, not a bug). This hook replaces
 // Bluebird's default reporter app-wide with calmer, explanatory logging for that specific case;
 // anything else still logs normally so a genuine bug is never silently hidden.
-if (window.Promise && typeof window.Promise.onPossiblyUnhandledRejection === 'function') {
+(function () {
+    if (!window.Promise || typeof window.Promise.onPossiblyUnhandledRejection !== 'function') {
+        return;
+    }
+
     var MSP_ABANDONED_REQUEST_PATTERN = /^MSP request (\d+) aborted before a response arrived \(tab switch or disconnect\)$/;
     var mspCodeNamesByValue = {};
     for (var mspCodeName in MSPCodes) {
@@ -496,4 +500,4 @@ if (window.Promise && typeof window.Promise.onPossiblyUnhandledRejection === 'fu
             console.error('Unhandled rejection:', error);
         }
     });
-}
+})();
