@@ -404,19 +404,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         // initial-config-only: first time a port is set to MSP Display Port (HDZERO_OSD), switch OSD video format to HD
         function save_osd_video_format() {
             if (hdZeroFirstSet) {
-                // MSP.promise() never rejects, and switching tabs mid-save clears pending MSP
-                // callbacks without settling their promises (GUI.tab_switch_cleanup ->
-                // MSP.callbacks_cleanup). Without a bound, that would silently skip EEPROM
-                // write + reboot below. This watchdog guarantees save_to_eeprom() always runs.
-                let osdSaveSettled = false;
-                const osdSaveWatchdog = setTimeout(function () {
-                    if (!osdSaveSettled) {
-                        osdSaveSettled = true;
-                        console.error('Timed out auto-setting OSD video format to HD; continuing with save/reboot.');
-                        save_to_eeprom();
-                    }
-                }, 3000);
-
+                // This whole chain runs while protectedSaveToken keeps activeSaveCount > 0 (see top
+                // of on_save_handler), so a mid-save tab switch no longer abandons these requests
+                // (fixed app-wide by #625) — no local timeout/watchdog needed here anymore.
                 MSP.promise(MSPCodes.MSP_OSD_CONFIG)
                     .then(function (info) {
                         // OSD.chooseFields() needs OSD.ALL_DISPLAY_FIELDS, which is only populated
@@ -434,13 +424,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
                         // never let this convenience feature block the actual save/reboot
                         console.error('Failed to auto-set OSD video format to HD:', e);
                     })
-                    .then(function () {
-                        clearTimeout(osdSaveWatchdog);
-                        if (!osdSaveSettled) {
-                            osdSaveSettled = true;
-                            save_to_eeprom();
-                        }
-                    });
+                    .then(save_to_eeprom);
             } else {
                 save_to_eeprom();
             }
