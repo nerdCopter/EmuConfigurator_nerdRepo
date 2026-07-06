@@ -308,6 +308,10 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
 
 
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
+
             // gather data that doesn't have automatic change event bound
 
             FEATURE_CONFIG.features.updateData($('input[name="FAILSAFE"]'));
@@ -376,6 +380,8 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                     reinitialiseConnection(self);
                 });
+
+                MSP.endProtectedSave(protectedSaveToken);
             }
 
             MSP.send_message(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG), false, save_failssafe_config);

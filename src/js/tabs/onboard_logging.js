@@ -12,7 +12,7 @@ TABS.onboard_logging = {
     VCP_BLOCK_SIZE: 4096
 };
 TABS.onboard_logging.initialize = function (callback) {
-    var 
+    var
         self = this,
         saveCancelled, eraseCancelled;
 
@@ -42,17 +42,24 @@ TABS.onboard_logging.initialize = function (callback) {
         return gcd(b, a % b);
     }
     
-    function save_to_eeprom() {
-        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, reboot);
+    // token is threaded explicitly through this chain rather than a shared closure variable,
+    // so two overlapping clicks (before the first one's response arrives) each track their own
+    // protection instead of one click's completion releasing the other's still-in-flight token
+    function save_to_eeprom(token) {
+        MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
+            reboot(token);
+        });
     }
 
-    function reboot() {
+    function reboot(token) {
         GUI.log(i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
             MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
             reinitialiseConnection(self);
         });
+
+        MSP.endProtectedSave(token);
     }
     
     function load_html() {
@@ -104,6 +111,12 @@ TABS.onboard_logging.initialize = function (callback) {
 
             if (BLACKBOX.supported) {
                 $(".tab-onboard_logging a.save-settings").click(function() {
+                    // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if
+                    // the user switches tabs before the FC responds; cleared in reboot() above. Scoped
+                    // to this click's own closure (not a shared variable) so a second click before this
+                    // one settles can't overwrite the token this chain needs to release.
+                    var protectedSaveToken = MSP.beginProtectedSave();
+
                     if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
                         BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);
                     } else {
@@ -112,7 +125,9 @@ TABS.onboard_logging.initialize = function (callback) {
                         BLACKBOX.blackboxRateDenom = parseInt(rate[1], 10);
                     }
                     BLACKBOX.blackboxDevice = parseInt(deviceSelect.val(), 10);
-                    MSP.send_message(MSPCodes.MSP_SET_BLACKBOX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BLACKBOX_CONFIG), false, save_to_eeprom);
+                    MSP.send_message(MSPCodes.MSP_SET_BLACKBOX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BLACKBOX_CONFIG), false, function() {
+                        save_to_eeprom(protectedSaveToken);
+                    });
                 });
             }
             

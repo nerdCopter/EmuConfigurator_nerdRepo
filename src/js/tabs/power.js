@@ -412,6 +412,12 @@ TABS.power.initialize = function (callback) {
         });
 
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE) from being abandoned if the
+            // user switches tabs before the FC responds; cleared in save_completed() below.
+            // Scoped to this click's own closure (not a shared variable) so a second click
+            // before this one settles can't overwrite the token this chain needs to release.
+            var protectedSaveToken = MSP.beginProtectedSave();
+
             for (var index = 0; index < VOLTAGE_METER_CONFIGS.length; index++) {
                 VOLTAGE_METER_CONFIGS[index].vbatscale = parseInt($('input[name="vbatscale-' + index + '"]').val());
                 VOLTAGE_METER_CONFIGS[index].vbatresdivval = parseInt($('input[name="vbatresdivval-' + index + '"]').val());
@@ -428,13 +434,16 @@ TABS.power.initialize = function (callback) {
             BATTERY_CONFIG.vbatwarningcellvoltage = parseFloat($('input[name="warningcellvoltage"]').val());
             BATTERY_CONFIG.capacity = parseInt($('input[name="capacity"]').val());
 
-            save_power_config();
+            save_power_config(protectedSaveToken);
         });
 
         GUI.interval_add('setup_data_pull_slow', get_slow_data, 200, true); // 5hz
     }
 
-    function save_power_config() {
+    // token is a parameter here (not the old shared closure variable) so every function nested
+    // below reads the token belonging to THIS invocation's click, even if another click starts
+    // and finishes a separate save_power_config() call before this one settles
+    function save_power_config(token) {
         function save_battery_config() {
             MSP.send_message(MSPCodes.MSP_SET_BATTERY_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BATTERY_CONFIG), false, save_voltage_config);
         }
@@ -460,9 +469,14 @@ TABS.power.initialize = function (callback) {
         }
 
         function save_completed() {
+            MSP.endProtectedSave(token);
             GUI.log(i18n.getMessage('configurationEepromSaved'));
 
-            TABS.power.initialize();
+            // this callback survives a tab switch (protected save), so only refresh Power if
+            // it's still the tab the user is actually looking at
+            if (GUI.active_tab === 'power') {
+                TABS.power.initialize();
+            }
         }
 
         save_battery_config();
