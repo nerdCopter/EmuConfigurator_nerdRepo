@@ -407,19 +407,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
                 // This whole chain runs while protectedSaveToken keeps activeSaveCount > 0 (see top
                 // of on_save_handler), so a mid-save tab switch no longer abandons these requests
                 // (fixed app-wide by #625) — no local timeout/watchdog needed here anymore.
-                MSP.promise(MSPCodes.MSP_OSD_CONFIG)
-                    .then(function (info) {
-                        // OSD.chooseFields() needs OSD.ALL_DISPLAY_FIELDS, which is only populated
-                        // when the OSD tab has been opened (osd.js TABS.osd.initialize); ports.js
-                        // may save before that ever happens, so load it here if still missing.
-                        if (!OSD.ALL_DISPLAY_FIELDS) {
-                            OSD.loadDisplayFields();
-                        }
-                        OSD.chooseFields();
-                        OSD.msp.decode(info);
-                        OSD.data.video_system = OSD.constants.VIDEO_TYPES.indexOf('HD');
-                        return MSP.promise(MSPCodes.MSP_SET_OSD_CONFIG, OSD.msp.encodeOther());
-                    })
+                OSD.saveVideoFormat('HD')
                     .catch(function (e) {
                         // never let this convenience feature block the actual save/reboot
                         console.error('Failed to auto-set OSD video format to HD:', e);

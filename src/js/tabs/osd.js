@@ -2108,6 +2108,31 @@ OSD.msp = {
     }
 };
 
+// Fetches the FC's current OSD config and decodes it into OSD.data, ensuring
+// OSD.ALL_DISPLAY_FIELDS is populated first (otherwise only guaranteed once the
+// OSD tab has been opened) -- safe to call from any tab, not just this one.
+OSD.fetchAndDecode = function () {
+    return MSP.promise(MSPCodes.MSP_OSD_CONFIG).then(function (info) {
+        if (!OSD.ALL_DISPLAY_FIELDS) {
+            OSD.loadDisplayFields();
+        }
+        OSD.chooseFields();
+        OSD.msp.decode(info);
+        return info;
+    });
+};
+
+// Fetches+decodes the current OSD config, switches video format, and saves it
+// back to the FC. Shared by the OSD tab's own video-format radio buttons and by
+// any other tab that needs to change video format without corrupting the
+// alarms/warnings/timers encodeOther() also serializes.
+OSD.saveVideoFormat = function (type) {
+    return OSD.fetchAndDecode().then(function () {
+        OSD.data.video_system = OSD.constants.VIDEO_TYPES.indexOf(type);
+        return MSP.promise(MSPCodes.MSP_SET_OSD_CONFIG, OSD.msp.encodeOther());
+    });
+};
+
 OSD.GUI = {};
 OSD.GUI.preview = {
     onMouseEnter: function () {
@@ -2351,12 +2376,8 @@ TABS.osd.initialize = function (callback) {
         // 2 way binding... sorta
         function updateOsdView() {
             // ask for the OSD config data
-            MSP.promise(MSPCodes.MSP_OSD_CONFIG)
-                .then(function (info) {
-
-                    OSD.chooseFields();
-
-                    OSD.msp.decode(info);
+            OSD.fetchAndDecode()
+                .then(function () {
 
                     if (OSD.data.state.haveSomeOsd == 0) {
                         $('.unsupported').fadeIn();
@@ -2379,8 +2400,7 @@ TABS.osd.initialize = function (callback) {
                         $videoTypes.append($checkbox);
                     }
                     $videoTypes.find(':radio').click(function (e) {
-                        OSD.data.video_system = $(this).data('type');
-                        MSP.promise(MSPCodes.MSP_SET_OSD_CONFIG, OSD.msp.encodeOther())
+                        OSD.saveVideoFormat(OSD.constants.VIDEO_TYPES[$(this).data('type')])
                             .then(function () {
                                 updateOsdView();
                             });
