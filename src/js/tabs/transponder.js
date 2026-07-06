@@ -300,7 +300,6 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
 
                 function save_to_eeprom() {
                     MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
-                        MSP.endProtectedSave(protectedSaveToken);
                         GUI.log(i18n.getMessage('transponderEepromSaved'));
                         if ( $(_this).hasClass('reboot') ) {
                             GUI.tab_switch_cleanup(function() {
@@ -308,6 +307,7 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
                                 reinitialiseConnection(self);
                             });
                         }
+                        MSP.endProtectedSave(protectedSaveToken);
                     });
                 }
 

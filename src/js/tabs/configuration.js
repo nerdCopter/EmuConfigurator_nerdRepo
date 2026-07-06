@@ -1297,13 +1297,14 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
             }
 
             function reboot() {
-                MSP.endProtectedSave(protectedSaveToken);
                 GUI.log(i18n.getMessage('configurationEepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                     reinitialiseConnection(self);
                 });
+
+                MSP.endProtectedSave(protectedSaveToken);
             }
 
             save_serial_config();

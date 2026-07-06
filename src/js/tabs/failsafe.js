@@ -374,13 +374,14 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
             }
 
             function reboot() {
-                MSP.endProtectedSave(protectedSaveToken);
                 GUI.log(i18n.getMessage('configurationEepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                     reinitialiseConnection(self);
                 });
+
+                MSP.endProtectedSave(protectedSaveToken);
             }
 
             MSP.send_message(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG), false, save_failssafe_config);

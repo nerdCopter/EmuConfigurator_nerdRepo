@@ -52,13 +52,14 @@ TABS.onboard_logging.initialize = function (callback) {
     }
 
     function reboot(token) {
-        MSP.endProtectedSave(token);
         GUI.log(i18n.getMessage('configurationEepromSaved'));
 
         GUI.tab_switch_cleanup(function() {
             MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
             reinitialiseConnection(self);
         });
+
+        MSP.endProtectedSave(token);
     }
     
     function load_html() {
