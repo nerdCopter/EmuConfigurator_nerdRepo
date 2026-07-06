@@ -464,3 +464,27 @@ var MSP = {
         this.callbacks_cleanup(true);
     }
 };
+
+// window.Promise is Bluebird (see main.html), whose default handling of an unhandled rejection
+// is a multi-frame "Unhandled rejection" trace dump straight to console — accurate, but alarming
+// for the one case we know is expected: a background MSP read abandoned by callbacks_cleanup()/
+// disconnect_cleanup() above (tab switch or real disconnect, not a bug). This hook replaces
+// Bluebird's default reporter app-wide with calmer, explanatory logging for that specific case;
+// anything else still logs normally so a genuine bug is never silently hidden.
+if (window.Promise && typeof window.Promise.onPossiblyUnhandledRejection === 'function') {
+    var MSP_ABANDONED_REQUEST_PATTERN = /^MSP request (\d+) aborted before a response arrived \(tab switch or disconnect\)$/;
+    var mspCodeNamesByValue = {};
+    for (var mspCodeName in MSPCodes) {
+        mspCodeNamesByValue[MSPCodes[mspCodeName]] = mspCodeName;
+    }
+
+    window.Promise.onPossiblyUnhandledRejection(function (error) {
+        var match = error instanceof Error && MSP_ABANDONED_REQUEST_PATTERN.exec(error.message);
+        if (match) {
+            var code = match[1];
+            console.log(`MSP: request ${mspCodeNamesByValue[code] || code} was abandoned before a response arrived (tab switch or disconnect) — expected for a non-critical background read, no data was lost.`);
+        } else {
+            console.error('Unhandled rejection:', error);
+        }
+    });
+}
