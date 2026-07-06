@@ -336,7 +336,7 @@ var MSP = {
             bufferOut = this.encode_message_v2(code, data);
         }
 
-        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError, 'protected': this.activeSaveCount > 0};
+        var obj = {'code': code, 'requestBuffer': bufferOut, 'callback': callback_msp ? callback_msp : false, 'timer': false, 'callbackOnError': doCallbackOnError};
 
         var requestExists = false;
         for (var i = 0; i < MSP.callbacks.length; i++) {
@@ -431,12 +431,21 @@ var MSP = {
         delete this.saveWatchdogTimers[token];
         this.activeSaveCount = Math.max(0, this.activeSaveCount - 1);
     },
-    // force=true (used by disconnect_cleanup) also clears protected/in-flight-save entries, since a real
-    // disconnect means nothing can complete regardless. Plain tab switches leave protected entries alone
-    // so an in-flight save (including EEPROM_WRITE) is not abandoned, per issue #623.
+    // force=true (used by disconnect_cleanup) also clears in-flight-save entries, since a real
+    // disconnect means nothing can complete regardless. Plain tab switches leave everything alone
+    // while a save is CURRENTLY active (activeSaveCount > 0, checked live here, not a flag stored on
+    // the request at creation time) so an in-flight save (including EEPROM_WRITE) is not abandoned,
+    // per issue #623 — but the moment the save ends, protection ends with it for everything, including
+    // unrelated background polls that happened to be issued during that window. A per-request flag
+    // frozen at creation time was tried first and was a real bug: a periodic poll created during any
+    // save anywhere in the session would stay "protected" forever, even long after that save finished,
+    // silently defeating cleanup calls other code depends on (e.g. cli.js's tab_switch_cleanup ->
+    // callbacks_cleanup() flush of stale retransmit timers before its CLI-exit/reboot/reconnect
+    // sequence) and leaving a retry timer stuck hammering a connection that had already moved on.
     callbacks_cleanup: function (force) {
+        var protectAll = this.activeSaveCount > 0 && !force;
         for (var i = this.callbacks.length - 1; i >= 0; i--) {
-            if (this.callbacks[i].protected && !force) {
+            if (protectAll) {
                 console.log(`MSP: preserving in-flight request ${this.callbacks[i].code} through tab switch (save in progress)`);
                 continue;
             }
