@@ -50,6 +50,21 @@ var MSP = {
     packet_error:               0,
     unsupported:                0,
 
+    // Reentrant save protection: beginProtectedSave() returns a token identifying one tab's save
+    // chain and increments activeSaveCount; requests issued while activeSaveCount > 0 are marked
+    // protected and survive a tab switch instead of being abandoned by callbacks_cleanup(). Tabs call
+    // endProtectedSave(token) once their chain settles (success or failure); if a chain stalls and
+    // never calls it (e.g. a plain callback that never fires), the watchdog armed for that token
+    // releases it after saveWatchdogTimeoutMs so one stuck save can't protect every other tab's
+    // unrelated requests forever. Using a per-token count instead of a single boolean means one save
+    // chain finishing (or timing out) can't prematurely end protection for a second, still-running
+    // save chain from another tab. disconnect_cleanup() releases every outstanding token immediately,
+    // since nothing can complete once the connection is gone.
+    activeSaveCount:             0,
+    saveWatchdogTimers:          {},
+    nextSaveToken:               1,
+    saveWatchdogTimeoutMs:       15000,
+
     last_received_timestamp:   null,
     listeners:                  [],
 
@@ -353,31 +368,136 @@ var MSP = {
             });
         }
 
-        return true;
+        return obj;
     },
 
     /**
      * resolves: {command: code, data: data, length: message_length}
+     * rejects: Error, if the request is abandoned by callbacks_cleanup() (e.g. tab switch or disconnect
+     * before a response arrives) instead of being left to hang forever.
      */
     promise: function(code, data) {
       var self = this;
-      return new Promise(function(resolve) {
-        self.send_message(code, data, false, function(data) {
+      return new Promise(function(resolve, reject) {
+        var pending = self.send_message(code, data, false, function(data) {
           resolve(data);
         });
+        if (!pending) {
+          reject(new Error(`MSP.promise: invalid code (${code})`));
+          return;
+        }
+        pending.reject = reject;
       });
     },
-    callbacks_cleanup: function () {
-        for (var i = 0; i < this.callbacks.length; i++) {
-            clearInterval(this.callbacks[i].timer);
+    // Marks the start of one tab's save chain: while activeSaveCount > 0, requests issued survive a
+    // tab switch instead of being abandoned (see callbacks_cleanup below). Returns a token that the
+    // caller MUST pass to endProtectedSave() once its chain settles (success or failure). Arms a
+    // watchdog scoped to that token so a chain that never calls endProtectedSave() (e.g. a plain
+    // callback that never fires) can't leave protection stuck on forever.
+    beginProtectedSave: function (timeoutMs) {
+        var token = this.nextSaveToken++;
+        this.activeSaveCount++;
+        this._armSaveWatchdog(token, timeoutMs);
+        return token;
+    },
+    endProtectedSave: function (token) {
+        this._releaseSaveToken(token);
+    },
+    // Re-arms an existing token's watchdog without touching activeSaveCount, for a chain that legitimately
+    // runs longer than one watchdog window (e.g. many sequential requests in a loop) — call this between
+    // steps so only a stalled step expires protection, instead of the chain's total duration. No-op if the
+    // token was already released (e.g. by a disconnect).
+    touchProtectedSave: function (token, timeoutMs) {
+        if (!Object.prototype.hasOwnProperty.call(this.saveWatchdogTimers, token)) {
+            return;
         }
+        clearTimeout(this.saveWatchdogTimers[token]);
+        this._armSaveWatchdog(token, timeoutMs);
+    },
+    _armSaveWatchdog: function (token, timeoutMs) {
+        var self = this;
+        this.saveWatchdogTimers[token] = setTimeout(function () {
+            console.log('MSP save watchdog: save token ' + token + ' did not settle within ' + (timeoutMs || self.saveWatchdogTimeoutMs) + 'ms, releasing its protection');
+            self._releaseSaveToken(token);
+        }, timeoutMs || this.saveWatchdogTimeoutMs);
+    },
+    // Shared by endProtectedSave() and the per-token watchdog; safe to call twice for the same token
+    // (e.g. if both the watchdog and a late endProtectedSave() fire) since the second call is a no-op.
+    _releaseSaveToken: function (token) {
+        if (!Object.prototype.hasOwnProperty.call(this.saveWatchdogTimers, token)) {
+            return;
+        }
+        clearTimeout(this.saveWatchdogTimers[token]);
+        delete this.saveWatchdogTimers[token];
+        this.activeSaveCount = Math.max(0, this.activeSaveCount - 1);
+    },
+    // force=true (used by disconnect_cleanup) also clears in-flight-save entries, since a real
+    // disconnect means nothing can complete regardless. Plain tab switches leave everything alone
+    // while a save is CURRENTLY active (activeSaveCount > 0, checked live here, not a flag stored on
+    // the request at creation time) so an in-flight save (including EEPROM_WRITE) is not abandoned,
+    // per issue #623 — but the moment the save ends, protection ends with it for everything, including
+    // unrelated background polls that happened to be issued during that window. A per-request flag
+    // frozen at creation time was tried first and was a real bug: a periodic poll created during any
+    // save anywhere in the session would stay "protected" forever, even long after that save finished,
+    // silently defeating cleanup calls other code depends on (e.g. cli.js's tab_switch_cleanup ->
+    // callbacks_cleanup() flush of stale retransmit timers before its CLI-exit/reboot/reconnect
+    // sequence) and leaving a retry timer stuck hammering a connection that had already moved on.
+    callbacks_cleanup: function (force) {
+        var protectAll = this.activeSaveCount > 0 && !force;
+        for (var i = this.callbacks.length - 1; i >= 0; i--) {
+            if (protectAll) {
+                console.log(`MSP: preserving in-flight request ${this.callbacks[i].code} through tab switch (save in progress)`);
+                continue;
+            }
 
-        this.callbacks = [];
+            clearInterval(this.callbacks[i].timer);
+
+            if (typeof this.callbacks[i].reject === 'function') {
+                this.callbacks[i].reject(new Error(`MSP request ${this.callbacks[i].code} aborted before a response arrived (tab switch or disconnect)`));
+            }
+
+            this.callbacks.splice(i, 1);
+        }
     },
     disconnect_cleanup: function () {
         this.state = 0; // reset packet state for "clean" initial entry (this is only required if user hot-disconnects)
         this.packet_error = 0; // reset CRC packet error counter for next session
 
-        this.callbacks_cleanup();
+        // release every outstanding save token — any protected in-flight save is moot once the connection is gone
+        for (var token in this.saveWatchdogTimers) {
+            clearTimeout(this.saveWatchdogTimers[token]);
+        }
+        this.saveWatchdogTimers = {};
+        this.activeSaveCount = 0;
+
+        this.callbacks_cleanup(true);
     }
 };
+
+// window.Promise is Bluebird (see main.html), whose default handling of an unhandled rejection
+// is a multi-frame "Unhandled rejection" trace dump straight to console — accurate, but alarming
+// for the one case we know is expected: a background MSP read abandoned by callbacks_cleanup()/
+// disconnect_cleanup() above (tab switch or real disconnect, not a bug). This hook replaces
+// Bluebird's default reporter app-wide with calmer, explanatory logging for that specific case;
+// anything else still logs normally so a genuine bug is never silently hidden.
+(function () {
+    if (!window.Promise || typeof window.Promise.onPossiblyUnhandledRejection !== 'function') {
+        return;
+    }
+
+    var MSP_ABANDONED_REQUEST_PATTERN = /^MSP request (\d+) aborted before a response arrived \(tab switch or disconnect\)$/;
+    var mspCodeNamesByValue = {};
+    for (var mspCodeName in MSPCodes) {
+        mspCodeNamesByValue[MSPCodes[mspCodeName]] = mspCodeName;
+    }
+
+    window.Promise.onPossiblyUnhandledRejection(function (error) {
+        var match = error instanceof Error && MSP_ABANDONED_REQUEST_PATTERN.exec(error.message);
+        if (match) {
+            var code = match[1];
+            console.log(`MSP: request ${mspCodeNamesByValue[code] || code} was abandoned before a response arrived (tab switch or disconnect) — expected for a non-critical background read, no data was lost.`);
+        } else {
+            console.error('Unhandled rejection:', error);
+        }
+    });
+})();

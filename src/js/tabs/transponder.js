@@ -292,6 +292,7 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
 
             $('a.save').click(function() {
                 let _this = this;
+                var protectedSaveToken;
 
                 function save_transponder_data() {
                     MSP.send_message(MSPCodes.MSP_SET_TRANSPONDER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_TRANSPONDER_CONFIG), false, save_to_eeprom);
@@ -306,6 +307,7 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
                                 reinitialiseConnection(self);
                             });
                         }
+                        MSP.endProtectedSave(protectedSaveToken);
                     });
                 }
 
@@ -314,6 +316,11 @@ TABS.transponder.initialize = function(callback, scrollPosition) {
                     }).dataLength ) {
                     GUI.log(i18n.getMessage('transponderDataInvalid'));
                 } else {
+                    // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+                    // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes above.
+                    // Only armed once validation passes, so a rejected save doesn't leave a stray token
+                    // protecting unrelated traffic until its watchdog expires.
+                    protectedSaveToken = MSP.beginProtectedSave();
                     save_transponder_data();
                 }
             });

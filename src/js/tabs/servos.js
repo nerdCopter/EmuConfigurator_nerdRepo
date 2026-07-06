@@ -103,6 +103,13 @@ TABS.servos.initialize = function (callback) {
         }
 
         function servos_update(save_configuration_to_eeprom) {
+            // protect this save chain (through EEPROM_WRITE) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken;
+            if (save_configuration_to_eeprom) {
+                protectedSaveToken = MSP.beginProtectedSave();
+            }
+
             $('div.tab-servos table.fields tr:not(".main")').each(function () {
                 var info = $(this).data('info');
 
@@ -136,6 +143,7 @@ TABS.servos.initialize = function (callback) {
             function save_to_eeprom() {
                 if (save_configuration_to_eeprom) {
                     MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                        MSP.endProtectedSave(protectedSaveToken);
                         GUI.log(i18n.getMessage('servosEepromSave'));
                     });
                 }

@@ -298,6 +298,10 @@ TABS.ports.initialize = function (callback, scrollPosition) {
     }
 
    function on_save_handler() {
+        // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+        // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+        var protectedSaveToken = MSP.beginProtectedSave();
+
         // update configuration based on current ui state
         SERIAL_CONFIG.ports = [];
 
@@ -453,6 +457,8 @@ TABS.ports.initialize = function (callback, scrollPosition) {
                 MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                 reinitialiseConnection(self);
             });
+
+            MSP.endProtectedSave(protectedSaveToken);
         }
     }
 };
