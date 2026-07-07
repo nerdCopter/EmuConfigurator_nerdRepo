@@ -57,6 +57,22 @@ module.exports = {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       packageJson.buildMode = buildMode;
       fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+
+      // Defense in depth for the usb/glibc issue documented in rebuildConfig below:
+      // ignoreModules prevents @electron/rebuild from creating a broken build/Release,
+      // but it can't undo one that already exists in a contributor's node_modules
+      // (e.g. left over from before this exclusion was added, or from an interrupted
+      // install). node-gyp-build always prefers a local build/Release over the correct
+      // prebuilt, so a stale one silently ships a binary that crashes with
+      // "undefined symbol: __pthread_cond_timedwait64" during real USB/DFU use.
+      // Strip it from the copied output so packaging is self-healing regardless of
+      // the source tree's node_modules state.
+      if (process.platform === 'linux') {
+        const usbBuildDir = path.join(buildPath, 'node_modules', 'usb', 'build');
+        if (fs.existsSync(usbBuildDir)) {
+          fs.rmSync(usbBuildDir, { recursive: true, force: true });
+        }
+      }
     },
   },
   rebuildConfig: {
