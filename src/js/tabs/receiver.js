@@ -217,6 +217,10 @@ TABS.receiver.initialize = function (callback) {
         });
 
         $('a.update').click(function () {
+            // protect this save chain (through EEPROM_WRITE) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
+
             RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
             RX_CONFIG.stick_center = parseInt($('.sticks input[name="stick_center"]').val());
             RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
@@ -269,6 +273,7 @@ TABS.receiver.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                    MSP.endProtectedSave(protectedSaveToken);
                     GUI.log(i18n.getMessage('receiverEepromSaved'));
                 });
             }

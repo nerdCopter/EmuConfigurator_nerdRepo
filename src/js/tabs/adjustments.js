@@ -161,6 +161,9 @@ TABS.adjustments.initialize = function (callback) {
 
         // UI Hooks
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
 
             // update internal data structures based on current UI elements
             var requiredAdjustmentRangeCount = ADJUSTMENT_RANGES.length;
@@ -211,6 +214,7 @@ TABS.adjustments.initialize = function (callback) {
             
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
+                    MSP.endProtectedSave(protectedSaveToken);
                     GUI.log(i18n.getMessage('adjustmentsEepromSaved'));
                 });
             }

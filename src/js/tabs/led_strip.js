@@ -538,6 +538,9 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
         });
 
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
 
             mspHelper.sendLedStripConfig(send_led_strip_colors);
 
@@ -551,6 +554,7 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
+                    MSP.endProtectedSave(protectedSaveToken);
                     GUI.log(i18n.getMessage('ledStripEepromSaved'));
                 });
             }

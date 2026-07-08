@@ -2537,6 +2537,9 @@ TABS.pid_tuning.initialize = function(callback) {
             form_to_pid_and_rc();
 
             self.updating = true;
+            // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
             Promise.resolve(true)
                 .then(function() {
                     return MSP.promise(MSPCodes.MSP_SET_PID, mspHelper.crunch(MSPCodes.MSP_SET_PID));
@@ -2596,6 +2599,11 @@ TABS.pid_tuning.initialize = function(callback) {
                             reinitialiseConnection(self);
                         });
                     }
+                    MSP.endProtectedSave(protectedSaveToken);
+                }).catch(function(error) {
+                    MSP.endProtectedSave(protectedSaveToken);
+                    self.updating = false;
+                    console.error(error);
                 });
         });
 
@@ -2736,7 +2744,11 @@ TABS.pid_tuning.refresh = function(callback) {
             FEATURE_CONFIG.features.setMask(existingEepromFeatureBitMask);
         }
         //end MSP 1.51 Experimental - Preset Dynamic_Filter toggle
-        self.initialize();
+        // this can fire from a protected save's deferred refresh after the user has switched
+        // tabs, so only reload pid_tuning's own DOM if it's still the active tab
+        if (GUI.active_tab === 'pid_tuning') {
+            self.initialize();
+        }
         self.setDirty(false);
         if (callback) {
             callback();

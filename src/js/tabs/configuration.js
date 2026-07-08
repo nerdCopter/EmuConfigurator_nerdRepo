@@ -841,6 +841,10 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
         }
 
         $('a.save').click(function () {
+            // protect this save chain (through EEPROM_WRITE + reboot) from being abandoned if the
+            // user switches tabs before the FC responds; cleared once EEPROM_WRITE completes below
+            var protectedSaveToken = MSP.beginProtectedSave();
+
             // gather data that doesn't have automatic change event bound
             BOARD_ALIGNMENT_CONFIG.roll = parseInt($('input[name="board_align_roll"]').val());
             BOARD_ALIGNMENT_CONFIG.pitch = parseInt($('input[name="board_align_pitch"]').val());
@@ -1024,6 +1028,8 @@ TABS.configuration.initialize = function (callback, scrollPosition) {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                     reinitialiseConnection(self);
                 });
+
+                MSP.endProtectedSave(protectedSaveToken);
             }
 
             save_serial_config();
