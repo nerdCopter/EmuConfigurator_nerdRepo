@@ -38,12 +38,6 @@ function MspHelper () {
     self.SIGNATURE_LENGTH = 32;
 }
 
-MspHelper.prototype.reorderPwmProtocols = function (protocol) {
-    var result = protocol;
-
-    return result;
-}
-
 MspHelper.prototype.process_data = function(dataHandler) {
     var self = this;
 
@@ -808,7 +802,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 PID_ADVANCED_CONFIG.gyro_sync_denom = data.readU8();
                 PID_ADVANCED_CONFIG.pid_process_denom = data.readU8();
                 PID_ADVANCED_CONFIG.use_unsyncedPwm = data.readU8();
-                PID_ADVANCED_CONFIG.fast_pwm_protocol = self.reorderPwmProtocols(data.readU8());
+                PID_ADVANCED_CONFIG.fast_pwm_protocol = data.readU8();
                 PID_ADVANCED_CONFIG.motor_pwm_rate = data.readU16();
                 PID_ADVANCED_CONFIG.digitalIdlePercent = data.readU16() / 100;
                 let gyroUse32kHz = data.readU8();
@@ -1656,7 +1650,7 @@ MspHelper.prototype.crunch = function(code) {
             buffer.push8(PID_ADVANCED_CONFIG.gyro_sync_denom)
                   .push8(PID_ADVANCED_CONFIG.pid_process_denom)
                   .push8(PID_ADVANCED_CONFIG.use_unsyncedPwm)
-                  .push8(self.reorderPwmProtocols(PID_ADVANCED_CONFIG.fast_pwm_protocol))
+                  .push8(PID_ADVANCED_CONFIG.fast_pwm_protocol)
                   .push16(PID_ADVANCED_CONFIG.motor_pwm_rate);
             buffer.push16(PID_ADVANCED_CONFIG.digitalIdlePercent * 100);
             let gyroUse32kHzCrunch = PID_ADVANCED_CONFIG.gyroUse32kHz;
