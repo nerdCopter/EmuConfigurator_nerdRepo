@@ -268,9 +268,6 @@
     "stm32AddressLoadFailed": {
         "message": "Adrešu ielāde priekš opciju baita sektora neizdevās. Ļoti iespējams, ka sakarā ar lasīšanas aizsardzību."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Adrešu ielāde priekš opciju baita sektora izdevās."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Adrešu ielāde priekš opciju baita sektora neizdevās ar nezināmu kļūdu. Pārtrauc."
     },
@@ -303,9 +300,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP versija nav atbalstīta. Lūdzu, atjauniniet EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Šai programmatūrai uz šīs iekārtas nepieciešama atjaunināšana uz jaunāku versiju. Izmantojiet CLI, lai dublētu datus pirms programmēšanas. CLI dublēšanas/atjaunošanas procedūras ir dokumentācijā. <br />Alternatīva ir lejupielādēt un lietot veco konfiguratora versiju, ja jūs neesat gatavs atjaunināt."
     },
     "infoVersions": {
         "message": "Darbojās - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -959,9 +953,6 @@
     "configuration3dNeutral": {
         "message": "3D neitrālais"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D droseles neaktīvā josla"
-    },
     "configurationSystem": {
         "message": "Sistēmas konfigurācija"
     },
@@ -1045,9 +1036,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Ātrumprofils $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Paslēpt neizmantotos PID"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profila neatkarīga PID kontroliera iestatījumi"
@@ -2338,9 +2326,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term zemfrekvenču 2 nogriešanas frekvence [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term zemfrekvenču 2 filtra tips"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term joslas filtrs"

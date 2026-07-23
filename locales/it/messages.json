@@ -253,9 +253,6 @@
     "stm32AddressLoadFailed": {
         "message": "Il caricamento dell'indirizzo per il settore dei byte di opzione non è riuscito. Molto probabilmente a causa della protezione da lettura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Il caricamento dell'indirizzo per il settore dei byte di opzione è riuscito."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Il caricamento dell'indirizzo per il settore dei byte di opzione non è riuscito, errore sconosciuto. Interruzione."
     },
@@ -288,9 +285,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "La versione MSP non è supportata. Aggiorna EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Il firmware su questo dispositivo deve essere aggiornato a una versione più recente. Utilizzare il CLI per il backup prima del flashing. La procedura di backup/ripristino CLI è nella documentazione.<br />In alternativa, scaricare e utilizzare una vecchia versione del configuratore se non è ancora pronto per l'aggiornamento."
     },
     "infoVersions": {
         "message": "Sistema operativo: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -851,9 +845,6 @@
     "configuration3dNeutral": {
         "message": "3D Neutro"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D Banda morta Gas"
-    },
     "configurationSystem": {
         "message": "Configurazione sistema"
     },
@@ -928,9 +919,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Profilo Rate $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "nascondi PID non utilizzati"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Impostazioni controller PID indipendenti dal profilo"

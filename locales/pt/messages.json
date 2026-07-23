@@ -265,9 +265,6 @@
     "stm32AddressLoadFailed": {
         "message": "Falha ao carregar endereço para setor de bytes de opção. Muito provavelmente devido a estar protegido contra leitura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Sucesso ao carregar endereço de bytes de opção."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Erro desconhecido ao carregar endereço para setor de bytes de opção. Abortando."
     },
@@ -300,9 +297,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "A versão MSP não é compatível. Atualize o EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "O firmware deste dispositivo precisa ser atualizado para uma versão mais recente. Use a Linha de comandos (CLI) para realizar uma cópia de segurança antes da atualização. O procedimento para fazer uma cópia de segurança/restaurar encontra-se na documentação.<br />Como alternativa faça o download e use uma versão antiga do configurador, caso não esteja preparado para efetuar a atualização."
     },
     "infoVersions": {
         "message": "Executando - SO: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurador: <strong>{{configuratorVersion}}</strong>",
@@ -938,9 +932,6 @@
     "configuration3dNeutral": {
         "message": "Zona 3D neutra"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Zona morta do Acelerador 3D"
-    },
     "configurationSystem": {
         "message": "Configuração do sistema"
     },
@@ -1015,9 +1006,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Perfil de taxa $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Esconder PIDs não utilizados"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Configurar controlador PID independente do perfil"
@@ -2271,9 +2259,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "Termo D - Lowpass 2 - Frequência de corte [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "Termo D - Lowpass 2 - Tipo do filtro"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "Filtros Notch (Rejeita Faixa) do TERMO D"

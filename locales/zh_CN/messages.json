@@ -262,9 +262,6 @@
     "stm32AddressLoadFailed": {
         "message": "定位选项字节扇区失败。很可能因为读保护。"
     },
-    "stm32AddressLoadSuccess": {
-        "message": "定位选项字节扇区成功。"
-    },
     "stm32AddressLoadUnknown": {
         "message": "因未知错误，定位选项字节扇区失败。正在中止。"
     },
@@ -297,9 +294,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "不支持 MSP 版本。请升级 EmuConfigurator。"
-    },
-    "firmwareUpgradeRequired": {
-        "message": "飞控固件需要更新到新的版本，使用CLI 来备份设置。具体操作信息请参考 Emuflight 文档。<br />如果不想更新到最新的固件，可以使用支持该固件的地面站来设置使用。"
     },
     "infoVersions": {
         "message": "操作系统: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, 配置程序: <strong>{{configuratorVersion}}</strong>",
@@ -947,9 +941,6 @@
     "configuration3dNeutral": {
         "message": "3D 中位"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D 死区油门"
-    },
     "configurationSystem": {
         "message": "系统设置"
     },
@@ -1039,9 +1030,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "速度设置 $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "隐藏未使用的PID"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "独立于配置文件的PID控制器设置"
@@ -2393,9 +2381,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term 低通2截止频率 [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term 低通滤波器2类型"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term 陷波滤波器"

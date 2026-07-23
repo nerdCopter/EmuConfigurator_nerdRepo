@@ -247,9 +247,6 @@
     "stm32AddressLoadFailed": {
         "message": "Alamat memori untuk pilihan sektor bit gagal. Sangat mungkin karena proteksi baca."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Alamat memori untuk pilihan sektor bit berhasil."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Alamat memori untuk pilihan sektor bit gagal dengan kesalahan yang tidak diketahui. Membatalkan."
     },
@@ -282,9 +279,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "Versi MSP tidak didukung. Silakan perbarui EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Firmware pada perangkat ini perlu ditingkatkan ke versi yang lebih baru. Gunakan CLI untuk backup sebelum flashing. Prosedur backup/restore CLI ada di dokumentasi.<br />Atau unduh dan gunakan EmuFlight versi lama jika anda belum siap untuk upgrade."
     },
     "infoVersions": {
         "message": "Sistem Operasi: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -880,9 +874,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Sembunyikan PID yang tidak dipakai"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Pengaturan PID yang independen dari profile"

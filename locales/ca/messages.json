@@ -247,9 +247,6 @@
     "stm32AddressLoadFailed": {
         "message": "Error al carregar l'adreça amb bytes d'opcions. Probablement degut a la protecció de lectura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Càrrega de direcció del sector amb bytes d'opcions correcta."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Error desconegut al carregar la direcció del sector amb bytes d'opcions. Avortant."
     },
@@ -282,9 +279,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "La versió MSP no és compatible. Si us plau, actualitzeu EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "El firmware d'aquest dispositiu necessita ser actualitzat a una versió superior. Utilitza el CLI per fer una còpia de seguretat abans de flashejar. El procediment està explicat a la documentació.<br />D'altra banda pots descarregar i fer servir una versió antiga del configurador si no estàs preparat per actualitzar."
     },
     "infoVersions": {
         "message": "En execució - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurador: <strong>{{configuratorVersion}}</strong>"
@@ -834,9 +828,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Amaga els PIDs no utilitzats"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Ajustament de PIDs independent del perfil"

@@ -250,9 +250,6 @@
     "stm32AddressLoadFailed": {
         "message": "Chargement de l'adresse des octets d'options échoué. Souvent du à la protection en lecture."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Chargement de l'adresse des octets d'options réussi."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Erreur inconnue lors du chargement de l'adresse des octets d'options. Arrêt."
     },
@@ -285,9 +282,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "La version MSP n'est pas supportée. Veuillez mettre à jour EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Le microprogramme de ce dispositif a besoin d'être mis à jour. Utilisez le CLI pour sauvegarder avant de flasher. Les procédures de sauvegarde/restauration par le CLI sont décrites dans l'aide.<br /> Téléchargez et utilisez une ancienne version du configurateur si vous n'êtes pas prêt à le mettre à jour."
     },
     "infoVersions": {
         "message": "Version - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurateur: <strong>{{configuratorVersion}}</strong>",
@@ -914,9 +908,6 @@
     "configuration3dNeutral": {
         "message": "Neutre 3D"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Deadband Throttle 3D"
-    },
     "configurationSystem": {
         "message": "Configuration système"
     },
@@ -988,9 +979,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Profile rate $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Cacher les PIDs non utilisés"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Paramètres du contrôleur PID independants du profil"
@@ -2179,9 +2167,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "Fréquence de coupure du filtre passe-bas D Term 2 [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "Type du filtre passe-bas D Term 2"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "Filtres Notch D Term"

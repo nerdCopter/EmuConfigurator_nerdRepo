@@ -262,9 +262,6 @@
     "stm32AddressLoadFailed": {
         "message": "Adressladdning av optionsbyte-sektorn misslyckades. Sannolikt på grund av lässkydd."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Adressladdning av optionsbyte-sektorn lyckades."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Adressladdning av optionsbyte-sektorn misslyckades med okänt fel. Avbryter."
     },
@@ -297,9 +294,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP-versionen stöds inte. Uppdatera EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Firmwaren på den här enheten behöver uppgraderas till en nyare version. Använd CLI för säkerhetskopiering innan du flashar. CLI-säkerhetskopierings/återställningsförfarandet finns i dokumentationen.<br />Alternativt kan du ladda ner och använda en gammal version av konfiguratorn om du inte vill uppgradera."
     },
     "infoVersions": {
         "message": "Kör - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Konfigurator: <strong>{{configuratorVersion}}</strong>",
@@ -935,9 +929,6 @@
     "configuration3dDeadbandHigh": {
         "message": "3D dödband hög"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D dödband trottel"
-    },
     "configurationSystem": {
         "message": "Systemkonfiguration"
     },
@@ -1021,9 +1012,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-profil $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Dölj PIDs som inte används"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profiloberoende PID-kontrollerinställningar"
@@ -2243,9 +2231,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term lågpass 2 cutoff-frekvens [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term lågpass 2 filtertyp"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term bandspärrfilter"

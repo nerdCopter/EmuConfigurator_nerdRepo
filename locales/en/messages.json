@@ -382,9 +382,6 @@
     "stm32AddressLoadFailed": {
         "message": "Address load for option bytes sector failed. Very likely due to read protection."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Address load for option bytes sector succeeded."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Address load for option bytes sector failed with unknown error. Aborting."
     },
@@ -417,9 +414,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP version is not supported. Please upgrade EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "The firmware on this device needs upgrading to a newer version. Use CLI for backup before flashing. CLI backup/restore procedure is in the documention.<br />Alternatively download and use an old version of the configurator if you are not ready to upgrade."
     },
     "infoVersions": {
         "message": "Running - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -1163,9 +1157,6 @@
     "configuration3dNeutral": {
         "message": "3D Neutral"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D Deadband Throttle"
-    },
     "configurationSystem": {
         "message": "System configuration"
     },
@@ -1321,9 +1312,6 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Feel Settings"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Hide unused PIDs"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profile independent PID Controller Settings"
@@ -3130,9 +3118,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term Lowpass 2 Cutoff [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term Lowpass 2 Filter Type"
-    },
     "dtermLowpassFrequencyRoll": {
         "message": " Roll D-Term Lowpass 1 Cutoff [Hz]"
     },
@@ -3315,12 +3300,6 @@
     },
     "pidTuningIntegratedYaw": {
         "message": "Integrated Yaw"
-    },
-    "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">CAUTION</span>: if you enable this feature, you must adjust the YAW PID accordingly. More info <a href=\"https://github.com/emuflight/EmuFlight/wiki/Integrated-Yaw\" target=\"_blank\">here</a>"
-    },
-    "pidTuningIntegratedYawHelp": {
-        "message": "Integrated Yaw corrects a fundamental aircraft-control issue: pitch and roll are controlled by thrust differentials, but yaw behaves differently. Integrated Yaw fixes this by integrating the yaw PID output before applying it to the mixer. This normalizes PID behavior so yaw can be tuned like the other axes. It requires Absolute Control, since no I term is needed with Integrated Yaw."
     },
     "pidTuningEmuGravity": {
         "message": "EmuGravity"

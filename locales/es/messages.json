@@ -259,9 +259,6 @@
     "stm32AddressLoadFailed": {
         "message": "Error al cargar dirección de sector con bytes de opciones. Probablemente protegido contra lectura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Carga de dirección de sector con bytes de opciones correcta."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Error desconocido al cargar dirección de sector con bytes de opciones. Abortando."
     },
@@ -294,9 +291,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "La versión MSP no es compatible. Actualice EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "El firmware de este dispositivo necesita actualizarse a una nueva versión. Use CLI para hacer una copia de seguridad antes de flashear. El proceso de copia/restauración con CLI está en la documentación.<br />Alternativamente puede descargar y usar una versión anterior del configurador si no está preparado para actualizar."
     },
     "infoVersions": {
         "message": "Ejecutando - SO: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurador: <strong>{{configuratorVersion}}</strong>",
@@ -938,9 +932,6 @@
     "configuration3dNeutral": {
         "message": "Neutral 3D"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Banda Muerta 3D Acelerador"
-    },
     "configurationSystem": {
         "message": "Configuración de sistema"
     },
@@ -1024,9 +1015,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Ocultar PIDs no usados"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Ajustes de PID independientes del Perfil"
@@ -2315,9 +2303,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term Paso Bajo 2 Frecuencia de Corte [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term Paso Bajo 2 Tipo de Filtro"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "Filtros Notch del D Term"

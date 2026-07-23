@@ -259,9 +259,6 @@
     "stm32AddressLoadFailed": {
         "message": "옵션 바이트 섹터에 대한 주소 로드가 실패했습니다. 읽기 보호로 인해 발생할 가능성이 큽니다."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "옵션 바이트 섹터에 대한 주소 로드가 성공하였습니다."
-    },
     "stm32AddressLoadUnknown": {
         "message": "옵션 바이트 섹터에 대한 주소 로드가 알 수 없는 오류로 실패했습니다. 종료합니다."
     },
@@ -294,9 +291,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP 버전이 지원되지 않습니다. EmuConfigurator를 업그레이드하세요."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "이 기기의 펌웨어는 최신 버전으로 업그레이드해야합니다. 플래시하기 전에 CLI를 사용하여 백업하십시오. CLI 백업/복원 절차는 문서를 참고하십시오. <br />또는 업그레이드 준비가 되지 않은 경우 이전 버전의 컨피규레이터를 다운로드하여 사용하십시오."
     },
     "infoVersions": {
         "message": "운영-OS: <strong>{{operatingSystem}}</strong>, 크롬: <strong>{{chromeVersion}}</strong>, 컨피규레이터: <strong>{{configuratorVersion}}</strong>",
@@ -947,9 +941,6 @@
     "configuration3dNeutral": {
         "message": "3D 중립"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D 데드밴드 스로틀"
-    },
     "configurationSystem": {
         "message": "시스템 환경설정"
     },
@@ -1039,9 +1030,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "레이트프로파일 $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "사용하지 않는 PID 숨기기"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "프로파일 독립적 PID 컨트롤러 설정"
@@ -2449,9 +2437,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D 텀 저역통과 2 컷오프 주파수 [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D 텀 저역통과 2 필터 형식"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D 텀 노치 필터"

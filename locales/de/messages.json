@@ -254,9 +254,6 @@
     "stm32AddressLoadFailed": {
         "message": "Fehler beim laden der Adressierung, des option byte Sektors. Sehr wahrscheinlich hervorgerufen, durch Leseschutz"
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Laden der Adressierung des option byte Sektors erfolgreich."
-    },
     "stm32NotReadProtected": {
         "message": "Leseschutz nicht aktiv"
     },
@@ -906,9 +903,6 @@
     "configuration3dDeadbandHigh": {
         "message": "3D Totzone hoch"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D Gas Totzone"
-    },
     "configurationSystem": {
         "message": "Systemkonfiguration"
     },
@@ -986,9 +980,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate Profil $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Verstecke ungenutzt PIDs"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Pofilunabhänige PID Controller Einstellungen"

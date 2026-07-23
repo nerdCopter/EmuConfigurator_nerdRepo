@@ -271,9 +271,6 @@
     "stm32AddressLoadFailed": {
         "message": "Fallou a carga de enderezos para a opción de bytes do sector. Moi probablemente, debido á protección de lectura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "A carga de enderezo para a opción de bytes do sector tivo éxito."
-    },
     "stm32AddressLoadUnknown": {
         "message": "A carga de enderezos para a opción de bytes do sector fallou cun erro descoñecido. Abortando."
     },
@@ -306,9 +303,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "A versión MSP non é compatible. Actualice EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "O firmware neste dispositivo necesita actualización a unha nova versión. Empregue o CLI para backup antes de flashear. O procedemento CLI de backup/recuperación atópase na documentación.<br />Se o prefire tamén pode descargar e usar unha versión antigua do configurador se non desexa actualizar."
     },
     "infoVersions": {
         "message": "Executando - OS: <strong> {{operatingSystem}} </strong>, Chrome: <strong>{{chromeVersion}} </strong>, Configurador: <strong> {{configuratorVersion}} </strong>",
@@ -944,9 +938,6 @@
     "configuration3dNeutral": {
         "message": "3D Neutro"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Acelerador 3D Bandamorta"
-    },
     "configurationSystem": {
         "message": "Configuración de sistema"
     },
@@ -1027,9 +1018,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Perfil tasa $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Oculta PID's no usados"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Configuración do controlador PID independente do perfil"
@@ -2245,9 +2233,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "Frecuencia de Corte D Term Paso Baixo 2 [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "Tipo de filtro D Termo Lowpass 2"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "Filtros Notch de termo D"

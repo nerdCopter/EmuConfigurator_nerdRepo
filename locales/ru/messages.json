@@ -268,9 +268,6 @@
     "stm32AddressLoadFailed": {
         "message": "Сбой чтения адреса для option bytes. Скорее всего установлена защита от чтения."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Чтение адреса для option bytes успешно."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Сбой чтения адреса для option bytes с неизвестной ошибкой. Отмена ..."
     },
@@ -300,9 +297,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "Версия MSP не поддерживается. Обновите EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Прошивка в этом устройстве нуждается в обновлении до новой версии. Используйте командную строку, чтобы сделать резервную копию перед обновлением прошивки. Процедура создания/восстановления резервной копии описана в документации.<br />Если вы не хотите обновлять прошивку, то используйте более старую версию конфигуратора."
     },
     "infoVersions": {
         "message": "Запуск - ОС: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Конфигуратор: <strong>{{configuratorVersion}}</strong>",
@@ -944,9 +938,6 @@
     "configuration3dNeutral": {
         "message": "Нейтральная точка 3D режима"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Нечувствительная зона газа 3D режима"
-    },
     "configurationSystem": {
         "message": "Системные настройки"
     },
@@ -1018,9 +1009,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-профиль $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Скрыть ненужные PID-ы"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Настройки PID-контроллера, независящие от настройки профиля"

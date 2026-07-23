@@ -265,9 +265,6 @@
     "stm32AddressLoadFailed": {
         "message": "Učitavanje adresa opcija byte sektora neuspješno. Vjerojatno zbog zaštite čitanja."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Učitavanje adresa opcija byte sektora uspješno."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Učitavanje adresa opcija byte sektora neuspješno s nepoznatom greškom. Prekidanje."
     },
@@ -300,9 +297,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "Verzija MSP nije podržana. Molimo ažurirajte EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Firmware na ovom uređaju potrebno je ažurirati na noviju verziju. Koristite CLI za stvaranje sigurnosne kopije prije ažuriranja. CLI procedura za sigurnosnu kopiju je u dokumentaciji. <br />U suprotnom, preuzmite i koristite stariju verziju konfiguratora ako niste spremni za ažuriranje firmwarea."
     },
     "infoVersions": {
         "message": "Koristi se - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Konfigurator: <strong>{{configuratorVersion}}</strong>",
@@ -944,9 +938,6 @@
     "configuration3dNeutral": {
         "message": "3D Neutralno"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D mrtva-zona gasa/throttlea"
-    },
     "configurationSystem": {
         "message": "Konfiguracija sustava"
     },
@@ -1024,9 +1015,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rateprofil $1"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Sakrij nekorištene PIDove"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profilno neovisne postavke PID kontrolera"
@@ -2237,9 +2225,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term Lowpass 2 Cutoff Frekvencija [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term Lowpass 2 vrsta filtera"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term Notch Filteri"

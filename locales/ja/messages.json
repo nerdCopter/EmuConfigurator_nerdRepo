@@ -268,9 +268,6 @@
     "stm32AddressLoadFailed": {
         "message": "オプションバイトセクターのアドレスの読込みに失敗しました。読取り保護が原因の可能性があります。"
     },
-    "stm32AddressLoadSuccess": {
-        "message": "オプションバイトセクターのアドレスの読込みに成功しました。"
-    },
     "stm32AddressLoadUnknown": {
         "message": "オプションバイトセクターのアドレスの呼出しが原因不明のエラーで失敗しました。中止しています。"
     },
@@ -303,9 +300,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP バージョンはサポートされていません。EmuConfigurator をアップグレードしてください。"
-    },
-    "firmwareUpgradeRequired": {
-        "message": "このデバイスのファームウェアは、新しいバージョンにアップグレードする必要があります。 書換えする前にCLIを使用してバックアップして下さい。 CLIのバックアップ / リストア手順はドキュメントに記載されています。<br />または、アップグレードする準備ができていない場合は、旧バージョンのConfiguratorをダウンロードして使用して下さい。"
     },
     "infoVersions": {
         "message": "実行中 - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -950,9 +944,6 @@
     "configuration3dNeutral": {
         "message": "3D ナチュラル"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D デッドバンド スロットル"
-    },
     "configurationSystem": {
         "message": "システム設定"
     },
@@ -1027,9 +1018,6 @@
     },
     "portsFunction_RUNCAM_DEVICE_CONTROL": {
         "message": "カメラ (RunCamプロトコル)"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "未使用なPID値 非表示"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profile毎のPID値 制御設定"
@@ -2368,9 +2356,6 @@
     },
     "pidTuningDTermLowpass2Frequency": {
         "message": "D値 ローパス2 カットオフ周波数 [Hz]"
-    },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D値 ローパス2 フィルタータイプ"
     },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D値 ノッチフィルター"
