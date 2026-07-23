@@ -268,9 +268,6 @@
     "stm32AddressLoadFailed": {
         "message": "Adrešu ielāde priekš opciju baita sektora neizdevās. Ļoti iespējams, ka sakarā ar lasīšanas aizsardzību."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Adrešu ielāde priekš opciju baita sektora izdevās."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Adrešu ielāde priekš opciju baita sektora neizdevās ar nezināmu kļūdu. Pārtrauc."
     },
@@ -303,9 +300,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP versija nav atbalstīta. Lūdzu, atjauniniet EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Šai programmatūrai uz šīs iekārtas nepieciešama atjaunināšana uz jaunāku versiju. Izmantojiet CLI, lai dublētu datus pirms programmēšanas. CLI dublēšanas/atjaunošanas procedūras ir dokumentācijā. <br />Alternatīva ir lejupielādēt un lietot veco konfiguratora versiju, ja jūs neesat gatavs atjaunināt."
     },
     "infoVersions": {
         "message": "Darbojās - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -445,9 +439,6 @@
     },
     "defaultSupport": {
         "message": "Palīdzībai, lūdzu, apmeklējiet forumus un wiki vai sazināties ar savu pārdevēju.<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Dublēšanas un atjaunošanas funkcionalitāte ir atslēgta.</span>Jūsu programmatūras API versija <span class=\"message-negative\">$1</span>, dublēšanai un atjaunošanai nepieciešama <span class=\"message-positive\">$2</span>.  Lūdzu, dublējat savus iestatījumus ar CLI, procedūras aprakstu skatīt Emuflight dokumentācijā."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrēt akselerometru"
@@ -800,15 +791,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Brīdinājums: Žiro/Aksel nav atrasts"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Pirmais"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Otrais"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Abi"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Pirmais ŽIRO"
     },
@@ -971,9 +953,6 @@
     "configuration3dNeutral": {
         "message": "3D neitrālais"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D droseles neaktīvā josla"
-    },
     "configurationSystem": {
         "message": "Sistēmas konfigurācija"
     },
@@ -1057,12 +1036,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Ātrumprofils $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">PID kontroliera maiņa ir atslēgta  - jūs to varat nomainīt iekš CLI.</span>  Jums ir programmatūra ar API versiju <span class=\"message-negative\">$1</span>, bet šai funkcionalitātei nepieciešama <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Paslēpt neizmantotos PID"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profila neatkarīga PID kontroliera iestatījumi"
@@ -1170,21 +1143,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Ar šo parametru, Feedforward iestatījuma svars var tikt samazināts tuvu sviras centram, kas rezultējas ar maigāku nobeigumu pie flipiem un rolliem.<br> Šī vērtība reprezentē sviras ielieces punktu: 0 - svira centā, 1 - pilnīga ieliece. Kad svira ir virs šī punkta, Feedforward ir konstants tā konfigurētajā vērtībā. Kad svira ir zem šī punkta, Feedforward ir samazināts proporcionāli, sasniedzot 0 sviras centra pozīcijā.<br> Vērtība 1 dod maksimālu izlīdzinājumu efektu, kamēr 0 vērtība uztur Feedforward fiksētu uz tā konfigurēto vērtību visā svirās gājiena diapazonā."
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "D iestatījuma pāreja"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D iestatījuma svars"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Ar šo parametru, D iestatījuma svars var tikt samazināts tuvu sviras centram, kas rezultējas ar maigāku nobeigumu pie flipiem un rolliem.<br> Šī vērtība reprezentē sviras ielieces punktu: 0 - svira centā, 1 - pilnīga ieliece. Kad svira ir virs šī punkta, iestatījuma svars ir konstants tā konfigurētajā vērtībā. Kad svira ir zem šī punkta, iestatījuma svars ir samazināts proporcionāli, sasniedzot 0 sviras centra pozīcijā.<br> Vērtība 1 dod maksimālu izlīdzinājumu efektu, kamēr 0 vērtība uztur iestatījuma svaru fiksētu uz tā konfigurēto vērtību visā svirās gājiena diapazonā."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "Šis parametrs nosaka sviras akselerācijas efektu derivative komponentē. <br> Vērtība 0 ir ekvivalenta vecajai mērījuma metodei, kur D seko tika žiroskopam, kamēr vērtība 1 ekvivalenta vecajai mērījuma metodei ar vienādu žiroskopa un sviru sekošanu attiecību.<br> Zemāka vērtība sniedz lēnāku/vienmērīgāku sviras atsauci, kamēr augstāka vērtība sniedz lielāku sviras akselerācijas atsauci.<br> Atcerieties ka pie augstām vērtībām RC interpolāciju ieteicams ieslēgt, tas novērsīs vadības sviras trokšņu ģenerēšanu."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong>Izmantojot D iestatījuma pāreju lielāku par 0 un mazāku par 0.1 ir drosmīgs gājiens. Tā darot, tas var novest līdz nestabilitātei un samazināt vadības sviru atsaucību, kad tās šķērso centra punktu.</span>"
     },
     "pidTuningRcRate": {
         "message": "RC ātrums"
@@ -2369,9 +2327,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term zemfrekvenču 2 nogriešanas frekvence [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term zemfrekvenču 2 filtra tips"
-    },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term joslas filtrs"
     },
@@ -3175,9 +3130,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Brīdināt, kad GPS glābšana ir atslēgta"
-    },
-    "osdWarningUnknown": {
-        "message": "Nezināms brīdinājums (detaļas tiks pievienotas nākotnes relīzēs)"
     },
     "osdSectionHelpElements": {
         "message": "Ieslēgt vai izslēgt OSD elementus."

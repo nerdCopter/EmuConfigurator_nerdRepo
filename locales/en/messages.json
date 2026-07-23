@@ -382,9 +382,6 @@
     "stm32AddressLoadFailed": {
         "message": "Address load for option bytes sector failed. Very likely due to read protection."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Address load for option bytes sector succeeded."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Address load for option bytes sector failed with unknown error. Aborting."
     },
@@ -417,9 +414,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP version is not supported. Please upgrade EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "The firmware on this device needs upgrading to a newer version. Use CLI for backup before flashing. CLI backup/restore procedure is in the documention.<br />Alternatively download and use an old version of the configurator if you are not ready to upgrade."
     },
     "infoVersions": {
         "message": "Running - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -592,9 +586,6 @@
     },
     "defaultSupport2": {
         "message": "<a href=\"https://github.com/Emuflight\" target=\"_blank\">GitHub</a>"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Backup and restore functionality disabled.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, backup and restore requires <span class=\"message-positive\">$2</span>.  Please backup your settings via the CLI, see Emuflight documentation for procedure."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrate Accelerometer"
@@ -1001,15 +992,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Warning: No Gyro/Acc found"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "First"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Second"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Both"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "First GYRO"
     },
@@ -1175,9 +1157,6 @@
     "configuration3dNeutral": {
         "message": "3D Neutral"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D Deadband Throttle"
-    },
     "configurationSystem": {
         "message": "System configuration"
     },
@@ -1319,9 +1298,6 @@
     "portsFunction_LIDAR_TF": {
         "message": "Benewake LIDAR"
     },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span>  You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires <span class=\"message-positive\">$2</span>."
-    },
     "pidTuningSubTabPid": {
         "message": "Acro PIDs"
     },
@@ -1336,9 +1312,6 @@
     },
     "pidTuningSubTabFeel": {
         "message": "Feel Settings"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Hide unused PIDs"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profile independent PID Controller Settings"
@@ -1458,21 +1431,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "With this parameter, the Feedforward term can be reduced near the center of the sticks, which results in smoother end of flips and rolls.<br> The value represents a point of stick deflection: 0 - stick centered, 1 - full deflection. When the stick is above that point, Feedforward is kept constant at its configured value. When the stick is positioned below that point, Feedforward is reduced proportionally, reaching 0 at the stick center position.<br> Value of 1 gives maximum smoothing effect, while value of 0 keeps the Feedforward fixed at its configured value over the whole stick range."
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "D Setpoint transition"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D Setpoint Weight"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "With this parameter, D Setpoint Weight can be reduced near the center of the sticks, which results in smoother end of flips and rolls.<br> The value represents a point of stick deflection: 0 - stick centered, 1 - full deflection. When the stick is above that point, Setpoint Weight is kept constant at its configured value. When the stick is positioned below that point, Setpoint Weight is reduced proportionally, reaching 0 at the stick center position.<br> Value of 1 gives maximum smoothing effect, while value of 0 keeps the Setpoint Weight fixed at its configured value over the whole stick range."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "This parameter determines the stick accelerating effect within derivative component.<br>Value of 0 equals to old Measurement method where D only tracks gyro, while value of 1 equals to old Error method with equal gyro and stick tracking ratio.<br>Lower value equals to slower/smoother stick response, while higher value provides more stick acceleration response.<br>Note that RC interpolation is recommended to be enabled with higher values to prevent control kicks making noise."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> The use of a D Setpoint transition greater than 0 and less than 0.1 is highly discouraged. Doing so may lead to instability and reduced stick responsiveness as the sticks cross the centre point.</span>"
     },
     "pidTuningProportional": {
         "message": "Proportional"
@@ -3160,9 +3118,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term Lowpass 2 Cutoff [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term Lowpass 2 Filter Type"
-    },
     "dtermLowpassFrequencyRoll": {
         "message": " Roll D-Term Lowpass 1 Cutoff [Hz]"
     },
@@ -3345,12 +3300,6 @@
     },
     "pidTuningIntegratedYaw": {
         "message": "Integrated Yaw"
-    },
-    "pidTuningIntegratedYawCaution": {
-        "message": "<span class=\"message-negative\">CAUTION</span>: if you enable this feature, you must adjust the YAW PID accordingly. More info <a href=\"https://github.com/emuflight/EmuFlight/wiki/Integrated-Yaw\" target=\"_blank\">here</a>"
-    },
-    "pidTuningIntegratedYawHelp": {
-        "message": "Integrated Yaw corrects a fundamental aircraft-control issue: pitch and roll are controlled by thrust differentials, but yaw behaves differently. Integrated Yaw fixes this by integrating the yaw PID output before applying it to the mixer. This normalizes PID behavior so yaw can be tuned like the other axes. It requires Absolute Control, since no I term is needed with Integrated Yaw."
     },
     "pidTuningEmuGravity": {
         "message": "EmuGravity"
@@ -4847,12 +4796,6 @@
     },
     "osdWarningDji": {
         "message": "DJI hack. Show warnings instead of craft name."
-    },
-    "osdWarningTextUnknown": {
-        "message": "Unknown $1"
-    },
-    "osdWarningUnknown": {
-        "message": "Unknown warning (details to be added in a future release)"
     },
     "osdSectionHelpElements": {
         "message": "Enable or disable OSD elements."

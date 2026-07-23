@@ -254,9 +254,6 @@
     "stm32AddressLoadFailed": {
         "message": "Fehler beim laden der Adressierung, des option byte Sektors. Sehr wahrscheinlich hervorgerufen, durch Leseschutz"
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Laden der Adressierung des option byte Sektors erfolgreich."
-    },
     "stm32NotReadProtected": {
         "message": "Leseschutz nicht aktiv"
     },
@@ -410,9 +407,6 @@
     },
     "defaultSupport": {
         "message": "Für Hilfe durchsuche bitte die Foren und das Wiki zuerst oder wende dich an deinen Händler.<br /><br /> "
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Backup and restore functionality disabled.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, backup and restore requires <span class=\"message-positive\">$2</span>. Please backup your settings via the CLI, see Emuflight documentation for procedure."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Accelerometer (accel) kalibrieren"
@@ -753,15 +747,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Warnung: Kein Gyro/Acc gefunden"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Erster"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Zweiter"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Beide"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Erster Gyro"
     },
@@ -918,9 +903,6 @@
     "configuration3dDeadbandHigh": {
         "message": "3D Totzone hoch"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D Gas Totzone"
-    },
     "configurationSystem": {
         "message": "Systemkonfiguration"
     },
@@ -998,12 +980,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate Profil $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires requires <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Verstecke ungenutzt PIDs"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Pofilunabhänige PID Controller Einstellungen"
@@ -1105,12 +1081,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Mit diesem Parameter kann man die Feedforward Regelung an der Mittelstellung der Sticks reduzieren und damit ein weicheres Enden von Flips und Rolls erreichen.<br> Der Wert bedeutet eine Auslenkung des Sticks von 0 - Knüppel mittig bis 1 - voller Ausschlag. Wenn der Knüppel weiter ausgelenkt wird als dieser Wert, hat die Feedforward Regelung den eingestellten Wert. Wenn der Stick weniger ausgelenkt ist, wird die Feedforward Regelung proportional reduziert und erreicht 0 in der Nullstellung des Knüppels.<br> Ein Wert von 1 ergibt den maximalen Glättungseffekt, ein Wert von 0 hält die Feedforward Regelung über den gesamten Steuerbereich auf seinem eingestellten Wert."
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D Setpoint Gewichtung"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Mit diesem Parameter kann man D Setpoint Weight an der Mittelstellung der Sticks reduzieren und damit weichere Enden von Flips und Rolls erreichen.<br> Der Wert bedeutet eine Auslenkung des Sticks von 0 - mittig bis 1 - voller Ausschlag. Wenn der Stick weiter ausgelenkt ist als dieser Wert, hat Setpoint Weight seinen eingestellten Wert. Wenn der Stick weniger ausgelenkt ist, wird Setpoint Weight proportional reduziert und erreicht 0 in der Nullstellung des Sticks.<br> Ein Wert von 1 ergibt den maximalen Glättungseffekt, ein Wert von 0 hält Setpoint Weight über den gesammten Steuerbereich auf seinem eingestellten Wert."
     },
     "pidTuningDerivative": {
         "message": "Differential"
@@ -2895,9 +2865,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Warnung, wenn GPS Rescue deaktiviert ist"
-    },
-    "osdWarningUnknown": {
-        "message": "Unbekannte Warnung (Details werden in einer künftigen Version ergänzt)"
     },
     "osdSectionHelpElements": {
         "message": "OSD Elemente aktivieren oder deaktivieren"

@@ -57,13 +57,7 @@ TABS.motors.initialize = function (callback) {
     }
 
     // Get information from Emuflight
-    if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-        // BF 3.2.0+
-        MSP.send_message(MSPCodes.MSP_MOTOR_CONFIG, false, false, get_arm_status);
-    } else {
-        // BF 3.1.x or older
-        MSP.send_message(MSPCodes.MSP_MISC, false, false, get_arm_status);
-    }
+    MSP.send_message(MSPCodes.MSP_MOTOR_CONFIG, false, false, get_arm_status);
 
     function update_arm_status() {
         self.armed = bit_check(CONFIG.mode, 0);
@@ -193,9 +187,7 @@ TABS.motors.initialize = function (callback) {
     function update_model(mixer) {
         var reverse = "";
 
-        if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-            reverse = MIXER_CONFIG.reverseMotorDir ? "_reversed" : "";
-        }
+        reverse = MIXER_CONFIG.reverseMotorDir ? "_reversed" : "";
 
         $('.mixerPreview img').attr('src', '../resources/motor_order/' + mixerList[mixer - 1].image + reverse + '.svg');
     }

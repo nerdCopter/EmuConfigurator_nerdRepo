@@ -14,39 +14,22 @@ TABS.ports.initialize = function (callback, scrollPosition) {
          {name: 'BLACKBOX',     groups: ['peripherals'], sharableWith: ['msp'], notSharableWith: ['telemetry'], maxPorts: 1}
     ];
 
-    if (semver.gte(CONFIG.apiVersion, "1.15.0")) {
-        var ltmFunctionRule = {name: 'TELEMETRY_LTM',        groups: ['telemetry'], sharableWith: ['msp'], notSharableWith: ['peripherals'], maxPorts: 1};
-        functionRules.push(ltmFunctionRule);
-    } else {
-        var mspFunctionRule = {name: 'TELEMETRY_MSP',        groups: ['telemetry'], sharableWith: ['msp'], notSharableWith: ['peripherals'], maxPorts: 1};
-        functionRules.push(mspFunctionRule);
-    }
+    var ltmFunctionRule = {name: 'TELEMETRY_LTM',        groups: ['telemetry'], sharableWith: ['msp'], notSharableWith: ['peripherals'], maxPorts: 1};
+    functionRules.push(ltmFunctionRule);
 
-    if (semver.gte(CONFIG.apiVersion, "1.18.0")) {
-        var mavlinkFunctionRule = {name: 'TELEMETRY_MAVLINK',    groups: ['telemetry'], sharableWith: ['msp'], notSharableWith: ['peripherals'], maxPorts: 1};
-        functionRules.push(mavlinkFunctionRule);
-    }
+    var mavlinkFunctionRule = {name: 'TELEMETRY_MAVLINK',    groups: ['telemetry'], sharableWith: ['msp'], notSharableWith: ['peripherals'], maxPorts: 1};
+    functionRules.push(mavlinkFunctionRule);
 
-    if (semver.gte(CONFIG.apiVersion, "1.31.0")) {
-        functionRules.push({ name: 'ESC_SENSOR', groups: ['sensors'], maxPorts: 1 });
-        functionRules.push({ name: 'TBS_SMARTAUDIO', groups: ['peripherals'], maxPorts: 1 });
-    }
+    functionRules.push({ name: 'ESC_SENSOR', groups: ['sensors'], maxPorts: 1 });
+    functionRules.push({ name: 'TBS_SMARTAUDIO', groups: ['peripherals'], maxPorts: 1 });
 
-    if (semver.gte(CONFIG.apiVersion, "1.27.0")) {
-        functionRules.push({ name: 'IRC_TRAMP', groups: ['peripherals'], maxPorts: 1 });
-    }
+    functionRules.push({ name: 'IRC_TRAMP', groups: ['peripherals'], maxPorts: 1 });
 
-    if (semver.gte(CONFIG.apiVersion, "1.32.0")) {
-        functionRules.push({ name: 'TELEMETRY_IBUS', groups: ['telemetry'], maxPorts: 1 });
-    }
+    functionRules.push({ name: 'TELEMETRY_IBUS', groups: ['telemetry'], maxPorts: 1 });
 
-    if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-        functionRules.push({ name: 'RUNCAM_DEVICE_CONTROL', groups: ['peripherals'], maxPorts: 1 });
-    }
+    functionRules.push({ name: 'RUNCAM_DEVICE_CONTROL', groups: ['peripherals'], maxPorts: 1 });
 
-    if (semver.gte(CONFIG.apiVersion, "1.37.0")) {
-        functionRules.push({ name: 'LIDAR_TF', groups: ['peripherals'], maxPorts: 1 });
-    }
+    functionRules.push({ name: 'LIDAR_TF', groups: ['peripherals'], maxPorts: 1 });
 
     if (semver.gte(CONFIG.apiVersion, "1.52.0")) {
         functionRules.push({ name: 'HDZERO_OSD', groups: ['peripherals'], maxPorts: 1 });
@@ -66,9 +49,7 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         '250000'
     ];
 
-    if (semver.gte(CONFIG.apiVersion, "1.31.0")) {
-        mspBaudRates = mspBaudRates.concat(['500000', '1000000']);
-    }
+    mspBaudRates = mspBaudRates.concat(['500000', '1000000']);
 
     var gpsBaudRates = [
         'AUTO',
@@ -111,14 +92,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 
     function load_configuration_from_fc() {
 
-        let promise;
-        if(semver.gte(CONFIG.apiVersion, "1.40.0")) {
-            promise = MSP.promise(MSPCodes.MSP_VTX_CONFIG).catch(function(e) {
-                return Promise.resolve();
-            });
-        } else {
-            promise = Promise.resolve();
-        }
+        let promise = MSP.promise(MSPCodes.MSP_VTX_CONFIG).catch(function(e) {
+            return Promise.resolve();
+        });
         promise
             .then(function() {
                 MSP.send_message(MSPCodes.MSP_CF_SERIAL_CONFIG, false, false, on_configuration_loaded_handler);
@@ -130,12 +106,6 @@ TABS.ports.initialize = function (callback, scrollPosition) {
     }
 
     function update_ui() {
-        if (semver.lt(CONFIG.apiVersion, "1.6.0")) {
-
-            $(".tab-ports").removeClass("supported");
-            return;
-        }
-
         $(".tab-ports").addClass("supported");
 
         const VCP_PORT_IDENTIFIER = 20;

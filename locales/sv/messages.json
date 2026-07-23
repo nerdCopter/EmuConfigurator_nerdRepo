@@ -262,9 +262,6 @@
     "stm32AddressLoadFailed": {
         "message": "Adressladdning av optionsbyte-sektorn misslyckades. Sannolikt på grund av lässkydd."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Adressladdning av optionsbyte-sektorn lyckades."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Adressladdning av optionsbyte-sektorn misslyckades med okänt fel. Avbryter."
     },
@@ -297,9 +294,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "MSP-versionen stöds inte. Uppdatera EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Firmwaren på den här enheten behöver uppgraderas till en nyare version. Använd CLI för säkerhetskopiering innan du flashar. CLI-säkerhetskopierings/återställningsförfarandet finns i dokumentationen.<br />Alternativt kan du ladda ner och använda en gammal version av konfiguratorn om du inte vill uppgradera."
     },
     "infoVersions": {
         "message": "Kör - OS: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Konfigurator: <strong>{{configuratorVersion}}</strong>",
@@ -430,9 +424,6 @@
     },
     "defaultSupport": {
         "message": "För support, var vänlig sök i forumen och wikin först eller kontakta din försäljare.<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Säkerhetskopierings- och återställningsfunktioner inaktiverade.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>, säkerhetskopiering och återställning kräver <span class=\"message-positive\">$2</span>.  Vänligen säkerhetskopiera dina inställningar via CLI, se Emuflight-dokumentation för förfarandet."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrera Accelerometer"
@@ -779,15 +770,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Varning: Ingen Gyro/Acc hittad"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Första"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Andra"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Båda"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Första GYRO"
     },
@@ -947,9 +929,6 @@
     "configuration3dDeadbandHigh": {
         "message": "3D dödband hög"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D dödband trottel"
-    },
     "configurationSystem": {
         "message": "Systemkonfiguration"
     },
@@ -1033,12 +1012,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-profil $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Inte möjligt att ändra PID-kontroller - du kan ändra den via CLI.</span>  Din firmware har API-version <span class=\"message-negative\">$1</span>, men denna funktion kräver <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Dölj PIDs som inte används"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Profiloberoende PID-kontrollerinställningar"
@@ -1143,21 +1116,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Med denna parameter kan framkopplings-termen reduceras nära mitten av spakarna, vilket resulterar i jämnare avslut på flippar och rollar.<br> Värdet representerar en böjningspunkt: 0 - spaken centrerad, 1 - full böjning. När spaken är över denna punkt, hålls framkoppling konstant vid sitt konfigurerade värde. När spaken är under denna punkt, reduceras framkoppling proportionellt, och blir 0 vid spakens mittposition.<br> Värdet 1 ger maximal utjämningseffekt, medan värdet 0 håller framkoppling konstant vid sitt konfigurerade värde över hela spakens räckvidd."
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "D setpoint-övergång"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D setpoint-vikt"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Med denna parameter kan D setpoint-vikten reduceras nära mitten av spakarna, vilket resulterar i jämnare avslut på flippar och rollar.<br> Värdet representerar en böjningspunkt: 0 - spaken centrerad, 1 - full böjning. När spaken är över denna punkt, hålls setpoint-vikten konstant vid sitt konfigurerade värde. När spaken är under denna punkt, reduceras setpoint-vikten proportionellt, och blir 0 vid spakens mittposition.<br> Värdet 1 ger maximal utjämningseffekt, medan värdet 0 håller setpoint-vikten konstant vid sitt konfigurerade värde över hela spakens räckvidd."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "Denna parameter bestämmer spakens accelerationseffekt inom den derivativa komponenten.<br> Värdet 0 innebär en äldre mätbaserad metod där D endast följer gyron, och värdet 1 innebär en äldre felbaserad metod där gyro- och spakar följs likvärdigt.<br> Lägre värden innebär långsammare/jämnare spakrespons, och högre värden ger en mer accelererande spakrespons.<br> Observera att aktivering av RC-interpolering rekommenderas vid högre värden för att undvika att plötsliga ändringar orsakar brus."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> Användning av en D setpoint-övergång mellan 0 och 0.1 avråds bestämt. Det kan resultera i instabilitet och sämre spakrespons när spakarna korsar mittpunkten.</span>"
     },
     "pidTuningProportional": {
         "message": "Proportionell"
@@ -2274,9 +2232,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term lågpass 2 cutoff-frekvens [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term lågpass 2 filtertyp"
-    },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term bandspärrfilter"
     },
@@ -2981,9 +2936,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Varnar när GPS-räddning är avstängd"
-    },
-    "osdWarningUnknown": {
-        "message": "Okänd varning (detaljer tillkommer i en kommande utgåva)"
     },
     "osdSectionHelpElements": {
         "message": "Aktivera eller avaktivera OSD-element."

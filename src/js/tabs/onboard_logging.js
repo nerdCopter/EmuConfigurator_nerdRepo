@@ -38,10 +38,10 @@ TABS.onboard_logging.initialize = function (callback) {
     function gcd(a, b) {
         if (b === 0)
             return a;
-        
+
         return gcd(b, a % b);
     }
-    
+
     // token is threaded explicitly through this chain rather than a shared closure variable,
     // so two overlapping clicks (before the first one's response arrives) each track their own
     // protection instead of one click's completion releasing the other's still-in-flight token
@@ -76,7 +76,7 @@ TABS.onboard_logging.initialize = function (callback) {
              * 
              * The best we can do on those targets is check the BLACKBOX feature bit to identify support for Blackbox instead.
              */
-            if ((BLACKBOX.supported || DATAFLASH.supported) && (semver.gte(CONFIG.apiVersion, "1.33.0") || FEATURE_CONFIG.features.isEnabled('BLACKBOX'))) {
+            if (BLACKBOX.supported || DATAFLASH.supported) {
                 blackboxSupport = 'yes';
             } else {
                 blackboxSupport = 'no';
@@ -117,13 +117,7 @@ TABS.onboard_logging.initialize = function (callback) {
                     // one settles can't overwrite the token this chain needs to release.
                     var protectedSaveToken = MSP.beginProtectedSave();
 
-                    if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-                        BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);
-                    } else {
-                        var rate = loggingRatesSelect.val().split('/');
-                        BLACKBOX.blackboxRateNum = parseInt(rate[0], 10);
-                        BLACKBOX.blackboxRateDenom = parseInt(rate[1], 10);
-                    }
+                    BLACKBOX.blackboxPDenom = parseInt(loggingRatesSelect.val(), 10);
                     BLACKBOX.blackboxDevice = parseInt(deviceSelect.val(), 10);
                     MSP.send_message(MSPCodes.MSP_SET_BLACKBOX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_BLACKBOX_CONFIG), false, function() {
                         save_to_eeprom(protectedSaveToken);
@@ -143,18 +137,16 @@ TABS.onboard_logging.initialize = function (callback) {
                 }
             }).change();
 
-            if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-                if ((SDCARD.supported && deviceSelect.val() == 2) || (DATAFLASH.supported && deviceSelect.val() == 1)) {
+            if ((SDCARD.supported && deviceSelect.val() == 2) || (DATAFLASH.supported && deviceSelect.val() == 1)) {
 
-                    $(".tab-onboard_logging")
-                        .toggleClass("msc-supported", true);
+                $(".tab-onboard_logging")
+                    .toggleClass("msc-supported", true);
 
-                    $('a.onboardLoggingRebootMsc').click(function () {
-                        var buffer = [];
-                        buffer.push(mspHelper.REBOOT_TYPES.MSC);                        
-                        MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
-                    });
-                }
+                $('a.onboardLoggingRebootMsc').click(function () {
+                    var buffer = [];
+                    buffer.push(mspHelper.REBOOT_TYPES.MSC);
+                    MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
+                });
             }
             
             update_html();
@@ -166,24 +158,14 @@ TABS.onboard_logging.initialize = function (callback) {
     function populateDevices(deviceSelect) {
         deviceSelect.empty();
 
-        if (semver.gte(CONFIG.apiVersion, "1.33.0")) {
-            deviceSelect.append('<option value="0">' + i18n.getMessage('blackboxLoggingNone') + '</option>');
-            if (DATAFLASH.supported) {
-                deviceSelect.append('<option value="1">' + i18n.getMessage('blackboxLoggingFlash') + '</option>');
-            }
-            if (SDCARD.supported) {
-                deviceSelect.append('<option value="2">' + i18n.getMessage('blackboxLoggingSdCard') + '</option>');
-            }
-            deviceSelect.append('<option value="3">' + i18n.getMessage('blackboxLoggingSerial') + '</option>');
-        } else {
-            deviceSelect.append('<option value="0">' + i18n.getMessage('blackboxLoggingSerial') + '</option>');
-            if (DATAFLASH.ready) {
-                deviceSelect.append('<option value="1">' + i18n.getMessage('blackboxLoggingFlash') + '</option>');
-            }
-            if (SDCARD.supported) {
-                deviceSelect.append('<option value="2">' + i18n.getMessage('blackboxLoggingSdCard') + '</option>');
-            }
+        deviceSelect.append('<option value="0">' + i18n.getMessage('blackboxLoggingNone') + '</option>');
+        if (DATAFLASH.supported) {
+            deviceSelect.append('<option value="1">' + i18n.getMessage('blackboxLoggingFlash') + '</option>');
         }
+        if (SDCARD.supported) {
+            deviceSelect.append('<option value="2">' + i18n.getMessage('blackboxLoggingSdCard') + '</option>');
+        }
+        deviceSelect.append('<option value="3">' + i18n.getMessage('blackboxLoggingSerial') + '</option>');
 
         deviceSelect.val(BLACKBOX.blackboxDevice);
     }
@@ -194,64 +176,32 @@ TABS.onboard_logging.initialize = function (callback) {
         var loggingRates = [];
         var pidRateBase = 8000;
 
-        if (semver.gte(CONFIG.apiVersion, "1.25.0")  && PID_ADVANCED_CONFIG.gyroUse32kHz !== 0) {
+        if (PID_ADVANCED_CONFIG.gyroUse32kHz !== 0) {
             pidRateBase = 32000;
         }
 
         var pidRate = pidRateBase / PID_ADVANCED_CONFIG.gyro_sync_denom / 
         PID_ADVANCED_CONFIG.pid_process_denom; 
 
-        if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-            loggingRates = [
-                {text: "Disabled", hz: 0,     p_denom: 0},
-                {text: "500 Hz",   hz: 500,   p_denom: 16},
-                {text: "1 kHz",    hz: 1000,  p_denom: 32},
-                {text: "1.5 kHz",  hz: 1500,  p_denom: 48},
-                {text: "2 kHz",    hz: 2000,  p_denom: 64},
-                {text: "4 kHz",    hz: 4000,  p_denom: 128},
-                {text: "8 kHz",    hz: 8000,  p_denom: 256},   
-                {text: "16 kHz",   hz: 16000, p_denom: 512},
-                {text: "32 kHz",   hz: 32000, p_denom: 1024},         
-            ];
+        loggingRates = [
+            {text: "Disabled", hz: 0,     p_denom: 0},
+            {text: "500 Hz",   hz: 500,   p_denom: 16},
+            {text: "1 kHz",    hz: 1000,  p_denom: 32},
+            {text: "1.5 kHz",  hz: 1500,  p_denom: 48},
+            {text: "2 kHz",    hz: 2000,  p_denom: 64},
+            {text: "4 kHz",    hz: 4000,  p_denom: 128},
+            {text: "8 kHz",    hz: 8000,  p_denom: 256},
+            {text: "16 kHz",   hz: 16000, p_denom: 512},
+            {text: "32 kHz",   hz: 32000, p_denom: 1024},
+        ];
 
-            $.each(loggingRates, function(index, item) {
-                if (pidRate >= item.hz || item.hz == 0) {
-                    loggingRatesSelect.append(new Option(item.text, item.p_denom));
-                }
-            });
-
-            loggingRatesSelect.val(BLACKBOX.blackboxPDenom);
-        }
-        else {
-            loggingRates = [
-                    {num: 1, denom: 1},
-                    {num: 1, denom: 2},
-                    {num: 1, denom: 3},
-                    {num: 1, denom: 4},
-                    {num: 1, denom: 5},
-                    {num: 1, denom: 6},
-                    {num: 1, denom: 7},
-                    {num: 1, denom: 8},
-                    {num: 1, denom: 16},
-                    {num: 1, denom: 32}
-                ];
-
-            
-            for (var i = 0; i < loggingRates.length; i++) {
-                var loggingRate = Math.round(pidRate / loggingRates[i].denom);
-                var loggingRateUnit = " Hz";
-                if (loggingRate !== Infinity) {
-                    if (gcd(loggingRate, 1000) === 1000) {
-                        loggingRate /= 1000;
-                        loggingRateUnit = " KHz";	
-                    }
-                }
-                loggingRatesSelect.append('<option value="' + loggingRates[i].num + '/' + loggingRates[i].denom + '">' 
-                    + loggingRate + loggingRateUnit + ' (' + Math.round(loggingRates[i].num / loggingRates[i].denom * 100) + '%)</option>');
-                
+        $.each(loggingRates, function(index, item) {
+            if (pidRate >= item.hz || item.hz == 0) {
+                loggingRatesSelect.append(new Option(item.text, item.p_denom));
             }
-            loggingRatesSelect.val(BLACKBOX.blackboxRateNum + '/' + BLACKBOX.blackboxRateDenom);
-        }
+        });
+
+        loggingRatesSelect.val(BLACKBOX.blackboxPDenom);
     }
 
     function populateDebugModes(debugModeSelect) {
@@ -315,16 +265,14 @@ TABS.onboard_logging.initialize = function (callback) {
             .toggleClass("sdcard-initializing", SDCARD.state === MSP.SDCARD_STATE_CARD_INIT || SDCARD.state === MSP.SDCARD_STATE_FS_INIT)
             .toggleClass("sdcard-ready", SDCARD.state === MSP.SDCARD_STATE_READY);
 
-        if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-            var mscIsReady = dataflashPresent || (SDCARD.state === MSP.SDCARD_STATE_READY);
-            $(".tab-onboard_logging")
-                .toggleClass("msc-not-ready", !mscIsReady);
+        var mscIsReady = dataflashPresent || (SDCARD.state === MSP.SDCARD_STATE_READY);
+        $(".tab-onboard_logging")
+            .toggleClass("msc-not-ready", !mscIsReady);
 
-            if (!mscIsReady) {
-                $('a.onboardLoggingRebootMsc').addClass('disabled');
-            } else {
-                $('a.onboardLoggingRebootMsc').removeClass('disabled');
-            }
+        if (!mscIsReady) {
+            $('a.onboardLoggingRebootMsc').addClass('disabled');
+        } else {
+            $('a.onboardLoggingRebootMsc').removeClass('disabled');
         }
         
         var loggingStatus
@@ -410,11 +358,7 @@ TABS.onboard_logging.initialize = function (callback) {
     function flash_save_begin() {
         if (GUI.connected_to) {
             if (FC.boardHasVcp()) {
-                if (semver.gte(CONFIG.apiVersion, "1.31.0")) {
-                    self.blockSize = self.VCP_BLOCK_SIZE;
-                } else {
-                    self.blockSize = self.VCP_BLOCK_SIZE_3_0;
-                }
+                self.blockSize = self.VCP_BLOCK_SIZE;
             } else {
                 self.blockSize = self.BLOCK_SIZE;
             }

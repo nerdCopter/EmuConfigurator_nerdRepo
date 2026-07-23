@@ -31,7 +31,7 @@ TABS.servos.initialize = function (callback) {
     
     function update_ui() {
             
-        if (semver.lt(CONFIG.apiVersion, "1.12.0") || SERVO_CONFIG.length == 0) {
+        if (SERVO_CONFIG.length === 0) {
             
             $(".tab-servos").removeClass("supported");
             return;

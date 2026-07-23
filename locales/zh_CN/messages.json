@@ -262,9 +262,6 @@
     "stm32AddressLoadFailed": {
         "message": "定位选项字节扇区失败。很可能因为读保护。"
     },
-    "stm32AddressLoadSuccess": {
-        "message": "定位选项字节扇区成功。"
-    },
     "stm32AddressLoadUnknown": {
         "message": "因未知错误，定位选项字节扇区失败。正在中止。"
     },
@@ -297,9 +294,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "不支持 MSP 版本。请升级 EmuConfigurator。"
-    },
-    "firmwareUpgradeRequired": {
-        "message": "飞控固件需要更新到新的版本，使用CLI 来备份设置。具体操作信息请参考 Emuflight 文档。<br />如果不想更新到最新的固件，可以使用支持该固件的地面站来设置使用。"
     },
     "infoVersions": {
         "message": "操作系统: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, 配置程序: <strong>{{configuratorVersion}}</strong>",
@@ -436,9 +430,6 @@
     },
     "defaultSupport": {
         "message": "需要帮助时请先搜索论坛或者咨询飞控的生产商。<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">备份和恢复功能被禁用。</span>当前飞控固件的API版本为 <span class=\"message-negative\">$1</span>，而备份和恢复功能需要版本 <span class=\"message-positive\">$2</span>。请通过 CLI 命令行手工备份，具体操作流程请参阅 Emuflight 文档。"
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "校准加速度计"
@@ -788,15 +779,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "警告：未检测到陀螺仪/加速度计"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "第一个"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "第二个"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "同时启用"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "第一个陀螺仪"
     },
@@ -959,9 +941,6 @@
     "configuration3dNeutral": {
         "message": "3D 中位"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "3D 死区油门"
-    },
     "configurationSystem": {
         "message": "系统设置"
     },
@@ -1051,12 +1030,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "速度设置 $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">禁止切换 PID 控制器 -  你可以通过CLI 来调整。</span> 当前固件 API 版本为 <span class=\"message-negative\">$1</span>，而此功能需要版本 <span class=\"message-positive\">$2</span>。"
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "隐藏未使用的PID"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "独立于配置文件的PID控制器设置"
@@ -1173,18 +1146,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "通过这个参数， 前馈值可以被降低到接近摇杆中点，使翻滚动作的结束更平滑一些。<br> 该值表示摇杆偏移量：0代表摇杆居中，1代表摇杆打满。当摇杆实际位置大于该值时，前馈值保持在用户设定的数字不变。当摇杆实际位置小于该值时，前馈值会按比例下降，在摇杆居中时降低到0。<br> 设置为1可以获得最平滑的效果，而设置为0将保持前馈值在全程都保持在用户设定的数字不变。"
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "D 设定点转换阈值"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "D 设定点权重"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "通过这个参数， D 设定点权重可以被降低到接近摇杆中点，使翻滚动作的结束更平滑一些。<br> 该值表示摇杆偏移量：0代表摇杆居中，1代表摇杆打满。当摇杆实际位置大于该值时，设定点权重保持在用户设定的数字不变。当摇杆实际位置小于该值时，设定点权重会按比例下降，在摇杆居中时降低到0。<br> 设置为1可以获得最平滑的效果，而设置为0将保持设定点权重在全程都保持在用户设定的数字不变。"
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> 强烈不建议将D设定点转换设置为0到0.1之间的值。这样做可能会导致不稳定，以及降低摇杆在穿过中点时的响应速度。</span>"
     },
     "pidTuningMaxVel": {
         "message": "最大角速度 [度/秒]"
@@ -2421,9 +2382,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term 低通2截止频率 [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term 低通滤波器2类型"
-    },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "D Term 陷波滤波器"
     },
@@ -3244,9 +3202,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "GPS 救援被禁用时发出警告"
-    },
-    "osdWarningUnknown": {
-        "message": "未知警告 (会在将来的版本中添加详细信息)"
     },
     "osdSectionHelpElements": {
         "message": "显示或者隐藏 OSD 显示信息"

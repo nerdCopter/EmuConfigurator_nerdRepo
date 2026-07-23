@@ -50,9 +50,6 @@ TABS.gps.initialize = function (callback) {
             var lon = GPS_DATA.lon / 10000000;
             var url = 'https://maps.google.com/?q=' + lat + ',' + lon;
             var alt = GPS_DATA.alt;
-            if (semver.lt(CONFIG.apiVersion, "1.39.0")) {
-                alt = alt / 10;
-            }
 
             $('.GPS_info td.fix').html((GPS_DATA.fix) ? i18n.getMessage('gpsFixTrue') : i18n.getMessage('gpsFixFalse'));
             $('.GPS_info td.alt').text(alt + ' m');

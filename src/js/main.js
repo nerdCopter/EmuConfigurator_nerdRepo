@@ -611,17 +611,9 @@ function updateTabList(features) {
         $('#tabs ul.mode-connected li.tab_osd').hide();
     }
 
-    if (semver.gte(CONFIG.apiVersion, "1.36.0")) {
-        $('#tabs ul.mode-connected li.tab_power').show();
-    } else {
-        $('#tabs ul.mode-connected li.tab_power').hide();
-    }
+    $('#tabs ul.mode-connected li.tab_power').show();
 
-    if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-        $('#tabs ul.mode-connected li.tab_vtx').show();
-    } else {
-        $('#tabs ul.mode-connected li.tab_vtx').hide();
-    }
+    $('#tabs ul.mode-connected li.tab_vtx').show();
 
     //experimental: show/hide with expert-mode
     if (semver.gte(CONFIG.apiVersion, "1.44.0")) {

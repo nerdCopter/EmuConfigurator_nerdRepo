@@ -436,7 +436,6 @@ var FC = {
             errorBoost:                 0,
             feathered_pids:             0,
             vbatPidCompensation:        0,
-            dtermSetpointTransition:    0,
             errorBoostLimit:            0,
             iDecay:                     0,
             toleranceBandReduction:     0,
@@ -607,12 +606,7 @@ var FC = {
     },
 
     boardHasVcp: function () {
-        var hasVcp = false;
-        if (semver.gte(CONFIG.apiVersion, "1.37.0")) {
-            hasVcp = (CONFIG.commCapabilities & FC.COMM_CAPABILITIES_FLAGS.HAS_VCP) !== 0;
-        }
-        // For older API versions, default to false (legacy firmware without VCP capability flag)
-        return hasVcp;
+        return (CONFIG.commCapabilities & FC.COMM_CAPABILITIES_FLAGS.HAS_VCP) !== 0;
     },
 
     FILTER_TYPE_FLAGS: {

@@ -259,9 +259,6 @@
     "stm32AddressLoadFailed": {
         "message": "Error al cargar dirección de sector con bytes de opciones. Probablemente protegido contra lectura."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Carga de dirección de sector con bytes de opciones correcta."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Error desconocido al cargar dirección de sector con bytes de opciones. Abortando."
     },
@@ -294,9 +291,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "La versión MSP no es compatible. Actualice EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "El firmware de este dispositivo necesita actualizarse a una nueva versión. Use CLI para hacer una copia de seguridad antes de flashear. El proceso de copia/restauración con CLI está en la documentación.<br />Alternativamente puede descargar y usar una versión anterior del configurador si no está preparado para actualizar."
     },
     "infoVersions": {
         "message": "Ejecutando - SO: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurador: <strong>{{configuratorVersion}}</strong>",
@@ -424,9 +418,6 @@
     },
     "defaultSupport": {
         "message": "Para soporte por favor busca primero en los foros y en la wiki o contacta con tu vendedor.<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Funcionalidad de copia de seguridad y restauración desactivada.</span>  Tu firmware tiene versión de API <span class=\"message-negative\">$1</span>, copia de seguridad y restauración requiere <span class=\"message-positive\">$2</span>.  Haz copia de tus ajustes vía CLI, mira la documentación para ver el procedimiento."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrar Acelerómetro"
@@ -779,15 +770,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Atención: Giro/Acel no encontrado"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Primero"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Segundo"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Ambos"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Primer Giro"
     },
@@ -950,9 +932,6 @@
     "configuration3dNeutral": {
         "message": "Neutral 3D"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Banda Muerta 3D Acelerador"
-    },
     "configurationSystem": {
         "message": "Configuración de sistema"
     },
@@ -1036,12 +1015,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Cambio de controlador PID desactivado - puedes cambiarlo a través de CLI.</span>  Tienes firmware con versión de API <span class=\"message-negative\">$1</span>, pero esta funcionalidad requiere <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Ocultar PIDs no usados"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Ajustes de PID independientes del Perfil"
@@ -1146,18 +1119,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Con este parámetro, la Prealimentación (Feedforward) puede reducirse cuando las palancas están cerca del centro, lo cual provoca que el final de los flips y rolls sea más suave.<br>El valor representa un punto del movimiento de la palanca: 0 - palanca centrada, 1 - completamente desplazada. Cuando la palanca está por encima de ese punto, la Prealimentación se mantiene constante en el valor configurado. Cuando la palanca se sitúa por debajo de ese punto, la Prealimentación se reduce proporcionalmente, llegando a 0 en la posición central de la palanca. <br> El valor de 1 da el máximo efecto de suavizado, mientras que el valor de 0 mantiene la Prealimentación fija en su valor configurado sobre el rango completo de la palanca."
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "Punto de Ajuste de Transición de D"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "Punto de Ajuste de Peso de D"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Con este parámetro, el Punto de Ajuste de Peso de D puede reducirse cuando las palancas están cerca del centro, lo cual provoca que el final de los flips y rolls sea más suave.<br>El valor representa un punto del movimiento de la palanca: 0 - palanca centrada, 1 - completamente desplazada. Cuando la palanca está por encima de ese punto, el Punto de Ajuste de Peso se mantiene constante en el valor configurado. Cuando la palanca se sitúa por debajo de ese punto, el Punto de Ajuste de Peso se reduce proporcionalmente, llegando a 0 en la posición central de la palanca. <br> El valor de 1 da el máximo efecto de suavizado, mientras que el valor de 0 mantiene el Punto de Ajuste de Peso fijo en su valor configurado sobre el rango completo de la palanca."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> El uso de un Punto de Ajuste de Transición de D mayor que 0 y menor que 0.1 está altamente desaconsejado. Puede causar inestabilidad y reducir la respuesta de los controles al cruzar el punto central.</span>"
     },
     "pidTuningProportional": {
         "message": "Proporcional (P)"
@@ -2343,9 +2304,6 @@
     "pidTuningDTermLowpass2Frequency": {
         "message": "D Term Paso Bajo 2 Frecuencia de Corte [Hz]"
     },
-    "pidTuningDTermLowpass2Type": {
-        "message": "D Term Paso Bajo 2 Tipo de Filtro"
-    },
     "pidTuningDTermNotchFiltersGroup": {
         "message": "Filtros Notch del D Term"
     },
@@ -3070,9 +3028,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Avisa cuando el Rescate GPS está desactivado"
-    },
-    "osdWarningUnknown": {
-        "message": "Aviso desconocido (los detalles se añadirán en una futura versión)"
     },
     "osdSectionHelpElements": {
         "message": "Activa o desactiva elementos del OSD"

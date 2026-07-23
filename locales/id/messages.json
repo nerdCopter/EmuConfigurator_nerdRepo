@@ -247,9 +247,6 @@
     "stm32AddressLoadFailed": {
         "message": "Alamat memori untuk pilihan sektor bit gagal. Sangat mungkin karena proteksi baca."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Alamat memori untuk pilihan sektor bit berhasil."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Alamat memori untuk pilihan sektor bit gagal dengan kesalahan yang tidak diketahui. Membatalkan."
     },
@@ -282,9 +279,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "Versi MSP tidak didukung. Silakan perbarui EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Firmware pada perangkat ini perlu ditingkatkan ke versi yang lebih baru. Gunakan CLI untuk backup sebelum flashing. Prosedur backup/restore CLI ada di dokumentasi.<br />Atau unduh dan gunakan EmuFlight versi lama jika anda belum siap untuk upgrade."
     },
     "infoVersions": {
         "message": "Sistem Operasi: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Configurator: <strong>{{configuratorVersion}}</strong>",
@@ -412,9 +406,6 @@
     },
     "defaultSupport": {
         "message": "Untuk dukungan silahkan cari di forum dan wiki terlebih dahulu atau hubungi vendor anda.<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Fungsi Backup dan Restore nonaktif.</span> Anda memiliki firmware dengan versi API <span class=\"message-negative\">$1</span>, backup dan restore membutuhkan versi <span class=\"message-positive\">$2</span>. Backup pengaturan anda melalui CLI, lihat dokumentasi EmuFlight untuk mengetahui caranya."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrasi Accelerometer"
@@ -884,12 +875,6 @@
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
     },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Perubahan PID dinonaktifkan - anda bisa mengubahnya melalui CLI.</span> Anda mempunyai firmware dengan versi API <span class = \"message-negative\">$1</span>, namun Fungsi ini memerlukan <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Sembunyikan PID yang tidak dipakai"
-    },
     "pidTuningNonProfilePidSettings": {
         "message": "Pengaturan PID yang independen dari profile"
     },
@@ -973,21 +958,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "Dengan parameter ini, Feedforward term dapat dikurangi hingga dekat dengan nilai tengah stick, yang menghasilkan akhir flip dan roll yang lebih halus.<br> Nilai mewakili defleksi stik dari titik tengah: 0 - stick di tengah, 1 - defleksi penuh. Ketika stick diatas titik itu, Feedforward akan tetap pada nilai yang telah ditentukan. Ketika stick berada di bawah, Feedforward akan berkurang secara proporsional, hingga mencapai titik 0 pada posisi tengah stick.<br> Nilai 1 memberikan efek smoothing yang maksimum, sedangkan nilai 0 menjaga Feedforward pada nilai yang telah ditentukan untuk seluruh kisaran stick."
-    },
-    "pidTuningDtermSetpointTransition": {
-        "message": "Transisi Setpoint D"
-    },
-    "pidTuningDtermSetpoint": {
-        "message": "Beban Setpoint D"
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Dengan parameter ini, beban setpoint D dapat dikurangi dekat dengan tengah stik, yang menghasilkan akhir flip dan roll yang lebih halus.<br>Nilai mewakili titik defleksi stik: 0 - stik di tengah, 1 - defleksi penuh. Ketika stik berada di atas titik itu, bobot setpoint dijaga konstan pada nilai konfigurasinya. Bila stik diletakkan di bawah titik itu, bobot setpoint dikurangi secara proporsional, mencapai 0 pada posisi stik di tengah.<br>Nilai 1 memberikan efek smoothing maksimum, sedangkan nilai 0 menjaga bobot setpoint tetap pada nilai konfigurasinya diseluruh rentang stik."
-    },
-    "pidTuningDtermSetpointHelp": {
-        "message": "Parameter ini menentukan efek akselerasi stik dalam komponen derivatif.<br>Nilai 0 sama dengan metode pengukuran lama dimana D hanya melacak gyro, sedangkan nilai 1 sama dengan metode Error lama dengan rasio pelacakan gyro dan stick yang sama.<br>Nilai yang lebih rendah sama dengan respons stik yang lebih lambat / lebih halus, sedangkan nilai yang lebih tinggi memberikan respon stik lebih cepat.<br>Perhatikan bahwa interpolasi RC dianjurkan untuk diaktifkan dengan nilai yang lebih tinggi untuk mencegah noise."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> Hindari penggunaan transisi Setpoint D lebih dari 0 dan kurang dari 0.1. Menggunakan nilai tersebut dapat menyebabkan tidak stabil dan mengurangi respon stick ketika melewati titik tengahnya.</span>"
     },
     "pidTuningProportional": {
         "message": "Proporsional"

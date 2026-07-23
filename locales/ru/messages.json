@@ -268,9 +268,6 @@
     "stm32AddressLoadFailed": {
         "message": "Сбой чтения адреса для option bytes. Скорее всего установлена защита от чтения."
     },
-    "stm32AddressLoadSuccess": {
-        "message": "Чтение адреса для option bytes успешно."
-    },
     "stm32AddressLoadUnknown": {
         "message": "Сбой чтения адреса для option bytes с неизвестной ошибкой. Отмена ..."
     },
@@ -300,9 +297,6 @@
     },
     "firmwareMSPNotSupported": {
         "message": "Версия MSP не поддерживается. Обновите EmuConfigurator."
-    },
-    "firmwareUpgradeRequired": {
-        "message": "Прошивка в этом устройстве нуждается в обновлении до новой версии. Используйте командную строку, чтобы сделать резервную копию перед обновлением прошивки. Процедура создания/восстановления резервной копии описана в документации.<br />Если вы не хотите обновлять прошивку, то используйте более старую версию конфигуратора."
     },
     "infoVersions": {
         "message": "Запуск - ОС: <strong>{{operatingSystem}}</strong>, Chrome: <strong>{{chromeVersion}}</strong>, Конфигуратор: <strong>{{configuratorVersion}}</strong>",
@@ -430,9 +424,6 @@
     },
     "defaultSupport": {
         "message": "Для помощи сперва поищите на форумах и на wiki или свяжитесь с вашим продавцом.<br /><br />"
-    },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Функционал создания и восстановления из резервной копии не доступен.</span> Ваша прошивка имеет API версию конфигуратора <span class=\"message-negative\">$1</span>, создание и восстановление из резервной копии требует версию <span class=\"message-positive\">$2</span>. Пожалуйста, создайте резервную копию ваших настроек через командную строку; загляните в документацию Emuflight, чтобы узнать как это сделать."
     },
     "initialSetupButtonCalibrateAccel": {
         "message": "Калибровать акселерометр"
@@ -788,12 +779,6 @@
     "configurationSensorAlignmentGyro": {
         "message": "Положение Гиро."
     },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Второй"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Оба"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Первый ГИРО"
     },
@@ -953,9 +938,6 @@
     "configuration3dNeutral": {
         "message": "Нейтральная точка 3D режима"
     },
-    "configuration3dDeadbandThrottle": {
-        "message": "Нечувствительная зона газа 3D режима"
-    },
     "configurationSystem": {
         "message": "Системные настройки"
     },
@@ -1027,12 +1009,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-профиль $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Менять PID-контроллер запрещено, но его можно поменять в командной строке.</span>  Ваша прошивка поддерживает конфигуратор версии <span class=\"message-negative\">$1</span>, а этот функционал требует версию прошивки <span class=\"message-positive\">$2</span>."
-    },
-    "pidTuningHideUnusedPids": {
-        "message": "Скрыть ненужные PID-ы"
     },
     "pidTuningNonProfilePidSettings": {
         "message": "Настройки PID-контроллера, независящие от настройки профиля"
@@ -1149,12 +1125,6 @@
     },
     "pidTuningFeedforwardTransitionHelp": {
         "message": "С этим параметром Feedforward может быть уменьшен вблизи центра стиков, что приводит к более плавным флипам и разворотам. <br> Значение представляет собой точку отклонения стика: 0 - центрированное по центру, 1 - полное отклонение. Когда стик находится выше этой точки, Feedforward поддерживается постоянным по своему сконфигурированному значению. Когда стик расположен ниже этой точки, показатель подачи уменьшается пропорционально, достигая 0 в центральном положении. <br> Значение 1 дает максимальный эффект сглаживания, а значение 0 сохраняет фиксированное значение Ф Feedforward на его заданном значении по всему диапазону стиков."
-    },
-    "pidTuningDtermSetpointTransitionHelp": {
-        "message": "Этот параметр снижает значение D Setpoint Weight, когда стики находятся в районе центра, что делает завершение флипов и роллов более плавными.<br> Он означает отклонение стика: 0 - стик в центре, 1 - полное отклонение стика. Когда стик находится выше этого значения, то Setpoint Weight имеет установленное значение. Когда стик находится ниже этого значения, то Setpoint Weight уменьшается пропорционально, достигая 0, когда стик находятся в центре.<br> Значение 1 даёт максимальный сглаживающий эффект, а значение 0 сохраняет установленное значение Setpoint Weight при любом отклонении стика."
-    },
-    "pidTuningDtermSetpointTransitionWarning": {
-        "message": "<span class=\"message-negative\"><strong>$t(warningTitle.message):</strong> использование D Setpoint больше 0 и меньше, чем 0.1 не рекомендуется. Это может привести к нестабильности и снижению оперативности стиков когда стик пересекает центральную точку.</span>"
     },
     "pidTuningMaxVel": {
         "message": "Макс. скор. [град/сек]"
@@ -3185,9 +3155,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Предупреждает, когда GPS отключён"
-    },
-    "osdWarningUnknown": {
-        "message": "Неизвестное предупреждение (детали будут добавлены в будущем выпуске)"
     },
     "osdSectionHelpElements": {
         "message": "Включение или отключение элементов OSD."

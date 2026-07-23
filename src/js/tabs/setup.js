@@ -29,13 +29,6 @@ TABS.setup.initialize = function (callback) {
         // translate to user-selected language
         i18n.localizePage();
 
-        if (semver.lt(CONFIG.apiVersion, CONFIGURATOR.backupRestoreMinApiVersionAccepted)) {
-            $('#content .backup').addClass('disabled');
-            $('#content .restore').addClass('disabled');
-
-            GUI.log(i18n.getMessage('initialSetupBackupAndRestoreApiVersion', [CONFIG.apiVersion, CONFIGURATOR.backupRestoreMinApiVersionAccepted]));
-        }
-
         // initialize 3D Model
         self.initModel();
 
@@ -61,21 +54,17 @@ TABS.setup.initialize = function (callback) {
 
         $('#arming-disable-flag').attr('title', i18n.getMessage('initialSetupArmingDisableFlagsTooltip'));
 
-        if (semver.gte(CONFIG.apiVersion, "1.40.0")) {
-            //if (isExpertModeEnabled()) {
-                $('.initialSetupRebootBootloader').show();
-            //} else {
-            //    $('.initialSetupRebootBootloader').hide();
-            //}
+        //if (isExpertModeEnabled()) {
+            $('.initialSetupRebootBootloader').show();
+        //} else {
+        //    $('.initialSetupRebootBootloader').hide();
+        //}
 
-            $('a.rebootBootloader').click(function () {
-                var buffer = [];
-                buffer.push(mspHelper.REBOOT_TYPES.BOOTLOADER);
-                MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
-            });
-        } else {
-            $('.initialSetupRebootBootloader').hide();
-        }
+        $('a.rebootBootloader').click(function () {
+            var buffer = [];
+            buffer.push(mspHelper.REBOOT_TYPES.BOOTLOADER);
+            MSP.send_message(MSPCodes.MSP_SET_REBOOT, buffer, false);
+        });
 
         // UI Hooks
         $('a.calibrateAccel').click(function () {
@@ -194,10 +183,6 @@ TABS.setup.initialize = function (callback) {
             pitch_e = $('dd.pitch'),
             heading_e = $('dd.heading');
 
-        if (semver.lt(CONFIG.apiVersion, "1.36.0")) {
-            arming_disable_flags_e.hide();
-        }
-
         // DISARM FLAGS
         // We add all the arming/disarming flags available, and show/hide them if needed.
         var prepareDisarmFlags = function() {
@@ -220,14 +205,10 @@ TABS.setup.initialize = function (callback) {
                                       'MSP',
                                      ];
 
-            if (semver.gte(CONFIG.apiVersion, "1.38.0")) {
-                disarmFlagElements.splice(disarmFlagElements.indexOf('THROTTLE'), 0, 'RUNAWAY_TAKEOFF'); 
-            }
+            disarmFlagElements.splice(disarmFlagElements.indexOf('THROTTLE'), 0, 'RUNAWAY_TAKEOFF');
 
-            if (semver.gte(CONFIG.apiVersion, "1.39.0")) {
-                disarmFlagElements = disarmFlagElements.concat(['PARALYZE',
-                                                                'GPS']);
-            }
+            disarmFlagElements = disarmFlagElements.concat(['PARALYZE',
+                                                            'GPS']);
 
             // Always the latest element
             disarmFlagElements = disarmFlagElements.concat(['ARM_SWITCH']);
