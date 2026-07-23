@@ -413,9 +413,6 @@
     "defaultSupport": {
         "message": "Untuk dukungan silahkan cari di forum dan wiki terlebih dahulu atau hubungi vendor anda.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Fungsi Backup dan Restore nonaktif.</span> Anda memiliki firmware dengan versi API <span class=\"message-negative\">$1</span>, backup dan restore membutuhkan versi <span class=\"message-positive\">$2</span>. Backup pengaturan anda melalui CLI, lihat dokumentasi EmuFlight untuk mengetahui caranya."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrasi Accelerometer"
     },
@@ -883,9 +880,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Perubahan PID dinonaktifkan - anda bisa mengubahnya melalui CLI.</span> Anda mempunyai firmware dengan versi API <span class = \"message-negative\">$1</span>, namun Fungsi ini memerlukan <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Sembunyikan PID yang tidak dipakai"

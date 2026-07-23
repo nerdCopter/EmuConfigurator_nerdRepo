@@ -431,9 +431,6 @@
     "defaultSupport": {
         "message": "För support, var vänlig sök i forumen och wikin först eller kontakta din försäljare.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Säkerhetskopierings- och återställningsfunktioner inaktiverade.</span> Du har firmware med API-version <span class=\"message-negative\">$1</span>, säkerhetskopiering och återställning kräver <span class=\"message-positive\">$2</span>.  Vänligen säkerhetskopiera dina inställningar via CLI, se Emuflight-dokumentation för förfarandet."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrera Accelerometer"
     },
@@ -779,15 +776,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Varning: Ingen Gyro/Acc hittad"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Första"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Andra"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Båda"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Första GYRO"
     },
@@ -1033,9 +1021,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-profil $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Inte möjligt att ändra PID-kontroller - du kan ändra den via CLI.</span>  Din firmware har API-version <span class=\"message-negative\">$1</span>, men denna funktion kräver <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Dölj PIDs som inte används"
@@ -2966,9 +2951,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Varnar när GPS-räddning är avstängd"
-    },
-    "osdWarningUnknown": {
-        "message": "Okänd varning (detaljer tillkommer i en kommande utgåva)"
     },
     "osdSectionHelpElements": {
         "message": "Aktivera eller avaktivera OSD-element."

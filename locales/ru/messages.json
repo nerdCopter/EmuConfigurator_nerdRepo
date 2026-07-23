@@ -431,9 +431,6 @@
     "defaultSupport": {
         "message": "Для помощи сперва поищите на форумах и на wiki или свяжитесь с вашим продавцом.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Функционал создания и восстановления из резервной копии не доступен.</span> Ваша прошивка имеет API версию конфигуратора <span class=\"message-negative\">$1</span>, создание и восстановление из резервной копии требует версию <span class=\"message-positive\">$2</span>. Пожалуйста, создайте резервную копию ваших настроек через командную строку; загляните в документацию Emuflight, чтобы узнать как это сделать."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Калибровать акселерометр"
     },
@@ -788,12 +785,6 @@
     "configurationSensorAlignmentGyro": {
         "message": "Положение Гиро."
     },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Второй"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Оба"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Первый ГИРО"
     },
@@ -1027,9 +1018,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate-профиль $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Менять PID-контроллер запрещено, но его можно поменять в командной строке.</span>  Ваша прошивка поддерживает конфигуратор версии <span class=\"message-negative\">$1</span>, а этот функционал требует версию прошивки <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Скрыть ненужные PID-ы"
@@ -3179,9 +3167,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Предупреждает, когда GPS отключён"
-    },
-    "osdWarningUnknown": {
-        "message": "Неизвестное предупреждение (детали будут добавлены в будущем выпуске)"
     },
     "osdSectionHelpElements": {
         "message": "Включение или отключение элементов OSD."

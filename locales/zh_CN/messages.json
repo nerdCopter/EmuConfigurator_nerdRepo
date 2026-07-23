@@ -437,9 +437,6 @@
     "defaultSupport": {
         "message": "需要帮助时请先搜索论坛或者咨询飞控的生产商。<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">备份和恢复功能被禁用。</span>当前飞控固件的API版本为 <span class=\"message-negative\">$1</span>，而备份和恢复功能需要版本 <span class=\"message-positive\">$2</span>。请通过 CLI 命令行手工备份，具体操作流程请参阅 Emuflight 文档。"
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "校准加速度计"
     },
@@ -788,15 +785,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "警告：未检测到陀螺仪/加速度计"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "第一个"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "第二个"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "同时启用"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "第一个陀螺仪"
     },
@@ -1051,9 +1039,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "速度设置 $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">禁止切换 PID 控制器 -  你可以通过CLI 来调整。</span> 当前固件 API 版本为 <span class=\"message-negative\">$1</span>，而此功能需要版本 <span class=\"message-positive\">$2</span>。"
     },
     "pidTuningHideUnusedPids": {
         "message": "隐藏未使用的PID"
@@ -3232,9 +3217,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "GPS 救援被禁用时发出警告"
-    },
-    "osdWarningUnknown": {
-        "message": "未知警告 (会在将来的版本中添加详细信息)"
     },
     "osdSectionHelpElements": {
         "message": "显示或者隐藏 OSD 显示信息"

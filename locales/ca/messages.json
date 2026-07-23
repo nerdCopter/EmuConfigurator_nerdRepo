@@ -403,9 +403,6 @@
     "defaultSupportSubline1": {
         "message": "Fonts de suport"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Funcionalitats de còpia de seguretat i restauració deshabilitades.</span> La teva versió de la API és <span class=\"message-negative\">$1</span>, la còpia i restauració requereix <span class=\"message-positive\">$2</span>. Si us plau, desa la teva configuració mitjançant el CLI, revisa la documentació de EmuFlight per saber com procedir."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibra Accel"
     },
@@ -837,9 +834,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "LIDAR Benewake"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Canviant el controlador PID a deshabilitat - ho pots canviar pel CLI.</span> Tens un firmware amb versió API <span class=\"message-negative\">$1</span>, però aquesta funcionalitat requereix <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Amaga els PIDs no utilitzats"

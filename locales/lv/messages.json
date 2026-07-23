@@ -446,9 +446,6 @@
     "defaultSupport": {
         "message": "Palīdzībai, lūdzu, apmeklējiet forumus un wiki vai sazināties ar savu pārdevēju.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Dublēšanas un atjaunošanas funkcionalitāte ir atslēgta.</span>Jūsu programmatūras API versija <span class=\"message-negative\">$1</span>, dublēšanai un atjaunošanai nepieciešama <span class=\"message-positive\">$2</span>.  Lūdzu, dublējat savus iestatījumus ar CLI, procedūras aprakstu skatīt Emuflight dokumentācijā."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibrēt akselerometru"
     },
@@ -800,15 +797,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Brīdinājums: Žiro/Aksel nav atrasts"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Pirmais"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Otrais"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Abi"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Pirmais ŽIRO"
     },
@@ -1057,9 +1045,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Ātrumprofils $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">PID kontroliera maiņa ir atslēgta  - jūs to varat nomainīt iekš CLI.</span>  Jums ir programmatūra ar API versiju <span class=\"message-negative\">$1</span>, bet šai funkcionalitātei nepieciešama <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Paslēpt neizmantotos PID"
@@ -3160,9 +3145,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Brīdināt, kad GPS glābšana ir atslēgta"
-    },
-    "osdWarningUnknown": {
-        "message": "Nezināms brīdinājums (detaļas tiks pievienotas nākotnes relīzēs)"
     },
     "osdSectionHelpElements": {
         "message": "Ieslēgt vai izslēgt OSD elementus."

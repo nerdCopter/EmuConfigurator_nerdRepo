@@ -428,9 +428,6 @@
     "defaultSupport": {
         "message": "지원을 받으려면 먼저 포럼과 위키를 검색하거나 공급 업체에 문의하십시오.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">백업과 복구 기능이 비활성화되었습니다.</span> API 버전  <span class=\"message-negative\">$1</span>에 맞는 펌웨어여야 합니다, 백업과 복구 절차는 <span class=\"message-positive\">$2</span>를 참고하십시오. 당신의 설정을 CLI를 통해 백업하세요, 필요한 경우 절차에 대한 베타플라이트 문서를 확인하세요."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "가속도계 캘리브레이션"
     },
@@ -788,15 +785,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "경고: 자이로/가속도계 발견 안됨"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "첫번째"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "두번째"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "모두"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "첫번째 자이로"
     },
@@ -1051,9 +1039,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "레이트프로파일 $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">PID 변경 컨트롤러가 비활성화됨 - 당신은 CLI를 통하여 변경할 수 있습니다.</span> 당신은 API 버전  <span class=\"message-negative\">$1</span>의 펌웨어를 가지고 있으나, 이 기능은  <span class=\"message-positive\">$2</span>를 필요로 합니다."
     },
     "pidTuningHideUnusedPids": {
         "message": "사용하지 않는 PID 숨기기"
@@ -3276,9 +3261,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "GPS 구조를 사용하지 않도록 설정하는 경우 경고합니다"
-    },
-    "osdWarningUnknown": {
-        "message": "알 수 없는 경고 (다음 릴리스에 추가 될 세부 정보)"
     },
     "osdSectionHelpElements": {
         "message": "OSD 요소를 활성화 또는 비활성화합니다."

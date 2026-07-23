@@ -431,9 +431,6 @@
     "defaultSupport": {
         "message": "サポートに関しては、最初に検索フォーラムやwiki、もしくはベンダーにお問い合わせ下さい。<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">バックアップと復元の機能が無効です。</span>ファームウェアのAPIバージョンは<span class=\"message-negative\">$1</span>ですが、バックアップと復元には<span class=\"message-positive\">$2</span>が必要です。バックアップにはCLIをご利用下さい。方法についてはEmuflightドキュメントを参照して下さい。"
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "加速度計のキャリブレーション"
     },
@@ -791,15 +788,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "警告: ジャイロ/加速度センサーが確認できません"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "第1"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "第2"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "両方"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "第1ジャイロ"
     },
@@ -1039,9 +1027,6 @@
     },
     "portsFunction_RUNCAM_DEVICE_CONTROL": {
         "message": "カメラ (RunCamプロトコル)"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">PID制御の変更が無効 - CLIにより変更できます。</span> このファームウェアはAPIバージョン<span class=\"message-negative\">$1</span>ですが、この機能には<span class=\"message-positive\">$2</span>が必要です。"
     },
     "pidTuningHideUnusedPids": {
         "message": "未使用なPID値 非表示"
@@ -3195,9 +3180,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "GPS レスキューが無効な場合に警告"
-    },
-    "osdWarningUnknown": {
-        "message": "原因不明の警告 (詳細は今後のリリースで対応予定)"
     },
     "osdSectionHelpElements": {
         "message": "OSDを有効、または無効にします。"

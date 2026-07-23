@@ -446,9 +446,6 @@
     "defaultSupport": {
         "message": "Para soporte por favor busque nos foros e na wiki ou contacte co vendedor. <br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Funcionalidade de copia de seguridade e restauración desactivada.</span> Tes firmware con versión de API <span class=\"message-negative\">$1</span>, a copia de seguridade e restauración require <span class=\"message-positive\">$2</span>. Por favor, fai copia de seguridade dos axustes mediante o CLI; consulta a documentación de Emuflight para o procedemento."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrar Acelerómetro"
     },
@@ -785,15 +782,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Peligro: Non funciona Xiro/Acc"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Primeiro"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Segundo"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Ámbalas dúas"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Primer XIRO"
     },
@@ -1039,9 +1027,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Perfil tasa $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\"> Cambio do controlador PID desactivado - pode cambialo a través da CLI. </span> Ten firmware coa versión API <span class=\"message-negative\">$1</span>, pero esta funcionalidade require <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Oculta PID's no usados"
@@ -3004,9 +2989,6 @@
     },
     "osdWarningLinkQuality": {
         "message": "Avisa cando a Calidad do Enlace está por debaixo da alarma configurada"
-    },
-    "osdWarningUnknown": {
-        "message": "Aviso descoñecido (os detalles engadiranse nunha futura versión)"
     },
     "osdSectionHelpElements": {
         "message": "Activar ou desactivar os elementos do OSD"

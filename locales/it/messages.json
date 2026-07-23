@@ -413,9 +413,6 @@
     "defaultSupport": {
         "message": "Per avere supporto prova a cercare nei forum e sulle pagine wiki o prova a contattare il tuo fornitore.<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">funzione di Backup e ripristino disabilitata.</span>La versione API del tuo Firmware è <span class=\"message-negative\">$1</span>, per eseguire backup e ripristino è necessaria la versione<span class=\"message-positive\">$2</span>. puoi eseguire il backup dei tuoi settaggi via CLI, vedi la documentazione Emuflight per la procedura."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibra Accel"
     },
@@ -931,9 +928,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Profilo Rate $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">la modifica del controllore dei PID è disabilitata - puoi modificarli tramite CLI.</span> hai un Firmware con versione delle API <span class=\"message-negative\">$1</span>, ma questa funzionalità richiede <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "nascondi PID non utilizzati"

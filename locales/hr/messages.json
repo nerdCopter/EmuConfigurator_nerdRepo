@@ -437,9 +437,6 @@
     "defaultSupport": {
         "message": "Za podršku molimo potražite na forumima i na EmuFlight wikiju ili kontaktirajte vašek proizvođaća<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Izrada i korištenje sigurnosnih kopija onemogućeno.</span> Koristite firmware s API verzijom <span class=\"message-negative\">$1</span>, sigurnosne kopije zahtijevaju <span class=\"message-positive\">$2</span>.  Molimo napravite sigurnosne kopije postavki kroz CLI sučelje, pogledajte EmuFlight dokumentaciju za proceduru."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Kalibracija akcelerometra"
     },
@@ -788,15 +785,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Upozorenje: Nema žiroskopa/akcelerometra"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Prvi"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Drugi"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Oba"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Prvi GYRO"
     },
@@ -1036,9 +1024,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rateprofil $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Mijenjanje postavki PID kontrolera onemogućeno - možete ih mijenjati kroz CLI.</span> Firmware koji koristite ima API verziju<span class=\"message-negative\">$1</span>, ali ova mogućnost zahtijeva verziju <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Sakrij nekorištene PIDove"
@@ -2987,9 +2972,6 @@
     },
     "osdWarningLinkQuality": {
         "message": "Upozori kad je kvaliteta veze ispod postavljene razine za alarm"
-    },
-    "osdWarningUnknown": {
-        "message": "Nepoznato upozorenje (detalji će biti dodani u budućim verzijama)"
     },
     "osdSectionHelpElements": {
         "message": "Omogućavanje ili onemogućavanje elemenata OSD-a."

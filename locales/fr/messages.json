@@ -413,9 +413,6 @@
     "defaultSupport": {
         "message": "Pour avoir du support, dans un premier temps,effectuez une recherche sur les forums et wiki ou prenez contact avec votre revendeur<br /><br />"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">La sauvegarde et la restauration sont désactivés.</span> La version API de votre microprogramme est <span class=\"message-negative\">$1</span>, la version minimum requise est <span class=\"message-positive\">$2</span>.  Veuillez sauvegarder vos paramètres en CLI, voir la procédure dans l'aide Emuflight."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrer Accel"
     },
@@ -755,15 +752,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Avertissement: Aucun Gyroscope/Accéléromètre détecté"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Premier"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Deuxième"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Les deux"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Premier GYRO"
     },
@@ -1000,9 +988,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Profile rate $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Changement de contrôleur PID désactivé - mais possible en CLI.</span> Votre microprogramme dispose de l'API version <span class=\"message-negative\">$1</span>, cette fonctionnalité nécessite la version <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Cacher les PIDs non utilisés"
@@ -2965,9 +2950,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Alerte quand GPS rescue est désactivé"
-    },
-    "osdWarningUnknown": {
-        "message": "Avertissement inconnu (détails à ajouter dans une version ultérieure)"
     },
     "osdSectionHelpElements": {
         "message": "Activer ou désactiver l'OSD"

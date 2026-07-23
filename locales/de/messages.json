@@ -411,9 +411,6 @@
     "defaultSupport": {
         "message": "Für Hilfe durchsuche bitte die Foren und das Wiki zuerst oder wende dich an deinen Händler.<br /><br /> "
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Backup and restore functionality disabled.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, backup and restore requires <span class=\"message-positive\">$2</span>. Please backup your settings via the CLI, see Emuflight documentation for procedure."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Accelerometer (accel) kalibrieren"
     },
@@ -753,15 +750,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Warnung: Kein Gyro/Acc gefunden"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "Erster"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Zweiter"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Beide"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "Erster Gyro"
     },
@@ -998,9 +986,6 @@
     },
     "pidTuningRateProfileOption": {
         "message": "Rate Profil $1"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires requires <span class=\"message-positive\">$2</span>."
     },
     "pidTuningHideUnusedPids": {
         "message": "Verstecke ungenutzt PIDs"
@@ -2889,9 +2874,6 @@
     },
     "osdWarningGpsRescueDisabled": {
         "message": "Warnung, wenn GPS Rescue deaktiviert ist"
-    },
-    "osdWarningUnknown": {
-        "message": "Unbekannte Warnung (Details werden in einer künftigen Version ergänzt)"
     },
     "osdSectionHelpElements": {
         "message": "OSD Elemente aktivieren oder deaktivieren"

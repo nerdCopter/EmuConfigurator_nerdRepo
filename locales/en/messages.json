@@ -593,9 +593,6 @@
     "defaultSupport2": {
         "message": "<a href=\"https://github.com/Emuflight\" target=\"_blank\">GitHub</a>"
     },
-    "initialSetupBackupAndRestoreApiVersion": {
-        "message": "<span class=\"message-negative\">Backup and restore functionality disabled.</span> You have firmware with API version <span class=\"message-negative\">$1</span>, backup and restore requires <span class=\"message-positive\">$2</span>.  Please backup your settings via the CLI, see Emuflight documentation for procedure."
-    },
     "initialSetupButtonCalibrateAccel": {
         "message": "Calibrate Accelerometer"
     },
@@ -1001,15 +998,6 @@
     "configurationSensorGyroToUseNotFound": {
         "message": "Warning: No Gyro/Acc found"
     },
-    "configurationSensorGyroToUseFirst": {
-        "message": "First"
-    },
-    "configurationSensorGyroToUseSecond": {
-        "message": "Second"
-    },
-    "configurationSensorGyroToUseBoth": {
-        "message": "Both"
-    },
     "configurationSensorAlignmentGyro1": {
         "message": "First GYRO"
     },
@@ -1318,9 +1306,6 @@
     },
     "portsFunction_LIDAR_TF": {
         "message": "Benewake LIDAR"
-    },
-    "pidTuningUpgradeFirmwareToChangePidController": {
-        "message": "<span class=\"message-negative\">Changing PID controller disabled - you can change it via the CLI.</span>  You have firmware with API version <span class=\"message-negative\">$1</span>, but this functionality requires <span class=\"message-positive\">$2</span>."
     },
     "pidTuningSubTabPid": {
         "message": "Acro PIDs"
@@ -4832,12 +4817,6 @@
     },
     "osdWarningDji": {
         "message": "DJI hack. Show warnings instead of craft name."
-    },
-    "osdWarningTextUnknown": {
-        "message": "Unknown $1"
-    },
-    "osdWarningUnknown": {
-        "message": "Unknown warning (details to be added in a future release)"
     },
     "osdSectionHelpElements": {
         "message": "Enable or disable OSD elements."
