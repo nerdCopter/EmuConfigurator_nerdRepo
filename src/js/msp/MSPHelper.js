@@ -1913,7 +1913,9 @@ MspHelper.prototype.crunch = function(code) {
                   .push8(VTX_CONFIG.vtx_pit_mode ? 1 : 0);
             //MSP 1.54
             //buffer.push16(VTX_CONFIG.vtx_pit_mode_freq);
-            buffer.push8(VTX_CONFIG.vtx_low_power_disarm);
+            if (semver.gte(CONFIG.apiVersion, "1.54.0")) {
+                buffer.push8(VTX_CONFIG.vtx_low_power_disarm);
+            }
             //End MSP 1.54
             break;
 
