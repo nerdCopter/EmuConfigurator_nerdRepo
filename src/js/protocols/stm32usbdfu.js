@@ -1044,6 +1044,15 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             if (!verify) {
                                 console.log('Verification block ' + i + ' @ 0x' + self.hex.data[i].address.toString(16) +
                                             ', ' + self.hex.data[i].bytes + ' bytes, read back ' + self.verify_hex[i].length + ' bytes');
+                                var expected = self.hex.data[i].data;
+                                var received = self.verify_hex[i];
+                                var mismatches = 0;
+                                for (var m = 0; m < expected.length; m++) {
+                                    if (expected[m] !== received[m]) { mismatches++; }
+                                }
+                                console.log('Verification mismatches: ' + mismatches + ' of ' + expected.length + ' bytes');
+                                console.log('Expected[0..15]: ' + Array.prototype.slice.call(expected, 0, 16).join(','));
+                                console.log('Received[0..15]: ' + Array.prototype.slice.call(received, 0, 16).join(','));
                                 break;
                             }
                         }
