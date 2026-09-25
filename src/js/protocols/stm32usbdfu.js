@@ -1041,7 +1041,11 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                         for (var i = 0; i <= blocks; i++) {
                             verify = self.verify_flash(self.hex.data[i].data, self.verify_hex[i]);
 
-                            if (!verify) { break; }
+                            if (!verify) {
+                                console.log('Verification block ' + i + ' @ 0x' + self.hex.data[i].address.toString(16) +
+                                            ', ' + self.hex.data[i].bytes + ' bytes, read back ' + self.verify_hex[i].length + ' bytes');
+                                break;
+                            }
                         }
 
                         if (verify) {
