@@ -346,8 +346,7 @@ STM32DFU_protocol.prototype.getChipInfo = function (_interface, callback) {
             return;
         }
 
-        // Keep this for new MCU debugging
-        // console.log('Descriptors: ' + descriptors);
+        console.log('Descriptors: ' + descriptors);
 
         var parseDescriptor = function(str) {
             // F303: "@Internal Flash  /0x08000000/128*0002Kg"
@@ -576,6 +575,33 @@ STM32DFU_protocol.prototype.verify_flash = function (first_array, second_array) 
     return true;
 };
 
+// first hex block not fully covered by contiguous sector groups of flash_layout, else null
+STM32DFU_protocol.prototype.findBlockOutsideLayout = function () {
+    var self = this;
+    var sectors = self.flash_layout.sectors;
+    for (var k = 0; k < self.hex.data.length; k++) {
+        var block = self.hex.data[k];
+        var next = block.address;
+        var end = block.address + block.bytes;
+        var advanced = true;
+        while (next < end && advanced) {
+            advanced = false;
+            for (var i = 0; i < sectors.length; i++) {
+                var group_end = sectors[i].start_address + sectors[i].total_size;
+                if (sectors[i].total_size > 0 && next >= sectors[i].start_address && next < group_end) {
+                    next = group_end;
+                    advanced = true;
+                    break;
+                }
+            }
+        }
+        if (next < end) {
+            return block;
+        }
+    }
+    return null;
+};
+
 // pages to erase: full chip if self.options.erase_chip, else only pages overlapping self.hex.data
 STM32DFU_protocol.prototype.getErasePages = function () {
     var self = this;
@@ -642,22 +668,16 @@ STM32DFU_protocol.prototype.upload_procedure = function (step) {
                             });
                         }
                     } else if (typeof chipInfo.external_flash !== "undefined") {
-                        // external flash, flash to the 3rd partition.
+                        // external flash: bootloader layouts differ, so check each hex block by address
                         self.chipInfo = chipInfo;
                         self.flash_layout = chipInfo.external_flash;
-                        
-                        var firmware_partition_index = 2;
-                        var firmware_sectors = self.flash_layout.sectors[firmware_partition_index];
-                        var firmware_partition_size = firmware_sectors.total_size;
-
-                        self.available_flash_size = firmware_partition_size;
 
                         GUI.log(i18n.getMessage('dfu_device_flash_info', (self.flash_layout.total_size / 1024).toString()));
 
-                        if (self.hex.bytes_total > self.available_flash_size) {
-                            GUI.log(i18n.getMessage('dfu_error_image_size', 
-                                [(self.hex.bytes_total / 1024.0).toFixed(1), 
-                                (self.available_flash_size / 1024.0).toFixed(1)]));
+                        var bad_block = self.findBlockOutsideLayout();
+                        if (bad_block) {
+                            GUI.log(i18n.getMessage('dfu_error_block_outside_flash',
+                                ['0x' + bad_block.address.toString(16), bad_block.bytes.toString()]));
                             self.upload_procedure(99);
                         } else {
                             self.getFunctionalDescriptor(0, function (descriptor, resultCode) {
